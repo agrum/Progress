@@ -246,6 +246,7 @@
     <Compile Include="Assets\Scripts\Controller\ResourceController.cs" />
     <Compile Include="Assets\Scripts\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Keybindings.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Armor.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\BurstShield.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Assets\Scripts\Model\Resource\ResourceReserve.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Speed.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\Ability.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerResourceAffinityVisual.cs" />
     <Compile Include="Assets\Scripts\Spell.cs" />
