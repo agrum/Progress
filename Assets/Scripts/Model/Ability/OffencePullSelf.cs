@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Ability : MonoBehaviour
+public class OffencePullSelf : Ability
 {
-	public String Info()
+	public float Merp;
+
+	String Info()
 	{
 		return "";
 	}
 
-	public void Cast()
+	void Cast()
 	{
 
 	}
 }
-

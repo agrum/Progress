@@ -13,7 +13,7 @@ public class BurstShield : Resource
 	public BurstShield()
 	{
 		Type = Resource.ResourceType.Shield;
-		InternalBehaviour = new ResourceBehaviour(DechargeRate, 0, 1);
+		InternalBehaviour = new ResourceBehaviour(DechargeRate, 0, 1, 1);
 		AddBehaviour(InternalBehaviour);
 	}
 	

@@ -601,7 +601,7 @@ PlayerSettings:
       daydreamIconBackground: {fileID: 0}
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 10182c7a-a8bb-4099-b2da-1dfa5364af2a
   projectName: SpellMap (1)
   organizationId: agrum

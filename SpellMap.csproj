@@ -12,15 +12,12 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.0f3</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -243,10 +240,12 @@
     <Compile Include="Assets\Data\Composer.cs" />
     <Compile Include="Assets\Data\Key.cs" />
     <Compile Include="Assets\Data\SpellSchool.cs" />
-    <Compile Include="Assets\Scripts\Controller\ResourceController.cs" />
+    <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Keybindings.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\Ability.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Armor.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\BurstShield.cs" />
@@ -256,7 +255,6 @@
     <Compile Include="Assets\Scripts\Model\Resource\ResourceReserve.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Speed.cs" />
-    <Compile Include="Assets\Scripts\Model\Ability\Ability.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\PlayerResourceAffinityVisual.cs" />
     <Compile Include="Assets\Scripts\Spell.cs" />

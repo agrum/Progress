@@ -14,7 +14,7 @@ public class Shield : Resource
 	public Shield()
 	{
 		Type = Resource.ResourceType.Shield;
-		InternalBehaviour = new ResourceBehaviour(RechargeRate, 0, 1);
+		InternalBehaviour = new ResourceBehaviour(RechargeRate, 0, 1, 1);
 		AddBehaviour(InternalBehaviour);
 	}
 
