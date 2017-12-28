@@ -7,12 +7,12 @@ public class OffencePullSelf : Ability
 {
 	public float Merp;
 
-	String Info()
+	public String Info()
 	{
 		return "";
 	}
 
-	void Cast()
+	public void Cast()
 	{
 
 	}
