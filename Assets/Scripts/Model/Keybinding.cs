@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Keybindings
+public class Keybinding
 {
 	public Key Q;
 	public Key W;

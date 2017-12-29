@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 	
 	public float speed;
 
-	public Keybindings keybindings;
+	public Keybinding keybinding;
 	public float resourceAffinity = 0.5f;
 
 	private bool hasDestination;
