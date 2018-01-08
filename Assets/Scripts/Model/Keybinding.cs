@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Keybinding
 {
-	public Key Q;
-	public Key W;
-	public Key E;
-	public Key R;
+	public string q;
+	public string w;
+	public string e;
+	public string r;
 }

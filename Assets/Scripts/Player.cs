@@ -4,28 +4,61 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	public Ability Q;
-	public Ability W;
-	public Ability E;
-	public Ability R;
+	enum AbilityState
+	{
+		None,
+		Aiming,
+		Casting,
+		Channeling
+	}
+
+	public Ability abilityQ;
+	public Ability abilityW;
+	public Ability abilityE;
+	public Ability abilityR;
 	
 	public float speed;
 
 	public Keybinding keybinding;
 	public float resourceAffinity = 0.5f;
 
-	private bool hasDestination;
+	private AbilityState actionState = AbilityState.None;
+	private bool hasDestination = false;
 	private Vector3 destination;
 	private Vector3 direction;
 	private float sqrMaxSpeed;
+	private bool canCast = true;
+	private Ability activeAbility = null;
 
-	// Use this for initialization
-	void Start () {
-		hasDestination = false;
+	public void Move()
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		int layerMask = 1 << LayerMask.NameToLayer("Terrain");
+		RaycastHit hit;
+		if (Physics.Raycast(ray, out hit, 100, layerMask))
+		{
+			destination = hit.point;
+			direction = destination - transform.position;
+			direction.Normalize();
+			hasDestination = true;
+		}
+	}
+	
+	void Start ()
+	{
+		abilityQ.keybind = keybinding.q;
+		abilityW.keybind = keybinding.w;
+		abilityE.keybind = keybinding.e;
+		abilityR.keybind = keybinding.q;
+	}
+	
+	void Update()
+	{
+		UpdatePosition();
+		TakeKeyboardInput();
 	}
 
-	// Update is called once per frame
-	void Update()
+	void UpdatePosition()
 	{
 		if (hasDestination)
 		{
@@ -40,17 +73,26 @@ public class Player : MonoBehaviour
 		}
 	}
 
-	public void Move ()
+	void TakeKeyboardInput()
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		int layerMask = 1 << LayerMask.NameToLayer("Terrain");
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, 100, layerMask))
+		Ability newActiveAbility = null;
+		if (Input.GetKeyDown(keybinding.q))
+			newActiveAbility = abilityQ;
+		else if (Input.GetKeyDown(keybinding.w))
+			newActiveAbility = abilityW;
+		else if (Input.GetKeyDown(keybinding.e))
+			newActiveAbility = abilityE;
+		else if (Input.GetKeyDown(keybinding.r))
+			newActiveAbility = abilityR;
+
+		if (actionState == AbilityState.None)
+			activeAbility = null;
+		if (newActiveAbility && newActiveAbility.CanActivate() && actionState != AbilityState.Casting)
 		{
-			destination = hit.point;
-			direction = destination - transform.position;
-			direction.Normalize();
-			hasDestination = true;
+			if (activeAbility && activeAbility != newActiveAbility && actionState != AbilityState.Aiming)
+				activeAbility.Cancel();
+			activeAbility = newActiveAbility;
+			activeAbility.Activate();
 		}
 	}
 }
