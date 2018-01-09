@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Keybinding
+public class Keybinding : MonoBehaviour
 {
 	public string q;
 	public string w;

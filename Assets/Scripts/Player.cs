@@ -29,6 +29,7 @@ public class Player : MonoBehaviour
 	private float sqrMaxSpeed;
 	private bool canCast = true;
 	private Ability activeAbility = null;
+	private GameObject aim;
 
 	public void Move()
 	{
@@ -50,6 +51,8 @@ public class Player : MonoBehaviour
 		abilityW.keybind = keybinding.w;
 		abilityE.keybind = keybinding.e;
 		abilityR.keybind = keybinding.q;
+		
+		aim = Instantiate(Resources.Load("Prefabs/Decals/Abilities/Aim", typeof(GameObject))) as GameObject;
 	}
 	
 	void Update()

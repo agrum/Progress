@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpellMap", "SpellMap.csproj", "{D801D4D5-9829-B359-CD79-0C3144747661}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpellMap.Editor", "SpellMap.Editor.csproj", "{EAE2AE56-8DF4-8A6A-3B62-AEC5A61F23EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{D801D4D5-9829-B359-CD79-0C3144747661}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D801D4D5-9829-B359-CD79-0C3144747661}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D801D4D5-9829-B359-CD79-0C3144747661}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAE2AE56-8DF4-8A6A-3B62-AEC5A61F23EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAE2AE56-8DF4-8A6A-3B62-AEC5A61F23EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAE2AE56-8DF4-8A6A-3B62-AEC5A61F23EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAE2AE56-8DF4-8A6A-3B62-AEC5A61F23EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

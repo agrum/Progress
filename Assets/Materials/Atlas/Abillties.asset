@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 225627996, guid: ffea41b2ef7376143bee608c897e587a, type: 3}
-  m_Name: AbilltiesAtlas
+  m_Name: Abillties
   m_EditorClassIdentifier: 
   material: {fileID: 2100000, guid: 8b4cc2deb10abea45a96768467729537, type: 2}
   regions:
