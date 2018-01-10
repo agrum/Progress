@@ -17,20 +17,27 @@ MonoBehaviour:
     region:
       serializedVersion: 2
       x: 0
-      y: 0
-      width: 0.5000765
-      height: 1
+      y: 0.5
+      width: 0.5
+      height: 0.5
   - name: Bracket
     region:
       serializedVersion: 2
-      x: 0.5105102
-      y: -0.0000004071917
+      x: 0.5029335
+      y: 0.5
       width: 0.126
-      height: 1.0001243
+      height: 0.5
   - name: Line
     region:
       serializedVersion: 2
       x: 0.74969566
-      y: -0.00030612247
+      y: 0.5
       width: 0.25025624
-      height: 1.0003084
+      height: 0.5
+  - name: ConeTip
+    region:
+      serializedVersion: 2
+      x: 0.5028033
+      y: 0.47053638
+      width: 0.12606412
+      height: 0.012606
