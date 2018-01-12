@@ -191,13 +191,13 @@ MonoBehaviour:
   technique: 0
   deferredFlags: 0
   transformObserver:
-    lastPosition: {x: 0, y: 0, z: 7.5}
-    lastScale: {x: 1, y: 1, z: 1}
+    lastPosition: {x: -1.6676865, y: -2.5279516e-19, z: 0.22769763}
+    lastScale: {x: 2, y: 1, z: 2}
     lastRotation: {x: -0, y: -0, z: -0, w: 1}
     transform: {fileID: 4523286747576660}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -4694
+  instanceID: -81666
 --- !u!137 &137708288959124352
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

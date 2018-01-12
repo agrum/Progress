@@ -513,13 +513,13 @@ MonoBehaviour:
   technique: 0
   deferredFlags: 0
   transformObserver:
-    lastPosition: {x: -0.99999994, y: 0, z: 9.232051}
+    lastPosition: {x: -0.24999999, y: 0, z: 0.43301272}
     lastScale: {x: -1, y: 1, z: 1}
     lastRotation: {x: -0, y: -0.258819, z: -0, w: 0.9659259}
     transform: {fileID: 4075042650864048}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -576,7 +576,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -35986
+  instanceID: -85550
 --- !u!114 &114442523271803222
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -597,13 +597,13 @@ MonoBehaviour:
   technique: 0
   deferredFlags: 0
   transformObserver:
-    lastPosition: {x: 1.0000002, y: 0, z: 9.232051}
+    lastPosition: {x: 0.25000006, y: 0, z: 0.43301266}
     lastScale: {x: 1, y: 1, z: 1}
     lastRotation: {x: -0, y: 0.2588191, z: -0, w: 0.9659258}
     transform: {fileID: 4203960724753960}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -660,7 +660,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -12764
+  instanceID: -85554
 --- !u!114 &114456189870299658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -681,13 +681,13 @@ MonoBehaviour:
   technique: 0
   deferredFlags: 0
   transformObserver:
-    lastPosition: {x: 0, y: 0, z: 11.45}
-    lastScale: {x: 1, y: 1, z: 0.1}
+    lastPosition: {x: 0, y: 0, z: 0.95}
+    lastScale: {x: 0.25, y: 1, z: 0.025}
     lastRotation: {x: -0, y: -0, z: -0, w: 1}
     transform: {fileID: 4166815068335938}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -744,7 +744,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -107756
+  instanceID: -85552
 --- !u!137 &137272299239352350
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

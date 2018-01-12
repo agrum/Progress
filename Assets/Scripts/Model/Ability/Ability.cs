@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Ability : MonoBehaviour
 {
-	public String keybind { get; set; }
-	public Player player;
+	public Player player { get; internal set; }
+	public string keybind { get; internal set; }
 
 	virtual public String Info()
 	{

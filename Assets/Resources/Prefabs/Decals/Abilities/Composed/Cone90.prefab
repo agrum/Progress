@@ -870,7 +870,7 @@ MonoBehaviour:
     transform: {fileID: 4963837310076666}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -927,7 +927,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -218762
+  instanceID: -86418
 --- !u!114 &114361792682580624
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -954,7 +954,7 @@ MonoBehaviour:
     transform: {fileID: 4694298835457272}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -218858
+  instanceID: -86422
 --- !u!114 &114401562090413342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1038,7 +1038,7 @@ MonoBehaviour:
     transform: {fileID: 4927677281727980}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1095,7 +1095,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -218838
+  instanceID: -86426
 --- !u!114 &114598605608713078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1179,7 +1179,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -218810
+  instanceID: -86428
 --- !u!114 &114676838102919994
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1206,7 +1206,7 @@ MonoBehaviour:
     transform: {fileID: 4058534676276084}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -218798
+  instanceID: -86416
 --- !u!137 &137095061218246228
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

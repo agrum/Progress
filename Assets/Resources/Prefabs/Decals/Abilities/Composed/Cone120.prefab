@@ -870,7 +870,7 @@ MonoBehaviour:
     transform: {fileID: 4552998527893994}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -927,7 +927,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -233444
+  instanceID: -62862
 --- !u!114 &114384185461115260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -954,7 +954,7 @@ MonoBehaviour:
     transform: {fileID: 4907571066595680}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1011,7 +1011,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -233520
+  instanceID: -62864
 --- !u!114 &114654287241491988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1038,7 +1038,7 @@ MonoBehaviour:
     transform: {fileID: 4454772765521616}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1095,7 +1095,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -233492
+  instanceID: -62832
 --- !u!114 &114697177064042730
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1122,7 +1122,7 @@ MonoBehaviour:
     transform: {fileID: 4931182265290480}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1179,7 +1179,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -233540
+  instanceID: -62872
 --- !u!114 &114759201758145642
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1206,7 +1206,7 @@ MonoBehaviour:
     transform: {fileID: 4784803067524760}
   Mask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 256
   mode: 0
   source: 1
   aspectCorrectionMode: 0
@@ -1263,7 +1263,7 @@ MonoBehaviour:
   surfaceRotation: 0
   quality: 1
   sharedMesh: {fileID: 0}
-  instanceID: -233480
+  instanceID: -62866
 --- !u!137 &137060077208266864
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
