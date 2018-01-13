@@ -16,11 +16,11 @@ public class Player : MonoBehaviour
 	public Ability abilityW;
 	public Ability abilityE;
 	public Ability abilityR;
-	
-	public float speed;
-
+	public float speedBase;
 	public Keybinding keybinding;
 	public float resourceAffinity = 0.5f;
+
+	internal Speed speed = new Speed();
 
 	private AbilityState actionState = AbilityState.None;
 	private bool hasDestination = false;
@@ -66,7 +66,7 @@ public class Player : MonoBehaviour
 	{
 		if (hasDestination)
 		{
-			Vector3 newPosition = transform.position + direction * speed * Time.deltaTime;
+			Vector3 newPosition = transform.position + direction * speedBase * speed.amount * Time.deltaTime;
 			if (Vector3.Dot(destination - transform.position, destination - newPosition) <= 0)
 			{
 				transform.position = destination;

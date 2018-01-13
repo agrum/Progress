@@ -24150,6 +24150,9 @@ MonoBehaviour:
   startRange: 3
   chargedRange: 10
   width: 2
+  chargeTime: 2
+  maxHoldTime: 4
+  speedReduction: 0.4
 --- !u!1 &1661023305
 GameObject:
   m_ObjectHideFlags: 0
@@ -28831,7 +28834,7 @@ MonoBehaviour:
   abilityW: {fileID: 1657437422}
   abilityE: {fileID: 1657437422}
   abilityR: {fileID: 1657437422}
-  speed: 10
+  speedBase: 10
   keybinding: {fileID: 373046440}
   resourceAffinity: 0.5
 --- !u!114 &2012749183

@@ -9,8 +9,7 @@ public abstract class Resource {
 		Life,
 		Armor,
 		Shield,
-		BurstShield,
-		Speed
+		BurstShield
 	}
 
 	protected ResourceType Type;
