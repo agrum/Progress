@@ -24153,6 +24153,7 @@ MonoBehaviour:
   chargeTime: 2
   maxHoldTime: 4
   speedReduction: 0.4
+  travelTime: 0.25
 --- !u!1 &1661023305
 GameObject:
   m_ObjectHideFlags: 0

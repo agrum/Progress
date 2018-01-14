@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-	enum AbilityState
+	public enum AbilityState
 	{
 		None,
 		Aiming,
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
 	internal Speed speed = new Speed();
 
-	private AbilityState actionState = AbilityState.None;
+	private AbilityState state = AbilityState.None;
 	private bool hasDestination = false;
 	private Vector3 destination;
 	private Vector3 direction;
@@ -30,17 +30,34 @@ public class Player : MonoBehaviour
 	private bool canCast = true;
 	private Ability activeAbility = null;
 
+	internal AbilityState State
+	{
+		get
+		{
+			return this.state;
+		}
+		set
+		{
+			this.state = value;
+			if(value == AbilityState.Casting)
+				hasDestination = false;
+		}
+	}
+
 	public void Move()
 	{
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		int layerMask = 1 << LayerMask.NameToLayer("Terrain");
-		RaycastHit hit;
-		if (Physics.Raycast(ray, out hit, 100, layerMask))
+		if(state != AbilityState.Casting)
 		{
-			destination = hit.point;
-			direction = destination - transform.position;
-			direction.Normalize();
-			hasDestination = true;
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			int layerMask = 1 << LayerMask.NameToLayer("Terrain");
+			RaycastHit hit;
+				if (Physics.Raycast(ray, out hit, 100, layerMask))
+				{
+					destination = hit.point;
+					direction = destination - transform.position;
+					direction.Normalize();
+					hasDestination = true;
+			}
 		}
 	}
 	
@@ -54,6 +71,8 @@ public class Player : MonoBehaviour
 		abilityW.player = this;
 		abilityE.player = this;
 		abilityR.player = this;
+
+		state = AbilityState.None;
 	}
 	
 	void Update()
@@ -89,11 +108,11 @@ public class Player : MonoBehaviour
 		else if (Input.GetKeyDown(keybinding.r))
 			newActiveAbility = abilityR;
 
-		if (actionState == AbilityState.None)
+		if (state == AbilityState.None)
 			activeAbility = null;
-		if (newActiveAbility && newActiveAbility.CanActivate() && actionState != AbilityState.Casting)
+		if (newActiveAbility && newActiveAbility.CanActivate() && state != AbilityState.Casting)
 		{
-			if (activeAbility && activeAbility != newActiveAbility && actionState != AbilityState.Aiming)
+			if (activeAbility && activeAbility != newActiveAbility && state != AbilityState.Aiming)
 				activeAbility.Cancel();
 			activeAbility = newActiveAbility;
 			activeAbility.Activate();

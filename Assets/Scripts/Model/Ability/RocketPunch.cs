@@ -10,12 +10,17 @@ public class RocketPunch : Ability
 	public float chargeTime = 2.0f;
 	public float maxHoldTime = 4.0f;
 	public float speedReduction = 0.4f;
+	public float travelTime = 0.5f;
 
 	private GameObject aim;
 	private bool isAiming = false;
-	private float startTime = 0.0f;
+	private bool isCasting = false;
+	private float aimStartTime = 0.0f;
+	private float castStartTime = 0.0f;
 	private SpeedModifier speedModifier;
 	private float orientation = 0.0f;
+	private float charge = 0.0f;
+	private Vector3 jump;
 
 	override public void Activate()
 	{
@@ -23,15 +28,20 @@ public class RocketPunch : Ability
 		aim.transform.SetParent(player.transform, false);
 		aim.transform.localScale = new Vector3(width, 1.0f, startRange);
 		isAiming = true;
-		startTime = Time.time;
+		aimStartTime = Time.time;
 		speedModifier = new SpeedModifier(speedReduction);
 		player.speed.AddModifier(speedModifier);
+		player.State = Player.AbilityState.Aiming;
 	}
 
 	void Update()
 	{
 		if(isAiming)
 		{
+			charge = Mathf.Min(1.0f, (Time.time - aimStartTime) / chargeTime);
+			float distance = Mathf.Lerp(startRange, chargedRange, charge);
+			aim.transform.localScale = new Vector3(width, 1.0f, distance);
+
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			int layerMask = 1 << LayerMask.NameToLayer("Terrain");
 			RaycastHit hit;
@@ -46,13 +56,36 @@ public class RocketPunch : Ability
 				aim.transform.localEulerAngles = new Vector3(0.0f, orientation, 0.0f);
 			}
 
-			if (Input.GetKeyDown(keybind))
+			//switch from aim to cast
+			if (Time.time > aimStartTime + maxHoldTime || Input.GetKeyUp(keybind))
 			{
-
+				player.State = Player.AbilityState.Casting;
+				isAiming = false;
+				isCasting = true;
+				speedModifier.Expire();
+				speedModifier = null;
+				jump = new Vector3(Mathf.Sin(aim.transform.localEulerAngles.y * Mathf.Deg2Rad), 0.0f, Mathf.Cos(aim.transform.localEulerAngles.y * Mathf.Deg2Rad)) * distance;
+				Destroy(aim);
+				castStartTime = Time.time;
 			}
-			else if (Input.GetKeyDown(keybind))
+		}
+		if(isCasting)
+		{
+			bool castFinished = false;
+			float jumpDT = Time.deltaTime;
+			if (Time.time > castStartTime + travelTime)
 			{
+				jumpDT -= Time.time - (castStartTime + travelTime);
+				castFinished = true;
+			}
 
+			player.transform.position += jump * (jumpDT / travelTime);
+
+			//switct state
+			if(castFinished)
+			{
+				isCasting = false;
+				player.State = Player.AbilityState.None;
 			}
 		}
 	}
