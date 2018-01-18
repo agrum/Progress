@@ -31,14 +31,14 @@ public class CameraController : MonoBehaviour
 			var amplitude = 0.0f;
 
 			if (Input.mousePosition.x < scrollMargin)
-				amplitude = scrollMargin - Input.mousePosition.x;
+				amplitude = scrollMargin - Mathf.Max(0, Input.mousePosition.x);
 			else if (Input.mousePosition.x > Screen.width - scrollMargin)
-				amplitude = scrollMargin - Screen.width + Input.mousePosition.x;
+				amplitude = scrollMargin - Screen.width + Mathf.Min(Screen.width, Input.mousePosition.x);
 
 			if (Input.mousePosition.y < scrollMargin)
-				amplitude = Mathf.Max(amplitude, scrollMargin - Input.mousePosition.y);
+				amplitude = Mathf.Max(amplitude, scrollMargin - Mathf.Max(0, Input.mousePosition.y));
 			else if (Input.mousePosition.y > Screen.height - scrollMargin)
-				amplitude = Mathf.Max(scrollMargin - Screen.height + Input.mousePosition.y);
+				amplitude = Mathf.Max(amplitude, scrollMargin - Screen.height + Mathf.Min(Screen.height, Input.mousePosition.y));
 
 			if (amplitude > 0.0f)
 			{

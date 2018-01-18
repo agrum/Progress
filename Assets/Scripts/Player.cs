@@ -21,9 +21,11 @@ public class Player : MonoBehaviour
 	public float resourceAffinity = 0.5f;
 
 	internal Speed speed = new Speed();
+	internal float facingDirection = 0.0f;
+	internal float walkingDirection = 0.0f;
+	internal bool hasDestination = false;
 
 	private AbilityState state = AbilityState.None;
-	private bool hasDestination = false;
 	private Vector3 destination;
 	private Vector3 direction;
 	private float sqrMaxSpeed;
@@ -51,13 +53,26 @@ public class Player : MonoBehaviour
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			int layerMask = 1 << LayerMask.NameToLayer("Terrain");
 			RaycastHit hit;
-				if (Physics.Raycast(ray, out hit, 100, layerMask))
-				{
-					destination = hit.point;
-					direction = destination - transform.position;
-					direction.Normalize();
-					hasDestination = true;
+			if (Physics.Raycast(ray, out hit, 100, layerMask))
+			{
+				destination = hit.point;
+				direction = destination - transform.position;
+				direction.Normalize();
+				hasDestination = true;
 			}
+		}
+		if (state == AbilityState.Aiming)
+		{
+
+		}
+		else if(hasDestination)
+		{
+			float localFacingDirection = Vector3.Angle(new Vector3(0.0f, 0.0f, 1.0f), direction);
+			float isRight = Vector3.Dot(new Vector3(1.0f, 0.0f, 0.0f), direction);
+			if (isRight < 0.0f)
+				localFacingDirection *= -1.0f;
+			facingDirection = walkingDirection = localFacingDirection;
+			transform.eulerAngles = new Vector3(0, facingDirection, 0);
 		}
 	}
 	
@@ -87,12 +102,8 @@ public class Player : MonoBehaviour
 		{
 			Vector3 newPosition = transform.position + direction * speedBase * speed.amount * Time.deltaTime;
 			if (Vector3.Dot(destination - transform.position, destination - newPosition) <= 0)
-			{
-				transform.position = destination;
 				hasDestination = false;
-			}
-			else
-				transform.position = newPosition;
+			//transform.position = newPosition;
 		}
 	}
 
