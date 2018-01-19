@@ -194,9 +194,9 @@ ModelImporter:
       name: Walk_Bwd
       takeName: _2_a_U1_M_P_WalkBackward_NtrlFaceFwd__Fb_p180_No_0_PJ_0
       firstFrame: 111
-      lastFrame: 165
+      lastFrame: 139
       wrapMode: 0
-      orientationOffsetY: 0.1
+      orientationOffsetY: 0.49
       level: 0
       cycleOffset: 0
       loop: 0

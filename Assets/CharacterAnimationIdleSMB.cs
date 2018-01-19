@@ -9,7 +9,10 @@ public class CharacterAnimationIdleSMB : StateMachineBehaviour {
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
 	{
 		Player player = animator.GetComponent<Player>();
-		animator.SetFloat(m_differenceFacingWalkingHash, player.facingDirection - player.walkingDirection, 0.5f, Time.deltaTime);
+		float angle = (player.facingDirection - player.walkingDirection) % 360.0f;
+		if (angle < 0.0f)
+			angle += 360.0f;
+		animator.SetFloat(m_differenceFacingWalkingHash, angle);//, 10.0f, Time.deltaTime);
 		animator.SetBool(m_isWalkingHash, player.hasDestination);
 	}
 }

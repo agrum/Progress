@@ -53,7 +53,7 @@ public class RocketPunch : Ability
 				float isRight = Vector3.Dot(new Vector3(1.0f, 0.0f, 0.0f), direction);
 				if (isRight < 0.0f)
 					orientation *= -1.0f;
-				aim.transform.localEulerAngles = new Vector3(0.0f, orientation, 0.0f);
+				player.facingDirection = orientation;
 			}
 
 			//switch from aim to cast
@@ -64,7 +64,8 @@ public class RocketPunch : Ability
 				isCasting = true;
 				speedModifier.Expire();
 				speedModifier = null;
-				jump = new Vector3(Mathf.Sin(aim.transform.localEulerAngles.y * Mathf.Deg2Rad), 0.0f, Mathf.Cos(aim.transform.localEulerAngles.y * Mathf.Deg2Rad)) * distance;
+				jump = new Vector3(Mathf.Sin((orientation) * Mathf.Deg2Rad), 0.0f, Mathf.Cos((orientation) * Mathf.Deg2Rad)) * distance;
+				Debug.Log(jump);
 				Destroy(aim);
 				castStartTime = Time.time;
 			}

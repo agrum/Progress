@@ -61,18 +61,16 @@ public class Player : MonoBehaviour
 				hasDestination = true;
 			}
 		}
-		if (state == AbilityState.Aiming)
-		{
-
-		}
-		else if(hasDestination)
+		if(hasDestination)
 		{
 			float localFacingDirection = Vector3.Angle(new Vector3(0.0f, 0.0f, 1.0f), direction);
 			float isRight = Vector3.Dot(new Vector3(1.0f, 0.0f, 0.0f), direction);
 			if (isRight < 0.0f)
 				localFacingDirection *= -1.0f;
-			facingDirection = walkingDirection = localFacingDirection;
-			transform.eulerAngles = new Vector3(0, facingDirection, 0);
+			walkingDirection = localFacingDirection;
+			Debug.Log(walkingDirection);
+			if (state != AbilityState.Aiming)
+				facingDirection = localFacingDirection;
 		}
 	}
 	
@@ -100,6 +98,7 @@ public class Player : MonoBehaviour
 	{
 		if (hasDestination && Vector3.Dot(direction, destination - transform.position) < 0.0f)
 			hasDestination = false;
+		transform.eulerAngles = new Vector3(0, facingDirection, 0);
 	}
 
 	void TakeKeyboardInput()
