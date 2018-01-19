@@ -6989,7 +6989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   offsetObject: {fileID: 2065778180}
-  speed: 0.08
+  speed: 0
   scrollMargin: 60
 --- !u!1 &457666146
 GameObject:
@@ -15217,7 +15217,7 @@ RectTransform:
   m_GameObject: {fileID: 1057443101}
   m_LocalRotation: {x: 0.5, y: -0, z: -0, w: 0.8660254}
   m_LocalPosition: {x: 0, y: 3.071797, z: 4}
-  m_LocalScale: {x: 0.010151213, y: 0.010151213, z: 0.010151213}
+  m_LocalScale: {x: 0.01990863, y: 0.01990863, z: 0.01990863}
   m_Children:
   - {fileID: 1161368414}
   m_Father: {fileID: 0}

@@ -98,13 +98,8 @@ public class Player : MonoBehaviour
 
 	void UpdatePosition()
 	{
-		if (hasDestination)
-		{
-			Vector3 newPosition = transform.position + direction * speedBase * speed.amount * Time.deltaTime;
-			if (Vector3.Dot(destination - transform.position, destination - newPosition) <= 0)
-				hasDestination = false;
-			//transform.position = newPosition;
-		}
+		if (hasDestination && Vector3.Dot(direction, destination - transform.position) < 0.0f)
+			hasDestination = false;
 	}
 
 	void TakeKeyboardInput()
