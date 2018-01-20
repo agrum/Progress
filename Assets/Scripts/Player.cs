@@ -73,6 +73,11 @@ public class Player : MonoBehaviour
 				facingDirection = localFacingDirection;
 		}
 	}
+
+	public float GetSpeed()
+	{
+		return speedBase* speed.amount;
+	}
 	
 	void Start ()
 	{
@@ -99,6 +104,8 @@ public class Player : MonoBehaviour
 		if (hasDestination && Vector3.Dot(direction, destination - transform.position) < 0.0f)
 			hasDestination = false;
 		transform.eulerAngles = new Vector3(0, facingDirection, 0);
+		if(hasDestination)
+			transform.position = transform.position + direction * GetSpeed() * Time.deltaTime;
 	}
 
 	void TakeKeyboardInput()

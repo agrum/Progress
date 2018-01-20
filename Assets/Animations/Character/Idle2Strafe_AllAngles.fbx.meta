@@ -163,12 +163,13 @@ ModelImporter:
     400154: TongueBack
     400156: TongueTip
     7400000: Idle2Strafe_AllAngles
-    7400002: Walk_FwdLeft
+    7400002: NonBaked_Walk_FwdLeft
     7400004: Walk_FwdRight
-    7400006: Walk_Left
-    7400008: Walk_Right
-    7400010: Walk_BwdRight
-    7400012: Walk_BwdLeft
+    7400006: NonBaked_Walk_Left
+    7400008: NonBaked_Walk_Right
+    7400010: NonBaked_Walk_BwdRight
+    7400012: NonBaked_Walk_BwdLeft
+    7400014: Walk_FwdRight
     9500000: //RootNode
   externalObjects: {}
   materials:
@@ -203,7 +204,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Walk_FwdLeft
+      name: NonBaked_Walk_FwdLeft
       takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
       firstFrame: 186
       lastFrame: 215
@@ -231,35 +232,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk_FwdRight
-      takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
-      firstFrame: 186
-      lastFrame: 215
-      wrapMode: 0
-      orientationOffsetY: 16.9
-      level: 0
-      cycleOffset: -0.08
-      loop: 0
-      hasAdditiveReferencePose: 0
-      loopTime: 1
-      loopBlend: 1
-      loopBlendOrientation: 1
-      loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 1
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      events: []
-      transformMask: []
-      maskType: 3
-      maskSource: {instanceID: 0}
-      additiveReferencePoseFrame: 0
-    - serializedVersion: 16
-      name: Walk_Left
+      name: NonBaked_Walk_Left
       takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
       firstFrame: 423
       lastFrame: 454
@@ -287,7 +260,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk_Right
+      name: NonBaked_Walk_Right
       takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
       firstFrame: 423
       lastFrame: 454
@@ -315,7 +288,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk_BwdRight
+      name: NonBaked_Walk_BwdRight
       takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
       firstFrame: 296
       lastFrame: 326
@@ -343,7 +316,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Walk_BwdLeft
+      name: NonBaked_Walk_BwdLeft
       takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
       firstFrame: 296
       lastFrame: 326
@@ -351,6 +324,34 @@ ModelImporter:
       orientationOffsetY: 2.67
       level: 0
       cycleOffset: 0.6
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 1
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Walk_FwdRight
+      takeName: _117_to_120_a_U1_M_P_idle2Strafe_AllAngles__Fb_p45-180_No_0_PJ_1
+      firstFrame: 186
+      lastFrame: 214
+      wrapMode: 0
+      orientationOffsetY: 17.07
+      level: 0
+      cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1

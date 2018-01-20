@@ -12,6 +12,7 @@ public class CharacterAnimationIdleSMB : StateMachineBehaviour {
 		float angle = (player.facingDirection - player.walkingDirection) % 360.0f;
 		if (angle < 0.0f)
 			angle += 360.0f;
+		animator.speed = player.GetSpeed();
 		animator.SetFloat(m_differenceFacingWalkingHash, angle);//, 10.0f, Time.deltaTime);
 		animator.SetBool(m_isWalkingHash, player.hasDestination);
 	}

@@ -159,7 +159,7 @@ ModelImporter:
     400150: TongueBack
     400152: TongueTip
     7400000: WalkFWD
-    7400002: Walk_Fwd
+    7400002: NonBaked_Walk_Fwd
     7400004: _1_Edit1_WalkFWD
     9500000: //RootNode
   externalObjects: {}
@@ -192,7 +192,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Walk_Fwd
+      name: NonBaked_Walk_Fwd
       takeName: _1_Edit1_WalkFWD
       firstFrame: 30
       lastFrame: 60
