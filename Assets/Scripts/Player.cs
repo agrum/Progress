@@ -21,6 +21,7 @@ public class Player : MonoBehaviour
 	public float resourceAffinity = 0.5f;
 
 	internal Speed speed = new Speed();
+	internal float crouch = 0.0f;
 	internal float facingDirection = 0.0f;
 	internal float walkingDirection = 0.0f;
 	internal bool hasDestination = false;

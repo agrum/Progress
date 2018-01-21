@@ -32,6 +32,7 @@ public class RocketPunch : Ability
 		speedModifier = new SpeedModifier(speedReduction);
 		player.speed.AddModifier(speedModifier);
 		player.State = Player.AbilityState.Aiming;
+		player.crouch = 0.5f;
 	}
 
 	void Update()
@@ -62,10 +63,10 @@ public class RocketPunch : Ability
 				player.State = Player.AbilityState.Casting;
 				isAiming = false;
 				isCasting = true;
+				player.crouch = 0.0f;
 				speedModifier.Expire();
 				speedModifier = null;
 				jump = new Vector3(Mathf.Sin((orientation) * Mathf.Deg2Rad), 0.0f, Mathf.Cos((orientation) * Mathf.Deg2Rad)) * distance;
-				Debug.Log(jump);
 				Destroy(aim);
 				castStartTime = Time.time;
 			}
