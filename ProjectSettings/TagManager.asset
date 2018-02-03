@@ -16,9 +16,9 @@ TagManager:
   - Terrain
   - Target
   - Navigation
-  - 
-  - 
-  - 
+  - Player
+  - Fog
+  - TerrainCollider
   - 
   - 
   - 

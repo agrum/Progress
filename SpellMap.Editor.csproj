@@ -274,6 +274,18 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/2015/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Assets/MORPH3D/Scripts/Plugins/ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="M3DIMPORT_DLL">
+      <HintPath>Assets/MORPH3D/Scripts/Plugins/M3DIMPORT_DLL.dll</HintPath>
+    </Reference>
+    <Reference Include="M3D_DLL">
+      <HintPath>Assets/MORPH3D/Scripts/Plugins/M3D_DLL.dll</HintPath>
+    </Reference>
+    <Reference Include="MCS_Utilities">
+      <HintPath>Assets/MORPH3D/Scripts/Plugins/MCS_Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="ch.sycoforge.Decal">
       <HintPath>Assets/nu Assets/Easy Decal/Scripts/ch.sycoforge.Decal.dll</HintPath>
     </Reference>
@@ -315,6 +327,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\ExportTerrain.cs" />
+    <Compile Include="Assets\Editor\FieldOfViewEditor.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\CIClothingEditor.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\M3DCharacterManagerEditor.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\M3DMorphEditor.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\M3DResourceEditor.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\M3DToolsEditor.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\MaterialImporter.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\MorphDebugInfo.cs" />
+    <Compile Include="Assets\MORPH3D\Scripts\Editor\SearchableWindow.cs" />
+    <Compile Include="Assets\MORPH3D\Vendor\Unity\Shaders\Hair\Editor\HairShaderGUI.cs" />
+    <Compile Include="Assets\MORPH3D\Vendor\Unity\Shaders\Skin\Editor\VolundMultiStandardShaderGUI.cs" />
     <Compile Include="Assets\nu Assets\Easy Decal\Scripts\Editor\DSSDShaderGUI.cs" />
     <Compile Include="Assets\nu Assets\Easy Decal\Scripts\Editor\EDStandardShaderGUI.cs" />
   </ItemGroup>
@@ -325,7 +349,27 @@
     <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\CanvasSelection.shader" />
     <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\CanvasUtil.cginc" />
     <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\UnlitColorAlpha.shader" />
+    <None Include="Assets\MORPH3D\README.txt" />
+    <None Include="Assets\MORPH3D\Resources\Shaders\AlphaCombiner.shader" />
+    <None Include="Assets\MORPH3D\Resources\Shaders\EyeAndLash.shader" />
+    <None Include="Assets\MORPH3D\Resources\Shaders\Morph3DBasicSkin.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Hair\Hair_UnityStandardCore.cginc" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Hair\Hair_UnityStandardInput.cginc" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Hair\Hair_Universal.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Hair\Hair_setup.cginc" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Skin\MorphSkinDeferred.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Skin\Volund_StandardSpecularCharacter.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Skin\Volund_UnityStandardCore.cginc" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Skin\Volund_UnityStandardInput.cginc" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Standard\Standard-2pass-doublesided-half depth.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Standard\Standard-2pass-doublesided.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Standard\Standard-doublesided.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\Standard\StandardSpecular-doublesided.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\UniqueShadow\UniqueShadow_DepthOnly.shader" />
+    <None Include="Assets\MORPH3D\Vendor\Unity\Shaders\UniqueShadow\UniqueShadow_ShadowSample.cginc" />
     <None Include="Assets\Raw Mocap Data\Animations\_CompleteAnimationList.txt" />
+    <None Include="Assets\Resources\Shaders\AutoLight.cginc" />
+    <None Include="Assets\Resources\Shaders\FogOfWar.shader" />
     <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAdd.shader" />
     <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAddSoft.shader" />
     <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAlpha.shader" />
