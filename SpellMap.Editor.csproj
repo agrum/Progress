@@ -370,6 +370,8 @@
     <None Include="Assets\Raw Mocap Data\Animations\_CompleteAnimationList.txt" />
     <None Include="Assets\Resources\Shaders\AutoLight.cginc" />
     <None Include="Assets\Resources\Shaders\FogOfWar.shader" />
+    <None Include="Assets\Shaders\StencilMask.shader" />
+    <None Include="Assets\Shaders\StencilObject.shader" />
     <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAdd.shader" />
     <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAddSoft.shader" />
     <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAlpha.shader" />
