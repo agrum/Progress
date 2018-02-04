@@ -9,7 +9,7 @@
 		Tags { "RenderType"="Transparent" "Queue"="Transparent" }
 		LOD 200
 		ZWrite Off
-		Blend DstColor OneMinusDstAlpha
+		Blend Zero SrcColor
 
 		Stencil
 		{
@@ -44,11 +44,11 @@
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			// Albedo comes from a texture tinted by color
 			fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-			o.Albedo = float3(1, 1, 1);// c.rgb;
+			o.Albedo = float3(_Color.a, _Color.a, _Color.a);
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
 			o.Smoothness = _Glossiness;
-			o.Alpha = 0.5;
+			o.Alpha = _Color.a;
 		}
 		ENDCG
 	}
