@@ -83,18 +83,24 @@ public class FieldOfView : MonoBehaviour {
 			oldViewCast = newViewCast;
 		}
 
-		int vertexCount = viewPoints.Count + 1;
+		int vertexCount = viewPoints.Count + 2;
 		Vector3[] vertices = new Vector3[vertexCount];
-		int[] triangles = new int[(vertexCount-2) * 3];
+		int[] triangles = new int[(vertexCount-3) * 6];
 
-		vertices [0] = Vector3.zero;
-		for (int i = 0; i < vertexCount - 1; i++) {
+		vertices[0] = Vector3.zero;
+		vertices[vertexCount - 1] = new Vector3(0, -100, 0);
+		for (int i = 0; i < vertexCount - 2; i++) {
 			vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]);
 
-			if (i < vertexCount - 2) {
-				triangles [i * 3] = 0;
-				triangles [i * 3 + 1] = i + 1;
-				triangles [i * 3 + 2] = i + 2;
+			if (i < vertexCount - 3)
+			{
+				triangles[i * 6] = 0;
+				triangles[i * 6 + 1] = i + 1;
+				triangles[i * 6 + 2] = i + 2;
+				
+				triangles[i * 6 + 3] = i + 2;
+				triangles[i * 6 + 4] = i + 1;
+				triangles[i * 6 + 5] = vertexCount - 1;
 			}
 		}
 
