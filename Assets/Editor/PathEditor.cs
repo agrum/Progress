@@ -9,7 +9,13 @@ public class PathEditor : Editor {
 	PathCreator creator;
 	Path path;
 	Plane xz = new Plane(new Vector3(0f, 1f, 0f), 0f);
+	bool passedOnce = false;
 	Vector2 lastCenter;
+
+	void OnScene(SceneView sceneview)
+	{
+		DrawVisual();
+	}
 
 	void OnSceneGUI()
 	{
@@ -18,7 +24,8 @@ public class PathEditor : Editor {
 			xz.distance = -creator.transform.position.y;
 		}
 		Input();
-		Draw();
+		DrawControl();
+		DrawVisual();
 	}
 
 	void Input()
@@ -44,19 +51,39 @@ public class PathEditor : Editor {
 			creator.CreatePath();
 		}
 		path = creator.path;
+
+		SceneView.onSceneGUIDelegate -= OnScene;
+		SceneView.onSceneGUIDelegate += OnScene;
 	}
 
-	void Draw()
+	void DrawVisual()
+	{
+		//draw edges
+		for (int i = 0; i < path.NumPoints(); ++i)
+		{
+			switch (path.GetType(i))
+			{
+				case Edge.TypeEnum.BlocksMovement: Handles.color = Color.yellow; break;
+				case Edge.TypeEnum.BlocksVision: Handles.color = Color.green; break;
+				case Edge.TypeEnum.BlocksBoth: Handles.color = Color.black; break;
+			}
+			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
+			Handles.ArrowHandleCap(0, ToV3(path[i]), Quaternion.LookRotation(ToV3(path[i + 1] - path[i], false)), 1.2f, EventType.Repaint);
+		}
+	}
+
+	void DrawControl()
 	{
 		//move all points if moved from main anchor
 		Vector2 currentCenter = ToV2(creator.transform.position);
-		if (lastCenter != null && lastCenter != currentCenter)
+		if (passedOnce && lastCenter != currentCenter)
 		{
 			for (int i = 0; i < path.NumPoints(); ++i)
 			{
 				path[i] += currentCenter - lastCenter;
 			}
 		}
+		passedOnce = true;
 
 		//define pivot
 		Vector2 center = Vector2.zero;
@@ -78,19 +105,6 @@ public class PathEditor : Editor {
 				Undo.RecordObject(creator, "Change path edge");
 				path.ChangeType(i);
 			}
-		}
-
-		//draw edges
-		for (int i = 0; i < path.NumPoints(); ++i)
-		{
-			switch(path.GetType(i))
-			{
-				case Edge.TypeEnum.BlocksMovement: Handles.color = Color.yellow; break;
-				case Edge.TypeEnum.BlocksVision: Handles.color = Color.green; break;
-				case Edge.TypeEnum.BlocksBoth: Handles.color = Color.black; break;
-			}
-			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
-			Handles.ArrowHandleCap(0, ToV3(path[i]), Quaternion.LookRotation(ToV3(path[i + 1] - path[i], false)), 1.2f, EventType.Repaint);
 		}
 
 		//draw anchor points
