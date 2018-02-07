@@ -9,12 +9,13 @@ public class PathEditor : Editor {
 	PathCreator creator;
 	Path path;
 	Plane xz = new Plane(new Vector3(0f, 1f, 0f), 0f);
+	Vector2 lastCenter;
 
 	void OnSceneGUI()
 	{
-		if(creator.height != xz.distance)
+		if(creator.transform.position.y != xz.distance)
 		{
-			xz.distance = -creator.height;
+			xz.distance = -creator.transform.position.y;
 		}
 		Input();
 		Draw();
@@ -47,6 +48,26 @@ public class PathEditor : Editor {
 
 	void Draw()
 	{
+		//move all points if moved from main anchor
+		Vector2 currentCenter = ToV2(creator.transform.position);
+		if (lastCenter != null && lastCenter != currentCenter)
+		{
+			for (int i = 0; i < path.NumPoints(); ++i)
+			{
+				path[i] += currentCenter - lastCenter;
+			}
+		}
+
+		//define pivot
+		Vector2 center = Vector2.zero;
+		for (int i = 0; i < path.NumPoints(); ++i)
+		{
+			center += path[i];
+		}
+		center /= path.NumPoints();
+		lastCenter = center;
+		creator.transform.position = ToV3(center);
+
 		//draw edge type handles
 		Handles.color = Color.white;
 		for (int i = 0; i < path.NumPoints(); ++i)
@@ -62,7 +83,12 @@ public class PathEditor : Editor {
 		//draw edges
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			Handles.color = path.GetType(i) == Edge.TypeEnum.BlocksMoveOnly ? Color.yellow : Color.blue;
+			switch(path.GetType(i))
+			{
+				case Edge.TypeEnum.BlocksMovement: Handles.color = Color.yellow; break;
+				case Edge.TypeEnum.BlocksVision: Handles.color = Color.green; break;
+				case Edge.TypeEnum.BlocksBoth: Handles.color = Color.black; break;
+			}
 			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
 			Handles.ArrowHandleCap(0, ToV3(path[i]), Quaternion.LookRotation(ToV3(path[i + 1] - path[i], false)), 1.2f, EventType.Repaint);
 		}
@@ -101,10 +127,10 @@ public class PathEditor : Editor {
 
 	Vector3 ToV3(Vector2 v2, bool applyCreatorHeight = true)
 	{
-		return new Vector3(v2.x, applyCreatorHeight ? creator.height : 0.0f, v2.y);
+		return new Vector3(v2.x, applyCreatorHeight ? creator.transform.position.y : 0.0f, v2.y);
 	}
 
-	Vector3 ToV2(Vector3 v3)
+	Vector2 ToV2(Vector3 v3)
 	{
 		return new Vector2(v3.x, v3.z);
 	}

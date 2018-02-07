@@ -7,8 +7,9 @@ public class Edge
 {
 	public enum TypeEnum
 	{
-		BlocksMoveAndVision,
-		BlocksMoveOnly
+		BlocksMovement,
+		BlocksVision,
+		BlocksBoth
 	}
 
 	public Vector2 position;
@@ -29,9 +30,9 @@ public class Path {
 
 	public Path(Vector2 center)
 	{
-		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksMoveOnly));
+		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksMovement));
 
-		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksMoveOnly));
+		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksMovement));
 	}
 
 	public Vector2 this[int i]
@@ -54,7 +55,12 @@ public class Path {
 
 	public void ChangeType(int i)
 	{
-		points[i % NumPoints()].type = points[i % NumPoints()].type == Edge.TypeEnum.BlocksMoveOnly ? Edge.TypeEnum.BlocksMoveAndVision : Edge.TypeEnum.BlocksMoveOnly;
+		switch(points[i % NumPoints()].type)
+		{
+			case Edge.TypeEnum.BlocksMovement: points[i % NumPoints()].type = Edge.TypeEnum.BlocksVision; break;
+			case Edge.TypeEnum.BlocksVision: points[i % NumPoints()].type = Edge.TypeEnum.BlocksBoth; break;
+			case Edge.TypeEnum.BlocksBoth: points[i % NumPoints()].type = Edge.TypeEnum.BlocksMovement; break;
+		}
 	}
 
 	public void Remove(int i)
@@ -74,6 +80,6 @@ public class Path {
 
 	public void AddSegment(Vector2 anchorPoint)
 	{
-		points.Add(new Edge(anchorPoint, Edge.TypeEnum.BlocksMoveOnly));
+		points.Add(new Edge(anchorPoint, Edge.TypeEnum.BlocksMovement));
 	}
 }
