@@ -141,11 +141,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   path:
     points:
-    - position: {x: -29.972624, y: 0.0056015253}
+    - position: {x: -29.972633, y: 0.0056610107}
       type: 0
     - position: {x: -16.96184, y: -13.9192295}
       type: 1
-    - position: {x: -9.555538, y: 2.6636271}
+    - position: {x: -2.475346, y: 19.914242}
       type: 0
 --- !u!4 &384716854
 Transform:
@@ -154,7 +154,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 384716852}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.83, y: 4.86, z: -3.75}
+  m_LocalPosition: {x: -16.469938, y: 4.86, z: 2.0002244}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -30,9 +30,9 @@ public class Path {
 
 	public Path(Vector2 center)
 	{
-		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksMovement));
+		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksBoth));
 
-		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksMovement));
+		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksBoth));
 	}
 
 	public Vector2 this[int i]
@@ -80,6 +80,6 @@ public class Path {
 
 	public void AddSegment(Vector2 anchorPoint)
 	{
-		points.Add(new Edge(anchorPoint, Edge.TypeEnum.BlocksMovement));
+		points.Add(new Edge(anchorPoint, Edge.TypeEnum.BlocksBoth));
 	}
 }

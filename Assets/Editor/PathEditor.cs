@@ -14,7 +14,14 @@ public class PathEditor : Editor {
 
 	void OnScene(SceneView sceneview)
 	{
-		DrawVisual();
+		if (creator != null)
+		{
+			DrawVisual();
+		}
+		else
+		{
+			SceneView.onSceneGUIDelegate -= OnScene;
+		}
 	}
 
 	void OnSceneGUI()
@@ -51,9 +58,19 @@ public class PathEditor : Editor {
 			creator.CreatePath();
 		}
 		path = creator.path;
-
-		SceneView.onSceneGUIDelegate -= OnScene;
+		
 		SceneView.onSceneGUIDelegate += OnScene;
+	}
+
+	Color ColorFrom(Edge.TypeEnum type)
+	{
+		switch (type)
+		{
+			case Edge.TypeEnum.BlocksMovement: return Color.yellow;
+			case Edge.TypeEnum.BlocksVision: return Color.green;
+			case Edge.TypeEnum.BlocksBoth: return Color.red;
+		}
+		return Color.black;
 	}
 
 	void DrawVisual()
@@ -61,15 +78,16 @@ public class PathEditor : Editor {
 		//draw edges
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			float distance = (Camera.current.transform.position - ToV3((path[i] + path[i+1])/2.0f)).magnitude;
-			switch (path.GetType(i))
-			{
-				case Edge.TypeEnum.BlocksMovement: Handles.color = Color.yellow; break;
-				case Edge.TypeEnum.BlocksVision: Handles.color = Color.green; break;
-				case Edge.TypeEnum.BlocksBoth: Handles.color = Color.black; break;
-			}
+			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i+1])/2.0f)).magnitude/30.0f;
+			scale = Mathf.Min(scale, 1.0f);
+			Handles.color = ColorFrom(path.GetType(i));
 			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
-			Handles.ArrowHandleCap(0, ToV3(path[i]), Quaternion.LookRotation(ToV3(path[i + 1] - path[i], false)), distance/6.0f, EventType.Repaint);
+			Handles.ArrowHandleCap(
+				0, 
+				ToV3((path[i] + path[i + 1]) / 2.0f), 
+				Quaternion.LookRotation(ToV3(new Vector2((path[i + 1] - path[i]).y, -(path[i + 1] - path[i]).x), false)), 
+				scale, 
+				EventType.Repaint);
 		}
 	}
 
@@ -100,7 +118,13 @@ public class PathEditor : Editor {
 		Handles.color = Color.white;
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			bool clicked = Handles.Button(ToV3((path[i] + path[i + 1]) / 2.0f), Quaternion.identity, 0.4f, 0.4f, Handles.RectangleHandleCap);
+			Handles.color = ColorFrom(path.GetType(i));
+			bool clicked = Handles.Button(
+				ToV3((path[i] + path[i + 1]) / 2.0f), 
+				Quaternion.LookRotation(Vector3.up), 
+				0.4f, 
+				0.4f, 
+				Handles.CubeHandleCap);
 			if (clicked)
 			{
 				Undo.RecordObject(creator, "Change path edge");
@@ -109,11 +133,12 @@ public class PathEditor : Editor {
 		}
 
 		//draw anchor points
-		Handles.color = Color.red;
+		Handles.color = Color.grey;
 		for(int i = 0; i < path.NumPoints(); ++i)
 		{
-			float distance = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude;
-			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, distance/30.0f, Vector3.zero, Handles.SphereHandleCap);
+			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 45.0f;
+			scale = Mathf.Min(scale, 0.6f);
+			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
 
 			float enter;
 			Ray worldRay = new Ray(Camera.current.transform.position, newPosition - Camera.current.transform.position);
@@ -131,7 +156,12 @@ public class PathEditor : Editor {
 		Handles.color = Color.red;
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			bool clicked = Handles.Button(ToV3(path[i] + (path[i + 1] - path[i]).normalized / 2.0f), Quaternion.identity, 0.1f, 0.2f, Handles.RectangleHandleCap);
+			bool clicked = Handles.Button(
+				ToV3(path[i] + (path[i + 1] - path[i]).normalized / 2.0f),
+				Quaternion.LookRotation(Vector3.up),
+				0.1f, 
+				0.2f, 
+				Handles.RectangleHandleCap);
 			if (clicked)
 			{
 				Undo.RecordObject(creator, "Remove path anchor");
