@@ -61,6 +61,7 @@ public class PathEditor : Editor {
 		//draw edges
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
+			float distance = (Camera.current.transform.position - ToV3((path[i] + path[i+1])/2.0f)).magnitude;
 			switch (path.GetType(i))
 			{
 				case Edge.TypeEnum.BlocksMovement: Handles.color = Color.yellow; break;
@@ -68,7 +69,7 @@ public class PathEditor : Editor {
 				case Edge.TypeEnum.BlocksBoth: Handles.color = Color.black; break;
 			}
 			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
-			Handles.ArrowHandleCap(0, ToV3(path[i]), Quaternion.LookRotation(ToV3(path[i + 1] - path[i], false)), 1.2f, EventType.Repaint);
+			Handles.ArrowHandleCap(0, ToV3(path[i]), Quaternion.LookRotation(ToV3(path[i + 1] - path[i], false)), distance/6.0f, EventType.Repaint);
 		}
 	}
 
@@ -111,7 +112,8 @@ public class PathEditor : Editor {
 		Handles.color = Color.red;
 		for(int i = 0; i < path.NumPoints(); ++i)
 		{
-			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, 0.4f, Vector3.zero, Handles.SphereHandleCap);
+			float distance = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude;
+			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, distance/30.0f, Vector3.zero, Handles.SphereHandleCap);
 
 			float enter;
 			Ray worldRay = new Ray(Camera.current.transform.position, newPosition - Camera.current.transform.position);
