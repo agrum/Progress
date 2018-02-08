@@ -65,7 +65,22 @@ public class Path {
 
 	public void Remove(int i)
 	{
-		points.RemoveAt(i % NumPoints());
+		if(NumPoints() > 2)
+			points.RemoveAt(i % NumPoints());
+	}
+
+	public void Merge(int i)
+	{
+		if (NumPoints() > 2)
+		{
+			points[(i + 1) % NumPoints()].position = (points[(i + 1) % NumPoints()].position + points[i % NumPoints()].position) / 2.0f;
+			points.RemoveAt(i % NumPoints());
+		}
+	}
+
+	public void Split(int i)
+	{
+		points.Insert((i+1) % NumPoints(), new Edge((points[(i + 1) % NumPoints()].position + points[i % NumPoints()].position) / 2.0f, points[i].type));
 	}
 
 	public int NumPoints()

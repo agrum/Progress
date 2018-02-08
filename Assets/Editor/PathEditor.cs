@@ -30,24 +30,8 @@ public class PathEditor : Editor {
 		{
 			xz.distance = -creator.transform.position.y;
 		}
-		Input();
 		DrawControl();
 		DrawVisual();
-	}
-
-	void Input()
-	{
-		Event guiEvent = Event.current;
-
-		if(guiEvent.type == EventType.mouseDown && guiEvent.button == 0 && guiEvent.shift)
-		{
-			float enter;
-			Ray worldRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
-			xz.Raycast(worldRay, out enter);
-			Vector3 mousePos = worldRay.GetPoint(enter);
-			Undo.RecordObject(creator, "Add path point");
-			path.AddSegment(ToV2(mousePos));
-		}
 	}
 
 	void OnEnable()
@@ -93,6 +77,9 @@ public class PathEditor : Editor {
 
 	void DrawControl()
 	{
+		Event guiEvent = Event.current;
+		bool guiEventHandled = false;
+
 		//move all points if moved from main anchor
 		Vector2 currentCenter = ToV2(creator.transform.position);
 		if (passedOnce && lastCenter != currentCenter)
@@ -127,8 +114,22 @@ public class PathEditor : Editor {
 				Handles.CubeHandleCap);
 			if (clicked)
 			{
-				Undo.RecordObject(creator, "Change path edge");
-				path.ChangeType(i);
+				if (guiEvent.shift)
+				{
+					Undo.RecordObject(creator, "Insert path anchor");
+					path.Split(i);
+				}
+				else if (guiEvent.control)
+				{
+					Undo.RecordObject(creator, "Merge path edge");
+					path.Merge(i);
+				}
+				else
+				{
+					Undo.RecordObject(creator, "Change path edge");
+					path.ChangeType(i);
+				}
+				guiEventHandled = true;
 			}
 		}
 
@@ -149,25 +150,19 @@ public class PathEditor : Editor {
 			{
 				Undo.RecordObject(creator, "Move path anchor");
 				path[i] = newPosition2D;
+				guiEventHandled = true;
 			}
 		}
 
-		//draw delete handles
-		Handles.color = Color.red;
-		for (int i = 0; i < path.NumPoints(); ++i)
+		//Input
+		if (!guiEventHandled && guiEvent.type == EventType.mouseDown && guiEvent.button == 0 && guiEvent.shift)
 		{
-			bool clicked = Handles.Button(
-				ToV3(path[i] + (path[i + 1] - path[i]).normalized / 2.0f),
-				Quaternion.LookRotation(Vector3.up),
-				0.1f, 
-				0.2f, 
-				Handles.RectangleHandleCap);
-			if (clicked)
-			{
-				Undo.RecordObject(creator, "Remove path anchor");
-				path.Remove(i);
-				--i;
-			}
+			float enter;
+			Ray worldRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
+			xz.Raycast(worldRay, out enter);
+			Vector3 mousePos = worldRay.GetPoint(enter);
+			Undo.RecordObject(creator, "Add path point");
+			path.AddSegment(ToV2(mousePos));
 		}
 	}
 
