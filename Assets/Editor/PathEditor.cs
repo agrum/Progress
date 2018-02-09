@@ -36,11 +36,14 @@ public class PathEditor : Editor {
 
 	void OnEnable()
 	{
+		if(PrefabUtility.GetPrefabParent(target) == null && PrefabUtility.GetPrefabObject(target) != null)
+			return;
+
 		creator = (PathCreator)target;
-		if(creator.path == null)
-		{
+		if (creator.path == null)
 			creator.CreatePath();
-		}
+		else
+			passedOnce = true;
 		path = creator.path;
 		
 		SceneView.onSceneGUIDelegate += OnScene;
