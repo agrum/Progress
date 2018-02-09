@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4553385031607090}
   - component: {fileID: 114659539254637368}
   m_Layer: 0
-  m_Name: Collider2D (1)
+  m_Name: Collider2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57,3 +57,4 @@ MonoBehaviour:
       type: 2
     - position: {x: 0.9999957, y: 0}
       type: 2
+  justDropped: 1

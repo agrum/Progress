@@ -42,8 +42,6 @@ public class PathEditor : Editor {
 		creator = (PathCreator)target;
 		if (creator.path == null)
 			creator.CreatePath();
-		else
-			passedOnce = true;
 		path = creator.path;
 		
 		SceneView.onSceneGUIDelegate += OnScene;
@@ -85,7 +83,7 @@ public class PathEditor : Editor {
 
 		//move all points if moved from main anchor
 		Vector2 currentCenter = ToV2(creator.transform.position);
-		if (passedOnce && lastCenter != currentCenter)
+		if ((passedOnce || creator.justDropped) && lastCenter != currentCenter)
 		{
 			for (int i = 0; i < path.NumPoints(); ++i)
 			{
@@ -93,6 +91,7 @@ public class PathEditor : Editor {
 			}
 		}
 		passedOnce = true;
+		creator.justDropped = false;
 
 		//define pivot
 		Vector2 center = Vector2.zero;
