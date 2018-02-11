@@ -10,6 +10,8 @@ public class PathCreator : MonoBehaviour {
 	[HideInInspector]
 	public bool justDropped = true;
 
+	public CircleCollider2D circleCollider;
+
 	public void CreatePath()
 	{
 		path = new Path(transform.position);
