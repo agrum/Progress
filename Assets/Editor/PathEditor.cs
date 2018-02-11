@@ -74,6 +74,10 @@ public class PathEditor : Editor {
 				scale, 
 				EventType.Repaint);
 		}
+
+		//draw unity collider radius
+		Handles.color = Color.gray;
+		Handles.DrawWireArc(creator.transform.position, Vector3.up, Vector3.forward, 360, creator.GetComponent<CircleCollider2D>().radius);
 	}
 
 	void DrawControl()
@@ -102,6 +106,14 @@ public class PathEditor : Editor {
 		center /= path.NumPoints();
 		lastCenter = center;
 		creator.transform.position = ToV3(center);
+
+		//define radius
+		float radius = 0.0f;
+		for (int i = 0; i < path.NumPoints(); ++i)
+		{
+			radius = Mathf.Max(radius, (path[i] - center).magnitude);
+		}
+		creator.GetComponent<CircleCollider2D>().radius = radius;
 
 		//draw edge type handles
 		Handles.color = Color.white;

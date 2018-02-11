@@ -297,6 +297,7 @@
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
+    <Compile Include="Assets\Scripts\Path\Edge.cs" />
     <Compile Include="Assets\Scripts\Path\Path.cs" />
     <Compile Include="Assets\Scripts\Path\PathCollider.cs" />
     <Compile Include="Assets\Scripts\Path\PathCreator.cs" />
