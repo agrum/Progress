@@ -10,7 +10,6 @@ public class CameraController : MonoBehaviour
 	public float scrollMargin = 80.0f;
 
 	private bool followPlayer = false;
-	private int cursorEnterCount = 0;
 	private Vector3 offset;
 	private float invScrollMargin;
 	private float invScrollMarginTimesSpeed;
@@ -30,14 +29,14 @@ public class CameraController : MonoBehaviour
 		{
 			var amplitude = 0.0f;
 
-			if (Input.mousePosition.x < scrollMargin)
+			if (Input.mousePosition.x < scrollMargin && Input.mousePosition.x >= 0)
 				amplitude = scrollMargin - Mathf.Max(0, Input.mousePosition.x);
-			else if (Input.mousePosition.x > Screen.width - scrollMargin)
+			else if (Input.mousePosition.x > Screen.width - scrollMargin && Input.mousePosition.x < Screen.width)
 				amplitude = scrollMargin - Screen.width + Mathf.Min(Screen.width, Input.mousePosition.x);
 
-			if (Input.mousePosition.y < scrollMargin)
+			if (Input.mousePosition.y < scrollMargin && Input.mousePosition.y >= 0)
 				amplitude = Mathf.Max(amplitude, scrollMargin - Mathf.Max(0, Input.mousePosition.y));
-			else if (Input.mousePosition.y > Screen.height - scrollMargin)
+			else if (Input.mousePosition.y > Screen.height - scrollMargin && Input.mousePosition.y < Screen.height)
 				amplitude = Mathf.Max(amplitude, scrollMargin - Screen.height + Mathf.Min(Screen.height, Input.mousePosition.y));
 
 			if (amplitude > 0.0f)

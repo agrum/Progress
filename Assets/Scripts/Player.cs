@@ -30,7 +30,6 @@ public class Player : MonoBehaviour
 	private Vector3 destination;
 	private Vector3 direction;
 	private float sqrMaxSpeed;
-	private bool canCast = true;
 	private Ability activeAbility = null;
 
 	internal AbilityState State
@@ -69,7 +68,6 @@ public class Player : MonoBehaviour
 			if (isRight < 0.0f)
 				localFacingDirection *= -1.0f;
 			walkingDirection = localFacingDirection;
-			Debug.Log(walkingDirection);
 			if (state != AbilityState.Aiming)
 				facingDirection = localFacingDirection;
 		}

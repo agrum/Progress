@@ -57,8 +57,7 @@ public class PathEditor : Editor {
 		//draw edges
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i+1])/2.0f)).magnitude/30.0f;
-			scale = Mathf.Min(scale, 1.0f);
+			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i+1])/2.0f)).magnitude/50.0f;
 			Handles.color = ColorFrom(path.GetType(i));
 			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
 			Handles.ArrowHandleCap(
@@ -134,7 +133,7 @@ public class PathEditor : Editor {
 			float angle = Vector2.Angle(path[e1Candidate] - path[e3Candidate], path[e2Candidate] - path[e3Candidate]);
 			if (angle <= 90.0f)
 			{
-				Vector2 p1, q1, p2, q2, t1, t2;
+				Vector2 p1, q1, p2, q2;
 				p1 = (path[e1Candidate] + path[e2Candidate]) / 2;
 				q1 = p1 + (new Vector2(path[e1Candidate].y, -path[e1Candidate].x) - new Vector2(path[e2Candidate].y, -path[e2Candidate].x));
 				p2 = (path[e2Candidate] + path[e3Candidate]) / 2;
@@ -160,7 +159,7 @@ public class PathEditor : Editor {
 		Handles.color = Color.white;
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 35.0f;
+			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 50.0f;
 			Handles.color = ColorFrom(path.GetType(i));
 			bool clicked = Handles.Button(
 				ToV3((path[i] + path[i + 1]) / 2.0f), 
@@ -193,7 +192,7 @@ public class PathEditor : Editor {
 		Handles.color = Color.grey;
 		for(int i = 0; i < path.NumPoints(); ++i)
 		{
-			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 45.0f;
+			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 50.0f;
 			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
 
 			float enter;

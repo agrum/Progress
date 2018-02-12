@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4482197607450584}
   - component: {fileID: 114790051542126686}
   m_Layer: 0
-  m_Name: Collider2D 1
+  m_Name: PolyCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,5 +101,7 @@ MonoBehaviour:
     type: 2
   - position: {x: 3.5785697, y: 3.1839118}
     type: 2
+  center: {x: 0, y: 0}
+  height: 0
   justDropped: 0
   circleCollider: {fileID: 58902642516140682}

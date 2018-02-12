@@ -137,34 +137,36 @@ public class FieldOfView : MonoBehaviour {
 
 	ViewCastInfo ViewCast(float globalAngle) {
 		Vector3 dir = DirFromAngle (globalAngle, true);
-		RaycastHit2D hit = Physics2D.Raycast(
+		RaycastHit2D[] hits = Physics2D.RaycastAll(
 			new Vector2(transform.position.x, transform.position.z),
 			new Vector2(dir.x, dir.z),
 			viewRadius,
 			obstacleMask);
 
-		if (hit.collider != null)
+		RaycastPathHit raycastPathHit = new RaycastPathHit(
+			null, 
+			new Vector2(transform.position.x, transform.position.z),
+			new Vector2(transform.position.x, transform.position.z) + new Vector2(dir.x, dir.z) * viewRadius);
+		foreach (var hit in hits)
 		{
-			//PathCreator pathCreator = hit.collider.gameObject.GetComponent<PathCreator>();
-			//if (pathCreator != null)
-			//{
-			//	return new ViewCastInfo(null, transform.position + dir * viewRadius, viewRadius, globalAngle);
-			//}
-			//else
-			//{
+			Path path = hit.collider.gameObject.GetComponentInParent<Path>();
+			if (path != null)
+				path.Raycast(transform.position, dir, ref raycastPathHit, viewRadius, Edge.TypeEnum.BlocksBoth);
+			else
+			{
 				return new ViewCastInfo(
-					hit.collider, 
+					hit.collider,
 					new Vector3(hit.point.x, transform.position.y, hit.point.y),
-					hit.distance, 
+					hit.distance,
 					globalAngle);
-			//}
+			}
 		}
-		else
-			return new ViewCastInfo(
-				null, 
-				transform.position + dir * viewRadius, 
-				viewRadius, 
-				globalAngle);
+
+		return new ViewCastInfo(
+			raycastPathHit.path ? raycastPathHit.path.gameObject.GetComponentInChildren<CircleCollider2D>() : null,
+			new Vector3(raycastPathHit.collision.x, transform.position.y, raycastPathHit.collision.y),
+			(raycastPathHit.collision - raycastPathHit.origin).magnitude,
+			globalAngle);
 	}
 
 	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal) {
