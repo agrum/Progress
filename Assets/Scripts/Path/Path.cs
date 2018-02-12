@@ -23,16 +23,27 @@ public class RaycastPathHit
 }
 
 [System.Serializable]
-public class Path {
+public class Path : MonoBehaviour
+{
 
-	[SerializeField, HideInInspector]
-	List<Edge> points = new List<Edge>();
+	[SerializeField]
+	public List<Edge> points;
 
-	public Path(Vector2 center)
+	[SerializeField]
+	public Vector2 center;
+
+	[SerializeField]
+	public bool justDropped;
+
+	public CircleCollider2D circleCollider;
+
+	public void InitPath()
 	{
+		center = new Vector2(transform.position.x, transform.position.z);
+		points = new List<Edge>();
 		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksBoth));
-
 		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksBoth));
+		justDropped = true;
 	}
 
 	public Vector2 this[int i]
@@ -195,7 +206,7 @@ public class Path {
 		return false; // Doesn't fall in any of the above cases
 	}
 
-	Vector2 IntersectionPoint(Vector2 p1, Vector2 q1, Vector2 p2, Vector2 q2)
+	static public Vector2 IntersectionPoint(Vector2 p1, Vector2 q1, Vector2 p2, Vector2 q2)
 	{
 		//does not handle case when segments are co linears.
 
@@ -205,7 +216,7 @@ public class Path {
 			float yPerXFor1 = (q1.y - p1.y) / (q1.x - p1.x);
 			float yPerXFor2 = (q2.y - p2.y) / (q2.x - p2.x);
 			float yAtX0For1 = q1.y - yPerXFor1 * q1.x;
-			float yAtX0For2 = q1.y - yPerXFor2 * q1.x;
+			float yAtX0For2 = q2.y - yPerXFor2 * q2.x;
 			float xResolve = (yAtX0For2 - yAtX0For1) / (yPerXFor1 - yPerXFor2);
 
 			return new Vector2(xResolve, xResolve * yPerXFor1 + yAtX0For1);

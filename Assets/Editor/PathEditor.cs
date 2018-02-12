@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(PathCreator))]
+[CustomEditor(typeof(Path))]
 public class PathEditor : Editor {
-
-	PathCreator creator;
+	
 	Path path;
 	Plane xz = new Plane(new Vector3(0f, 1f, 0f), 0f);
 	bool passedOnce = false;
@@ -14,7 +13,7 @@ public class PathEditor : Editor {
 
 	void OnScene(SceneView sceneview)
 	{
-		if (creator != null)
+		if (path != null)
 		{
 			DrawVisual();
 		}
@@ -26,9 +25,9 @@ public class PathEditor : Editor {
 
 	void OnSceneGUI()
 	{
-		if(creator.transform.position.y != xz.distance)
+		if(path.transform.position.y != xz.distance)
 		{
-			xz.distance = -creator.transform.position.y;
+			xz.distance = -path.transform.position.y;
 		}
 		DrawControl();
 		DrawVisual();
@@ -39,10 +38,9 @@ public class PathEditor : Editor {
 		if(PrefabUtility.GetPrefabParent(target) == null && PrefabUtility.GetPrefabObject(target) != null)
 			return;
 
-		creator = (PathCreator)target;
-		if (creator.path == null)
-			creator.CreatePath();
-		path = creator.path;
+		path = (Path)target;
+		if (path.points == null)
+			path.InitPath();
 		
 		SceneView.onSceneGUIDelegate += OnScene;
 	}
@@ -77,7 +75,7 @@ public class PathEditor : Editor {
 
 		//draw unity collider radius
 		Handles.color = Color.gray;
-		Handles.DrawWireArc(creator.transform.position, Vector3.up, Vector3.forward, 360, creator.circleCollider.radius);
+		Handles.DrawWireArc(path.transform.position, Vector3.up, Vector3.forward, 360, path.circleCollider.radius);
 	}
 
 	void DrawControl()
@@ -86,35 +84,68 @@ public class PathEditor : Editor {
 		bool guiEventHandled = false;
 
 		//move all points if moved from main anchor
-		Vector2 currentCenter = ToV2(creator.transform.position);
-		if ((passedOnce || creator.justDropped) && lastCenter != currentCenter)
+		Vector2 currentCenter = ToV2(path.transform.position);
+		if ((passedOnce || path.justDropped) && lastCenter != currentCenter)
 		{
+			Undo.RecordObject(path, "path move");
 			for (int i = 0; i < path.NumPoints(); ++i)
 			{
 				path[i] += currentCenter - lastCenter;
 			}
 		}
 		passedOnce = true;
-		creator.justDropped = false;
+		path.justDropped = false;
 
 		//define pivot
 		Vector2 center = Vector2.zero;
+		int e1Candidate = 0;
+		int e2Candidate = 0;
+		int e3Candidate = 0;
+		float candidatesSqrDistanceObserved = 0.0f;
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
-			center += path[i];
+			for (int j = i+1; j < path.NumPoints(); ++j)
+			{
+				float observedSqrDistance = (path[i] - path[j]).sqrMagnitude;
+				if (observedSqrDistance > candidatesSqrDistanceObserved)
+				{
+					e1Candidate = i;
+					e2Candidate = j;
+					candidatesSqrDistanceObserved = observedSqrDistance;
+				}
+			}
 		}
-		center /= path.NumPoints();
+		center = (path[e1Candidate] + path[e2Candidate]) / 2.0f;
+		path.circleCollider.radius = Mathf.Sqrt(candidatesSqrDistanceObserved) / 2.0f;
+		if (path.NumPoints() > 2)
+		{
+			candidatesSqrDistanceObserved = 0.0f;
+			for (int i = 0; i < path.NumPoints(); ++i)
+			{
+				float observedSqrDistance = (path[i] - center).sqrMagnitude;
+				if (observedSqrDistance > candidatesSqrDistanceObserved && i != e1Candidate && i != e2Candidate)
+				{
+					e3Candidate = i;
+					candidatesSqrDistanceObserved = observedSqrDistance;
+				}
+			}
+			float angle = Vector2.Angle(path[e1Candidate] - path[e3Candidate], path[e2Candidate] - path[e3Candidate]);
+			if (angle <= 90.0f)
+			{
+				Vector2 p1, q1, p2, q2, t1, t2;
+				p1 = (path[e1Candidate] + path[e2Candidate]) / 2;
+				q1 = p1 + (new Vector2(path[e1Candidate].y, -path[e1Candidate].x) - new Vector2(path[e2Candidate].y, -path[e2Candidate].x));
+				p2 = (path[e2Candidate] + path[e3Candidate]) / 2;
+				q2 = p2 + (new Vector2(path[e2Candidate].y, -path[e2Candidate].x) - new Vector2(path[e3Candidate].y, -path[e3Candidate].x));
+				center = Path.IntersectionPoint(p1, q1, p2, q2);
+				path.circleCollider.radius = (path[e1Candidate] - center).magnitude;
+			}
+		}
+		//center /= path.NumPoints();
 		lastCenter = center;
-		creator.transform.position = ToV3(center);
-		creator.circleCollider.transform.position = new Vector3(center.x, center.y, 0);
-
-		//define radius
-		float radius = 0.0f;
-		for (int i = 0; i < path.NumPoints(); ++i)
-		{
-			radius = Mathf.Max(radius, (path[i] - center).magnitude);
-		}
-		creator.circleCollider.radius = radius;
+		path.center = center;
+		path.transform.position = ToV3(center);
+		path.circleCollider.transform.position = new Vector3(center.x, center.y, 0);
 
 		//draw edge type handles
 		Handles.color = Color.white;
@@ -131,17 +162,17 @@ public class PathEditor : Editor {
 			{
 				if (guiEvent.shift)
 				{
-					Undo.RecordObject(creator, "Insert path anchor");
+					Undo.RecordObject(path, "Insert path anchor");
 					path.Split(i);
 				}
 				else if (guiEvent.control)
 				{
-					Undo.RecordObject(creator, "Merge path edge");
+					Undo.RecordObject(path, "Merge path edge");
 					path.Merge(i);
 				}
 				else
 				{
-					Undo.RecordObject(creator, "Change path edge");
+					Undo.RecordObject(path, "Change path edge");
 					path.ChangeType(i);
 				}
 				guiEventHandled = true;
@@ -163,7 +194,7 @@ public class PathEditor : Editor {
 			Vector2 newPosition2D = ToV2(newPositionOnPlane);
 			if (path[i] != newPosition2D)
 			{
-				Undo.RecordObject(creator, "Move path anchor");
+				Undo.RecordObject(path, "Move path anchor");
 				path[i] = newPosition2D;
 				guiEventHandled = true;
 			}
@@ -176,14 +207,14 @@ public class PathEditor : Editor {
 			Ray worldRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);
 			xz.Raycast(worldRay, out enter);
 			Vector3 mousePos = worldRay.GetPoint(enter);
-			Undo.RecordObject(creator, "Add path point");
+			Undo.RecordObject(path, "Add path point");
 			path.AddSegment(ToV2(mousePos));
 		}
 	}
 
 	Vector3 ToV3(Vector2 v2, bool applyCreatorHeight = true)
 	{
-		return new Vector3(v2.x, applyCreatorHeight ? creator.transform.position.y : 0.0f, v2.y);
+		return new Vector3(v2.x, applyCreatorHeight ? path.transform.position.y : 0.0f, v2.y);
 	}
 
 	Vector2 ToV2(Vector3 v3)

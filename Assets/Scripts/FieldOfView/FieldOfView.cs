@@ -137,22 +137,34 @@ public class FieldOfView : MonoBehaviour {
 
 	ViewCastInfo ViewCast(float globalAngle) {
 		Vector3 dir = DirFromAngle (globalAngle, true);
-		RaycastHit hit;
+		RaycastHit2D hit = Physics2D.Raycast(
+			new Vector2(transform.position.x, transform.position.z),
+			new Vector2(dir.x, dir.z),
+			viewRadius,
+			obstacleMask);
 
-		if (Physics.Raycast(transform.position, dir, out hit, viewRadius, obstacleMask))
+		if (hit.collider != null)
 		{
-			PathCreator pathCreator = hit.collider.gameObject.GetComponent<PathCreator>();
-			if (pathCreator != null)
-			{
-				return new ViewCastInfo(null, transform.position + dir * viewRadius, viewRadius, globalAngle);
-			}
-			else
-			{
-				return new ViewCastInfo(hit.collider, hit.point, hit.distance, globalAngle);
-			}
+			//PathCreator pathCreator = hit.collider.gameObject.GetComponent<PathCreator>();
+			//if (pathCreator != null)
+			//{
+			//	return new ViewCastInfo(null, transform.position + dir * viewRadius, viewRadius, globalAngle);
+			//}
+			//else
+			//{
+				return new ViewCastInfo(
+					hit.collider, 
+					new Vector3(hit.point.x, transform.position.y, hit.point.y),
+					hit.distance, 
+					globalAngle);
+			//}
 		}
 		else
-			return new ViewCastInfo(null, transform.position + dir * viewRadius, viewRadius, globalAngle);
+			return new ViewCastInfo(
+				null, 
+				transform.position + dir * viewRadius, 
+				viewRadius, 
+				globalAngle);
 	}
 
 	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal) {
@@ -163,12 +175,12 @@ public class FieldOfView : MonoBehaviour {
 	}
 
 	public struct ViewCastInfo {
-		public Collider collider;
+		public Collider2D collider;
 		public Vector3 point;
 		public float dst;
 		public float angle;
 
-		public ViewCastInfo(Collider _collider, Vector3 _point, float _dst, float _angle) {
+		public ViewCastInfo(Collider2D _collider, Vector3 _point, float _dst, float _angle) {
 			collider = _collider;
 			point = _point;
 			dst = _dst;
