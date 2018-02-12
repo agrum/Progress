@@ -33,6 +33,9 @@ public class Path : MonoBehaviour
 	public Vector2 center;
 
 	[SerializeField]
+	public float height;
+
+	[SerializeField]
 	public bool justDropped;
 
 	public CircleCollider2D circleCollider;
@@ -40,6 +43,7 @@ public class Path : MonoBehaviour
 	public void InitPath()
 	{
 		center = new Vector2(transform.position.x, transform.position.z);
+		height = 0;
 		points = new List<Edge>();
 		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksBoth));
 		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksBoth));

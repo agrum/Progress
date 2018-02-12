@@ -25,10 +25,10 @@ public class PathEditor : Editor {
 
 	void OnSceneGUI()
 	{
-		if(path.transform.position.y != xz.distance)
+		/*if(path.transform.position.y != xz.distance)
 		{
-			xz.distance = -path.transform.position.y;
-		}
+			xz.distance = -path.height;
+		}*/
 		DrawControl();
 		DrawVisual();
 	}
@@ -85,7 +85,7 @@ public class PathEditor : Editor {
 
 		//move all points if moved from main anchor
 		Vector2 currentCenter = ToV2(path.transform.position);
-		if ((passedOnce || path.justDropped) && lastCenter != currentCenter)
+		if ((passedOnce || path.justDropped) && (lastCenter != currentCenter))
 		{
 			Undo.RecordObject(path, "path move");
 			for (int i = 0; i < path.NumPoints(); ++i)
@@ -93,8 +93,15 @@ public class PathEditor : Editor {
 				path[i] += currentCenter - lastCenter;
 			}
 		}
+		if((passedOnce || path.justDropped) && path.height != path.transform.position.y)
+		{
+			path.height = path.transform.position.y;
+		}
 		passedOnce = true;
 		path.justDropped = false;
+
+		//plane
+		xz.distance = -path.height;
 
 		//define pivot
 		Vector2 center = Vector2.zero;
@@ -116,7 +123,6 @@ public class PathEditor : Editor {
 			}
 		}
 		center = (path[e1Candidate] + path[e2Candidate]) / 2.0f;
-		path.circleCollider.radius = Mathf.Sqrt(candidatesSqrDistanceObserved) / 2.0f;
 		if (path.NumPoints() > 2)
 		{
 			candidatesSqrDistanceObserved = 0.0f;
@@ -138,7 +144,6 @@ public class PathEditor : Editor {
 				p2 = (path[e2Candidate] + path[e3Candidate]) / 2;
 				q2 = p2 + (new Vector2(path[e2Candidate].y, -path[e2Candidate].x) - new Vector2(path[e3Candidate].y, -path[e3Candidate].x));
 				center = Path.IntersectionPoint(p1, q1, p2, q2);
-				path.circleCollider.radius = (path[e1Candidate] - center).magnitude;
 			}
 		}
 		//center /= path.NumPoints();
@@ -147,16 +152,25 @@ public class PathEditor : Editor {
 		path.transform.position = ToV3(center);
 		path.circleCollider.transform.position = new Vector3(center.x, center.y, 0);
 
+		//define radius
+		float radius = 0.0f;
+		for (int i = 0; i < path.NumPoints(); ++i)
+		{
+			radius = Mathf.Max(radius, (path[i] - center).magnitude);
+		}
+		path.circleCollider.radius = radius;
+
 		//draw edge type handles
 		Handles.color = Color.white;
 		for (int i = 0; i < path.NumPoints(); ++i)
 		{
+			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 35.0f;
 			Handles.color = ColorFrom(path.GetType(i));
 			bool clicked = Handles.Button(
 				ToV3((path[i] + path[i + 1]) / 2.0f), 
-				Quaternion.LookRotation(Vector3.up), 
-				0.4f, 
-				0.4f, 
+				Quaternion.LookRotation(Vector3.up),
+				scale,
+				scale,
 				Handles.CubeHandleCap);
 			if (clicked)
 			{
@@ -184,7 +198,6 @@ public class PathEditor : Editor {
 		for(int i = 0; i < path.NumPoints(); ++i)
 		{
 			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 45.0f;
-			scale = Mathf.Min(scale, 0.6f);
 			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
 
 			float enter;
@@ -214,7 +227,7 @@ public class PathEditor : Editor {
 
 	Vector3 ToV3(Vector2 v2, bool applyCreatorHeight = true)
 	{
-		return new Vector3(v2.x, applyCreatorHeight ? path.transform.position.y : 0.0f, v2.y);
+		return new Vector3(v2.x, applyCreatorHeight ? path.height : 0.0f, v2.y);
 	}
 
 	Vector2 ToV2(Vector3 v3)
