@@ -25,10 +25,6 @@ public class PathEditor : Editor {
 
 	void OnSceneGUI()
 	{
-		/*if(path.transform.position.y != xz.distance)
-		{
-			xz.distance = -path.height;
-		}*/
 		DrawControl();
 		DrawVisual();
 	}
@@ -39,8 +35,8 @@ public class PathEditor : Editor {
 			return;
 
 		path = (Path)target;
-		if (path.points == null)
-			path.InitPath();
+		//if (path.points == null)
+		//	path.InitPath();
 		
 		SceneView.onSceneGUIDelegate += OnScene;
 	}
@@ -223,6 +219,8 @@ public class PathEditor : Editor {
 			Undo.RecordObject(path, "Add path point");
 			path.AddSegment(ToV2(mousePos));
 		}
+
+		EditorUtility.SetDirty(path);
 	}
 
 	Vector3 ToV3(Vector2 v2, bool applyCreatorHeight = true)
