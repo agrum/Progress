@@ -66,16 +66,35 @@ public class FieldOfView : MonoBehaviour {
 			ViewCastInfo newViewCast = ViewCast (angle);
 
 			if (i > 0) {
-				if (oldViewCast.collider != newViewCast.collider || (oldViewCast.collider != null && newViewCast.collider != null)) {
-					EdgeInfo edge = FindEdge (oldViewCast, newViewCast);
-					if (edge.pointA != Vector3.zero) {
-						viewPoints.Add (edge.pointA);
-					}
-					if (edge.pointB != Vector3.zero) {
-						viewPoints.Add (edge.pointB);
-					}
+				//two edges touching from same path
+				if(oldViewCast.path != null && oldViewCast.path == newViewCast.path && oldViewCast.index != newViewCast.index)
+				{
+					viewPoints.Add(new Vector3(newViewCast.path[newViewCast.index].x, transform.position.y, newViewCast.path[newViewCast.index].y));
 				}
+				//one edge and nothing
+				else if (oldViewCast.path == null && newViewCast.path != null)
+				{
+					Vector2 far = (newViewCast.path[newViewCast.index] - new Vector2(transform.position.x, transform.position.z)).normalized * viewRadius;
+					viewPoints.Add(transform.position + new Vector3(far.x, 0.0f, far.y));
+					viewPoints.Add(new Vector3(newViewCast.path[newViewCast.index].x, transform.position.y, newViewCast.path[newViewCast.index].y));
+				}
+				//one edge and nothing
+				else if (oldViewCast.path != null && newViewCast.path == null)
+				{
+					Vector2 far = (oldViewCast.path[oldViewCast.index + 1] - new Vector2(transform.position.x, transform.position.z)).normalized * viewRadius;
+					viewPoints.Add(new Vector3(oldViewCast.path[oldViewCast.index+1].x, transform.position.y, oldViewCast.path[oldViewCast.index+1].y));
+					viewPoints.Add(transform.position + new Vector3(far.x, 0.0f, far.y));
+				}
+				//two edges with one of the node in between angle-1 and angle
+				else if (true)
+				{
 
+				}
+				//two edges with one of the node in between angle-1 and angle
+				else if (true)
+				{
+
+				}
 			}
 
 
@@ -88,7 +107,7 @@ public class FieldOfView : MonoBehaviour {
 		int[] triangles = new int[(vertexCount-3) * 6];
 
 		vertices[0] = Vector3.zero;
-		vertices[vertexCount - 1] = new Vector3(0, -100, 0);
+		vertices[vertexCount - 1] = new Vector3(0, -100.0f, 0);
 		for (int i = 0; i < vertexCount - 2; i++) {
 			vertices[i + 1] = transform.InverseTransformPoint(viewPoints[i]);
 
@@ -112,29 +131,6 @@ public class FieldOfView : MonoBehaviour {
 	}
 
 
-	EdgeInfo FindEdge(ViewCastInfo minViewCast, ViewCastInfo maxViewCast) {
-		float minAngle = minViewCast.angle;
-		float maxAngle = maxViewCast.angle;
-		Vector3 minPoint = Vector3.zero;
-		Vector3 maxPoint = Vector3.zero;
-
-		for (int i = 0; i < edgeResolveIterations; i++) {
-			float angle = (minAngle + maxAngle) / 2;
-			ViewCastInfo newViewCast = ViewCast (angle);
-			
-			if (newViewCast.collider == minViewCast.collider) {
-				minAngle = angle;
-				minPoint = newViewCast.point;
-			} else {
-				maxAngle = angle;
-				maxPoint = newViewCast.point;
-			}
-		}
-
-		return new EdgeInfo (minPoint, maxPoint);
-	}
-
-
 	ViewCastInfo ViewCast(float globalAngle) {
 		Vector3 dir = DirFromAngle (globalAngle, true);
 		RaycastHit2D[] hits = Physics2D.RaycastAll(
@@ -145,6 +141,7 @@ public class FieldOfView : MonoBehaviour {
 
 		RaycastPathHit raycastPathHit = new RaycastPathHit(
 			null, 
+			0,
 			new Vector2(transform.position.x, transform.position.z),
 			new Vector2(transform.position.x, transform.position.z) + new Vector2(dir.x, dir.z) * viewRadius);
 		foreach (var hit in hits)
@@ -154,16 +151,13 @@ public class FieldOfView : MonoBehaviour {
 				path.Raycast(transform.position, dir, ref raycastPathHit, viewRadius, Edge.TypeEnum.BlocksBoth);
 			else
 			{
-				return new ViewCastInfo(
-					hit.collider,
-					new Vector3(hit.point.x, transform.position.y, hit.point.y),
-					hit.distance,
-					globalAngle);
+				Debug.Log("Collided with non path element");
 			}
 		}
 
 		return new ViewCastInfo(
-			raycastPathHit.path ? raycastPathHit.path.gameObject.GetComponentInChildren<CircleCollider2D>() : null,
+			raycastPathHit.path ? raycastPathHit.path : null,
+			raycastPathHit.index,
 			new Vector3(raycastPathHit.collision.x, transform.position.y, raycastPathHit.collision.y),
 			(raycastPathHit.collision - raycastPathHit.origin).magnitude,
 			globalAngle);
@@ -176,21 +170,25 @@ public class FieldOfView : MonoBehaviour {
 		return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),0,Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
 	}
 
-	public struct ViewCastInfo {
-		public Collider2D collider;
+	public struct ViewCastInfo
+	{
+		public Path path;
+		public int index;
 		public Vector3 point;
 		public float dst;
 		public float angle;
 
-		public ViewCastInfo(Collider2D _collider, Vector3 _point, float _dst, float _angle) {
-			collider = _collider;
+		public ViewCastInfo(Path _path, int _index, Vector3 _point, float _dst, float _angle) {
+			path = _path;
+			index = _index;
 			point = _point;
 			dst = _dst;
 			angle = _angle;
 		}
 	}
 
-	public struct EdgeInfo {
+	public struct EdgeInfo
+	{
 		public Vector3 pointA;
 		public Vector3 pointB;
 

@@ -5,15 +5,17 @@ using UnityEngine;
 public class RaycastPathHit
 {
 	public Path path;
+	public int index;
 	public Vector2 origin;
 	public Vector2 collision;
 	//public float dst;
 	//public float angle;
 	//public float normal;
 
-	public RaycastPathHit(Path _path, Vector2 _origin, Vector2 _collision)
+	public RaycastPathHit(Path _path, int _index, Vector2 _origin, Vector2 _collision)
 	{
 		path = _path;
+		index = _index;
 		origin = _origin;
 		collision = _collision;
 		//dst = _dst;
@@ -131,6 +133,7 @@ public class Path : MonoBehaviour
 					if (hit.path == null || (intersectionPoint - p1).sqrMagnitude < (hit.collision - hit.origin).sqrMagnitude)
 					{
 						hit.path = this;
+						hit.index = i;
 						hit.origin = p1;
 						hit.collision = intersectionPoint;
 					}
