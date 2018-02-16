@@ -69,20 +69,20 @@ public class FieldOfView : MonoBehaviour {
 				//two edges touching from same path
 				if(oldViewCast.path != null && oldViewCast.path == newViewCast.path && oldViewCast.index != newViewCast.index)
 				{
-					viewPoints.Add(new Vector3(newViewCast.path[newViewCast.index].x, transform.position.y, newViewCast.path[newViewCast.index].y));
+					viewPoints.Add(newViewCast.path[newViewCast.index].Position3(transform.position.y));
 				}
-				//one edge and nothing
+				//nothing and one edge
 				else if (oldViewCast.path == null && newViewCast.path != null)
 				{
-					Vector2 far = (newViewCast.path[newViewCast.index] - new Vector2(transform.position.x, transform.position.z)).normalized * viewRadius;
+					Vector2 far = (newViewCast.path[newViewCast.index].Position - new Vector2(transform.position.x, transform.position.z)).normalized * viewRadius;
 					viewPoints.Add(transform.position + new Vector3(far.x, 0.0f, far.y));
-					viewPoints.Add(new Vector3(newViewCast.path[newViewCast.index].x, transform.position.y, newViewCast.path[newViewCast.index].y));
+					viewPoints.Add(newViewCast.path[newViewCast.index].Position3(transform.position.y));
 				}
 				//one edge and nothing
 				else if (oldViewCast.path != null && newViewCast.path == null)
 				{
-					Vector2 far = (oldViewCast.path[oldViewCast.index + 1] - new Vector2(transform.position.x, transform.position.z)).normalized * viewRadius;
-					viewPoints.Add(new Vector3(oldViewCast.path[oldViewCast.index+1].x, transform.position.y, oldViewCast.path[oldViewCast.index+1].y));
+					Vector2 far = (oldViewCast.path[oldViewCast.index + 1].Position - new Vector2(transform.position.x, transform.position.z)).normalized * viewRadius;
+					viewPoints.Add(oldViewCast.path[oldViewCast.index+1].Position3(transform.position.y));
 					viewPoints.Add(transform.position + new Vector3(far.x, 0.0f, far.y));
 				}
 				//two edges with one of the node in between angle-1 and angle

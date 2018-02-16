@@ -29,7 +29,7 @@ public class Path : MonoBehaviour
 {
 
 	[SerializeField]
-	public List<Edge> points;
+	public List<Edge> edgeList;
 
 	[SerializeField]
 	public Vector2 center;
@@ -46,73 +46,65 @@ public class Path : MonoBehaviour
 	{
 		center = new Vector2(transform.position.x, transform.position.z);
 		height = 0;
-		points = new List<Edge>();
-		points.Add(new Edge(center + Vector2.left, Edge.TypeEnum.BlocksBoth));
-		points.Add(new Edge(center + Vector2.right, Edge.TypeEnum.BlocksBoth));
+		edgeList = new List<Edge>();
+		edgeList.Add(new Edge(center + Vector2.left, null, Edge.TypeEnum.BlocksBoth));
+		edgeList.Add(new Edge(center + Vector2.right, this[0], Edge.TypeEnum.BlocksBoth));
 		justDropped = true;
 	}
 
-	public Vector2 this[int i]
+	public Edge this[int i]
 	{
 		get
 		{
-			return points[i % NumPoints()].position;
+			Edge edge = edgeList[i % NumEdges];
+			edge.NextEdge = edgeList[(i + 1) % NumEdges];
+			return edge;
 		}
-		set
-		{
-			points[i % NumPoints()].position = value;
-		}
-	}
-
-	public Edge.TypeEnum GetType(int i)
-	{
-		return points[i % NumPoints()].type;
-		
-	}
-
-	public void ChangeType(int i)
-	{
-		switch(points[i % NumPoints()].type)
-		{
-			case Edge.TypeEnum.BlocksMovement: points[i % NumPoints()].type = Edge.TypeEnum.BlocksVision; break;
-			case Edge.TypeEnum.BlocksVision: points[i % NumPoints()].type = Edge.TypeEnum.BlocksBoth; break;
-			case Edge.TypeEnum.BlocksBoth: points[i % NumPoints()].type = Edge.TypeEnum.BlocksMovement; break;
-		}
-	}
-
-	public void Remove(int i)
-	{
-		if(NumPoints() > 2)
-			points.RemoveAt(i % NumPoints());
 	}
 
 	public void Merge(int i)
 	{
-		if (NumPoints() > 2)
+		if (NumEdges > 2)
 		{
-			points[(i + 1) % NumPoints()].position = (points[(i + 1) % NumPoints()].position + points[i % NumPoints()].position) / 2.0f;
-			points.RemoveAt(i % NumPoints());
+			this[i + 1].Position = (this[i].Position + this[i + 1].Position) / 2.0f;
+			edgeList.RemoveAt(i % NumEdges);
 		}
 	}
 
 	public void Split(int i)
 	{
-		points.Insert((i+1) % NumPoints(), new Edge((points[(i + 1) % NumPoints()].position + points[i % NumPoints()].position) / 2.0f, points[i].type));
+		edgeList.Insert((i % NumEdges) + 1, new Edge((this[i + 1].Position + this[i].Position) / 2.0f, this[i + 1], this[i].Type));
 	}
 
-	public int NumPoints()
+	public int NumEdges
 	{
-		return points.Count;
-	}
-
-	public int NumSegments()
-	{
-		return points.Count - 1;
+		get { return edgeList.Count; }
 	}
 
 	public void AddSegment(Vector2 anchorPoint)
 	{
-		points.Add(new Edge(anchorPoint, Edge.TypeEnum.BlocksBoth));
+		float bestSqrDistance = Mathf.Infinity;
+		int bestCandidateIndex = 0;
+		if (NumEdges == 2)
+		{
+			if (Vector2.Dot(this[1].Normal.normalized, anchorPoint - this[1].Center) > 0)
+				bestCandidateIndex = 1;
+		}
+		else
+		{
+			for (int i = 0; i < edgeList.Count; ++i)
+			{
+				float candidateDistance = (anchorPoint - (this[i].Position + this[i + 1].Position) / 2.0f).sqrMagnitude;
+				if (candidateDistance < bestSqrDistance)
+				{
+					bestSqrDistance = candidateDistance;
+					bestCandidateIndex = i;
+				}
+			}
+		}
+
+		Split(bestCandidateIndex);
+		this[bestCandidateIndex + 1].Position = anchorPoint;
 	}
 
 	public bool Raycast(Vector3 origin, Vector3 direction, ref RaycastPathHit hit, float length, Edge.TypeEnum filter)
@@ -123,13 +115,13 @@ public class Path : MonoBehaviour
 
 		bool collided = false;
 
-		for (int i = 0; i < NumPoints(); ++i)
+		for (int i = 0; i < NumEdges; ++i)
 		{
-			if (points[i].type == filter && IsFacing(direction2D, this[i], this[i + 1]))
+			if (this[i].Type == filter && IsFacing(direction2D, this[i].Position, this[i + 1].Position))
 			{
-				if(DoIntersect(p1, p2, this[i], this[i + 1], false))
+				if(DoIntersect(p1, p2, this[i].Position, this[i + 1].Position, false))
 				{
-					Vector2 intersectionPoint = IntersectionPoint(p1, p2, this[i], this[i + 1]);
+					Vector2 intersectionPoint = IntersectionPoint(p1, p2, this[i].Position, this[i + 1].Position);
 					if (hit.path == null || (intersectionPoint - p1).sqrMagnitude < (hit.collision - hit.origin).sqrMagnitude)
 					{
 						hit.path = this;
@@ -151,7 +143,7 @@ public class Path : MonoBehaviour
 		return Vector2.Dot(directionRotated, q - p) > 0.0f;
 	}
 
-	// Given three colinear points p, q, r, the function checks if
+	// Given three colinear edgeList p, q, r, the function checks if
 	// point q lies on line segment 'pr'
 	bool OnSegment(Vector2 p, Vector2 q, Vector2 r)
 	{
@@ -169,7 +161,7 @@ public class Path : MonoBehaviour
 	// 2 --> Counterclockwise
 	int Orientation(Vector2 p, Vector2 q, Vector2 r)
 	{
-		// See https://www.geeksforgeeks.org/orientation-3-ordered-points/
+		// See https://www.geeksforgeeks.org/orientation-3-ordered-edgeList/
 		// for details of below formula.
 		float val = (q.y - p.y) * (r.x - q.x) -
 				  (q.x - p.x) * (r.y - q.y);

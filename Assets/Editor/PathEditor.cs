@@ -35,8 +35,8 @@ public class PathEditor : Editor {
 			return;
 
 		path = (Path)target;
-		//if (path.points == null)
-		//	path.InitPath();
+		if (path.edgeList == null)
+			path.InitPath();
 		
 		SceneView.onSceneGUIDelegate += OnScene;
 	}
@@ -55,15 +55,15 @@ public class PathEditor : Editor {
 	void DrawVisual()
 	{
 		//draw edges
-		for (int i = 0; i < path.NumPoints(); ++i)
+		for (int i = 0; i < path.NumEdges; ++i)
 		{
-			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i+1])/2.0f)).magnitude/50.0f;
-			Handles.color = ColorFrom(path.GetType(i));
-			Handles.DrawLine(ToV3(path[i]), ToV3(path[i + 1]));
+			float scale = (Camera.current.transform.position - ToV3((path[i].Position + path[i+1].Position) /2.0f)).magnitude/50.0f;
+			Handles.color = ColorFrom(path[i].Type);
+			Handles.DrawLine(ToV3(path[i].Position), ToV3(path[i + 1].Position));
 			Handles.ArrowHandleCap(
 				0, 
-				ToV3((path[i] + path[i + 1]) / 2.0f), 
-				Quaternion.LookRotation(ToV3(new Vector2((path[i + 1] - path[i]).y, -(path[i + 1] - path[i]).x), false)), 
+				ToV3((path[i].Position + path[i + 1].Position) / 2.0f), 
+				Quaternion.LookRotation(ToV3(new Vector2((path[i + 1].Position - path[i].Position).y, -(path[i + 1].Position - path[i].Position).x), false)), 
 				scale, 
 				EventType.Repaint);
 		}
@@ -83,9 +83,9 @@ public class PathEditor : Editor {
 		if ((passedOnce || path.justDropped) && (lastCenter != currentCenter))
 		{
 			Undo.RecordObject(path, "path move");
-			for (int i = 0; i < path.NumPoints(); ++i)
+			for (int i = 0; i < path.NumEdges; ++i)
 			{
-				path[i] += currentCenter - lastCenter;
+				path[i].Position += currentCenter - lastCenter;
 			}
 		}
 		if((passedOnce || path.justDropped) && path.height != path.transform.position.y)
@@ -104,11 +104,11 @@ public class PathEditor : Editor {
 		int e2Candidate = 0;
 		int e3Candidate = 0;
 		float candidatesSqrDistanceObserved = 0.0f;
-		for (int i = 0; i < path.NumPoints(); ++i)
+		for (int i = 0; i < path.NumEdges; ++i)
 		{
-			for (int j = i+1; j < path.NumPoints(); ++j)
+			for (int j = i+1; j < path.NumEdges; ++j)
 			{
-				float observedSqrDistance = (path[i] - path[j]).sqrMagnitude;
+				float observedSqrDistance = (path[i].Position - path[j].Position).sqrMagnitude;
 				if (observedSqrDistance > candidatesSqrDistanceObserved)
 				{
 					e1Candidate = i;
@@ -117,28 +117,25 @@ public class PathEditor : Editor {
 				}
 			}
 		}
-		center = (path[e1Candidate] + path[e2Candidate]) / 2.0f;
-		if (path.NumPoints() > 2)
+		center = (path[e1Candidate].Position + path[e2Candidate].Position) / 2.0f;
+		if (path.NumEdges > 2)
 		{
 			candidatesSqrDistanceObserved = 0.0f;
-			for (int i = 0; i < path.NumPoints(); ++i)
+			for (int i = 0; i < path.NumEdges; ++i)
 			{
-				float observedSqrDistance = (path[i] - center).sqrMagnitude;
+				float observedSqrDistance = (path[i].Position - center).sqrMagnitude;
 				if (observedSqrDistance > candidatesSqrDistanceObserved && i != e1Candidate && i != e2Candidate)
 				{
 					e3Candidate = i;
 					candidatesSqrDistanceObserved = observedSqrDistance;
 				}
 			}
-			float angle = Vector2.Angle(path[e1Candidate] - path[e3Candidate], path[e2Candidate] - path[e3Candidate]);
+			float angle = Vector2.Angle(path[e1Candidate].Position - path[e3Candidate].Position, path[e2Candidate].Position - path[e3Candidate].Position);
 			if (angle <= 90.0f)
 			{
-				Vector2 p1, q1, p2, q2;
-				p1 = (path[e1Candidate] + path[e2Candidate]) / 2;
-				q1 = p1 + (new Vector2(path[e1Candidate].y, -path[e1Candidate].x) - new Vector2(path[e2Candidate].y, -path[e2Candidate].x));
-				p2 = (path[e2Candidate] + path[e3Candidate]) / 2;
-				q2 = p2 + (new Vector2(path[e2Candidate].y, -path[e2Candidate].x) - new Vector2(path[e3Candidate].y, -path[e3Candidate].x));
-				center = Path.IntersectionPoint(p1, q1, p2, q2);
+				Edge e1 = new Edge(path[e1Candidate].Position, path[e2Candidate]);
+				Edge e2 = new Edge(path[e2Candidate].Position, path[e3Candidate]);
+				center = Path.IntersectionPoint(e1.Center, e1.Center + e1.Normal, e2.Center, e2.Center + e2.Normal);
 			}
 		}
 		//center /= path.NumPoints();
@@ -149,20 +146,20 @@ public class PathEditor : Editor {
 
 		//define radius
 		float radius = 0.0f;
-		for (int i = 0; i < path.NumPoints(); ++i)
+		for (int i = 0; i < path.NumEdges; ++i)
 		{
-			radius = Mathf.Max(radius, (path[i] - center).magnitude);
+			radius = Mathf.Max(radius, (path[i].Position - center).magnitude);
 		}
 		path.circleCollider.radius = radius;
 
 		//draw edge type handles
 		Handles.color = Color.white;
-		for (int i = 0; i < path.NumPoints(); ++i)
+		for (int i = 0; i < path.NumEdges; ++i)
 		{
-			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 50.0f;
-			Handles.color = ColorFrom(path.GetType(i));
+			float scale = (Camera.current.transform.position - ToV3((path[i].Position + path[i + 1].Position) / 2.0f)).magnitude / 50.0f;
+			Handles.color = ColorFrom(path[i].Type);
 			bool clicked = Handles.Button(
-				ToV3((path[i] + path[i + 1]) / 2.0f), 
+				ToV3((path[i].Position + path[i + 1].Position) / 2.0f), 
 				Quaternion.LookRotation(Vector3.up),
 				scale,
 				scale,
@@ -182,7 +179,7 @@ public class PathEditor : Editor {
 				else
 				{
 					Undo.RecordObject(path, "Change path edge");
-					path.ChangeType(i);
+					path[i].RotateType();
 				}
 				guiEventHandled = true;
 			}
@@ -190,20 +187,20 @@ public class PathEditor : Editor {
 
 		//draw anchor points
 		Handles.color = Color.grey;
-		for(int i = 0; i < path.NumPoints(); ++i)
+		for(int i = 0; i < path.NumEdges; ++i)
 		{
-			float scale = (Camera.current.transform.position - ToV3((path[i] + path[i + 1]) / 2.0f)).magnitude / 50.0f;
-			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i]), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
+			float scale = (Camera.current.transform.position - ToV3((path[i].Position + path[i + 1].Position) / 2.0f)).magnitude / 50.0f;
+			Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i].Position), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
 
 			float enter;
 			Ray worldRay = new Ray(Camera.current.transform.position, newPosition - Camera.current.transform.position);
 			xz.Raycast(worldRay, out enter);
 			Vector3 newPositionOnPlane = worldRay.GetPoint(enter);
 			Vector2 newPosition2D = ToV2(newPositionOnPlane);
-			if (path[i] != newPosition2D)
+			if (path[i].Position != newPosition2D)
 			{
 				Undo.RecordObject(path, "Move path anchor");
-				path[i] = newPosition2D;
+				path[i].Position = newPosition2D;
 				guiEventHandled = true;
 			}
 		}

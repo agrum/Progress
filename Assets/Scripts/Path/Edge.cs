@@ -12,12 +12,84 @@ public class Edge
 		BlocksBoth
 	}
 
-	public Vector2 position;
-	public TypeEnum type;
+	[SerializeField]
+	private Vector2 position;
+	[SerializeField]
+	private TypeEnum type;
 
-	public Edge(Vector2 _position, TypeEnum _type)
+	private Vector2 normal = Vector2.zero;
+	private Vector2 center = Vector2.zero;
+	private Edge nextEdge = null;
+
+	private bool normalOutdated = true;
+	private bool centerOutdated = true;
+
+	public Vector2 Position
+	{
+		get { return position; }
+		set { position = value; normalOutdated = true; centerOutdated = true; }
+	}
+
+	public Vector3 Position3(float y)
+	{
+		return new Vector3(position.x, y, position.y);
+	}
+
+	public TypeEnum Type
+	{
+		get { return type; }
+	}
+
+	public Edge NextEdge
+	{
+		set
+		{
+			nextEdge = value;
+			normalOutdated = true;
+			centerOutdated = true;
+		}
+	}
+
+	public Vector2 Center
+	{
+		get
+		{
+			if (/*centerOutdated && */nextEdge != null)
+			{
+				center = (position + nextEdge.position) / 2.0f;
+				centerOutdated = false;
+			}
+			return center;
+		}
+	}
+
+	public Vector2 Normal
+	{
+		get
+		{
+			if (/*normalOutdated && */nextEdge != null)
+			{
+				normal = new Vector2(nextEdge.Position.y - position.y, -(nextEdge.Position.x - position.x));
+				normalOutdated = false;
+			}
+			return normal;
+		}
+	}
+	
+	public void RotateType()
+	{
+		switch (type)
+		{
+			case Edge.TypeEnum.BlocksMovement: type = Edge.TypeEnum.BlocksVision; break;
+			case Edge.TypeEnum.BlocksVision: type = Edge.TypeEnum.BlocksBoth; break;
+			case Edge.TypeEnum.BlocksBoth: type = Edge.TypeEnum.BlocksMovement; break;
+		}
+	}
+
+	public Edge(Vector2 _position, Edge _nextEdge = null, TypeEnum _type = TypeEnum.BlocksBoth)
 	{
 		position = _position;
+		nextEdge = _nextEdge;
 		type = _type;
 	}
 }
