@@ -42,6 +42,10 @@ public class Edge
 
 	public Edge NextEdge
 	{
+		get
+		{
+			return nextEdge;
+		}
 		set
 		{
 			nextEdge = value;

@@ -1,22 +1,24 @@
-﻿Shader "Custom/Stencil Mask" {
-	Properties 
+﻿Shader "Custom/FieldOfView/Stencil Object" {
+	Properties
 	{
+		_Color("Color", Color) = (1,1,1,1)
 	}
-	SubShader 
-	{
-		Tags { "RenderType"="Opaque" "Queue"="Geometry-100" }
-		ColorMask 0
-		ZWrite Off
-		LOD 200
 
-		Stencil 
-		{
-			Ref 1
-			Pass replace
-		}
-		
-		Pass 
+	SubShader
 	{
+		Tags{ "RenderType" = "Transparent" "Queue" = "Transparent" }
+		LOD 200
+		ZWrite Off
+		Blend Zero SrcColor
+
+		Stencil
+		{
+			Ref 0
+			Comp equal
+		}
+
+		Pass
+		{
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
@@ -34,6 +36,8 @@
 				float4 vertex : SV_POSITION;
 			};
 
+			float4 _Color;
+
 			v2f vert(appdata v)
 			{
 				v2f o;
@@ -41,10 +45,9 @@
 				return o;
 			}
 
-			void frag(v2f i, out float4 color : COLOR, out float depth : DEPTH)
+			fixed4 frag(v2f i) : SV_Target
 			{
-				depth = 1;
-				color = float4(0, 0, 0, 0);
+				return _Color;
 			}
 			ENDCG
 		}
