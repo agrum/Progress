@@ -41,9 +41,10 @@
 				return o;
 			}
 
-			fixed4 frag(v2f i) : SV_Target
+			void frag(v2f i, out float4 color : COLOR, out float depth : DEPTH)
 			{
-				return (0, 0, 0, 0);
+				depth = 1;
+				color = float4(0, 0, 0, 0);
 			}
 			ENDCG
 		}
