@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
 	private Vector3 direction;
 	private float sqrMaxSpeed;
 	private Ability activeAbility = null;
+	private Terrain terrain;
 
 	internal AbilityState State
 	{
@@ -90,6 +91,8 @@ public class Player : MonoBehaviour
 		abilityR.player = this;
 
 		state = AbilityState.None;
+
+		terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
 	}
 	
 	void Update()
@@ -105,6 +108,7 @@ public class Player : MonoBehaviour
 		transform.eulerAngles = new Vector3(0, facingDirection, 0);
 		if(hasDestination)
 			transform.position = transform.position + direction * GetSpeed() * Time.deltaTime;
+		transform.position = new Vector3(transform.position.x, terrain.SampleHeight(transform.position), transform.position.z);
 	}
 
 	void TakeKeyboardInput()
