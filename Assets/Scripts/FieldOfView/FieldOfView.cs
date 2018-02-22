@@ -114,13 +114,15 @@ public class FieldOfView : MonoBehaviour {
 				pathHitList.Add(hit.collider.gameObject.GetComponentInParent<Path>());
 			}
 		}
-		
+
 		//find facing edges in intersecting paths
+		float sqrViewRadius = 2.0f * viewRadius * viewRadius;
 		foreach (var path in pathHitList)
 		{
 			for(int i = 0; i < path.NumEdges; ++i)
 			{
-				if(Vector2.Dot(path[i].Normal, path[i].Center - pos) < 0)
+				Vector2 posToEdge = path[i].Center - pos;
+				if (Vector2.Dot(path[i].Normal, posToEdge) < 0 && posToEdge.sqrMagnitude <= sqrViewRadius)
 				{
 					facingEdgeList.Add(path[i]);
 				}
@@ -137,8 +139,8 @@ public class FieldOfView : MonoBehaviour {
 			Edge edge = facingEdgeList[i];
 			vertices[i * 6 + 0] = transform.InverseTransformPoint(new Vector3(edge.Position.x, 0, edge.Position.y));
 			vertices[i * 6 + 1] = transform.InverseTransformPoint(new Vector3(edge.NextEdge.Position.x, 0, edge.NextEdge.Position.y));
-			vertices[i * 6 + 2] = vertices[i * 6 + 0].normalized * viewRadius;
-			vertices[i * 6 + 3] = vertices[i * 6 + 1].normalized * viewRadius;
+			vertices[i * 6 + 2] = vertices[i * 6 + 0].normalized * viewRadius * 2;
+			vertices[i * 6 + 3] = vertices[i * 6 + 1].normalized * viewRadius * 2;
 			vertices[i * 6 + 4] = vertices[i * 6 + 2] - new Vector3(vertices[i * 6 + 3].z - vertices[i * 6 + 2].z, 0, vertices[i * 6 + 2].x - vertices[i * 6 + 3].x);
 			vertices[i * 6 + 5] = vertices[i * 6 + 4] - vertices[i * 6 + 2] + vertices[i * 6 + 3];
 
