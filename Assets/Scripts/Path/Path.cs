@@ -41,6 +41,7 @@ public class Path : MonoBehaviour
 	public bool justDropped;
 
 	public CircleCollider2D circleCollider;
+	public PolygonCollider2D polyCollider;
 
 	public void InitPath()
 	{
@@ -50,6 +51,16 @@ public class Path : MonoBehaviour
 		edgeList.Add(new Edge(center + Vector2.left, null, Edge.TypeEnum.BlocksBoth));
 		edgeList.Add(new Edge(center + Vector2.right, this[0], Edge.TypeEnum.BlocksBoth));
 		justDropped = true;
+	}
+
+	public void UpgradePath()
+	{
+		if (polyCollider == null)
+		{
+			GameObject polyColliderGO = new GameObject("UnityPolyCollider");
+			polyCollider = polyColliderGO.AddComponent<PolygonCollider2D>();
+			UpdateUnityColliders();
+		}
 	}
 
 	public Edge this[int i]
@@ -105,6 +116,25 @@ public class Path : MonoBehaviour
 
 		Split(bestCandidateIndex);
 		this[bestCandidateIndex + 1].Position = anchorPoint;
+	}
+
+	public void UpdateUnityColliders()
+	{
+		//circle collider
+		circleCollider.transform.position = new Vector3(center.x, center.y, 0);
+		float radius = 0.0f;
+		for (int i = 0; i < NumEdges; ++i)
+		{
+			radius = Mathf.Max(radius, (this[i].Position - center).magnitude);
+		}
+		circleCollider.radius = radius;
+
+		//polygon collider
+		polyCollider.transform.position = new Vector3(center.x, center.y, 0);
+		List<Vector2> points = new List<Vector2>();
+		foreach (var edge in edgeList)
+			points.Add(edge.Position - center);
+		polyCollider.SetPath(0, points.ToArray());
 	}
 
 	public bool Raycast(Vector3 origin, Vector3 direction, ref RaycastPathHit hit, float length, Edge.TypeEnum filter)

@@ -37,6 +37,8 @@ public class PathEditor : Editor {
 		path = (Path)target;
 		if (path.edgeList == null)
 			path.InitPath();
+		if (path.polyCollider == null)
+			path.UpgradePath();
 		
 		SceneView.onSceneGUIDelegate += OnScene;
 	}
@@ -142,15 +144,7 @@ public class PathEditor : Editor {
 		lastCenter = center;
 		path.center = center;
 		path.transform.position = ToV3(center);
-		path.circleCollider.transform.position = new Vector3(center.x, center.y, 0);
-
-		//define radius
-		float radius = 0.0f;
-		for (int i = 0; i < path.NumEdges; ++i)
-		{
-			radius = Mathf.Max(radius, (path[i].Position - center).magnitude);
-		}
-		path.circleCollider.radius = radius;
+		path.UpdateUnityColliders();
 
 		//draw edge type handles
 		Handles.color = Color.white;

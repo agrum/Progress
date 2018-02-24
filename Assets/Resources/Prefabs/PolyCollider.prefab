@@ -21,7 +21,23 @@ GameObject:
   - component: {fileID: 4218059070691838}
   - component: {fileID: 58354080816177128}
   m_Layer: 13
-  m_Name: UnityCollider
+  m_Name: UnityCircleCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1240917854408642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4206497639024560}
+  - component: {fileID: 60779848020886646}
+  m_Layer: 0
+  m_Name: UnityPolyColldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,6 +59,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &4206497639024560
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1240917854408642}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.006468281, z: 0.006468281}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4827637401691224}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4218059070691838
 Transform:
   m_ObjectHideFlags: 1
@@ -50,7 +79,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1050318365815718}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.019523047, z: 0.019523047}
+  m_LocalPosition: {x: 0, y: -0.006468281, z: 0.006468281}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4827637401691224}
@@ -63,10 +92,11 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1825562218164002}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.009761453, y: 0, z: -0.019523047}
+  m_LocalPosition: {x: 5.0047994, y: 0, z: -0.006468281}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4218059070691838}
+  - {fileID: 4206497639024560}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -84,7 +114,33 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.9582489
+  m_Radius: 5.047921
+--- !u!60 &60779848020886646
+PolygonCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1240917854408642}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -5.0479198, y: 0.0037117042}
+      - {x: 5.0479198, y: -0.0037117042}
 --- !u!114 &114407898268290476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -97,11 +153,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   edgeList:
-  - position: {x: -1.967913, y: -0.0000000018626451}
+  - position: {x: -0.043120384, y: -0.002756577}
     type: 2
-  - position: {x: 1.9483901, y: -0.039046094}
+  - position: {x: 10.052719, y: -0.010179985}
     type: 2
-  center: {x: -0.009761453, y: -0.019523047}
+  center: {x: 5.0047994, y: -0.006468281}
   height: 0
   justDropped: 0
   circleCollider: {fileID: 58354080816177128}
+  polyCollider: {fileID: 60779848020886646}

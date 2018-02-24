@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 	public Ability abilityR;
 	public float speedBase;
 	public Keybinding keybinding;
-	public float resourceAffinity = 0.5f;
+	public Rigidbody2D rigidbody2D;
 
 	internal Speed speed = new Speed();
 	internal float crouch = 0.0f;
@@ -92,9 +92,11 @@ public class Player : MonoBehaviour
 
 		state = AbilityState.None;
 
+		rigidbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);
 		terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
+		Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainCollider"));
 	}
-	
+
 	void Update()
 	{
 		UpdatePosition();
@@ -104,10 +106,16 @@ public class Player : MonoBehaviour
 	void UpdatePosition()
 	{
 		if (hasDestination && Vector3.Dot(direction, destination - transform.position) < 0.0f)
+		{
 			hasDestination = false;
+			rigidbody2D.velocity = Vector2.zero;
+		}
 		transform.eulerAngles = new Vector3(0, facingDirection, 0);
 		if(hasDestination)
-			transform.position = transform.position + direction * GetSpeed() * Time.deltaTime;
+		{
+			rigidbody2D.velocity = new Vector2(direction.x, direction.z) * GetSpeed();
+		}
+		transform.position = new Vector3(rigidbody2D.transform.position.x, 0, rigidbody2D.transform.position.y);
 		transform.position = new Vector3(transform.position.x, terrain.SampleHeight(transform.position), transform.position.z);
 	}
 
