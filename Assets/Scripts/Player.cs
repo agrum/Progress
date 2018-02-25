@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 	public Ability abilityR;
 	public float speedBase;
 	public Keybinding keybinding;
-	public Rigidbody2D rigidbody2D;
+	public float hitBoxRadius;
 
 	internal Speed speed = new Speed();
 	internal float crouch = 0.0f;
@@ -32,6 +32,8 @@ public class Player : MonoBehaviour
 	private float sqrMaxSpeed;
 	private Ability activeAbility = null;
 	private Terrain terrain;
+	private Rigidbody2D rigidbody2D;
+	private CircleCollider2D collider2D;
 
 	internal AbilityState State
 	{
@@ -91,10 +93,18 @@ public class Player : MonoBehaviour
 		abilityR.player = this;
 
 		state = AbilityState.None;
-
-		rigidbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);
+		
 		terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
 		Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainRoughCollider"));
+
+		var pathCollidersContainer = Path.GetColliderCOntainer();
+		GameObject circleColliderGO = new GameObject("CircleCollider");
+		rigidbody2D = circleColliderGO.AddComponent<Rigidbody2D>();
+		rigidbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);
+		collider2D = circleColliderGO.AddComponent<CircleCollider2D>();
+		collider2D.radius = hitBoxRadius;
+		circleColliderGO.transform.parent = pathCollidersContainer.transform;
+		circleColliderGO.layer = LayerMask.NameToLayer("Player");
 	}
 
 	void Update()
