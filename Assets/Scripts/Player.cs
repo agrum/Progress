@@ -94,7 +94,7 @@ public class Player : MonoBehaviour
 
 		rigidbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);
 		terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
-		Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainCollider"));
+		Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainRoughCollider"));
 	}
 
 	void Update()

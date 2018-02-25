@@ -28,20 +28,36 @@ public class RaycastPathHit
 public class Path : MonoBehaviour
 {
 
-	[SerializeField]
+	[SerializeField, HideInInspector]
 	public List<Edge> edgeList;
 
-	[SerializeField]
+	[SerializeField, HideInInspector]
 	public Vector2 center;
 
-	[SerializeField]
+	[SerializeField, HideInInspector]
 	public float height;
 
-	[SerializeField]
+	[SerializeField, HideInInspector]
 	public bool justDropped;
 
-	public CircleCollider2D circleCollider;
-	public PolygonCollider2D polyCollider;
+	private float roughRadius;
+	private CircleCollider2D circleCollider;
+	private PolygonCollider2D polyCollider;
+
+	public static GameObject GetColliderCOntainer()
+	{
+		GameObject[] unityColldier2DContainerArray = GameObject.FindGameObjectsWithTag("UnityColldier2DContainer");
+		if(unityColldier2DContainerArray.Length > 0)
+		{
+			return unityColldier2DContainerArray[0];
+		}
+		else
+		{
+			GameObject unityColldier2DContainer = new GameObject("UnityColldier2DContainer");
+			unityColldier2DContainer.tag = "UnityColldier2DContainer";
+			return unityColldier2DContainer;
+		}
+	}
 
 	public void InitPath()
 	{
@@ -53,14 +69,26 @@ public class Path : MonoBehaviour
 		justDropped = true;
 	}
 
-	public void UpgradePath()
+	public void Start()
 	{
-		if (polyCollider == null)
-		{
-			GameObject polyColliderGO = new GameObject("UnityPolyCollider");
-			polyCollider = polyColliderGO.AddComponent<PolygonCollider2D>();
-			UpdateUnityColliders();
-		}
+		GameObject colliderContainer = Path.GetColliderCOntainer();
+
+		GameObject pathCollidersContainer = new GameObject(name + "_Colliders");
+		pathCollidersContainer.transform.parent = colliderContainer.transform;
+
+		GameObject circleColliderGO = new GameObject("CircleCollider");
+		circleCollider = circleColliderGO.AddComponent<CircleCollider2D>();
+		circleColliderGO.AddComponent<ColliderToPath>().path = this;
+		circleColliderGO.transform.parent = pathCollidersContainer.transform;
+		circleColliderGO.layer = LayerMask.NameToLayer("TerrainRoughCollider");
+
+		GameObject polyColliderGO = new GameObject("PolyCollider");
+		polyCollider = polyColliderGO.AddComponent<PolygonCollider2D>();
+		polyColliderGO.AddComponent<ColliderToPath>().path = this;
+		polyColliderGO.transform.parent = pathCollidersContainer.transform;
+		polyColliderGO.layer = gameObject.layer;
+
+		UpdateUnityColliders();
 	}
 
 	public Edge this[int i]
@@ -90,6 +118,11 @@ public class Path : MonoBehaviour
 	public int NumEdges
 	{
 		get { return edgeList.Count; }
+	}
+
+	public float RoughRadius
+	{
+		get { return roughRadius; }
 	}
 
 	public void AddSegment(Vector2 anchorPoint)
@@ -127,6 +160,7 @@ public class Path : MonoBehaviour
 		{
 			radius = Mathf.Max(radius, (this[i].Position - center).magnitude);
 		}
+		roughRadius = radius;
 		circleCollider.radius = radius;
 
 		//polygon collider

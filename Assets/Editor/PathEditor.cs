@@ -37,8 +37,6 @@ public class PathEditor : Editor {
 		path = (Path)target;
 		if (path.edgeList == null)
 			path.InitPath();
-		if (path.polyCollider == null)
-			path.UpgradePath();
 		
 		SceneView.onSceneGUIDelegate += OnScene;
 	}
@@ -72,7 +70,7 @@ public class PathEditor : Editor {
 
 		//draw unity collider radius
 		Handles.color = Color.gray;
-		Handles.DrawWireArc(path.transform.position, Vector3.up, Vector3.forward, 360, path.circleCollider.radius);
+		Handles.DrawWireArc(path.transform.position, Vector3.up, Vector3.forward, 360, path.RoughRadius);
 	}
 
 	void DrawControl()
@@ -144,7 +142,6 @@ public class PathEditor : Editor {
 		lastCenter = center;
 		path.center = center;
 		path.transform.position = ToV3(center);
-		path.UpdateUnityColliders();
 
 		//draw edge type handles
 		Handles.color = Color.white;

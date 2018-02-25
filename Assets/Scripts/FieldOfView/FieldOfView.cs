@@ -111,7 +111,7 @@ public class FieldOfView : MonoBehaviour {
 				obstacleMask);
 			foreach (var hit in hits)
 			{
-				pathHitList.Add(hit.collider.gameObject.GetComponentInParent<Path>());
+				pathHitList.Add(hit.collider.gameObject.GetComponent<ColliderToPath>().path);
 			}
 		}
 
