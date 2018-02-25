@@ -64,8 +64,8 @@ public class Path : MonoBehaviour
 		center = new Vector2(transform.position.x, transform.position.z);
 		height = 0;
 		edgeList = new List<Edge>();
-		edgeList.Add(new Edge(center + Vector2.left, null, Edge.TypeEnum.BlocksBoth));
-		edgeList.Add(new Edge(center + Vector2.right, this[0], Edge.TypeEnum.BlocksBoth));
+		edgeList.Add(new Edge(center + Vector2.left, null, Edge.TypeEnum.BlocksVisionAndMovement));
+		edgeList.Add(new Edge(center + Vector2.right, this[0], Edge.TypeEnum.BlocksVisionAndMovement));
 		justDropped = true;
 	}
 

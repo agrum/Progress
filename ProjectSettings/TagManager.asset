@@ -23,7 +23,7 @@ TagManager:
   - FieldOfView
   - Locked
   - TerrainRoughCollider
-  - 
+  - VisionCollider
   - 
   - 
   - 

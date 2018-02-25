@@ -8,8 +8,7 @@ public class Edge
 	public enum TypeEnum
 	{
 		BlocksMovement,
-		BlocksVision,
-		BlocksBoth
+		BlocksVisionAndMovement
 	}
 
 	[SerializeField]
@@ -84,13 +83,13 @@ public class Edge
 	{
 		switch (type)
 		{
-			case Edge.TypeEnum.BlocksMovement: type = Edge.TypeEnum.BlocksVision; break;
-			case Edge.TypeEnum.BlocksVision: type = Edge.TypeEnum.BlocksBoth; break;
-			case Edge.TypeEnum.BlocksBoth: type = Edge.TypeEnum.BlocksMovement; break;
+			case Edge.TypeEnum.BlocksMovement: type = Edge.TypeEnum.BlocksVisionAndMovement; break;
+			case Edge.TypeEnum.BlocksVisionAndMovement: type = Edge.TypeEnum.BlocksMovement; break;
+			default: type = Edge.TypeEnum.BlocksVisionAndMovement; break;
 		}
 	}
 
-	public Edge(Vector2 _position, Edge _nextEdge = null, TypeEnum _type = TypeEnum.BlocksBoth)
+	public Edge(Vector2 _position, Edge _nextEdge = null, TypeEnum _type = TypeEnum.BlocksVisionAndMovement)
 	{
 		position = _position;
 		nextEdge = _nextEdge;

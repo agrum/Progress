@@ -95,7 +95,9 @@ public class Player : MonoBehaviour
 		state = AbilityState.None;
 		
 		terrain = GameObject.Find("Terrain").GetComponent<Terrain>();
-		Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainRoughCollider"));
+
+		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainRoughCollider"));
+		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("VisionCollider"));
 
 		var pathCollidersContainer = Path.GetColliderCOntainer();
 		GameObject circleColliderGO = new GameObject("CircleCollider");

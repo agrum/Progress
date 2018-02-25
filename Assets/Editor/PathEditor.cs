@@ -46,8 +46,7 @@ public class PathEditor : Editor {
 		switch (type)
 		{
 			case Edge.TypeEnum.BlocksMovement: return Color.yellow;
-			case Edge.TypeEnum.BlocksVision: return Color.green;
-			case Edge.TypeEnum.BlocksBoth: return Color.red;
+			case Edge.TypeEnum.BlocksVisionAndMovement: return Color.red;
 		}
 		return Color.black;
 	}

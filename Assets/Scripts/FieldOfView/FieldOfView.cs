@@ -122,7 +122,7 @@ public class FieldOfView : MonoBehaviour {
 			for(int i = 0; i < path.NumEdges; ++i)
 			{
 				Vector2 posToEdge = path[i].Center - pos;
-				if (Vector2.Dot(path[i].Normal, posToEdge) < 0 && posToEdge.sqrMagnitude <= sqrViewRadius)
+				if (Vector2.Dot(path[i].Normal, posToEdge) < 0 && posToEdge.sqrMagnitude <= sqrViewRadius && path[i].Type == Edge.TypeEnum.BlocksVisionAndMovement)
 				{
 					facingEdgeList.Add(path[i]);
 				}
@@ -166,61 +166,11 @@ public class FieldOfView : MonoBehaviour {
 		obstacleMesh.RecalculateNormals();
 	}
 
-
-	ViewCastInfo ViewCast(float globalAngle) {
-		Vector3 dir = DirFromAngle (globalAngle, true);
-		RaycastHit2D[] hits = Physics2D.RaycastAll(
-			new Vector2(transform.position.x, transform.position.z),
-			new Vector2(dir.x, dir.z),
-			viewRadius,
-			obstacleMask);
-
-		RaycastPathHit raycastPathHit = new RaycastPathHit(
-			null, 
-			0,
-			new Vector2(transform.position.x, transform.position.z),
-			new Vector2(transform.position.x, transform.position.z) + new Vector2(dir.x, dir.z) * viewRadius);
-		foreach (var hit in hits)
-		{
-			Path path = hit.collider.gameObject.GetComponentInParent<Path>();
-			if (path != null)
-				path.Raycast(transform.position, dir, ref raycastPathHit, viewRadius, Edge.TypeEnum.BlocksBoth);
-			else
-			{
-				Debug.Log("Collided with non path element");
-			}
-		}
-
-		return new ViewCastInfo(
-			raycastPathHit.path ? raycastPathHit.path : null,
-			raycastPathHit.index,
-			new Vector3(raycastPathHit.collision.x, transform.position.y, raycastPathHit.collision.y),
-			(raycastPathHit.collision - raycastPathHit.origin).magnitude,
-			globalAngle);
-	}
-
 	public Vector3 DirFromAngle(float angleInDegrees, bool angleIsGlobal) {
 		if (!angleIsGlobal) {
 			angleInDegrees += transform.eulerAngles.y;
 		}
 		return new Vector3(Mathf.Sin(angleInDegrees * Mathf.Deg2Rad),0,Mathf.Cos(angleInDegrees * Mathf.Deg2Rad));
-	}
-
-	public struct ViewCastInfo
-	{
-		public Path path;
-		public int index;
-		public Vector3 point;
-		public float dst;
-		public float angle;
-
-		public ViewCastInfo(Path _path, int _index, Vector3 _point, float _dst, float _angle) {
-			path = _path;
-			index = _index;
-			point = _point;
-			dst = _dst;
-			angle = _angle;
-		}
 	}
 
 	public struct EdgeInfo
