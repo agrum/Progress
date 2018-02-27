@@ -99,7 +99,7 @@ public class Player : MonoBehaviour
 		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainRoughCollider"));
 		Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("VisionCollider"));
 
-		var pathCollidersContainer = Path.GetColliderCOntainer();
+		var pathCollidersContainer = TerrainManager.Instance.ColliderContainer;
 		GameObject circleColliderGO = new GameObject("CircleCollider");
 		rigidbody2D = circleColliderGO.AddComponent<Rigidbody2D>();
 		rigidbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);

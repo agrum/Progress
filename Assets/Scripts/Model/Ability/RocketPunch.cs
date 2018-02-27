@@ -67,6 +67,9 @@ public class RocketPunch : Ability
 				speedModifier.Expire();
 				speedModifier = null;
 				jump = new Vector3(Mathf.Sin((orientation) * Mathf.Deg2Rad), 0.0f, Mathf.Cos((orientation) * Mathf.Deg2Rad)) * distance;
+
+				Debug.Log(TerrainManager.Instance.CanJumpTo(player.transform.position + jump));
+
 				Destroy(aim);
 				castStartTime = Time.time;
 			}

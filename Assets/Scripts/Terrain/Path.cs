@@ -44,21 +44,6 @@ public class Path : MonoBehaviour
 	private CircleCollider2D circleCollider;
 	private PolygonCollider2D polyCollider;
 
-	public static GameObject GetColliderCOntainer()
-	{
-		GameObject[] unityColldier2DContainerArray = GameObject.FindGameObjectsWithTag("UnityColldier2DContainer");
-		if(unityColldier2DContainerArray.Length > 0)
-		{
-			return unityColldier2DContainerArray[0];
-		}
-		else
-		{
-			GameObject unityColldier2DContainer = new GameObject("UnityColldier2DContainer");
-			unityColldier2DContainer.tag = "UnityColldier2DContainer";
-			return unityColldier2DContainer;
-		}
-	}
-
 	public void InitPath()
 	{
 		center = new Vector2(transform.position.x, transform.position.z);
@@ -71,7 +56,7 @@ public class Path : MonoBehaviour
 
 	public void Start()
 	{
-		GameObject colliderContainer = Path.GetColliderCOntainer();
+		GameObject colliderContainer = TerrainManager.Instance.ColliderContainer;
 
 		GameObject pathCollidersContainer = new GameObject(name + "_Colliders");
 		pathCollidersContainer.transform.parent = colliderContainer.transform;
@@ -80,7 +65,7 @@ public class Path : MonoBehaviour
 		circleCollider = circleColliderGO.AddComponent<CircleCollider2D>();
 		circleColliderGO.AddComponent<ColliderToPath>().path = this;
 		circleColliderGO.transform.parent = pathCollidersContainer.transform;
-		circleColliderGO.layer = LayerMask.NameToLayer("TerrainRoughCollider");
+		circleColliderGO.layer = TerrainManager.Instance.TerrainRoughColliderLayer;
 
 		GameObject polyColliderGO = new GameObject("PolyCollider");
 		polyCollider = polyColliderGO.AddComponent<PolygonCollider2D>();
