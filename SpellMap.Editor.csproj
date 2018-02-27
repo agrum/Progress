@@ -274,24 +274,6 @@
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/2015/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
-    <Reference Include="ch.sycoforge.Decal">
-      <HintPath>Assets/nu Assets/Easy Decal/Scripts/ch.sycoforge.Decal.dll</HintPath>
-    </Reference>
-    <Reference Include="ch.sycoforge.Decal.Editor">
-      <HintPath>Assets/nu Assets/Easy Decal/Scripts/Editor/ch.sycoforge.Decal.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="ch.sycoforge.Logging">
-      <HintPath>Assets/nu Assets/Shared/Scripts/ch.sycoforge.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="ch.sycoforge.Unity.Runtime">
-      <HintPath>Assets/nu Assets/Shared/Scripts/ch.sycoforge.Unity.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="ch.sycoforge.Imaging">
-      <HintPath>Assets/nu Assets/Shared/Scripts/Editor/ch.sycoforge.Imaging.dll</HintPath>
-    </Reference>
-    <Reference Include="ch.sycoforge.Unity.Editor">
-      <HintPath>Assets/nu Assets/Shared/Scripts/Editor/ch.sycoforge.Unity.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>C:/Users/Thomas/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.ads@1.0.7/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -307,6 +289,24 @@
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>C:/Users/Thomas/AppData/LocalLow/Unity/cache/packages/packages.unity.com/com.unity.purchasing@1.0.1/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
+    <Reference Include="ch.sycoforge.Unity.Runtime">
+      <HintPath>Assets/External/nu Assets/Shared/Scripts/ch.sycoforge.Unity.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="ch.sycoforge.Unity.Editor">
+      <HintPath>Assets/External/nu Assets/Shared/Scripts/Editor/ch.sycoforge.Unity.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="ch.sycoforge.Decal">
+      <HintPath>Assets/External/nu Assets/Easy Decal/Scripts/ch.sycoforge.Decal.dll</HintPath>
+    </Reference>
+    <Reference Include="ch.sycoforge.Decal.Editor">
+      <HintPath>Assets/External/nu Assets/Easy Decal/Scripts/Editor/ch.sycoforge.Decal.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="ch.sycoforge.Imaging">
+      <HintPath>Assets/External/nu Assets/Shared/Scripts/Editor/ch.sycoforge.Imaging.dll</HintPath>
+    </Reference>
+    <Reference Include="ch.sycoforge.Logging">
+      <HintPath>Assets/External/nu Assets/Shared/Scripts/ch.sycoforge.Logging.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="SpellMap.csproj">
@@ -315,60 +315,58 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Editor\ExportTerrain.cs" />
     <Compile Include="Assets\Editor\FieldOfViewEditor.cs" />
     <Compile Include="Assets\Editor\PathEditor.cs" />
-    <Compile Include="Assets\nu Assets\Easy Decal\Scripts\Editor\DSSDShaderGUI.cs" />
-    <Compile Include="Assets\nu Assets\Easy Decal\Scripts\Editor\EDStandardShaderGUI.cs" />
+    <Compile Include="Assets\External\nu Assets\Easy Decal\Scripts\Editor\DSSDShaderGUI.cs" />
+    <Compile Include="Assets\External\nu Assets\Easy Decal\Scripts\Editor\EDStandardShaderGUI.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\Canvas.shader" />
-    <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\CanvasChannels.shader" />
-    <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\CanvasOpaque.shader" />
-    <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\CanvasSelection.shader" />
-    <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\CanvasUtil.cginc" />
-    <None Include="Assets\Editor Default Resources\nu Assets\Shared\Shaders\UnlitColorAlpha.shader" />
-    <None Include="Assets\Raw Mocap Data\Animations\_CompleteAnimationList.txt" />
+    <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />
+    <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasChannels.shader" />
+    <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasOpaque.shader" />
+    <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasSelection.shader" />
+    <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasUtil.cginc" />
+    <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\UnlitColorAlpha.shader" />
+    <None Include="Assets\External\Raw Mocap Data\Animations\_CompleteAnimationList.txt" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAdd.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAddSoft.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAlpha.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\README.txt" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Scripts\ch.sycoforge.Decal.XML" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\EDMultiply.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\EDSandardVACutoff.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\EDStandardSpecular.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\EDStandardSpecularVACutoff.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\EDVertexAlpha.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\EDVertexAlphaN.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaBumpSpec.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaEdgeBleed.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaEdgeBleed_Mul.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaSimple.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_ReflBumpSpec.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_ReflBumpSpec_Cut.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Legacy\ED_SoftUnlit.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Particles\ParticleAddSoft.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Particles\ParticleAlpha.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\DSSD.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\DSSDSignatures.cginc" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdMetallic.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdMetallicCG.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdMetallicCG_DoubleSided.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdSpecular.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdSpecularCG.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\SSD-M.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\SycoDSSD.cginc" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\SycoFSSD.cginc" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\SycoSSD.cginc" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\SSD\Legacy\Util.cginc" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Unlit\EDAlpha.shader" />
+    <None Include="Assets\External\nu Assets\Easy Decal\Shader\Unlit\EDMultiply.shader" />
     <None Include="Assets\Resources\Shaders\AutoLight.cginc" />
     <None Include="Assets\Resources\Shaders\FogOfWar.shader" />
     <None Include="Assets\Shaders\FieldOfView\ObstacleStencilMask.shader" />
     <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
     <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
-    <None Include="Assets\Shaders\FogObstacleStencilMask.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAdd.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAddSoft.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAlpha.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\README.txt" />
-    <None Include="Assets\nu Assets\Easy Decal\Scripts\ch.sycoforge.Decal.XML" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\EDMultiply.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\EDSandardVACutoff.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\EDStandardSpecular.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\EDStandardSpecularVACutoff.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\EDVertexAlpha.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\EDVertexAlphaN.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaBumpSpec.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaEdgeBleed.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaEdgeBleed_Mul.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_AlphaSimple.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_ReflBumpSpec.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_ReflBumpSpec_Cut.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Legacy\ED_SoftUnlit.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Particles\ParticleAddSoft.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Particles\ParticleAlpha.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\DSSD.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\DSSDSignatures.cginc" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdMetallic.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdMetallicCG.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdMetallicCG_DoubleSided.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdSpecular.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\Masking\MaskStdSpecularCG.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\SSD-M.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\SycoDSSD.cginc" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\SycoFSSD.cginc" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\SycoSSD.cginc" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\SSD\Legacy\Util.cginc" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Unlit\EDAlpha.shader" />
-    <None Include="Assets\nu Assets\Easy Decal\Shader\Unlit\EDMultiply.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
