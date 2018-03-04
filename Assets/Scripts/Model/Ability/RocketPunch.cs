@@ -21,6 +21,7 @@ public class RocketPunch : Ability
 	private float orientation = 0.0f;
 	private float charge = 0.0f;
 	private Vector3 jump;
+	private float effectiveTravelTime;
 
 	override public void Activate()
 	{
@@ -68,7 +69,12 @@ public class RocketPunch : Ability
 				speedModifier = null;
 				jump = new Vector3(Mathf.Sin((orientation) * Mathf.Deg2Rad), 0.0f, Mathf.Cos((orientation) * Mathf.Deg2Rad)) * distance;
 
-				Debug.Log(TerrainManager.Instance.CanJumpTo(player.transform.position + jump));
+				if(!TerrainManager.Instance.CanJumpTo(player.transform.position + jump))
+				{
+					jump = TerrainManager.Instance.ComputeAcceptableJump(player.transform.position, jump, player.col2D.radius);
+				}
+				effectiveTravelTime = travelTime * (jump.magnitude / chargedRange);
+				Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainCollider"));
 
 				Destroy(aim);
 				castStartTime = Time.time;
@@ -76,21 +82,17 @@ public class RocketPunch : Ability
 		}
 		if(isCasting)
 		{
-			bool castFinished = false;
-			float jumpDT = Time.deltaTime;
-			if (Time.time > castStartTime + travelTime)
+			bool castFinished = (Time.time > castStartTime + effectiveTravelTime);
+			
+			if(!castFinished)
 			{
-				jumpDT -= Time.time - (castStartTime + travelTime);
-				castFinished = true;
+				player.rigbody2D.velocity = new Vector2(jump.x, jump.z) / effectiveTravelTime;
 			}
-
-			player.transform.position += jump * (jumpDT / travelTime);
-
-			//switct state
-			if(castFinished)
-			{
+			else{
 				isCasting = false;
 				player.State = Player.AbilityState.None;
+				player.rigbody2D.velocity = Vector3.zero;
+				Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("TerrainCollider"), false);
 			}
 		}
 	}

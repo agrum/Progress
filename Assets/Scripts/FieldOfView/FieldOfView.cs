@@ -99,32 +99,36 @@ public class FieldOfView : MonoBehaviour {
 		pathHitList.Clear();
 		facingEdgeList.Clear();
 
-		//find intersection paths
-		for (int i = 0; i <= stepCount; i++)
+		//abort if inside terrain, all fogged
+		if (TerrainManager.Instance.CanJumpTo(transform.position))
 		{
-			float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
-			Vector3 dir = DirFromAngle(angle, true);
-			RaycastHit2D[] hits = Physics2D.RaycastAll(
-				pos,
-				new Vector2(dir.x, dir.z),
-				viewRadius,
-				obstacleMask);
-			foreach (var hit in hits)
+			//find intersection paths
+			for (int i = 0; i <= stepCount; i++)
 			{
-				pathHitList.Add(hit.collider.gameObject.GetComponent<ColliderToPath>().path);
-			}
-		}
-
-		//find facing edges in intersecting paths
-		float sqrViewRadius = 2.0f * viewRadius * viewRadius;
-		foreach (var path in pathHitList)
-		{
-			for(int i = 0; i < path.NumEdges; ++i)
-			{
-				Vector2 posToEdge = path[i].Center - pos;
-				if (Vector2.Dot(path[i].Normal, posToEdge) < 0 && posToEdge.sqrMagnitude <= sqrViewRadius && path[i].Type == Edge.TypeEnum.BlocksVisionAndMovement)
+				float angle = transform.eulerAngles.y - viewAngle / 2 + stepAngleSize * i;
+				Vector3 dir = DirFromAngle(angle, true);
+				RaycastHit2D[] hits = Physics2D.RaycastAll(
+					pos,
+					new Vector2(dir.x, dir.z),
+					viewRadius,
+					obstacleMask);
+				foreach (var hit in hits)
 				{
-					facingEdgeList.Add(path[i]);
+					pathHitList.Add(hit.collider.gameObject.GetComponent<ColliderToPath>().path);
+				}
+			}
+
+			//find facing edges in intersecting paths
+			float sqrViewRadius = 2.0f * viewRadius * viewRadius;
+			foreach (var path in pathHitList)
+			{
+				for (int i = 0; i < path.NumEdges; ++i)
+				{
+					Vector2 posToEdge = path[i].Center - pos;
+					if (Vector2.Dot(path[i].Normal, posToEdge) < 0 && posToEdge.sqrMagnitude <= sqrViewRadius && path[i].Type == Edge.TypeEnum.BlocksVisionAndMovement)
+					{
+						facingEdgeList.Add(path[i]);
+					}
 				}
 			}
 		}
@@ -132,17 +136,34 @@ public class FieldOfView : MonoBehaviour {
 		//draw quad for each facing edge
 		int vertexCount = facingEdgeList.Count * 6;
 		Vector3[] vertices = new Vector3[vertexCount];
+		Vector2[] vertices2D = new Vector2[6];
 		int[] triangles = new int[facingEdgeList.Count * 4 * 3];
-		
+
+		transform.eulerAngles = Vector2.zero;
+		transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+		//Debug.Log(TerrainManager.Instance.SampleHeight(transform.position));
+
 		for (int i = 0; i < facingEdgeList.Count; ++i)
 		{
 			Edge edge = facingEdgeList[i];
-			vertices[i * 6 + 0] = transform.InverseTransformPoint(new Vector3(edge.Position.x, 0, edge.Position.y));
+			vertices2D[0] = edge.Position - new Vector2(transform.position.x, transform.position.z);
+			vertices2D[1] = edge.NextEdge.Position - new Vector2(transform.position.x, transform.position.z);
+			vertices2D[2] = vertices2D[0].normalized * viewRadius * 2;
+			vertices2D[3] = vertices2D[1].normalized * viewRadius * 2;
+			vertices2D[4] = vertices2D[2] - new Vector2(vertices2D[3].y - vertices2D[2].y, vertices2D[2].x - vertices2D[3].x);
+			vertices2D[5] = vertices2D[4] - vertices2D[2] + vertices2D[3]; TerrainManager.Instance.SampleHeight(edge.Position);
+
+			for(int j = 0; j < 6; ++j)
+				vertices[i * 6 + j] = new Vector3(
+					vertices2D[j].x, 
+					TerrainManager.Instance.SampleHeight(transform.position), 
+					vertices2D[j].y);
+			/*vertices[i * 6 + 0] = transform.InverseTransformPoint(new Vector3(edge.Position.x, 0, edge.Position.y));
 			vertices[i * 6 + 1] = transform.InverseTransformPoint(new Vector3(edge.NextEdge.Position.x, 0, edge.NextEdge.Position.y));
 			vertices[i * 6 + 2] = vertices[i * 6 + 0].normalized * viewRadius * 2;
 			vertices[i * 6 + 3] = vertices[i * 6 + 1].normalized * viewRadius * 2;
 			vertices[i * 6 + 4] = vertices[i * 6 + 2] - new Vector3(vertices[i * 6 + 3].z - vertices[i * 6 + 2].z, 0, vertices[i * 6 + 2].x - vertices[i * 6 + 3].x);
-			vertices[i * 6 + 5] = vertices[i * 6 + 4] - vertices[i * 6 + 2] + vertices[i * 6 + 3];
+			vertices[i * 6 + 5] = vertices[i * 6 + 4] - vertices[i * 6 + 2] + vertices[i * 6 + 3];*/
 
 			triangles[i * 12 + 0] = i * 6 + 1;
 			triangles[i * 12 + 1] = i * 6 + 0;

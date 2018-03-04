@@ -32,8 +32,10 @@ public class Player : MonoBehaviour
 	private float sqrMaxSpeed;
 	private Ability activeAbility = null;
 	private Terrain terrain;
-	private Rigidbody2D rigidbody2D;
-	private CircleCollider2D collider2D;
+	[HideInInspector]
+	public Rigidbody2D rigbody2D;
+	[HideInInspector]
+	public CircleCollider2D col2D;
 
 	internal AbilityState State
 	{
@@ -101,10 +103,10 @@ public class Player : MonoBehaviour
 
 		var pathCollidersContainer = TerrainManager.Instance.ColliderContainer;
 		GameObject circleColliderGO = new GameObject("CircleCollider");
-		rigidbody2D = circleColliderGO.AddComponent<Rigidbody2D>();
-		rigidbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);
-		collider2D = circleColliderGO.AddComponent<CircleCollider2D>();
-		collider2D.radius = hitBoxRadius;
+		rigbody2D = circleColliderGO.AddComponent<Rigidbody2D>();
+		rigbody2D.transform.position = new Vector3(transform.position.x, transform.position.z, 0);
+		col2D = circleColliderGO.AddComponent<CircleCollider2D>();
+		col2D.radius = hitBoxRadius;
 		circleColliderGO.transform.parent = pathCollidersContainer.transform;
 		circleColliderGO.layer = LayerMask.NameToLayer("Player");
 	}
@@ -120,14 +122,14 @@ public class Player : MonoBehaviour
 		if (hasDestination && Vector3.Dot(direction, destination - transform.position) < 0.0f)
 		{
 			hasDestination = false;
-			rigidbody2D.velocity = Vector2.zero;
+			rigbody2D.velocity = Vector2.zero;
 		}
 		transform.eulerAngles = new Vector3(0, facingDirection, 0);
 		if(hasDestination)
 		{
-			rigidbody2D.velocity = new Vector2(direction.x, direction.z) * GetSpeed();
+			rigbody2D.velocity = new Vector2(direction.x, direction.z) * GetSpeed();
 		}
-		transform.position = new Vector3(rigidbody2D.transform.position.x, 0, rigidbody2D.transform.position.y);
+		transform.position = new Vector3(rigbody2D.transform.position.x, 0, rigbody2D.transform.position.y);
 		transform.position = new Vector3(transform.position.x, terrain.SampleHeight(transform.position), transform.position.z);
 	}
 

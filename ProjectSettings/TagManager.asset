@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - UnityColldier2DContainer
+  - Terrain
   layers:
   - Default
   - TransparentFX
