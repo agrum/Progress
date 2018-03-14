@@ -2,15 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Team : MonoBehaviour {
+public class Team {
+	private List<Player> playerList = new List<Player>();
 
-	// Use this for initialization
-	void Start () {
-		
+	public Team(int size)
+	{
+		while (size > playerList.Count)
+			playerList.Add(null);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	public Player this[int i]
+	{
+		get
+		{
+			return playerList[i];
+		}
+		set
+		{
+			playerList[i] = value;
+		}
+	}
+
+	public int TeamSize()
+	{
+		return playerList.Count;
 	}
 }

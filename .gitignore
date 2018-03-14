@@ -16,3 +16,6 @@
 /Assets/StreamingAssets
 /Assets/Stones_and_buried_treasure
 /Assets/External
+/server/node_modules
+/server/package-lock.json
+/server/private.js

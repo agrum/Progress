@@ -24,7 +24,7 @@ public class TeamManager
 		uint numTeams = 3;
 
 		for(int i = 0; i < numTeams; i++)
-			teamList.Add(new Team());
+			teamList.Add(new Team(6));
 
 		NexusManager.Instance.AllocateMexusesBetweenTeams(ref teamList);
 	}
