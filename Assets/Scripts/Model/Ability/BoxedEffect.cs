@@ -3,35 +3,38 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class BoxedEffect : MonoBehaviour
+namespace West
 {
-	public bool IsSingleShot = false;
-	private bool ranOnce = false;
-
-	public delegate void ObjectEnterDelegate(GameObject gameObject);
-	public delegate void ObjectLeaveDelegate(GameObject gameObject);
-
-	public event ObjectEnterDelegate ObjectEnterEvent;
-	public event ObjectLeaveDelegate ObjectLeaveEvent;
-
-	void OnTriggerEnter(Collider other)
+	public class BoxedEffect : MonoBehaviour
 	{
-		if(enabled)
-			ObjectEnterEvent(other.gameObject);
-	}
+		public bool IsSingleShot = false;
+		private bool ranOnce = false;
 
-	void OnTriggerLeave(Collider other)
-	{
-		if (enabled)
-			ObjectLeaveEvent(other.gameObject);
-	}
+		public delegate void ObjectEnterDelegate(GameObject gameObject);
+		public delegate void ObjectLeaveDelegate(GameObject gameObject);
 
-	void FixedUpdate()
-	{
-		if (IsSingleShot && ranOnce)
+		public event ObjectEnterDelegate ObjectEnterEvent;
+		public event ObjectLeaveDelegate ObjectLeaveEvent;
+
+		void OnTriggerEnter(Collider other)
 		{
-			ranOnce = true;
-			enabled = false;
+			if (enabled)
+				ObjectEnterEvent(other.gameObject);
+		}
+
+		void OnTriggerLeave(Collider other)
+		{
+			if (enabled)
+				ObjectLeaveEvent(other.gameObject);
+		}
+
+		void FixedUpdate()
+		{
+			if (IsSingleShot && ranOnce)
+			{
+				ranOnce = true;
+				enabled = false;
+			}
 		}
 	}
 }

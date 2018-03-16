@@ -4,23 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class BurstShield : Resource
+namespace West
 {
-	public float DechargeRate = 75.0f;
-
-	ResourceBehaviour InternalBehaviour;
-
-	public BurstShield()
+	public class BurstShield : Resource
 	{
-		Type = Resource.ResourceType.Shield;
-		InternalBehaviour = new ResourceBehaviour(DechargeRate, 0, 1, 1);
-		AddBehaviour(InternalBehaviour);
-	}
-	
-	public override void AddReserve(ResourceReserve reserve)
-	{
-		reserve.Max = 0.0f;
+		public float DechargeRate = 75.0f;
 
-		base.AddReserve(reserve);
+		ResourceBehaviour InternalBehaviour;
+
+		public BurstShield()
+		{
+			Type = Resource.ResourceType.Shield;
+			InternalBehaviour = new ResourceBehaviour(DechargeRate, 0, 1, 1);
+			AddBehaviour(InternalBehaviour);
+		}
+
+		public override void AddReserve(ResourceReserve reserve)
+		{
+			reserve.Max = 0.0f;
+
+			base.AddReserve(reserve);
+		}
 	}
 }

@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpeedModifier : Expirable
+namespace West
 {
-	public float factor { get; private set; }
-
-	public SpeedModifier(float p_factor, float p_expirationTime = 0.0f) :
-		base(p_expirationTime)
+	public class SpeedModifier : Expirable
 	{
-		factor = p_factor;
+		public float factor { get; private set; }
+
+		public SpeedModifier(float p_factor, float p_expirationTime = 0.0f) :
+			base(p_expirationTime)
+		{
+			factor = p_factor;
+		}
 	}
 }

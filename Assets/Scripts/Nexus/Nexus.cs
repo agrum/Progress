@@ -2,23 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Nexus : MonoBehaviour {
+namespace West
+{
+	public class Nexus : MonoBehaviour
+	{
 
-	public float fullPowerRadius;
-	public float maxRangeRadius;
-	public List<Nexus> neighbourNexusList;
-	public bool startingNexus;
+		public float fullPowerRadius;
+		public float maxRangeRadius;
+		public List<Nexus> neighbourNexusList;
+		public bool startingNexus;
 
-	private Team team;
+		private Team team;
 
-	public Team Team{
-		get
+		public Team Team
 		{
-			return team;
-		}
-		set
-		{
-			team = value;
+			get
+			{
+				return team;
+			}
+			set
+			{
+				team = value;
+			}
 		}
 	}
 }

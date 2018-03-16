@@ -4,20 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public class Armor : Resource
+namespace West
 {
-	public float ArmorPhysicalReduction = 5.0f;
-
-	public Armor()
+	public class Armor : Resource
 	{
-		Type = Resource.ResourceType.Armor;
-	}
+		public float ArmorPhysicalReduction = 5.0f;
 
-	public override void Deplete(ref Hit hit)
-	{
-		if(hit.Type == Hit.HitType.Physical)
-			hit.Amount -= ArmorPhysicalReduction;
+		public Armor()
+		{
+			Type = Resource.ResourceType.Armor;
+		}
 
-		base.Deplete(ref hit);
+		public override void Deplete(ref Hit hit)
+		{
+			if (hit.Type == Hit.HitType.Physical)
+				hit.Amount -= ArmorPhysicalReduction;
+
+			base.Deplete(ref hit);
+		}
 	}
 }

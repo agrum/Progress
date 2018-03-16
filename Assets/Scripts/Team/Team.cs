@@ -2,29 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Team {
-	private List<Player> playerList = new List<Player>();
+namespace West
+{
+	public class Team
+	{
+		private List<Player> playerList = new List<Player>();
 
-	public Team(int size)
-	{
-		while (size > playerList.Count)
-			playerList.Add(null);
-	}
-	
-	public Player this[int i]
-	{
-		get
+		public Team(int size)
 		{
-			return playerList[i];
+			while (size > playerList.Count)
+				playerList.Add(null);
 		}
-		set
-		{
-			playerList[i] = value;
-		}
-	}
 
-	public int TeamSize()
-	{
-		return playerList.Count;
+		public Player this[int i]
+		{
+			get
+			{
+				return playerList[i];
+			}
+			set
+			{
+				playerList[i] = value;
+			}
+		}
+
+		public int TeamSize()
+		{
+			return playerList.Count;
+		}
 	}
 }

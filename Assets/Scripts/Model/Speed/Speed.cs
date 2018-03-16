@@ -2,39 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Speed
+namespace West
 {
-	public float amount { get; private set; }
-	private List<SpeedModifier> modifierList = new List<SpeedModifier>();
-
-	public Speed()
+	public class Speed
 	{
-		UpdateSpeed();
-	}
+		public float amount { get; private set; }
+		private List<SpeedModifier> modifierList = new List<SpeedModifier>();
 
-	public void AddModifier(SpeedModifier modifier)
-	{
-		if (modifier.factor <= 0.0f)
-			return;
-		
-		modifierList.Add(modifier);
-		modifier.ExpiredEvent += SpeedModifierExpired;
-		UpdateSpeed();
-	}
-
-	void SpeedModifierExpired(Expirable behaviour)
-	{
-		modifierList.Remove(behaviour as SpeedModifier);
-		UpdateSpeed();
-	}
-
-	void UpdateSpeed()
-	{
-		float localAmount = 1.0f;
-		foreach (var modifier in modifierList)
+		public Speed()
 		{
-			localAmount *= modifier.factor;
+			UpdateSpeed();
 		}
-		amount = localAmount;
+
+		public void AddModifier(SpeedModifier modifier)
+		{
+			if (modifier.factor <= 0.0f)
+				return;
+
+			modifierList.Add(modifier);
+			modifier.ExpiredEvent += SpeedModifierExpired;
+			UpdateSpeed();
+		}
+
+		void SpeedModifierExpired(Expirable behaviour)
+		{
+			modifierList.Remove(behaviour as SpeedModifier);
+			UpdateSpeed();
+		}
+
+		void UpdateSpeed()
+		{
+			float localAmount = 1.0f;
+			foreach (var modifier in modifierList)
+			{
+				localAmount *= modifier.factor;
+			}
+			amount = localAmount;
+		}
 	}
 }

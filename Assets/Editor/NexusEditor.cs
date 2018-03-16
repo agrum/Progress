@@ -2,15 +2,18 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(Nexus))]
-public class NexusEditor : Editor
+namespace West
 {
-	void OnSceneGUI()
+	[CustomEditor(typeof(Nexus))]
+	public class NexusEditor : Editor
 	{
-		Nexus nexus = (Nexus)target;
-		Handles.color = Color.white;
-		Handles.DrawWireArc(nexus.transform.position, Vector3.up, Vector3.forward, 360, nexus.fullPowerRadius);
-		Handles.DrawWireArc(nexus.transform.position, Vector3.up, Vector3.forward, 360, nexus.maxRangeRadius);
-	}
+		void OnSceneGUI()
+		{
+			Nexus nexus = (Nexus)target;
+			Handles.color = Color.white;
+			Handles.DrawWireArc(nexus.transform.position, Vector3.up, Vector3.forward, 360, nexus.fullPowerRadius);
+			Handles.DrawWireArc(nexus.transform.position, Vector3.up, Vector3.forward, 360, nexus.maxRangeRadius);
+		}
 
+	}
 }

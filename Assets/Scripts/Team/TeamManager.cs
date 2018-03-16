@@ -2,38 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeamManager
+namespace West
 {
-	//static instantiation
-	private static TeamManager _instance;
-	public static TeamManager Instance
+	public class TeamManager
 	{
-		get
+		//static instantiation
+		private static TeamManager _instance;
+		public static TeamManager Instance
 		{
-			if (_instance == null)
-				_instance = new TeamManager();
-			return _instance;
+			get
+			{
+				if (_instance == null)
+					_instance = new TeamManager();
+				return _instance;
+			}
 		}
-	}
-	//static instantiation
+		//static instantiation
 
-	private List<Team> teamList;
+		private List<Team> teamList = new List<Team>();
 
-	private TeamManager()
-	{
-		uint numTeams = 3;
-
-		for(int i = 0; i < numTeams; i++)
-			teamList.Add(new Team(6));
-
-		NexusManager.Instance.AllocateMexusesBetweenTeams(ref teamList);
-	}
-
-	public List<Team> TeamList
-	{
-		get
+		private TeamManager()
 		{
-			return teamList;
+			int numTeams = App.Model["numberOfTeams"].AsInt;
+
+			for (int i = 0; i < numTeams; i++)
+				teamList.Add(new Team(App.Model["numberOfPlayersPerTeam"].AsInt));
+
+			NexusManager.Instance.AllocateMexusesBetweenTeams(ref teamList);
+		}
+
+		public List<Team> TeamList
+		{
+			get
+			{
+				return teamList;
+			}
 		}
 	}
 }

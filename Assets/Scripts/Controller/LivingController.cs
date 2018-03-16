@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LivingController : MonoBehaviour
+
+namespace West
 {
-	private Life life;
-	private List<Ability> affectingAbilityList;
+	public class LivingController : MonoBehaviour
+	{
+		private Life life;
+		private List<Ability> affectingAbilityList;
+	}
 }

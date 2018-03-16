@@ -328,6 +328,10 @@
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasSelection.shader" />
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasUtil.cginc" />
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\UnlitColorAlpha.shader" />
+    <None Include="Assets\External\Best HTTP (Pro)\BestHTTP\SecureProtocol\License.txt" />
+    <None Include="Assets\External\Best HTTP (Pro)\ReleaseNotes.txt" />
+    <None Include="Assets\External\Best HTTP (Pro)\link.xml" />
+    <None Include="Assets\External\Best HTTP (Pro)\link_android_subset.xml" />
     <None Include="Assets\External\Raw Mocap Data\Animations\_CompleteAnimationList.txt" />
     <None Include="Assets\External\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAdd.shader" />
     <None Include="Assets\External\nu Assets\Easy Decal\Demo\Unity SA\Patricles\Shader\PriorityParticleAddSoft.shader" />

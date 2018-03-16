@@ -2,40 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cooldown : MonoBehaviour {
-	public float BaseDuration = 0;
-
-	private float ConsumedTimestamp = 0;
-	private float CooledTimestamp = 0;
-
-	public void Consume ()
+namespace West
+{
+	public class Cooldown : MonoBehaviour
 	{
-		ConsumedTimestamp = Time.time;
-		CooledTimestamp = Time.time + BaseDuration;
-	}
+		public float BaseDuration = 0;
 
-	public float TimeUntilCooled ()
-	{
-		return (CooledTimestamp > Time.time) ? CooledTimestamp - Time.time : 0.0f;
-	}
+		private float ConsumedTimestamp = 0;
+		private float CooledTimestamp = 0;
 
-	public float CooledPercentage ()
-	{
-		if (ConsumedTimestamp == CooledTimestamp)
-			return 1.0f;
+		public void Consume()
+		{
+			ConsumedTimestamp = Time.time;
+			CooledTimestamp = Time.time + BaseDuration;
+		}
 
-		return 1.0f - TimeUntilCooled() / (CooledTimestamp - ConsumedTimestamp);
-	}
+		public float TimeUntilCooled()
+		{
+			return (CooledTimestamp > Time.time) ? CooledTimestamp - Time.time : 0.0f;
+		}
 
-	// Use this for initialization
-	void Start ()
-	{
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		
+		public float CooledPercentage()
+		{
+			if (ConsumedTimestamp == CooledTimestamp)
+				return 1.0f;
+
+			return 1.0f - TimeUntilCooled() / (CooledTimestamp - ConsumedTimestamp);
+		}
+
+		// Use this for initialization
+		void Start()
+		{
+
+		}
+
+		// Update is called once per frame
+		void Update()
+		{
+
+		}
 	}
 }

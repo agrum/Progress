@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class OffencePullSelf : Ability
+namespace West
 {
-	public float Merp;
-
-	public String Info()
+	public class OffencePullSelf : Ability
 	{
-		return "";
-	}
+		public float Merp;
 
-	public void Cast()
-	{
+		public String Info()
+		{
+			return "";
+		}
 
+		public void Cast()
+		{
+
+		}
 	}
 }
