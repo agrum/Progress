@@ -1143,6 +1143,7 @@
     <Compile Include="Assets\Scripts\Nexus\Nexus.cs" />
     <Compile Include="Assets\Scripts\Nexus\NexusManager.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
+    <Compile Include="Assets\Scripts\Startup\StartupManager.cs" />
     <Compile Include="Assets\Scripts\Team\Team.cs" />
     <Compile Include="Assets\Scripts\Team\TeamManager.cs" />
     <Compile Include="Assets\Scripts\Terrain\ColliderToPath.cs" />
