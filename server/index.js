@@ -4,6 +4,7 @@ var io = require('socket.io')(http)
 var mongo = require('mongodb').MongoClient
 var private = require('./private').private
 let mongoose = require('mongoose')
+var bodyParser = require('body-parser')
 
 var server =
 	"west-shard-00-00-1wi8d.mongodb.net:27017," +
@@ -12,7 +13,6 @@ var server =
 var database = "west"
 var options = "ssl=true&replicaSet=West-shard-0&authSource=admin"
 var credentials = "agrum:" + encodeURI(private.mongoPWD)
-//var uri = "mongodb://"+credentials+"@"+server+"/"+database
 var uri = "mongodb://" + credentials + "@" + server + "/" + database + "?" + options
 
 app.db = mongoose
@@ -30,7 +30,8 @@ app.db.connect(uri)
 		console.error(err)
 	})
 
-require('./routes')(app)
+app.use(bodyParser.urlencoded({ extended: false }))
+app.all('*', require('./routes').router)
 
 /*io.on('connection', function(socket){
 	console.log('a user connected');

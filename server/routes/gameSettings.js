@@ -1,7 +1,7 @@
 var express = require('express');
-var gameSettings = express.Router();
+var router = express.Router();
 
-gameSettings.get('/:name', function(req, res, next) {
+router.get('/:name', function(req, res, next) {
     req.app.db.models.gameSettings
     .findOne({'name':req.params.name})
     .then(document => {
@@ -12,6 +12,6 @@ gameSettings.get('/:name', function(req, res, next) {
         console.error('gameSettings error')
         console.error(err)
     })
-});
+})
 
-module.exports.gameSettings = gameSettings;
+module.exports.router = router

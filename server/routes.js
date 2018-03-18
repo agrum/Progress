@@ -1,11 +1,13 @@
-'use strict';
+var express = require('express');
+var router = express.Router();
 
-exports = module.exports = function (app) {
-	app.use('/gameSettings', require('./routes/gameSettings').gameSettings)
+router.use('/gameSettings', require('./routes/gameSettings').router)
+router.use('/signup', require('./routes/signup').router)
 
-	app.use(function (req, res, next) {
-		var err = new Error('Not Found')
-		err.status = 404
-		next(err)
-	})
-}
+router.use(function (req, res, next) {
+	var err = new Error('Not Found')
+	err.status = 404
+	next(err)
+})
+
+module.exports.router = router

@@ -2,13 +2,13 @@ let mongoose = require('mongoose');
 
 module.exports = function()
 {
-	let gameSettings = new mongoose.Schema({
+	let schema = new mongoose.Schema({
 		name: String,
 		numberOfTeams: Number,
 		numberOfPlayersPerTeam: Number,
 		map: String
 	})
-	gameSettings.set('collection', 'gameSettings')
+	schema.set('collection', 'gameSettings')
 
-	module.exports = mongoose.model('gameSettings', gameSettings)
+	module.exports = mongoose.model('gameSettings', schema)
 }
