@@ -35,6 +35,13 @@ module.exports = function () {
 		})
 	})
 	schema.set('collection', 'users')
+	
+	schema.statics.validatePassword = function(password, hash, done) {
+		var bcrypt = require('bcrypt');
+		bcrypt.compare(password, hash, function(err, res) {
+		  done(err, res);
+		});
+	  };
 
 	mongoose.model('users', schema)
 }

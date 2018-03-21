@@ -5,6 +5,10 @@ var mongo = require('mongodb').MongoClient
 var private = require('./private').private
 let mongoose = require('mongoose')
 var bodyParser = require('body-parser')
+var cookieParser = require('cookie-parser')
+var passport = require('passport')
+var session = require('express-session')
+var mongoStore = require('connect-mongo')(session);
 
 var server =
 	"west-shard-00-00-1wi8d.mongodb.net:27017," +
@@ -21,6 +25,7 @@ app.db.connect(uri)
 		console.log('Database connection successful')
 		require('./models')()
 
+		//configure http
 		http.listen(3000, function () {
 			console.log('Example app listening on port 3000!')
 		})
@@ -30,7 +35,25 @@ app.db.connect(uri)
 		console.error(err)
 	})
 
+
+// Configuring Passport
+app.use(session(
+	{
+		secret: private.expressSession,
+		saveUninitialized: true,
+		resave: true,
+		store: new mongoStore({
+			url: uri,
+			collection: 'sessions'
+		})
+	}))
+app.use(passport.initialize())
+app.use(passport.session())
+app.passport = passport;
+require('./passport')(app);
+
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
 app.all('*', require('./routes').router)
 
 /*io.on('connection', function(socket){

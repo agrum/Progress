@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function (req, res, next) {
-    res.sendFile('ui/signup.html', {root: './' })
+    res.sendFile('ui/signup.html', { root: './' })
 })
 
 router.post('/', function (req, res, next) {
@@ -10,7 +10,7 @@ router.post('/', function (req, res, next) {
     if (!(req.body.email &&
         req.body.username &&
         req.body.password)) {
-            return res.send("Invalid request:" + req.body)
+        return res.send("Invalid request:" + req.body)
     }
 
     var userData = {
