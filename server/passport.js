@@ -35,12 +35,10 @@ exports = module.exports = function (app) {
 
 
 	app.passport.serializeUser(function (user, done) {
-		console.log('serialize')
 		done(null, user._id)
 	})
 
 	app.passport.deserializeUser(function (id, done) {
-		console.log('deserialize')
 		app.db.models.users.findById(id, function (err, user) {
 			done(err, user)
 		})

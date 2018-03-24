@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 
 var isAuthenticated = function (req, res, next) {
+	console.log(req.cookies)
 	if (req.isAuthenticated())
 		return next();
-	console.log(req.cookies)
-	res.send('authentication required');
+	res.send({'error':'authentication required'});
 }
 
 router.use('/login', require('./routes/login').router)

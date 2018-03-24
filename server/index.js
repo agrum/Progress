@@ -40,6 +40,7 @@ app.db.connect(uri)
 app.use(session(
 	{
 		secret: private.expressSession,
+		cookie: { maxAge: 3600000 * 24 * 3 }, //3days
 		saveUninitialized: true,
 		resave: true,
 		store: new mongoStore({

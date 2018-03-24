@@ -10,6 +10,7 @@ namespace West
 	public class App
 	{
 		static private string host = "http://127.0.0.1:3000";
+		static private string bootUpPage = "/gameSettings/Classic";
 
 		static private JSONNode session = null;
 		static private JSONNode model = null;
@@ -19,21 +20,14 @@ namespace West
 		{
 			get
 			{
-				if (session == null && request == null)
-				{
-					request = new HTTPRequest(
-						new System.Uri(host + "/login"), 
-						HTTPMethods.Post,
-						OnLoginRequestFinished);
-					request.AddField("email", "thomas.lgd@gmail.com");
-					request.AddField("password", "plop");
-					request.Send();
-				}
-				else if (model == null && request == null)
+				if (model == null && request == null)
 				{
 					//ask server for model base
+					BestHTTP.Statistics.GeneralStatistics stats = HTTPManager.GetGeneralStatistics(BestHTTP.Statistics.StatisticsQueryFlags.All);
+					Debug.Log(stats.CookieCount);
+
 					request = new HTTPRequest(
-						new System.Uri(host + "/gameSettings/Classic"),
+						new System.Uri(host + bootUpPage),
 						OnGameSettingsRequestFinished);
 					request.Send();
 				}
@@ -56,11 +50,29 @@ namespace West
 
 		static private void OnGameSettingsRequestFinished(HTTPRequest _request, HTTPResponse response)
 		{
-			if (request.State == HTTPRequestStates.Finished)
+			if (request.State != HTTPRequestStates.Finished)
 			{
-				model = JSON.Parse(request.Response.DataAsText);
+				request = null;
+				return;
 			}
-			request = null;
+			
+			var json = JSON.Parse(request.Response.DataAsText);
+			if (json["error"] == json["null"])
+			{
+				model = json;
+				request = null;
+			}
+			else
+			{
+				Debug.Log(json);
+				request = new HTTPRequest(
+					new System.Uri(host + "/login"),
+					HTTPMethods.Post,
+					OnLoginRequestFinished);
+				request.AddField("email", "thomas.lgd@gmail.com");
+				request.AddField("password", "plop");
+				request.Send();
+			}
 		}
 	}
 }
