@@ -10,6 +10,7 @@ var isAuthenticated = function (req, res, next) {
 
 router.use('/login', require('./routes/login').router)
 router.use('/signup', require('./routes/signup').router)
+router.use('/setupConstellation', require('./routes/setupConstellation').router)
 
 router.all('*', isAuthenticated)
 router.use('/gameSettings', require('./routes/gameSettings').router)
