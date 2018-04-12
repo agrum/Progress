@@ -23,12 +23,15 @@ namespace West
 
 		private TeamManager()
 		{
-			int numTeams = App.Model["numberOfTeams"].AsInt;
+			App.Load(() =>
+			{
+				int numTeams = App.Model["numberOfTeams"].AsInt;
 
-			for (int i = 0; i < numTeams; i++)
-				teamList.Add(new Team(App.Model["numberOfPlayersPerTeam"].AsInt));
+				for (int i = 0; i < numTeams; i++)
+					teamList.Add(new Team(App.Model["numberOfPlayersPerTeam"].AsInt));
 
-			NexusManager.Instance.AllocateMexusesBetweenTeams(ref teamList);
+				NexusManager.Instance.AllocateMexusesBetweenTeams(ref teamList);
+			});
 		}
 
 		public List<Team> TeamList

@@ -368,7 +368,6 @@
     <None Include="Assets\External\nu Assets\Easy Decal\Shader\Unlit\EDAlpha.shader" />
     <None Include="Assets\External\nu Assets\Easy Decal\Shader\Unlit\EDMultiply.shader" />
     <None Include="Assets\Resources\Shaders\AutoLight.cginc" />
-    <None Include="Assets\Resources\Shaders\FogOfWar.shader" />
     <None Include="Assets\Shaders\FieldOfView\ObstacleStencilMask.shader" />
     <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
     <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />

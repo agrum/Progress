@@ -13,20 +13,11 @@ namespace West
 		// Use this for initialization
 		void Start()
 		{
-
-		}
-
-		// Update is called once per frame
-		void Update()
-		{
-			if(App.Model != null)
+			text.text = "Starting up";
+			App.Load(() =>
 			{
 				SceneManager.LoadScene("World");
-			}
-			else if(text != null)
-			{
-				text.text = "Starting up";
-			}
+			});
 		}
 	}
 }
