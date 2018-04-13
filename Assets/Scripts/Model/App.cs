@@ -21,6 +21,8 @@ namespace West
 
 		public delegate void OnAppLoadedDelegate();
 		static private event OnAppLoadedDelegate appLoadedEvent;
+		
+		public delegate void OnAppRespondedDelegate(JSONNode json);
 
 		static public void Load(OnAppLoadedDelegate callback)
 		{
@@ -39,6 +41,33 @@ namespace West
 			}
 		}
 
+		static public HTTPRequest Request(HTTPMethods method, string path, OnAppRespondedDelegate callback)
+		{
+			return Request(method, path, callback, (JSONNode json) => { Debug.Log("Request(+"+ path + ") resulted in \n" + json); });
+		}
+
+		static public HTTPRequest Request(HTTPMethods method, string path, OnAppRespondedDelegate callback, OnAppRespondedDelegate err)
+		{
+			return request = new HTTPRequest(
+				new System.Uri(URI, path),
+				method,
+				(HTTPRequest request_, HTTPResponse response_) =>
+				{
+					if (request_.State != HTTPRequestStates.Finished)
+					{
+						request_ = null;
+						Debug.Log("Request " + path + " returned null");
+						return;
+					}
+
+					var json = JSON.Parse(request_.Response.DataAsText);
+					if (json != null && json["error"] == json["null"])
+						callback(json);
+					else
+						err(json);
+				});
+		}
+
 		static public JSONNode Model
 		{
 			get
@@ -51,51 +80,36 @@ namespace West
 
 		static private void RequestGameSettings()
 		{
-			request = new HTTPRequest(
-				new System.Uri(URI, bootUpPage),
-				OnGameSettingsRequestFinished);
-			request.Send();
-		}
+			Request(
+				HTTPMethods.Get,
+				bootUpPage,
+				(JSONNode json) => //set game settings if received
+				{
+					model = json;
+					loaded = true;
+					request = null;
+					SceneManager.LoadScene(callbackScene);
+					appLoadedEvent();
+				},
+				(JSONNode json) => //try to log in if not logged in yet
+				{
+					//Debug.Log(json);
+					if (session != null)
+						return;
 
-		static private void OnLoginRequestFinished(HTTPRequest _request, HTTPResponse response)
-		{
-			if (request.State == HTTPRequestStates.Finished)
-			{
-				session = JSON.Parse(request.Response.DataAsText);
-				RequestGameSettings();
-			}
-			else
-				request = null;
-		}
-
-		static private void OnGameSettingsRequestFinished(HTTPRequest _request, HTTPResponse response)
-		{
-			if (request.State != HTTPRequestStates.Finished)
-			{
-				request = null;
-				return;
-			}
-			
-			var json = JSON.Parse(request.Response.DataAsText);
-			if (json["error"] == json["null"])
-			{
-				model = json;
-				loaded = true;
-				request = null;
-				SceneManager.LoadScene(callbackScene);
-				appLoadedEvent();
-			}
-			else
-			{
-				Debug.Log(json);
-				request = new HTTPRequest(
-					new System.Uri(URI, logInPage),
-					HTTPMethods.Post,
-					OnLoginRequestFinished);
-				request.AddField("email", "thomas.lgd@gmail.com");
-				request.AddField("password", "plop");
-				request.Send();
-			}
+					var request = Request(
+						HTTPMethods.Post,
+						logInPage,
+						(JSONNode json_) => //if log in is successful, try to get game settigns again
+						{
+							session = json_;
+							RequestGameSettings();
+						});
+					request.AddField("email", "thomas.lgd@gmail.com");
+					request.AddField("password", "plop");
+					request.Send();
+				})
+				.Send();
 		}
 	}
 }

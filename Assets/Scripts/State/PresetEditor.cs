@@ -5,25 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using BestHTTP;
+using SimpleJSON;
 
 namespace West
 {
 	class PresetEditor : MonoBehaviour
 	{
+		private JSONNode constellation = null;
+
 		void Start()
 		{
 			App.Load(()=>
 			{
-				var request = new HTTPRequest(
-					new System.Uri(App.URI, "constellation"),
-					OnConstellationRequestFinished);
-				request.Send();
-			}); ;
+				App.Request(
+					HTTPMethods.Get,
+					"constellation/" + App.Model["constellation"],
+					(JSONNode json) => {
+						OnConstellationRequestFinished(json);
+					})
+					.Send();
+			});
 		}
 
-		private void OnConstellationRequestFinished(HTTPRequest request, HTTPResponse response)
+		private void OnConstellationRequestFinished(JSONNode json)
 		{
-
+			constellation = json;
 		}
 	}
 }

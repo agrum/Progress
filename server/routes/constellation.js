@@ -3,7 +3,7 @@ var async = require('async');
 var constellationObjectSource = require('../constellationObject').constellationObject;
 var router = express.Router();
 
-router.get('/', function(req, res, next) {
+router.get('/setup', function(req, res, next) {
     var constellationObject = JSON.parse(JSON.stringify(constellationObjectSource));
     async.series([
         callback1 =>
@@ -110,6 +110,22 @@ router.get('/', function(req, res, next) {
         .then(err => {
             res.send(constellationObject)
         })
+    })
+})
+
+
+router.get('/:name', function(req, res, next) {
+    console.log(req.params.name)
+    req.app.db.models.constellations
+    .findOne({'name':req.params.name})
+    .then(document => {
+        console.log('constellation no error')
+        //console.log(document)
+        res.send(document);
+        })
+    .catch(err => {
+        console.error('constellation error')
+        console.error(err)
     })
 })
 
