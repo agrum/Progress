@@ -14,10 +14,7 @@ namespace West
 		void Start()
 		{
 			text.text = "Starting up";
-			App.Load(() =>
-			{
-				SceneManager.LoadScene("World");
-			});
+			App.Load(()=>{ });
 		}
 	}
 }

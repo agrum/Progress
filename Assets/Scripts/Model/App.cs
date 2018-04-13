@@ -17,6 +17,7 @@ namespace West
 		static private JSONNode session = null;
 		static private JSONNode model = null;
 		static private HTTPRequest request = null;
+		static private string callbackScene = null;
 
 		public delegate void OnAppLoadedDelegate();
 		static private event OnAppLoadedDelegate appLoadedEvent;
@@ -31,7 +32,10 @@ namespace West
 				if (model == null && request == null)
 					RequestGameSettings();
 				if (request != null && SceneManager.GetActiveScene().name != "Startup")
+				{
+					callbackScene = SceneManager.GetActiveScene().name;
 					SceneManager.LoadScene("Startup");
+				}
 			}
 		}
 
@@ -47,9 +51,6 @@ namespace West
 
 		static private void RequestGameSettings()
 		{
-			//BestHTTP.Statistics.GeneralStatistics stats = HTTPManager.GetGeneralStatistics(BestHTTP.Statistics.StatisticsQueryFlags.All);
-			//Debug.Log(stats.CookieCount);
-
 			request = new HTTPRequest(
 				new System.Uri(URI, bootUpPage),
 				OnGameSettingsRequestFinished);
@@ -81,6 +82,7 @@ namespace West
 				model = json;
 				loaded = true;
 				request = null;
+				SceneManager.LoadScene(callbackScene);
 				appLoadedEvent();
 			}
 			else
