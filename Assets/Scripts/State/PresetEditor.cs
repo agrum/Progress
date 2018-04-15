@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using BestHTTP;
 using SimpleJSON;
+using UnityEngine.UI;
 
 namespace West
 {
@@ -15,6 +16,9 @@ namespace West
 		public GameObject prefab;
 
 		private JSONNode constellation = null;
+		private List<int> startingAbilityIndexList = new List<int>();
+		private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
+		private List<ConstellationNode> startingAbilityNodeList = new List<ConstellationNode>();
 
 		void Start()
 		{
@@ -37,15 +41,21 @@ namespace West
 				return;
 
 			constellation = json;
-			JSONArray abilities = constellation["abilities"].AsArray;
+			JSONArray abilityArray = constellation["abilities"].AsArray;
+			JSONArray startingAbilityIndexArray = constellation["startingAbilities"].AsArray;
 
-			//fix max coordinates
+			//find starting node indexes
+			foreach (var startingAbilityindex in startingAbilityIndexArray)
+			{
+				startingAbilityIndexList.Add(startingAbilityindex.Value.AsInt);
+			}
+
+			//find scale factor
 			float maxX = 0;
 			float maxY = 0;
-			foreach (var abilityNode in abilities)
+			foreach (var abilityNode in abilityArray)
 			{
 				JSONNode ability = abilityNode.Value;
-				GameObject node = Instantiate(prefab);
 				if (Math.Abs(ability["position"]["x"].AsFloat) > maxX)
 					maxX = Math.Abs(ability["position"]["x"].AsFloat);
 				if (Math.Abs(ability["position"]["y"].AsFloat) > maxY)
@@ -58,14 +68,23 @@ namespace West
 			float scale = Math.Min(canvas.pixelRect.width / (2 * (maxX+1) * xMultiplier), canvas.pixelRect.height / (2 * (maxY+1) * yMultiplier));
 			xMultiplier *= scale;
 			yMultiplier *= scale;
-			foreach (var abilityNode in abilities)
+			foreach (var abilityNode in abilityArray)
 			{
 				JSONNode ability = abilityNode.Value;
-				GameObject node = Instantiate(prefab);
-				node.transform.SetParent(canvas.transform);
-				node.transform.localPosition = new Vector3(ability["position"]["x"].AsFloat * xMultiplier, ability["position"]["y"].AsFloat * yMultiplier, 0);
-				node.transform.localScale = Vector3.one * scale;
-				node.transform.localRotation = Quaternion.identity;
+				GameObject gob = Instantiate(prefab);
+				gob.transform.SetParent(canvas.transform);
+				gob.transform.localPosition = new Vector3(ability["position"]["x"].AsFloat * xMultiplier, ability["position"]["y"].AsFloat * yMultiplier, 0);
+				gob.transform.localScale = Vector3.one * scale;
+				gob.transform.localRotation = Quaternion.identity;
+
+				ConstellationNode node = gob.GetComponent<ConstellationNode>();
+				node.Setup();
+				if (startingAbilityIndexList.Contains(abilityNodeList.Count))
+				{
+					node.SelectableNode = true;
+					startingAbilityNodeList.Add(node);
+				}
+				abilityNodeList.Add(node);
 			}
 		}
 	}
