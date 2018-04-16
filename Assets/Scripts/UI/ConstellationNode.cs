@@ -7,18 +7,22 @@ namespace West
 {
 	public class ConstellationNode : MonoBehaviour
 	{
-		private Selectable selectable;
+		private ConstellationNodeSelectable selectable;
 		private Animator pulse;
-		private Image[] imageArray;
 		private bool selectableNode = false;
+		private List<ConstellationNode> linkedAbilityNodeList = new List<ConstellationNode>();
+		private bool isSelected = false;
+
+		public delegate void OnSelectedDelegate(ConstellationNode node);
+		public event OnSelectedDelegate selectedEvent;
 
 		public void Setup()
 		{
-			selectable = GetComponentInChildren<Selectable>();
+			selectable = GetComponentInChildren<ConstellationNodeSelectable>();
 			pulse = GetComponentsInChildren<Animator>()[1];
-			imageArray = GetComponentsInChildren<Image>();
 			
 			SelectableNode = false;
+			selectable.selectedEvent += OnSelected;
 		}
 
 		public void Update()
@@ -47,6 +51,25 @@ namespace West
 					pulse.enabled = false; 
 				}
 			}
+		}
+
+		public void SelectNode()
+		{
+			isSelected = !isSelected;
+		}
+
+		public static void Link(ConstellationNode a, ConstellationNode b)
+		{
+			if (!a.linkedAbilityNodeList.Contains(b) && !b.linkedAbilityNodeList.Contains(a))
+			{
+				a.linkedAbilityNodeList.Add(b);
+				b.linkedAbilityNodeList.Add(a);
+			}
+		}
+
+		private void OnSelected()
+		{
+			selectedEvent(this);
 		}
 	}
 }

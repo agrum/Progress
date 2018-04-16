@@ -41,7 +41,6 @@ namespace West
 				return;
 
 			constellation = json;
-			JSONArray abilityArray = constellation["abilities"].AsArray;
 			JSONArray startingAbilityIndexArray = constellation["startingAbilities"].AsArray;
 
 			//find starting node indexes
@@ -53,6 +52,7 @@ namespace West
 			//find scale factor
 			float maxX = 0;
 			float maxY = 0;
+			JSONArray abilityArray = constellation["abilities"].AsArray;
 			foreach (var abilityNode in abilityArray)
 			{
 				JSONNode ability = abilityNode.Value;
@@ -65,7 +65,7 @@ namespace West
 			//create nodes
 			float xMultiplier = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 			float yMultiplier = 0.75f;
-			float scale = Math.Min(canvas.pixelRect.width / (2 * (maxX+1) * xMultiplier), canvas.pixelRect.height / (2 * (maxY+1) * yMultiplier));
+			float scale = Math.Min(canvas.pixelRect.width / (2 * (maxX + 1) * xMultiplier), canvas.pixelRect.height / (2 * (maxY + 1) * yMultiplier));
 			xMultiplier *= scale;
 			yMultiplier *= scale;
 			foreach (var abilityNode in abilityArray)
@@ -79,6 +79,7 @@ namespace West
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
 				node.Setup();
+				node.selectedEvent += OnNodeSelected;
 				if (startingAbilityIndexList.Contains(abilityNodeList.Count))
 				{
 					node.SelectableNode = true;
@@ -86,6 +87,22 @@ namespace West
 				}
 				abilityNodeList.Add(node);
 			}
+
+			//connect nodes
+			JSONArray abilityToAbilityLinkArray = constellation["abilityToAbilityLinks"].AsArray;
+			foreach (var abilityToAbilityLink in abilityToAbilityLinkArray)
+			{
+				JSONArray link = abilityToAbilityLink.Value.AsArray;
+				ConstellationNode.Link(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt]);
+			}
+		}
+
+		private void OnNodeSelected(ConstellationNode node)
+		{
+			if (!node.SelectableNode)
+				return;
+
+			node.SelectNode();
 		}
 	}
 }

@@ -1152,6 +1152,7 @@
     <Compile Include="Assets\Scripts\Terrain\Path.cs" />
     <Compile Include="Assets\Scripts\Terrain\TerrainManager.cs" />
     <Compile Include="Assets\Scripts\UI\ConstellationNode.cs" />
+    <Compile Include="Assets\Scripts\UI\ConstellationNodeSelectable.cs" />
     <Compile Include="Assets\Scripts\UI\ResourceBar.cs" />
     <Compile Include="Assets\Scripts\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Utils\Pair.cs" />
