@@ -54,7 +54,7 @@ namespace West
 			float maxY = 0;
 			JSONArray abilityArray = constellation["abilities"].AsArray;
 			foreach (var abilityNode in abilityArray)
-			{
+				{
 				JSONNode ability = abilityNode.Value;
 				if (Math.Abs(ability["position"]["x"].AsFloat) > maxX)
 					maxX = Math.Abs(ability["position"]["x"].AsFloat);
