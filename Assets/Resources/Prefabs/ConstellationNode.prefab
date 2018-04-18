@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 224801253361246208}
   - component: {fileID: 222950965898828478}
   - component: {fileID: 114387866015450134}
-  - component: {fileID: 95214798334179032}
   m_Layer: 5
   m_Name: Pulse
   m_TagString: Untagged
@@ -223,23 +222,6 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 6a562dec82031fc44a5461896108fb70, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
---- !u!95 &95214798334179032
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1027737521523234}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 91cb77bc3c9ff1c46bb70604a359f7cb, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

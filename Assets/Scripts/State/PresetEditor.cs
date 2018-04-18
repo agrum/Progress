@@ -14,6 +14,8 @@ namespace West
 	{
 		public Canvas canvas;
 		public GameObject prefab;
+		public int numAbilities;
+		public int lengthConstellation;
 
 		private JSONNode constellation = null;
 		private List<int> startingAbilityIndexList = new List<int>();
@@ -78,7 +80,7 @@ namespace West
 				gob.transform.localRotation = Quaternion.identity;
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
-				node.Setup();
+				//node.Setup();
 				node.selectedEvent += OnNodeSelected;
 				if (startingAbilityIndexList.Contains(abilityNodeList.Count))
 				{
@@ -97,7 +99,7 @@ namespace West
 			}
 		}
 
-		private void OnNodeSelected(ConstellationNode node)
+		private void OnNodeSelected(ConstellationNode node, bool selected)
 		{
 			if (!node.SelectableNode)
 				return;

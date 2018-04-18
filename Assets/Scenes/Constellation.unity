@@ -142,6 +142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvas: {fileID: 1762738259}
   prefab: {fileID: 1154916069759420, guid: 05a416f1e9c15c74e81c364f76e39aaf, type: 2}
+  numAbilities: 0
+  lengthConstellation: 0
 --- !u!4 &306653812
 Transform:
   m_ObjectHideFlags: 0

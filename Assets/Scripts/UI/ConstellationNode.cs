@@ -8,20 +8,21 @@ namespace West
 	public class ConstellationNode : MonoBehaviour
 	{
 		private ConstellationNodeSelectable selectable;
-		private Animator pulse;
+		private bool preStartedSelectableNode = false;
 		private bool selectableNode = false;
 		private List<ConstellationNode> linkedAbilityNodeList = new List<ConstellationNode>();
 		private bool isSelected = false;
+		private bool started = false;
 
-		public delegate void OnSelectedDelegate(ConstellationNode node);
+		public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 		public event OnSelectedDelegate selectedEvent;
 
-		public void Setup()
+		public void Start()
 		{
+			started = true;
 			selectable = GetComponentInChildren<ConstellationNodeSelectable>();
-			pulse = GetComponentsInChildren<Animator>()[1];
 			
-			SelectableNode = false;
+			SelectableNode = preStartedSelectableNode;
 			selectable.selectedEvent += OnSelected;
 		}
 
@@ -38,18 +39,14 @@ namespace West
 			}
 			set
 			{
+				if (!started)
+				{
+					preStartedSelectableNode = value;
+					return;
+				}
+
 				selectableNode = value;
-				if(selectableNode)
-				{
-					pulse.gameObject.SetActive(true);
-					pulse.enabled = true;
-					pulse.Play("Play");
-				}
-				else
-				{
-					pulse.gameObject.SetActive(false);
-					pulse.enabled = false; 
-				}
+				selectable.SetSelectable(selectableNode);
 			}
 		}
 
@@ -67,9 +64,9 @@ namespace West
 			}
 		}
 
-		private void OnSelected()
+		private void OnSelected(bool selected)
 		{
-			selectedEvent(this);
+			selectedEvent(this, selected);
 		}
 	}
 }

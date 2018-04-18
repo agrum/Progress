@@ -8,7 +8,7 @@ namespace West
 {
 	public class ConstellationNodeSelectable : Selectable
 	{
-		public delegate void OnSelectedDelegate();
+		public delegate void OnSelectedDelegate(bool selected);
 		public event OnSelectedDelegate selectedEvent;
 
 		private readonly int enterHash = Animator.StringToHash("Enter");
@@ -16,69 +16,77 @@ namespace West
 		private readonly int clickInHash = Animator.StringToHash("ClickIn");
 		private readonly int clickOutHash = Animator.StringToHash("ClickOut");
 		private readonly int inHash = Animator.StringToHash("In");
-		private readonly int outHash = Animator.StringToHash("Out");
-		private readonly int unselectedHash = Animator.StringToHash("Unselected");
 		private readonly int selectedHash = Animator.StringToHash("Selected");
+		private readonly int isUnselectableHash = Animator.StringToHash("IsUnselectable");
+		private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
 		private int highlightLayerIndex;
 		private int selectLayerIndex;
 
-		private Animator animator_;
+		//private Animator animator_;
 		private bool hovered = false;
 		private bool selected = false;
+		private bool isSelectable = false;
 		private int highlightNextTrigger = 0;
 		private int selectNextTrigger = 0;
 
 		override public void OnPointerEnter(PointerEventData eventData)
 		{
-			Debug.Log("OnPointerEnter >");
 			hovered = true;
 			highlightNextTrigger = enterHash;
-			Debug.Log("OnPointerEnter <");
 		}
 
 		override public void OnPointerExit(PointerEventData eventData)
 		{
-			Debug.Log("OnPointerExit >");
 			hovered = false;
 			highlightNextTrigger = leaveHash;
-			Debug.Log("OnPointerExit <");
 		}
 
 		override public void OnPointerUp(PointerEventData eventData)
 		{
-			selected = !selected;
-			selectNextTrigger = selected ? clickInHash : clickOutHash;
+			if (isSelectable)
+			{
+				selected = !selected;
+				selectedEvent(selected);
+				selectNextTrigger = selected ? clickInHash : clickOutHash;
+			}
 		}
 
 		override protected void Start()
 		{
-			animator_ = GetComponent<Animator>();
-			highlightLayerIndex = animator_.GetLayerIndex("Hover Layer");
-			selectLayerIndex = animator_.GetLayerIndex("Click Layer");
+			//animator_ = GetComponent<Animator>();
+			highlightLayerIndex = animator.GetLayerIndex("Hover Layer");
+			selectLayerIndex = animator.GetLayerIndex("Click Layer");
 
 			base.Start();
 		}
 
 		public void Update()
 		{
-			if (highlightNextTrigger != 0 && !animator_.IsInTransition(highlightLayerIndex))
+			if (highlightNextTrigger != 0 && !animator.IsInTransition(highlightLayerIndex))
 			{
 				if ((animator.GetCurrentAnimatorStateInfo(highlightLayerIndex).shortNameHash == inHash) != hovered)
 				{
-					Debug.Log("Update > " + highlightNextTrigger);
-					animator_.SetTrigger(highlightNextTrigger);
+					animator.SetTrigger(highlightNextTrigger);
 					highlightNextTrigger = 0;
-					Debug.Log("Update <");
 				}
 			}
-			if (selectNextTrigger != 0 && !animator_.IsInTransition(selectLayerIndex))
+			if (selectNextTrigger != 0 && !animator.IsInTransition(selectLayerIndex))
 			{
 				if ((animator.GetCurrentAnimatorStateInfo(selectLayerIndex).shortNameHash == selectedHash) != selected)
 				{
-					animator_.SetTrigger(selectNextTrigger);
+					animator.SetTrigger(selectNextTrigger);
 					selectNextTrigger = 0;
 				}
 			}
+		}
+
+		public void SetSelectable(bool selectable)
+		{
+			isSelectable = selectable;
+			if (isSelectable)
+				animator.SetTrigger(isSelectableHash);
+			else
+				animator.SetTrigger(isUnselectableHash);
 		}
 	}
 }
