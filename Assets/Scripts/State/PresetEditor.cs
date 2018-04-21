@@ -103,8 +103,6 @@ namespace West
 		{
 			if (!node.SelectableNode)
 				return;
-
-			node.SelectNode();
 		}
 	}
 }

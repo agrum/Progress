@@ -2,33 +2,67 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace West
 {
-	public class ConstellationNode : MonoBehaviour
+	public class ConstellationNode : Selectable
 	{
-		private ConstellationNodeSelectable selectable;
-		private bool preStartedSelectableNode = false;
-		private bool selectableNode = false;
-		private List<ConstellationNode> linkedAbilityNodeList = new List<ConstellationNode>();
-		private bool isSelected = false;
-		private bool started = false;
-
 		public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 		public event OnSelectedDelegate selectedEvent;
 
-		public void Start()
+		private readonly int enterHash = Animator.StringToHash("Enter");
+		private readonly int leaveHash = Animator.StringToHash("Leave");
+		private readonly int clickInHash = Animator.StringToHash("ClickIn");
+		private readonly int clickOutHash = Animator.StringToHash("ClickOut");
+		private readonly int inHash = Animator.StringToHash("In");
+		private readonly int selectedHash = Animator.StringToHash("Selected");
+		private readonly int isUnselectableHash = Animator.StringToHash("IsUnselectable");
+		private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
+		private int highlightLayerIndex;
+		private int selectLayerIndex;
+		private List<ConstellationNode> linkedAbilityNodeList = new List<ConstellationNode>();
+		private bool preStartedSelectableNode = false;
+		private bool selectableNode = false;
+		private bool started = false;
+		
+		private bool hovered = false;
+		private bool selected = false;
+		private bool isSelectable = false;
+		private int highlightNextTrigger = 0;
+		private int selectNextTrigger = 0;
+
+		override protected void Start()
 		{
 			started = true;
-			selectable = GetComponentInChildren<ConstellationNodeSelectable>();
-			
+
 			SelectableNode = preStartedSelectableNode;
-			selectable.selectedEvent += OnSelected;
+
+			//animator_ = GetComponent<Animator>();
+			highlightLayerIndex = animator.GetLayerIndex("Hover Layer");
+			selectLayerIndex = animator.GetLayerIndex("Click Layer");
+
+			base.Start();
 		}
 
 		public void Update()
 		{
-
+			if (highlightNextTrigger != 0 && !animator.IsInTransition(highlightLayerIndex))
+			{
+				if ((animator.GetCurrentAnimatorStateInfo(highlightLayerIndex).shortNameHash == inHash) != hovered)
+				{
+					animator.SetTrigger(highlightNextTrigger);
+					highlightNextTrigger = 0;
+				}
+			}
+			if (selectNextTrigger != 0 && !animator.IsInTransition(selectLayerIndex))
+			{
+				if ((animator.GetCurrentAnimatorStateInfo(selectLayerIndex).shortNameHash == selectedHash) != selected)
+				{
+					animator.SetTrigger(selectNextTrigger);
+					selectNextTrigger = 0;
+				}
+			}
 		}
 
 		public bool SelectableNode
@@ -46,13 +80,8 @@ namespace West
 				}
 
 				selectableNode = value;
-				selectable.SetSelectable(selectableNode);
+				SetSelectable(selectableNode);
 			}
-		}
-
-		public void SelectNode()
-		{
-			isSelected = !isSelected;
 		}
 
 		public static void Link(ConstellationNode a, ConstellationNode b)
@@ -64,9 +93,35 @@ namespace West
 			}
 		}
 
-		private void OnSelected(bool selected)
+		override public void OnPointerEnter(PointerEventData eventData)
 		{
-			selectedEvent(this, selected);
+			hovered = true;
+			highlightNextTrigger = enterHash;
+		}
+
+		override public void OnPointerExit(PointerEventData eventData)
+		{
+			hovered = false;
+			highlightNextTrigger = leaveHash;
+		}
+
+		override public void OnPointerUp(PointerEventData eventData)
+		{
+			if (isSelectable)
+			{
+				selected = !selected;
+				selectedEvent(this, selected);
+				selectNextTrigger = selected ? clickInHash : clickOutHash;
+			}
+		}
+
+		public void SetSelectable(bool selectable)
+		{
+			isSelectable = selectable;
+			if (isSelectable)
+				animator.SetTrigger(isSelectableHash);
+			else
+				animator.SetTrigger(isUnselectableHash);
 		}
 	}
 }
