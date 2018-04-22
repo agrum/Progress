@@ -23,7 +23,8 @@ namespace West
 		private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
 		private int highlightLayerIndex;
 		private int selectLayerIndex;
-		private List<List<ConstellationNode>> linkedAbilityNodeList = new List<List<ConstellationNode>>();
+		private List<List<ConstellationNodeLink>> nodeLinkListList = new List<List<ConstellationNodeLink>>();
+		private List<ConstellationNodeLink> nodeLinkList = new List<ConstellationNodeLink>();
 		private bool preStartedSelectableNode = false;
 		private bool selectableNode = false;
 		private bool started = false;
@@ -36,8 +37,7 @@ namespace West
 
 		public ConstellationNode()
 		{
-			linkedAbilityNodeList.Add(new List<ConstellationNode>());
-			linkedAbilityNodeList[0].Add(this);
+			//new ConstellationNodeLink(this, this);
 		}
 
 		override protected void Start()
@@ -92,68 +92,63 @@ namespace West
 			}
 		}
 
-		public static void Link(ConstellationNode a, ConstellationNode b, int depth)
+		public List<ConstellationNode> GetNodeInRangeList(int range)
 		{
-			while (a.linkedAbilityNodeList.Count <= depth)
-				a.linkedAbilityNodeList.Add(new List<ConstellationNode>());
-			while (b.linkedAbilityNodeList.Count <= depth)
-				b.linkedAbilityNodeList.Add(new List<ConstellationNode>());
+			List<ConstellationNode> nodeInRangeList = new List<ConstellationNode>();
 
-			if (!a.linkedAbilityNodeList[depth].Contains(b) && !b.linkedAbilityNodeList[depth].Contains(a))
+			for (int i = 1; i <= range && i < nodeLinkListList.Count; ++i)
 			{
-				a.linkedAbilityNodeList[depth].Add(b);
-				b.linkedAbilityNodeList[depth].Add(a);
-			}
-		}
-
-		public static int LinkDepth(ConstellationNode a, ConstellationNode b)
-		{
-			for (int i = 0; i < a.linkedAbilityNodeList.Count; ++i)
-			{
-				foreach (var linkedNode in a.linkedAbilityNodeList[i])
+				foreach (var link in nodeLinkListList[i])
 				{
-					if (linkedNode == b)
-						return i;
+					nodeInRangeList.Add(link.Start != this ? link.Start : link.End);
 				}
 			}
 
-			return int.MaxValue;
+			return nodeInRangeList;
 		}
 
-		public List<int> LinkedNodeIndexList(int maxDepth)
+		public ConstellationNodeLink GetLinkTo(ConstellationNode node)
 		{
-			var linkedNodeList = new List<ConstellationNode>();
-			var linkedNodeIndexList = new List<int>();
-			for (int i = 0; i <= maxDepth && i < linkedAbilityNodeList.Count; ++i)
-			{
-				linkedNodeList.AddRange(linkedAbilityNodeList[i]);
-			}
+			if (nodeLinkList.Count <= node.Index)
+				return null;
 
-			foreach (var node in linkedNodeList)
-				linkedNodeIndexList.Add(node.Index);
+			return nodeLinkList[node.Index];
+		}
 
-			return linkedNodeIndexList;
+		public void AddLink(ConstellationNodeLink link)
+		{
+			while (nodeLinkListList.Count <= link.Depth)
+				nodeLinkListList.Add(new List<ConstellationNodeLink>());
+			while (nodeLinkList.Count <= link.Start.Index || nodeLinkList.Count <= link.End.Index)
+				nodeLinkList.Add(null);
+
+			nodeLinkListList[link.Depth].Add(link);
+			nodeLinkList[link.Start != this ? link.Start.Index : link.End.Index] = link;
 		}
 
 		public void DeepPopulateLinks(int depth)
 		{
-			while (linkedAbilityNodeList.Count <= depth)
-				linkedAbilityNodeList.Add(new List<ConstellationNode>());
+			while (nodeLinkListList.Count <= depth)
+				nodeLinkListList.Add(new List<ConstellationNodeLink>());
 
-			foreach (var node in linkedAbilityNodeList[depth-1])
+			foreach (var nodeLink in nodeLinkListList[depth-1])
 			{
-				foreach (var deepLinkedNode in node.linkedAbilityNodeList[1])
+				if (nodeLink.Start != this)
+					continue;
+
+				foreach (var directNodeLink in nodeLink.End.nodeLinkListList[1])
 				{
-					//ignore index lower than us
-					if (deepLinkedNode.Index < Index)
+					//skip lower entries
+					if (directNodeLink.Start.Index <= Index || directNodeLink.End.Index <= Index)
 						continue;
 
+					ConstellationNode directdEnd = nodeLink.End != directNodeLink.Start ? directNodeLink.Start : directNodeLink.End;
 					bool foundInShorterLink = false;
-					for (int i = 0; i < linkedAbilityNodeList.Count - 2 && !foundInShorterLink; ++i)
+					for (int i = 0; i < depth - 1 && !foundInShorterLink; ++i)
 					{
-						foreach (var otherLinkedNode in linkedAbilityNodeList[i])
+						foreach (var otherNodeLink in nodeLinkListList[i])
 						{
-							if (otherLinkedNode == deepLinkedNode)
+							if (this == otherNodeLink.Start && directdEnd == otherNodeLink.End)
 							{
 								foundInShorterLink = true;
 								break;
@@ -166,12 +161,12 @@ namespace West
 						continue;
 
 					//add to this depth
-					Link(this, deepLinkedNode, depth);
+					new ConstellationNodeLink(nodeLink, directdEnd);
 				}
 			}
 
 			//if this depth has links, try to deep populate them.
-			if (linkedAbilityNodeList[depth].Count > 0)
+			if (nodeLinkListList[depth].Count > 0)
 				DeepPopulateLinks(depth+1);
 		}
 

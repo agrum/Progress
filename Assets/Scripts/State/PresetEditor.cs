@@ -93,7 +93,7 @@ namespace West
 			foreach (var abilityToAbilityLink in abilityToAbilityLinkArray)
 			{
 				JSONArray link = abilityToAbilityLink.Value.AsArray;
-				ConstellationNode.Link(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt], 1);
+				new ConstellationNodeLink(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt]);
 			}
 
 			//define the longer links between nodes
@@ -183,65 +183,98 @@ namespace West
 			}
 
 			//compute length remaining
-			int[,] lengthTable = new int[selectedAbilityNodeIndexList.Count, selectedAbilityNodeIndexList.Count];
+			ConstellationNodeLink[,] linkTable = new ConstellationNodeLink[selectedAbilityNodeIndexList.Count, selectedAbilityNodeIndexList.Count];
 			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
 			{
 				for (int j = i + 1; j < selectedAbilityNodeIndexList.Count; ++j)
 				{
-					int linkDepth = ConstellationNode.LinkDepth(
-						abilityNodeList[selectedAbilityNodeIndexList[i]],
-						abilityNodeList[selectedAbilityNodeIndexList[j]]);
-					lengthTable[i, j] = linkDepth;
-					lengthTable[j, i] = linkDepth;
+					ConstellationNode nodeA = abilityNodeList[selectedAbilityNodeIndexList[i]];
+					ConstellationNode nodeB = abilityNodeList[selectedAbilityNodeIndexList[j]];
+					ConstellationNodeLink link = nodeA.GetLinkTo(nodeB);
+					linkTable[i, j] = link;
+					linkTable[j, i] = link;
 				}
 			}
+			int routeIndexUsed = -1;
 			int lengthUsed = int.MaxValue;
 			List<int> selectedIndexList = new List<int>();
 			for (int i = 1; i < selectedAbilityNodeIndexList.Count; ++i)
 				selectedIndexList.Add(i);
-			List<int> lengthList = GetPathLengthList(selectedIndexList, lengthTable, 0);
-			for (int i = 0; i < lengthList.Count; ++i)
-				if (lengthList[i] < lengthUsed)
-					lengthUsed = lengthList[i];
+			List<List<ConstellationNodeLink>> routeList = GetRouteList(selectedIndexList, linkTable, 0);
+			if (routeList.Count == 0)
+				lengthUsed = 0;
+			for (int i = 0; i < routeList.Count; ++i)
+			{
+				int routeLength = 0;
+				foreach (var link in routeList[i])
+				{
+					routeLength += link.Depth;
+				}
+				if (routeLength < lengthUsed)
+				{
+					routeIndexUsed = i;
+					lengthUsed = routeLength;
+				}
+			}
 			int lengthRemaining = lengthConstellation - lengthUsed;
 
-			//define selectable and unselectable nodes
+			//define selectable on routes
+			if (routeIndexUsed != -1)
+			{
+				foreach (var link in routeList[routeIndexUsed])
+				{
+					foreach (var linkedNode in link.nodeList)
+					{
+						stateList[linkedNode.Index] = true;
+					}
+				}
+			}
+
+			//define selectable and unselectable nodes around selected nodes
 			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
 			{
-				var linkedNodeIndexList = abilityNodeList[selectedAbilityNodeIndexList[i]].LinkedNodeIndexList(lengthRemaining);
-				foreach (var index in linkedNodeIndexList)
+				var selectedNode = abilityNodeList[selectedAbilityNodeIndexList[i]];
+				var nodeInRangeList = selectedNode.GetNodeInRangeList(lengthRemaining);
+				foreach (var nodeInRange in nodeInRangeList)
 				{
-					stateList[index] = true;
+					stateList[nodeInRange.Index] = true;
 				}
 			}
 			SetSelectableStateList(stateList);
 		}
 
-		List<int> GetPathLengthList(List<int> remainIndexList, int[,] lengthTable, int sourceIndex)
+		List<List<ConstellationNodeLink>> GetRouteList(List<int> remainIndexList, ConstellationNodeLink[,] linkTable, int sourceIndex)
 		{
-			List<int> pathLengthList = new List<int>();
+			List<List<ConstellationNodeLink>> routeList = new List<List<ConstellationNodeLink>>();
 
-			if (remainIndexList.Count  == 0)
+			if (remainIndexList.Count == 0)
+				return routeList;
+
+			for (int i = 0; i < remainIndexList.Count; ++i)
 			{
-				pathLengthList.Add(0);
-				return pathLengthList;
+				ConstellationNodeLink link = linkTable[sourceIndex, remainIndexList[i]];
+				List<List<ConstellationNodeLink>> subRouteList = new List<List<ConstellationNodeLink>>();
+
+				if (remainIndexList.Count > 1)
+				{
+					List<int> subRemainIndexList = new List<int>(remainIndexList);
+					subRemainIndexList.RemoveAt(i);
+
+					subRouteList.AddRange(GetRouteList(subRemainIndexList, linkTable, sourceIndex));
+					subRouteList.AddRange(GetRouteList(subRemainIndexList, linkTable, remainIndexList[i]));
+					for (int j = 0; j < subRouteList.Count; ++j)
+						subRouteList[j].Add(link);
+				}
+				else
+				{
+					subRouteList.Add(new List<ConstellationNodeLink>());
+					subRouteList[0].Add(link);
+				}
+
+				routeList.AddRange(subRouteList);
 			}
 
-			for(int i = 0; i < remainIndexList.Count; ++i)
-			{
-				int linkLength = lengthTable[sourceIndex, remainIndexList[i]];
-				List<int> subPathLengthList = new List<int>();
-				List<int> subRemainIndexList = new List<int>(remainIndexList);
-				subRemainIndexList.RemoveAt(i);
-
-				subPathLengthList.AddRange(GetPathLengthList(subRemainIndexList, lengthTable, sourceIndex));
-				subPathLengthList.AddRange(GetPathLengthList(subRemainIndexList, lengthTable, remainIndexList[i]));
-				for (int j = 0; j < subPathLengthList.Count; ++j)
-					subPathLengthList[j] += linkLength;
-				pathLengthList.AddRange(subPathLengthList);
-			}
-
-			return pathLengthList;
+			return routeList;
 		}
 	}
 }
