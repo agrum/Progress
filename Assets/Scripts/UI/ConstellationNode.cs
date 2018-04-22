@@ -11,6 +11,8 @@ namespace West
 		public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 		public event OnSelectedDelegate selectedEvent;
 
+		public int Index { get; set; } = -1;
+
 		private readonly int enterHash = Animator.StringToHash("Enter");
 		private readonly int leaveHash = Animator.StringToHash("Leave");
 		private readonly int clickInHash = Animator.StringToHash("ClickIn");
@@ -21,7 +23,7 @@ namespace West
 		private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
 		private int highlightLayerIndex;
 		private int selectLayerIndex;
-		private List<ConstellationNode> linkedAbilityNodeList = new List<ConstellationNode>();
+		private List<List<ConstellationNode>> linkedAbilityNodeList = new List<List<ConstellationNode>>();
 		private bool preStartedSelectableNode = false;
 		private bool selectableNode = false;
 		private bool started = false;
@@ -31,6 +33,12 @@ namespace West
 		private bool isSelectable = false;
 		private int highlightNextTrigger = 0;
 		private int selectNextTrigger = 0;
+
+		public ConstellationNode()
+		{
+			linkedAbilityNodeList.Add(new List<ConstellationNode>());
+			linkedAbilityNodeList[0].Add(this);
+		}
 
 		override protected void Start()
 		{
@@ -84,13 +92,58 @@ namespace West
 			}
 		}
 
-		public static void Link(ConstellationNode a, ConstellationNode b)
+		public static void Link(ConstellationNode a, ConstellationNode b, int depth)
 		{
-			if (!a.linkedAbilityNodeList.Contains(b) && !b.linkedAbilityNodeList.Contains(a))
+			while (a.linkedAbilityNodeList.Count <= depth)
+				a.linkedAbilityNodeList.Add(new List<ConstellationNode>());
+			while (b.linkedAbilityNodeList.Count <= depth)
+				b.linkedAbilityNodeList.Add(new List<ConstellationNode>());
+
+			if (!a.linkedAbilityNodeList[depth].Contains(b) && !b.linkedAbilityNodeList[depth].Contains(a))
 			{
-				a.linkedAbilityNodeList.Add(b);
-				b.linkedAbilityNodeList.Add(a);
+				a.linkedAbilityNodeList[depth].Add(b);
+				b.linkedAbilityNodeList[depth].Add(a);
 			}
+		}
+
+		public void DeepPopulateLinks(int depth)
+		{
+			while (linkedAbilityNodeList.Count <= depth)
+				linkedAbilityNodeList.Add(new List<ConstellationNode>());
+
+			foreach (var node in linkedAbilityNodeList[depth-1])
+			{
+				foreach (var deepLinkedNode in node.linkedAbilityNodeList[1])
+				{
+					//ignore index lower than us
+					if (deepLinkedNode.Index < Index)
+						continue;
+
+					bool foundInShorterLink = false;
+					for (int i = 0; i < linkedAbilityNodeList.Count - 2 && !foundInShorterLink; ++i)
+					{
+						foreach (var otherLinkedNode in linkedAbilityNodeList[i])
+						{
+							if (otherLinkedNode == deepLinkedNode)
+							{
+								foundInShorterLink = true;
+								break;
+							}
+						}
+					}
+
+					//ignore if already linkied with shorter link
+					if (foundInShorterLink)
+						continue;
+
+					//add to this depth
+					Link(this, deepLinkedNode, depth);
+				}
+			}
+
+			//if this depth has links, try to deep populate them.
+			if (linkedAbilityNodeList[depth].Count > 0)
+				DeepPopulateLinks(depth+1);
 		}
 
 		override public void OnPointerEnter(PointerEventData eventData)

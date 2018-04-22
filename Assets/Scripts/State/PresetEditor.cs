@@ -18,9 +18,9 @@ namespace West
 		public int lengthConstellation;
 
 		private JSONNode constellation = null;
-		private List<int> startingAbilityIndexList = new List<int>();
+		private List<int> startingAbilityNodeIndexList = new List<int>();
+		private List<int> selectedAbilityNodeIndexList = new List<int>();
 		private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
-		private List<ConstellationNode> startingAbilityNodeList = new List<ConstellationNode>();
 
 		void Start()
 		{
@@ -48,7 +48,7 @@ namespace West
 			//find starting node indexes
 			foreach (var startingAbilityindex in startingAbilityIndexArray)
 			{
-				startingAbilityIndexList.Add(startingAbilityindex.Value.AsInt);
+				startingAbilityNodeIndexList.Add(startingAbilityindex.Value.AsInt);
 			}
 
 			//find scale factor
@@ -56,7 +56,7 @@ namespace West
 			float maxY = 0;
 			JSONArray abilityArray = constellation["abilities"].AsArray;
 			foreach (var abilityNode in abilityArray)
-				{
+			{
 				JSONNode ability = abilityNode.Value;
 				if (Math.Abs(ability["position"]["x"].AsFloat) > maxX)
 					maxX = Math.Abs(ability["position"]["x"].AsFloat);
@@ -80,29 +80,110 @@ namespace West
 				gob.transform.localRotation = Quaternion.identity;
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
-				//node.Setup();
+				node.Index = abilityNodeList.Count;
 				node.selectedEvent += OnNodeSelected;
-				if (startingAbilityIndexList.Contains(abilityNodeList.Count))
-				{
-					node.SelectableNode = true;
-					startingAbilityNodeList.Add(node);
-				}
 				abilityNodeList.Add(node);
 			}
 
-			//connect nodes
+			SetStartingStateList();
+
+			//connect nodes directly
 			JSONArray abilityToAbilityLinkArray = constellation["abilityToAbilityLinks"].AsArray;
 			foreach (var abilityToAbilityLink in abilityToAbilityLinkArray)
 			{
 				JSONArray link = abilityToAbilityLink.Value.AsArray;
-				ConstellationNode.Link(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt]);
+				ConstellationNode.Link(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt], 1);
 			}
+
+			//define the longer links between nodes
+			foreach (var abilityNode in abilityNodeList)
+			{
+				abilityNode.DeepPopulateLinks(2);
+			}
+		}
+
+		private void SetStartingStateList()
+		{
+			if (selectedAbilityNodeIndexList.Count != 0)
+			{
+				Debug.Log("Can't call SetStartingStateList() with nodes preselected");
+				return;
+			}
+
+			List<bool> stateList = new List<bool>(new bool[abilityNodeList.Count]);
+			for (int i = 0; i < startingAbilityNodeIndexList.Count; ++i)
+				stateList[startingAbilityNodeIndexList[i]] = true;
+
+			SetSelectableStateList(stateList);
+		}
+
+		private void SetSelectableStateList(List<bool> list)
+		{
+			if (list.Count != abilityNodeList.Count)
+			{
+				Debug.Log("Can't call SetSelectableStateList() with with wrong amount of states to set");
+				return;
+			}
+
+			for (int i = 0; i < list.Count; ++i)
+				abilityNodeList[i].SelectableNode = list[i];
 		}
 
 		private void OnNodeSelected(ConstellationNode node, bool selected)
 		{
 			if (!node.SelectableNode)
 				return;
+
+			//get index of node
+			int nodeIndex = 0;
+
+			//add or remove from preset
+			if (!selected)
+			{
+				if(!selectedAbilityNodeIndexList.Contains(nodeIndex))
+				{
+					Debug.Log("Can't call OnNodeSelected() to remove a node that wasn't selected");
+					return;
+				}
+
+				if (selectedAbilityNodeIndexList[0] == nodeIndex) //clear if it's the initial node
+					selectedAbilityNodeIndexList.Clear();
+				else
+					selectedAbilityNodeIndexList.Remove(nodeIndex);
+			}
+			else
+			{
+				if (selectedAbilityNodeIndexList.Contains(nodeIndex))
+				{
+					Debug.Log("Can't call OnNodeSelected() to add a ndoe already selected");
+					return;
+				}
+
+				selectedAbilityNodeIndexList.Add(nodeIndex);
+			}
+
+			//no node selected edge case
+			if(selectedAbilityNodeIndexList.Count == 0)
+			{
+				SetStartingStateList();
+				return;
+			}
+
+			//create state list and add selected nodes as true
+			List<bool> stateList = new List<bool>(new bool[abilityNodeList.Count]);
+			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
+				abilityNodeList[selectedAbilityNodeIndexList[i]].SelectableNode = true;
+
+			//set complete edge case
+			if (selectedAbilityNodeIndexList.Count == numAbilities)
+			{
+				SetSelectableStateList(stateList);
+				return;
+			}
+
+			//compute length remaining
+
+			//define selectable and unselectable nodes
 		}
 	}
 }
