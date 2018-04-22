@@ -28,7 +28,8 @@ module.exports = function () {
         shapes: [nodeSchema],
         abilityToAbilityLinks: [[Number]],
         classToAbilityLinks: [[Number]],
-        kitsToAbilityLinks: [[Number]]
+        kitsToAbilityLinks: [[Number]],
+        startingAbilities: [Number]
     })
     schema.set('collection', 'constellations')
 

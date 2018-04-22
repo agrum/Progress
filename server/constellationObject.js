@@ -266,7 +266,7 @@ module.exports.constellationObject = {
             }
         },
         {
-            id:"Impale",
+            id:"Battle cry",
             position:
             {
                 x:-7,
@@ -625,5 +625,14 @@ module.exports.constellationObject = {
         [5, 20],
         [5, 21],
         [5, 22]
+    ],
+    startingAbilities:
+    [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
     ]
 }
