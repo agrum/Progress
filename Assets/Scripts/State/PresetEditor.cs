@@ -24,12 +24,13 @@ namespace West
 
 		void Start()
 		{
-			App.Load(()=>
+			App.Load(() =>
 			{
 				App.Request(
 					HTTPMethods.Get,
 					"constellation/" + App.Model["constellation"],
-					(JSONNode json) => {
+					(JSONNode json) =>
+					{
 						OnConstellationRequestFinished(json);
 					})
 					.Send();
@@ -135,12 +136,12 @@ namespace West
 				return;
 
 			//get index of node
-			int nodeIndex = 0;
+			int nodeIndex = node.Index;
 
 			//add or remove from preset
 			if (!selected)
 			{
-				if(!selectedAbilityNodeIndexList.Contains(nodeIndex))
+				if (!selectedAbilityNodeIndexList.Contains(nodeIndex))
 				{
 					Debug.Log("Can't call OnNodeSelected() to remove a node that wasn't selected");
 					return;
@@ -163,7 +164,7 @@ namespace West
 			}
 
 			//no node selected edge case
-			if(selectedAbilityNodeIndexList.Count == 0)
+			if (selectedAbilityNodeIndexList.Count == 0)
 			{
 				SetStartingStateList();
 				return;
@@ -182,8 +183,65 @@ namespace West
 			}
 
 			//compute length remaining
+			int[,] lengthTable = new int[selectedAbilityNodeIndexList.Count, selectedAbilityNodeIndexList.Count];
+			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
+			{
+				for (int j = i + 1; j < selectedAbilityNodeIndexList.Count; ++j)
+				{
+					int linkDepth = ConstellationNode.LinkDepth(
+						abilityNodeList[selectedAbilityNodeIndexList[i]],
+						abilityNodeList[selectedAbilityNodeIndexList[j]]);
+					lengthTable[i, j] = linkDepth;
+					lengthTable[j, i] = linkDepth;
+				}
+			}
+			int lengthUsed = int.MaxValue;
+			List<int> selectedIndexList = new List<int>();
+			for (int i = 1; i < selectedAbilityNodeIndexList.Count; ++i)
+				selectedIndexList.Add(i);
+			List<int> lengthList = GetPathLengthList(selectedIndexList, lengthTable, 0);
+			for (int i = 0; i < lengthList.Count; ++i)
+				if (lengthList[i] < lengthUsed)
+					lengthUsed = lengthList[i];
+			int lengthRemaining = lengthConstellation - lengthUsed;
 
 			//define selectable and unselectable nodes
+			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
+			{
+				var linkedNodeIndexList = abilityNodeList[selectedAbilityNodeIndexList[i]].LinkedNodeIndexList(lengthRemaining);
+				foreach (var index in linkedNodeIndexList)
+				{
+					stateList[index] = true;
+				}
+			}
+			SetSelectableStateList(stateList);
+		}
+
+		List<int> GetPathLengthList(List<int> remainIndexList, int[,] lengthTable, int sourceIndex)
+		{
+			List<int> pathLengthList = new List<int>();
+
+			if (remainIndexList.Count  == 0)
+			{
+				pathLengthList.Add(0);
+				return pathLengthList;
+			}
+
+			for(int i = 0; i < remainIndexList.Count; ++i)
+			{
+				int linkLength = lengthTable[sourceIndex, remainIndexList[i]];
+				List<int> subPathLengthList = new List<int>();
+				List<int> subRemainIndexList = new List<int>(remainIndexList);
+				subRemainIndexList.RemoveAt(i);
+
+				subPathLengthList.AddRange(GetPathLengthList(subRemainIndexList, lengthTable, sourceIndex));
+				subPathLengthList.AddRange(GetPathLengthList(subRemainIndexList, lengthTable, remainIndexList[i]));
+				for (int j = 0; j < subPathLengthList.Count; ++j)
+					subPathLengthList[j] += linkLength;
+				pathLengthList.AddRange(subPathLengthList);
+			}
+
+			return pathLengthList;
 		}
 	}
 }

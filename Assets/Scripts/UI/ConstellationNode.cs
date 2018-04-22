@@ -106,6 +106,35 @@ namespace West
 			}
 		}
 
+		public static int LinkDepth(ConstellationNode a, ConstellationNode b)
+		{
+			for (int i = 0; i < a.linkedAbilityNodeList.Count; ++i)
+			{
+				foreach (var linkedNode in a.linkedAbilityNodeList[i])
+				{
+					if (linkedNode == b)
+						return i;
+				}
+			}
+
+			return int.MaxValue;
+		}
+
+		public List<int> LinkedNodeIndexList(int maxDepth)
+		{
+			var linkedNodeList = new List<ConstellationNode>();
+			var linkedNodeIndexList = new List<int>();
+			for (int i = 0; i <= maxDepth && i < linkedAbilityNodeList.Count; ++i)
+			{
+				linkedNodeList.AddRange(linkedAbilityNodeList[i]);
+			}
+
+			foreach (var node in linkedNodeList)
+				linkedNodeIndexList.Add(node.Index);
+
+			return linkedNodeIndexList;
+		}
+
 		public void DeepPopulateLinks(int depth)
 		{
 			while (linkedAbilityNodeList.Count <= depth)
