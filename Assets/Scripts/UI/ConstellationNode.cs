@@ -188,6 +188,7 @@ namespace West
 			{
 				selected = !selected;
 				selectedEvent(this, selected);
+				animator.ResetTrigger(isSelectableHash);
 				selectNextTrigger = selected ? clickInHash : clickOutHash;
 			}
 		}
@@ -197,6 +198,7 @@ namespace West
 			isSelectable = selectable;
 			if (isSelectable)
 			{
+				animator.ResetTrigger(isSelectableHash);
 				animator.SetTrigger(isSelectableHash);
 			}
 			else
