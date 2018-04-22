@@ -173,7 +173,7 @@ namespace West
 			//create state list and add selected nodes as true
 			List<bool> stateList = new List<bool>(new bool[abilityNodeList.Count]);
 			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
-				abilityNodeList[selectedAbilityNodeIndexList[i]].SelectableNode = true;
+				stateList[selectedAbilityNodeIndexList[i]] = true;
 
 			//set complete edge case
 			if (selectedAbilityNodeIndexList.Count == numAbilities)

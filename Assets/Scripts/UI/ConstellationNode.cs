@@ -201,9 +201,15 @@ namespace West
 		{
 			isSelectable = selectable;
 			if (isSelectable)
+			{
 				animator.SetTrigger(isSelectableHash);
+			}
 			else
+			{
+				selected = false;
+				animator.ResetTrigger(isSelectableHash);
 				animator.SetTrigger(isUnselectableHash);
+			}
 		}
 	}
 }
