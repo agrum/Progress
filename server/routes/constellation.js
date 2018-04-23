@@ -115,7 +115,7 @@ router.get('/setup', function(req, res, next) {
 
 
 router.get('/:name', function(req, res, next) {
-    console.log(req.params.name)
+    //console.log(req.params.name)
     req.app.db.models.constellations
     .findOne({'name':req.params.name})
     .then(document => {

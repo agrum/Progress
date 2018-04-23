@@ -82,6 +82,7 @@ namespace West
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
 				node.Index = abilityNodeList.Count;
+				node.Uuid = ability["id"];
 				node.selectedEvent += OnNodeSelected;
 				abilityNodeList.Add(node);
 			}

@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 var isAuthenticated = function (req, res, next) {
-	console.log(req.cookies)
-	console.log(req)
 	if (req.isAuthenticated())
 		return next();
 	res.send({'error':'authentication required'});
@@ -13,6 +11,7 @@ router.all('*', (req, res, next) => { console.log(req._parsedOriginalUrl); retur
 router.use('/login', require('./routes/login').router)
 router.use('/signup', require('./routes/signup').router)
 router.use('/constellation', require('./routes/constellation').router)
+router.use('/ability', require('./routes/ability').router)
 
 router.all('*', isAuthenticated)
 router.use('/gameSettings', require('./routes/gameSettings').router)

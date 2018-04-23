@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using SimpleJSON;
 
 namespace West
 {
@@ -12,6 +13,8 @@ namespace West
 		public event OnSelectedDelegate selectedEvent;
 
 		public int Index { get; set; } = -1;
+		public JSONNode Json { get; private set; } = null;
+		private string uuid = "";
 
 		private readonly int enterHash = Animator.StringToHash("Enter");
 		private readonly int leaveHash = Animator.StringToHash("Leave");
@@ -34,10 +37,36 @@ namespace West
 		private bool isSelectable = false;
 		private int highlightNextTrigger = 0;
 		private int selectNextTrigger = 0;
-
-		public ConstellationNode()
+		
+		public string Uuid
 		{
-			//new ConstellationNodeLink(this, this);
+			get
+			{
+				return uuid;
+			}
+			set
+			{
+				uuid = value;
+				JSONArray abilityArray = App.Model["abilities"].AsArray;
+				foreach (var node in abilityArray)
+				{
+					string nodeId1 = node.Value["_id"];
+					string nodeId2 = uuid;
+					bool nodeId3 = nodeId1 == nodeId2;
+					if (node.Value["_id"] == uuid)
+					{
+						Json = node.Value;
+					}
+				}
+
+				Transform gob = gameObject.transform.Find("GameObject").Find("Icon");
+				Image image = gameObject.transform.Find("GameObject").Find("Icon").GetComponent<Image>();
+				string path = "Icons/Abilities/" + Json["name"];
+				Object prefabObject = Resources.Load(path) ;
+				Texture2D texture = prefabObject as Texture2D;
+				Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
+				image.overrideSprite = Instantiate<Sprite>(sprite);
+			}
 		}
 
 		override protected void Start()

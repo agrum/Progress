@@ -11,11 +11,12 @@ namespace West
 	{
 		static private string host = "http://127.0.0.1:3000";
 		static private string bootUpPage = "gameSettings/Classic";
+		static private string abilitiesPage = "ability";
 		static private string logInPage = "login";
 
 		static private bool loaded = false;
 		static private JSONNode session = null;
-		static private JSONNode model = null;
+		static public JSONNode Model { get; private set; }= null;
 		static private HTTPRequest request = null;
 		static private string callbackScene = null;
 
@@ -31,7 +32,7 @@ namespace West
 			else
 			{
 				appLoadedEvent += callback;
-				if (model == null && request == null)
+				if (Model == null && request == null)
 					RequestGameSettings();
 				if (request != null && SceneManager.GetActiveScene().name != "Startup")
 				{
@@ -67,14 +68,6 @@ namespace West
 						err(json);
 				});
 		}
-
-		static public JSONNode Model
-		{
-			get
-			{
-				return model;
-			}
-		}
 		
 		static public System.Uri URI { get; } = new System.Uri(host);
 
@@ -85,11 +78,8 @@ namespace West
 				bootUpPage,
 				(JSONNode json) => //set game settings if received
 				{
-					model = json;
-					loaded = true;
-					request = null;
-					SceneManager.LoadScene(callbackScene);
-					appLoadedEvent();
+					Model = json;
+					RequestAbilities();
 				},
 				(JSONNode json) => //try to log in if not logged in yet
 				{
@@ -108,6 +98,26 @@ namespace West
 					request.AddField("email", "thomas.lgd@gmail.com");
 					request.AddField("password", "plop");
 					request.Send();
+				})
+				.Send();
+		}
+
+		static private void RequestAbilities()
+		{
+			Request(
+				HTTPMethods.Get,
+				abilitiesPage,
+				(JSONNode json) => //set abilities if received
+				{
+					Model["abilities"] = json;
+					loaded = true;
+					request = null;
+					SceneManager.LoadScene(callbackScene);
+					appLoadedEvent();
+				},
+				(JSONNode json) =>
+				{
+					Debug.Log(json);
 				})
 				.Send();
 		}
