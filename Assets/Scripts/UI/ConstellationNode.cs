@@ -9,9 +9,18 @@ namespace West
 {
 	public class ConstellationNode : Selectable
 	{
+		public enum ConstellationNodeType
+		{
+			Ability,
+			Kit,
+			Class,
+			None
+		}
+
 		public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 		public event OnSelectedDelegate selectedEvent;
 
+		public ConstellationNodeType Type { get; set; } = ConstellationNodeType.None;
 		public int Index { get; set; } = -1;
 		public JSONNode Json { get; private set; } = null;
 		private string uuid = "";

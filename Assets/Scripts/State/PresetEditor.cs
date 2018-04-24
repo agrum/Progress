@@ -81,6 +81,7 @@ namespace West
 				gob.transform.localRotation = Quaternion.identity;
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
+				node.Type = ConstellationNode.ConstellationNodeType.Ability;
 				node.Index = abilityNodeList.Count;
 				node.Uuid = ability["id"];
 				node.selectedEvent += OnNodeSelected;

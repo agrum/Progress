@@ -27,6 +27,7 @@
 	{
 		float4 vertex : POSITION;
 		float2 uv : TEXCOORD0;
+		float4 color : COLOR0;
 	};
 
 	struct v2f
@@ -41,8 +42,9 @@
 		return o;
 	}
 
-	void frag(v2f i, out float depth : DEPTH)
+	void frag(v2f i, out float depth : DEPTH, out float4 color : COLOR0)
 	{
+		color = float4(1, 1, 1, 1);
 		depth = 1;
 	}
 	ENDCG
