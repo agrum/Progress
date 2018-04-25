@@ -312,7 +312,7 @@ module.exports.constellationObject = {
             id:"Tracker",
             position:
             {
-                x:5,
+                x:6,
                 y:2
             }
         },
@@ -320,7 +320,7 @@ module.exports.constellationObject = {
             id:"Scholar",
             position:
             {
-                x:5,
+                x:6,
                 y:0
             }
         },
@@ -328,7 +328,7 @@ module.exports.constellationObject = {
             id:"Arbiter",
             position:
             {
-                x:5,
+                x:6,
                 y:-2
             }
         },
@@ -360,7 +360,7 @@ module.exports.constellationObject = {
             id:"Crusader",
             position:
             {
-                x:-5,
+                x:-6,
                 y:-2
             }
         },
@@ -368,7 +368,7 @@ module.exports.constellationObject = {
             id:"Barbarian",
             position:
             {
-                x:-5,
+                x:-6,
                 y:0
             }
         },
@@ -376,7 +376,7 @@ module.exports.constellationObject = {
             id:"Duelist",
             position:
             {
-                x:-5,
+                x:-6,
                 y:2
             }
         },

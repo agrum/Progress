@@ -56,7 +56,25 @@ namespace West
 			set
 			{
 				uuid = value;
-				JSONArray abilityArray = App.Model["abilities"].AsArray;
+				string lowerCaseKey = "";
+				string UpperCamelCaseKey = "";
+				switch(Type)
+				{
+					case ConstellationNodeType.Ability:
+						lowerCaseKey = "abilities";
+						UpperCamelCaseKey = "Abilities";
+						break;
+					case ConstellationNodeType.Class:
+						lowerCaseKey = "classes";
+						UpperCamelCaseKey = "Classes";
+						break;
+					case ConstellationNodeType.Kit:
+						lowerCaseKey = "kits";
+						UpperCamelCaseKey = "Kits";
+						break;
+				}
+
+				JSONArray abilityArray = App.Model[lowerCaseKey].AsArray;
 				foreach (var node in abilityArray)
 				{
 					string nodeId1 = node.Value["_id"];
@@ -70,7 +88,7 @@ namespace West
 
 				Transform gob = gameObject.transform.Find("GameObject").Find("Icon");
 				Image image = gameObject.transform.Find("GameObject").Find("Icon").GetComponent<Image>();
-				string path = "Icons/Abilities/" + Json["name"];
+				string path = "Icons/" + UpperCamelCaseKey + "/" + Json["name"];
 				Object prefabObject = Resources.Load(path) ;
 				Texture2D texture = prefabObject as Texture2D;
 				Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);

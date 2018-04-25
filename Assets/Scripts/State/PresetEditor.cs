@@ -16,11 +16,15 @@ namespace West
 		public GameObject prefab;
 		public int numAbilities;
 		public int lengthConstellation;
+		public Material abilityMaterial;
+		public Material classMaterial;
+		public Material kitMaterial;
 
 		private JSONNode constellation = null;
 		private List<int> startingAbilityNodeIndexList = new List<int>();
 		private List<int> selectedAbilityNodeIndexList = new List<int>();
 		private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
+		private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
 
 		void Start()
 		{
@@ -65,7 +69,7 @@ namespace West
 					maxY = Math.Abs(ability["position"]["y"].AsFloat);
 			}
 
-			//create nodes
+			//create ability nodes
 			float xMultiplier = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 			float yMultiplier = 0.75f;
 			float scale = Math.Min(canvas.pixelRect.width / (2 * (maxX + 1) * xMultiplier), canvas.pixelRect.height / (2 * (maxY + 1) * yMultiplier));
@@ -81,11 +85,32 @@ namespace West
 				gob.transform.localRotation = Quaternion.identity;
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
+				gob.transform.Find("GameObject").Find("HexagonStroke").GetComponent<Image>().material = abilityMaterial;
 				node.Type = ConstellationNode.ConstellationNodeType.Ability;
 				node.Index = abilityNodeList.Count;
 				node.Uuid = ability["id"];
 				node.selectedEvent += OnNodeSelected;
 				abilityNodeList.Add(node);
+			}
+
+			//create classes nodes
+			JSONArray classArray = constellation["classes"].AsArray;
+			foreach (var classNode in classArray)
+			{
+				JSONNode class_ = classNode.Value;
+				GameObject gob = Instantiate(prefab);
+				gob.transform.SetParent(canvas.transform);
+				gob.transform.localPosition = new Vector3(class_["position"]["x"].AsFloat * xMultiplier, class_["position"]["y"].AsFloat * yMultiplier, 0);
+				gob.transform.localScale = Vector3.one * scale;
+				gob.transform.localRotation = Quaternion.identity;
+
+				ConstellationNode node = gob.GetComponent<ConstellationNode>();
+				gob.transform.Find("GameObject").Find("HexagonStroke").GetComponent<Image>().material = classMaterial;
+				node.Type = ConstellationNode.ConstellationNodeType.Class;
+				node.Index = classNodeList.Count;
+				node.Uuid = class_["id"];
+				//node.selectedEvent += OnNodeSelected;
+				classNodeList.Add(node);
 			}
 
 			SetStartingStateList();

@@ -12,6 +12,7 @@ namespace West
 		static private string host = "http://127.0.0.1:3000";
 		static private string bootUpPage = "gameSettings/Classic";
 		static private string abilitiesPage = "ability";
+		static private string classesPage = "class";
 		static private string logInPage = "login";
 
 		static private bool loaded = false;
@@ -110,6 +111,23 @@ namespace West
 				(JSONNode json) => //set abilities if received
 				{
 					Model["abilities"] = json;
+					RequestClasses();
+				},
+				(JSONNode json) =>
+				{
+					Debug.Log(json);
+				})
+				.Send();
+		}
+
+		static private void RequestClasses()
+		{
+			Request(
+				HTTPMethods.Get,
+				classesPage,
+				(JSONNode json) => //set classes if received
+				{
+					Model["classes"] = json;
 					loaded = true;
 					request = null;
 					SceneManager.LoadScene(callbackScene);

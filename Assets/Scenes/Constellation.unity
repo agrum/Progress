@@ -149,6 +149,9 @@ MonoBehaviour:
   prefab: {fileID: 1097869892902132, guid: 7d501e310db5e584090ac544206a6b10, type: 2}
   numAbilities: 4
   lengthConstellation: 8
+  abilityMaterial: {fileID: 2100000, guid: f32051b2464798b45bd6315fbf6d2b50, type: 2}
+  classMaterial: {fileID: 2100000, guid: d1a808f3571cf3d46916ad07a51d43da, type: 2}
+  kitMaterial: {fileID: 2100000, guid: 049f65498a1f1ad47b9e7f5301abf115, type: 2}
 --- !u!4 &306653812
 Transform:
   m_ObjectHideFlags: 0
@@ -368,7 +371,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.17711939, g: 0.18830499, b: 0.20588237, a: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0

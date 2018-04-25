@@ -12,6 +12,7 @@ router.use('/login', require('./routes/login').router)
 router.use('/signup', require('./routes/signup').router)
 router.use('/constellation', require('./routes/constellation').router)
 router.use('/ability', require('./routes/ability').router)
+router.use('/class', require('./routes/class').router)
 
 router.all('*', isAuthenticated)
 router.use('/gameSettings', require('./routes/gameSettings').router)
