@@ -408,7 +408,7 @@ module.exports.constellationObject = {
             }
         },
         {
-            id:"Long range",
+            id:"Sniper",
             position:
             {
                 x:3,
@@ -416,7 +416,7 @@ module.exports.constellationObject = {
             }
         },
         {
-            id:"Cover fire",
+            id:"Tesla",
             position:
             {
                 x:0,

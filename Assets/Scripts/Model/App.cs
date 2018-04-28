@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using SimpleJSON;
@@ -13,6 +14,7 @@ namespace West
 		static private string bootUpPage = "gameSettings/Classic";
 		static private string abilitiesPage = "ability";
 		static private string classesPage = "class";
+		static private string kitsPage = "kit";
 		static private string logInPage = "login";
 
 		static private bool loaded = false;
@@ -40,6 +42,36 @@ namespace West
 					callbackScene = SceneManager.GetActiveScene().name;
 					SceneManager.LoadScene("Startup");
 				}
+			}
+		}
+
+		static public void Async(List<HTTPRequest> request_list, OnAppRespondedDelegate callback)
+		{
+			JSONNode cumulatedResponses = new JSONArray();
+			int request_pending_count = request_list.Count;
+			foreach (var request in request_list)
+			{
+				var oldCallback = request.Callback;
+				request.Callback = (HTTPRequest request_, HTTPResponse response_) =>
+				{
+					//call original callback
+					oldCallback(request_, response_);
+
+					//write errors if any.
+					if (request_.State != HTTPRequestStates.Finished)
+						cumulatedResponses.Add(request_.Uri.ToString() + ": didn't terminate properly");
+					var json = JSON.Parse(request_.Response.DataAsText);
+					if (!(json != null && json["error"] == json["null"]))
+						cumulatedResponses.Add(request_.Uri.ToString() + ": error");
+
+					//decrement counter
+					Interlocked.Decrement(ref request_pending_count);
+
+					//when all requests have been processed, call async callback's
+					if (Interlocked.Equals(request_pending_count, 0))
+						callback(cumulatedResponses);
+				};
+				request.Send();
 			}
 		}
 
@@ -74,13 +106,45 @@ namespace West
 
 		static private void RequestGameSettings()
 		{
+			var extraRequestList = new List<HTTPRequest>();
+			extraRequestList.Add(Request(
+				HTTPMethods.Get,
+				abilitiesPage,
+				(JSONNode json) => { Model["abilities"] = json; },
+				(JSONNode json) => { Debug.Log(json); }));
+			extraRequestList.Add(Request(
+				HTTPMethods.Get,
+				classesPage,
+				(JSONNode json) => { Model["classes"] = json; },
+				(JSONNode json) => { Debug.Log(json); }));
+			extraRequestList.Add(Request(
+				HTTPMethods.Get,
+				kitsPage,
+				(JSONNode json) => { Model["kits"] = json; },
+				(JSONNode json) => { Debug.Log(json); }));
+
 			Request(
 				HTTPMethods.Get,
 				bootUpPage,
 				(JSONNode json) => //set game settings if received
 				{
 					Model = json;
-					RequestAbilities();
+					Async(
+						extraRequestList,
+						(JSONNode json_) =>
+						{
+							if (json_.AsArray.Count != 0)
+							{
+								Debug.Log("extraRequestList didn't return properly");
+								Debug.Log(json_);
+								return;
+							}
+
+							loaded = true;
+							request = null;
+							SceneManager.LoadScene(callbackScene);
+							appLoadedEvent();
+						});
 				},
 				(JSONNode json) => //try to log in if not logged in yet
 				{
@@ -99,43 +163,6 @@ namespace West
 					request.AddField("email", "thomas.lgd@gmail.com");
 					request.AddField("password", "plop");
 					request.Send();
-				})
-				.Send();
-		}
-
-		static private void RequestAbilities()
-		{
-			Request(
-				HTTPMethods.Get,
-				abilitiesPage,
-				(JSONNode json) => //set abilities if received
-				{
-					Model["abilities"] = json;
-					RequestClasses();
-				},
-				(JSONNode json) =>
-				{
-					Debug.Log(json);
-				})
-				.Send();
-		}
-
-		static private void RequestClasses()
-		{
-			Request(
-				HTTPMethods.Get,
-				classesPage,
-				(JSONNode json) => //set classes if received
-				{
-					Model["classes"] = json;
-					loaded = true;
-					request = null;
-					SceneManager.LoadScene(callbackScene);
-					appLoadedEvent();
-				},
-				(JSONNode json) =>
-				{
-					Debug.Log(json);
 				})
 				.Send();
 		}

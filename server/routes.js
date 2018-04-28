@@ -7,12 +7,12 @@ var isAuthenticated = function (req, res, next) {
 	res.send({'error':'authentication required'});
 }
 
-router.all('*', (req, res, next) => { console.log(req._parsedOriginalUrl); return next(); })
 router.use('/login', require('./routes/login').router)
 router.use('/signup', require('./routes/signup').router)
 router.use('/constellation', require('./routes/constellation').router)
 router.use('/ability', require('./routes/ability').router)
 router.use('/class', require('./routes/class').router)
+router.use('/kit', require('./routes/kit').router)
 
 router.all('*', isAuthenticated)
 router.use('/gameSettings', require('./routes/gameSettings').router)

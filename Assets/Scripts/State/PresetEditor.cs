@@ -25,6 +25,7 @@ namespace West
 		private List<int> selectedAbilityNodeIndexList = new List<int>();
 		private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
 		private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
+		private List<ConstellationNode> kitNodeList = new List<ConstellationNode>();
 
 		void Start()
 		{
@@ -112,6 +113,26 @@ namespace West
 				node.Uuid = class_["id"];
 				//node.selectedEvent += OnNodeSelected;
 				classNodeList.Add(node);
+			}
+
+			//create classes nodes
+			JSONArray kitArray = constellation["kits"].AsArray;
+			foreach (var kitNode in kitArray)
+			{
+				JSONNode kit_ = kitNode.Value;
+				GameObject gob = Instantiate(prefab);
+				gob.transform.SetParent(canvas.transform);
+				gob.transform.localPosition = new Vector3(kit_["position"]["x"].AsFloat * xMultiplier, kit_["position"]["y"].AsFloat * yMultiplier, 0);
+				gob.transform.localScale = Vector3.one * scale;
+				gob.transform.localRotation = Quaternion.identity;
+
+				ConstellationNode node = gob.GetComponent<ConstellationNode>();
+				node.Type = ConstellationNode.ConstellationNodeType.Kit;
+				node.Mat = kitMaterial;
+				node.Index = kitNodeList.Count;
+				node.Uuid = kit_["id"];
+				//node.selectedEvent += OnNodeSelected;
+				kitNodeList.Add(node);
 			}
 
 			SetStartingStateList();
