@@ -87,6 +87,7 @@ namespace West
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
 				gob.transform.Find("GameObject").Find("HexagonStroke").GetComponent<Image>().material = abilityMaterial;
 				node.Type = ConstellationNode.ConstellationNodeType.Ability;
+				node.Mat = abilityMaterial;
 				node.Index = abilityNodeList.Count;
 				node.Uuid = ability["id"];
 				node.selectedEvent += OnNodeSelected;
@@ -105,8 +106,8 @@ namespace West
 				gob.transform.localRotation = Quaternion.identity;
 
 				ConstellationNode node = gob.GetComponent<ConstellationNode>();
-				gob.transform.Find("GameObject").Find("HexagonStroke").GetComponent<Image>().material = classMaterial;
 				node.Type = ConstellationNode.ConstellationNodeType.Class;
+				node.Mat = classMaterial;
 				node.Index = classNodeList.Count;
 				node.Uuid = class_["id"];
 				//node.selectedEvent += OnNodeSelected;

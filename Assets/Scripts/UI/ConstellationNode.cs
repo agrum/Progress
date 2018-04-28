@@ -21,6 +21,7 @@ namespace West
 		public event OnSelectedDelegate selectedEvent;
 
 		public ConstellationNodeType Type { get; set; } = ConstellationNodeType.None;
+		public Material Mat { get; set; }
 		public int Index { get; set; } = -1;
 		public JSONNode Json { get; private set; } = null;
 		private string uuid = "";
@@ -86,13 +87,23 @@ namespace West
 					}
 				}
 
-				Transform gob = gameObject.transform.Find("GameObject").Find("Icon");
-				Image image = gameObject.transform.Find("GameObject").Find("Icon").GetComponent<Image>();
+				Transform childTranform = gameObject.transform.Find("GameObject");
+				Image stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
+				Image pulse = childTranform.Find("Pulse").GetComponent<Image>();
+				Image fill = childTranform.Find("HexagonFill").GetComponent<Image>();
+				Image icon = childTranform.Find("Icon").GetComponent<Image>();
+				Image iconWhite = childTranform.Find("White").Find("Icon").GetComponent<Image>();
 				string path = "Icons/" + UpperCamelCaseKey + "/" + Json["name"];
 				Object prefabObject = Resources.Load(path) ;
 				Texture2D texture = prefabObject as Texture2D;
 				Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
-				image.overrideSprite = Instantiate<Sprite>(sprite);
+
+				stroke.material = Mat;
+				pulse.material = Mat;
+				fill.material = Mat;
+				icon.material = Mat;
+				icon.overrideSprite = sprite;
+				iconWhite.overrideSprite = sprite;
 			}
 		}
 
