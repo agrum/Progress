@@ -40,7 +40,7 @@ namespace West
 		private int highlightLayerIndex;
 		private int selectLayerIndex;
 		private List<List<ConstellationNodeLink>> abilityNodeLinkListList = new List<List<ConstellationNodeLink>>();
-		private List<ConstellationNodeLink> abilityNodeLinkList = new List<ConstellationNodeLink>();
+		public List<ConstellationNodeLink> abilityNodeLinkList = new List<ConstellationNodeLink>();
 		private bool preStartedSelectableNode = false;
 		private bool selectableNode = false;
 		private bool started = false;
@@ -203,22 +203,27 @@ namespace West
 
 			foreach (var nodeLink in abilityNodeLinkListList[depth-1])
 			{
-				if (nodeLink.Start != this)
-					continue;
+				//if (nodeLink.Start != this)
+				//	continue;
 
-				foreach (var directNodeLink in nodeLink.End.abilityNodeLinkListList[1])
+				bool appendBack = this == nodeLink.Start;
+				ConstellationNode deepdEnd = this != nodeLink.Start ? nodeLink.Start : nodeLink.End;
+				foreach (var directNodeLink in deepdEnd.abilityNodeLinkListList[1])
 				{
 					//skip lower entries
-					if (directNodeLink.Start.Index <= Index || directNodeLink.End.Index <= Index)
+					//if (directNodeLink.Start.Index <= Index || directNodeLink.End.Index <= Index)
+					//	continue;
+
+					ConstellationNode directdEnd = deepdEnd != directNodeLink.Start ? directNodeLink.Start : directNodeLink.End;
+					if (directdEnd == this)
 						continue;
 
-					ConstellationNode directdEnd = nodeLink.End != directNodeLink.Start ? directNodeLink.Start : directNodeLink.End;
 					bool foundInShorterLink = false;
 					for (int i = 0; i < depth - 1 && !foundInShorterLink; ++i)
 					{
 						foreach (var otherNodeLink in abilityNodeLinkListList[i])
 						{
-							if (this == otherNodeLink.Start && directdEnd == otherNodeLink.End)
+							if ((this == otherNodeLink.Start && directdEnd == otherNodeLink.End) || (this == otherNodeLink.End && directdEnd == otherNodeLink.Start))
 							{
 								foundInShorterLink = true;
 								break;
@@ -231,7 +236,7 @@ namespace West
 						continue;
 
 					//add to this depth
-					new ConstellationNodeLink(nodeLink, directdEnd);
+					new ConstellationNodeLink(nodeLink, directdEnd, appendBack);
 				}
 			}
 

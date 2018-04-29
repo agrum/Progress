@@ -134,6 +134,14 @@ namespace West
 			foreach (var abilityNode in abilityNodeList)
 			{
 				abilityNode.DeepPopulateLinks(2);
+
+				for (var i = 0; i < abilityNode.abilityNodeLinkList.Count; ++i)
+				{
+					if (abilityNode.abilityNodeLinkList[i] == null && i != abilityNode.Index)
+					{
+						Debug.Log("merp");
+					}
+				}
 			}
 		}
 
@@ -287,9 +295,6 @@ namespace West
 						ConstellationNode nodeA = abilityNodeList[selectedAbilityNodeIndexList[i]];
 						ConstellationNode nodeB = abilityNodeList[selectedAbilityNodeIndexList[j]];
 						ConstellationNodeLink link = nodeA.GetLinkTo(nodeB);
-
-						if (link == null)
-							return;
 
 						linkTable[i, j] = link;
 						linkTable[j, i] = link;

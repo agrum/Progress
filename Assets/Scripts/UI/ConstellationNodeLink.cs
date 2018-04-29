@@ -19,10 +19,20 @@ namespace West
 			b.AddLink(this);
 		}
 
-		public ConstellationNodeLink(ConstellationNodeLink link, ConstellationNode extensionNode)
+		public ConstellationNodeLink(ConstellationNodeLink link, ConstellationNode extensionNode, bool appendBack)
 		{
-			nodeList = new List<ConstellationNode>(link.nodeList);
-			nodeList.Add(extensionNode);
+			nodeList = new List<ConstellationNode>();
+			if (appendBack)
+			{
+				nodeList.AddRange(link.nodeList);
+				nodeList.Add(extensionNode);
+			}
+			else
+			{
+				nodeList.Add(extensionNode);
+				nodeList.AddRange(link.nodeList);
+			}
+			
 			this.Start.AddLink(this);
 			this.End.AddLink(this);
 		}
