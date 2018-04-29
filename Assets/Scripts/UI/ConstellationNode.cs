@@ -25,6 +25,9 @@ namespace West
 		public int Index { get; set; } = -1;
 		public JSONNode Json { get; private set; } = null;
 		private string uuid = "";
+		
+		public List<ConstellationNode> KitsNodeList { get; set; } = new List<ConstellationNode>();
+		public List<ConstellationNode> ClassNodeList { get; set; } = new List<ConstellationNode>();
 
 		private readonly int enterHash = Animator.StringToHash("Enter");
 		private readonly int leaveHash = Animator.StringToHash("Leave");
@@ -36,8 +39,8 @@ namespace West
 		private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
 		private int highlightLayerIndex;
 		private int selectLayerIndex;
-		private List<List<ConstellationNodeLink>> nodeLinkListList = new List<List<ConstellationNodeLink>>();
-		private List<ConstellationNodeLink> nodeLinkList = new List<ConstellationNodeLink>();
+		private List<List<ConstellationNodeLink>> abilityNodeLinkListList = new List<List<ConstellationNodeLink>>();
+		private List<ConstellationNodeLink> abilityNodeLinkList = new List<ConstellationNodeLink>();
 		private bool preStartedSelectableNode = false;
 		private bool selectableNode = false;
 		private bool started = false;
@@ -163,9 +166,9 @@ namespace West
 		{
 			List<ConstellationNode> nodeInRangeList = new List<ConstellationNode>();
 
-			for (int i = 1; i <= range && i < nodeLinkListList.Count; ++i)
+			for (int i = 1; i <= range && i < abilityNodeLinkListList.Count; ++i)
 			{
-				foreach (var link in nodeLinkListList[i])
+				foreach (var link in abilityNodeLinkListList[i])
 				{
 					nodeInRangeList.Add(link.Start != this ? link.Start : link.End);
 				}
@@ -176,34 +179,34 @@ namespace West
 
 		public ConstellationNodeLink GetLinkTo(ConstellationNode node)
 		{
-			if (nodeLinkList.Count <= node.Index)
+			if (abilityNodeLinkList.Count <= node.Index)
 				return null;
 
-			return nodeLinkList[node.Index];
+			return abilityNodeLinkList[node.Index];
 		}
 
 		public void AddLink(ConstellationNodeLink link)
 		{
-			while (nodeLinkListList.Count <= link.Depth)
-				nodeLinkListList.Add(new List<ConstellationNodeLink>());
-			while (nodeLinkList.Count <= link.Start.Index || nodeLinkList.Count <= link.End.Index)
-				nodeLinkList.Add(null);
+			while (abilityNodeLinkListList.Count <= link.Depth)
+				abilityNodeLinkListList.Add(new List<ConstellationNodeLink>());
+			while (abilityNodeLinkList.Count <= link.Start.Index || abilityNodeLinkList.Count <= link.End.Index)
+				abilityNodeLinkList.Add(null);
 
-			nodeLinkListList[link.Depth].Add(link);
-			nodeLinkList[link.Start != this ? link.Start.Index : link.End.Index] = link;
+			abilityNodeLinkListList[link.Depth].Add(link);
+			abilityNodeLinkList[link.Start != this ? link.Start.Index : link.End.Index] = link;
 		}
 
 		public void DeepPopulateLinks(int depth)
 		{
-			while (nodeLinkListList.Count <= depth)
-				nodeLinkListList.Add(new List<ConstellationNodeLink>());
+			while (abilityNodeLinkListList.Count <= depth)
+				abilityNodeLinkListList.Add(new List<ConstellationNodeLink>());
 
-			foreach (var nodeLink in nodeLinkListList[depth-1])
+			foreach (var nodeLink in abilityNodeLinkListList[depth-1])
 			{
 				if (nodeLink.Start != this)
 					continue;
 
-				foreach (var directNodeLink in nodeLink.End.nodeLinkListList[1])
+				foreach (var directNodeLink in nodeLink.End.abilityNodeLinkListList[1])
 				{
 					//skip lower entries
 					if (directNodeLink.Start.Index <= Index || directNodeLink.End.Index <= Index)
@@ -213,7 +216,7 @@ namespace West
 					bool foundInShorterLink = false;
 					for (int i = 0; i < depth - 1 && !foundInShorterLink; ++i)
 					{
-						foreach (var otherNodeLink in nodeLinkListList[i])
+						foreach (var otherNodeLink in abilityNodeLinkListList[i])
 						{
 							if (this == otherNodeLink.Start && directdEnd == otherNodeLink.End)
 							{
@@ -233,7 +236,7 @@ namespace West
 			}
 
 			//if this depth has links, try to deep populate them.
-			if (nodeLinkListList[depth].Count > 0)
+			if (abilityNodeLinkListList[depth].Count > 0)
 				DeepPopulateLinks(depth+1);
 		}
 

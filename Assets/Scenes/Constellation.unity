@@ -148,6 +148,8 @@ MonoBehaviour:
   canvas: {fileID: 1762738259}
   prefab: {fileID: 1097869892902132, guid: 7d501e310db5e584090ac544206a6b10, type: 2}
   numAbilities: 4
+  numKits: 1
+  numClasses: 1
   lengthConstellation: 8
   abilityMaterial: {fileID: 2100000, guid: f32051b2464798b45bd6315fbf6d2b50, type: 2}
   classMaterial: {fileID: 2100000, guid: d1a808f3571cf3d46916ad07a51d43da, type: 2}
