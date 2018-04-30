@@ -223,32 +223,34 @@ namespace West
 					{
 						selectedNodeIndexList.Remove(nodeIndex);
 						//unselect classes and kits that were solely dependent on this ability
+						var newSelectedClassNodeIndexList = new List<int>();
 						foreach (var selectedClassNodeIndex in selectedClassNodeIndexList)
 						{
 							var selectedClassNode = classNodeList[selectedClassNodeIndex];
-							selectedClassNodeIndexList.Remove(selectedClassNodeIndex);
 							foreach (var selectedAbilityNodeIndex in selectedAbilityNodeIndexList)
 							{
 								if (abilityNodeList[selectedAbilityNodeIndex].ClassNodeList.Contains(selectedClassNode))
 								{
-									selectedClassNodeIndexList.Add(selectedClassNodeIndex);
+									newSelectedClassNodeIndexList.Add(selectedClassNodeIndex);
 									break;
 								}
 							}
 						}
+						selectedClassNodeIndexList = newSelectedClassNodeIndexList;
+						var newSelectedKitNodeIndexList = new List<int>();
 						foreach (var selectedKitNodeIndex in selectedKitNodeIndexList)
 						{
 							var selectedKitNode = kitNodeList[selectedKitNodeIndex];
-							selectedClassNodeIndexList.Remove(selectedKitNodeIndex);
 							foreach (var selectedAbilityNodeIndex in selectedAbilityNodeIndexList)
 							{
 								if (abilityNodeList[selectedAbilityNodeIndex].ClassNodeList.Contains(selectedKitNode))
 								{
-									selectedClassNodeIndexList.Add(selectedKitNodeIndex);
+									newSelectedKitNodeIndexList.Add(selectedKitNodeIndex);
 									break;
 								}
 							}
 						}
+						selectedKitNodeIndexList = newSelectedKitNodeIndexList;
 					}
 				}
 				else
