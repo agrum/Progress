@@ -120,7 +120,7 @@ router.get('/:name', function(req, res, next) {
     .findOne({'name':req.params.name})
     .then(document => {
         console.log('constellation no error')
-        //console.log(document)
+        console.log(document)
         res.send(document);
         })
     .catch(err => {

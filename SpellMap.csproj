@@ -1129,6 +1129,10 @@
     <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
     <Compile Include="Assets\Scripts\Model\App.cs" />
+    <Compile Include="Assets\Scripts\Model\Constellation.cs" />
+    <Compile Include="Assets\Scripts\Model\ConstellationNode.cs" />
+    <Compile Include="Assets\Scripts\Model\ConstellationNodeLink.cs" />
+    <Compile Include="Assets\Scripts\Model\ConstellationPreset.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
     <Compile Include="Assets\Scripts\Model\Keybinding.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Armor.cs" />
@@ -1151,11 +1155,11 @@
     <Compile Include="Assets\Scripts\Terrain\Edge.cs" />
     <Compile Include="Assets\Scripts\Terrain\Path.cs" />
     <Compile Include="Assets\Scripts\Terrain\TerrainManager.cs" />
-    <Compile Include="Assets\Scripts\UI\ConstellationNode.cs" />
-    <Compile Include="Assets\Scripts\UI\ConstellationNodeLink.cs" />
     <Compile Include="Assets\Scripts\UI\ResourceBar.cs" />
     <Compile Include="Assets\Scripts\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Utils\Pair.cs" />
+    <Compile Include="Assets\Scripts\View\UI\Constellation.cs" />
+    <Compile Include="Assets\Scripts\View\UI\ConstellationNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />

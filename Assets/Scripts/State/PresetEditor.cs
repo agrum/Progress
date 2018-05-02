@@ -10,424 +10,245 @@ using UnityEngine.UI;
 
 namespace West
 {
-	class PresetEditor : MonoBehaviour
+	namespace View
 	{
-		public Canvas canvas;
-		public GameObject prefab;
-		public int numAbilities;
-		public int numKits;
-		public int numClasses;
-		public int lengthConstellation;
-		public Material abilityMaterial;
-		public Material classMaterial;
-		public Material kitMaterial;
-
-		private JSONNode constellation = null;
-		private List<int> startingAbilityNodeIndexList = new List<int>();
-		private List<int> selectedAbilityNodeIndexList = new List<int>();
-		private List<int> selectedClassNodeIndexList = new List<int>();
-		private List<int> selectedKitNodeIndexList = new List<int>();
-		private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
-		private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
-		private List<ConstellationNode> kitNodeList = new List<ConstellationNode>();
-
-		void Start()
+		class PresetEditor : MonoBehaviour
 		{
-			App.Load(() =>
+			public RectTransform canvas = null;
+			public GameObject prefab = null;
+			public Material abilityMaterial = null;
+			public Material classMaterial = null;
+			public Material kitMaterial = null;
+
+			private Model.ConstellationPreset model = null;
+			private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
+			private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
+			private List<ConstellationNode> kitNodeList = new List<ConstellationNode>();
+
+			void Start()
 			{
-				App.Request(
-					HTTPMethods.Get,
-					"constellation/" + App.Model["constellation"],
-					(JSONNode json) =>
-					{
-						OnConstellationRequestFinished(json);
-					})
-					.Send();
-			});
-		}
-
-		private void OnConstellationRequestFinished(JSONNode json)
-		{
-			//return if object died while waiting for answer
-			if (!canvas)
-				return;
-
-			constellation = json;
-			JSONArray startingAbilityIndexArray = constellation["startingAbilities"].AsArray;
-
-			//find starting node indexes
-			foreach (var startingAbilityindex in startingAbilityIndexArray)
-			{
-				startingAbilityNodeIndexList.Add(startingAbilityindex.Value.AsInt);
-			}
-
-			//find scale factor
-			float maxX = 0;
-			float maxY = 0;
-			JSONArray abilityArray = constellation["abilities"].AsArray;
-			foreach (var abilityNode in abilityArray)
-			{
-				JSONNode ability = abilityNode.Value;
-				if (Math.Abs(ability["position"]["x"].AsFloat) > maxX)
-					maxX = Math.Abs(ability["position"]["x"].AsFloat);
-				if (Math.Abs(ability["position"]["y"].AsFloat) > maxY)
-					maxY = Math.Abs(ability["position"]["y"].AsFloat);
-			}
-
-			//create ability nodes
-			Vector2 positionMultiplier = new Vector2();
-			positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
-			positionMultiplier.y = 0.75f;
-			float scale = Math.Min(canvas.pixelRect.width / (2 * (maxX + 1) * positionMultiplier.x), canvas.pixelRect.height / (2 * (maxY + 1) * positionMultiplier.y));
-			positionMultiplier.x *= scale;
-			positionMultiplier.y *= scale;
-
-			//create constellation nodes
-			PopulateNodes(
-				abilityArray, 
-				abilityMaterial, 
-				ConstellationNode.ConstellationNodeType.Ability, 
-				scale, 
-				positionMultiplier, 
-				ref abilityNodeList);
-			PopulateNodes(
-				constellation["classes"].AsArray, 
-				classMaterial, 
-				ConstellationNode.ConstellationNodeType.Class, 
-				scale, 
-				positionMultiplier, 
-				ref classNodeList);
-			PopulateNodes(
-				constellation["kits"].AsArray, 
-				kitMaterial, 
-				ConstellationNode.ConstellationNodeType.Kit, 
-				scale, 
-				positionMultiplier, 
-				ref kitNodeList);
-
-			SetStartingStateList();
-
-			//connect nodes directly
-			JSONArray abilityToAbilityLinkArray = constellation["abilityToAbilityLinks"].AsArray;
-			foreach (var abilityToAbilityLink in abilityToAbilityLinkArray)
-			{
-				JSONArray link = abilityToAbilityLink.Value.AsArray;
-				new ConstellationNodeLink(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt]);
-			}
-			JSONArray classToAbilityLinkArray = constellation["classToAbilityLinks"].AsArray;
-			foreach (var classToAbilityLink in classToAbilityLinkArray)
-			{
-				JSONArray link = classToAbilityLink.Value.AsArray;
-				/*Debug.Log(link);
-				Debug.Log(abilityNodeList[link[1].AsInt]);
-				Debug.Log(classNodeList[link[0].AsInt]);*/
-				abilityNodeList[link[1].AsInt].ClassNodeList.Add(classNodeList[link[0].AsInt]);
-			}
-			JSONArray kitsToAbilityLinkArray = constellation["kitsToAbilityLinks"].AsArray;
-			foreach (var kitsToAbilityLink in kitsToAbilityLinkArray)
-			{
-				JSONArray link = kitsToAbilityLink.Value.AsArray;
-				abilityNodeList[link[1].AsInt].KitsNodeList.Add(kitNodeList[link[0].AsInt]);
-			}
-
-			//define the longer links between ability nodes
-			foreach (var abilityNode in abilityNodeList)
-			{
-				abilityNode.DeepPopulateLinks(2);
-
-				for (var i = 0; i < abilityNode.abilityNodeLinkList.Count; ++i)
+				App.Load(() =>
 				{
-					if (abilityNode.abilityNodeLinkList[i] == null && i != abilityNode.Index)
-					{
-						Debug.Log("merp");
-					}
-				}
-			}
-		}
-
-		private void SetStartingStateList()
-		{
-			if (selectedAbilityNodeIndexList.Count != 0)
-			{
-				Debug.Log("Can't call SetStartingStateList() with nodes preselected");
-				return;
+					if (gameObject != null)
+						Invoke("Setup", 1.0f);
+				});
 			}
 
-			List<bool> abilityStateList = new List<bool>(new bool[abilityNodeList.Count]);
-			List<bool> classStateList = new List<bool>(new bool[classNodeList.Count]);
-			List<bool> kitStateList = new List<bool>(new bool[kitNodeList.Count]);
-			for (int i = 0; i < startingAbilityNodeIndexList.Count; ++i)
-				abilityStateList[startingAbilityNodeIndexList[i]] = true;
-
-			SetSelectableStateList(abilityStateList, classStateList, kitStateList);
-		}
-
-		private void SetSelectableStateList(List<bool> abilityList, List<bool> classList, List<bool> kitList)
-		{
-			if (abilityList.Count != abilityNodeList.Count || classList.Count != classNodeList.Count || kitList.Count != kitNodeList.Count)
+			private void Setup()
 			{
-				Debug.Log("Can't call SetSelectableStateList() with with wrong amount of states to set");
-				return;
-			}
-
-			for (int i = 0; i < abilityList.Count; ++i)
-				abilityNodeList[i].SelectableNode = abilityList[i];
-			for (int i = 0; i < classList.Count; ++i)
-				classNodeList[i].SelectableNode = classList[i];
-			for (int i = 0; i < kitList.Count; ++i)
-				kitNodeList[i].SelectableNode = kitList[i];
-		}
-
-		private void OnNodeSelected(ConstellationNode node, bool selected)
-		{
-			if (!node.SelectableNode)
-				return;
-
-			//get index of node
-			int nodeIndex = node.Index;
-
-			//add or remove from preset
-			List<int> selectedNodeIndexList;
-			switch(node.Type)
-			{
-				case ConstellationNode.ConstellationNodeType.Ability:
-					selectedNodeIndexList = selectedAbilityNodeIndexList;
-					break;
-				case ConstellationNode.ConstellationNodeType.Class:
-					selectedNodeIndexList = selectedClassNodeIndexList;
-					break;
-				case ConstellationNode.ConstellationNodeType.Kit:
-					selectedNodeIndexList = selectedKitNodeIndexList;
-					break;
-				default:
-					selectedNodeIndexList = selectedAbilityNodeIndexList;
-					break;
-			}
-			if (!selected)
-			{
-				if (!selectedNodeIndexList.Contains(nodeIndex))
-				{
-					Debug.Log("Can't call OnNodeSelected() to remove a node that wasn't selected");
+				//return if object died while waiting for answer
+				if (!canvas)
 					return;
-				}
 
-				if (node.Type == ConstellationNode.ConstellationNodeType.Ability)
-				{
-					if (selectedNodeIndexList[0] == nodeIndex) //clear if it's the initial node
-					{
-						selectedAbilityNodeIndexList.Clear();
-						selectedClassNodeIndexList.Clear();
-						selectedKitNodeIndexList.Clear();
-					}
-					else
-					{
-						selectedNodeIndexList.Remove(nodeIndex);
-						//unselect classes and kits that were solely dependent on this ability
-						var newSelectedClassNodeIndexList = new List<int>();
-						foreach (var selectedClassNodeIndex in selectedClassNodeIndexList)
-						{
-							var selectedClassNode = classNodeList[selectedClassNodeIndex];
-							foreach (var selectedAbilityNodeIndex in selectedAbilityNodeIndexList)
-							{
-								if (abilityNodeList[selectedAbilityNodeIndex].ClassNodeList.Contains(selectedClassNode))
-								{
-									newSelectedClassNodeIndexList.Add(selectedClassNodeIndex);
-									break;
-								}
-							}
-						}
-						selectedClassNodeIndexList = newSelectedClassNodeIndexList;
-						var newSelectedKitNodeIndexList = new List<int>();
-						foreach (var selectedKitNodeIndex in selectedKitNodeIndexList)
-						{
-							var selectedKitNode = kitNodeList[selectedKitNodeIndex];
-							foreach (var selectedAbilityNodeIndex in selectedAbilityNodeIndexList)
-							{
-								if (abilityNodeList[selectedAbilityNodeIndex].ClassNodeList.Contains(selectedKitNode))
-								{
-									newSelectedKitNodeIndexList.Add(selectedKitNodeIndex);
-									break;
-								}
-							}
-						}
-						selectedKitNodeIndexList = newSelectedKitNodeIndexList;
-					}
-				}
-				else
-					selectedNodeIndexList.Remove(nodeIndex);
-			}
-			else
-			{
-				if (selectedNodeIndexList.Contains(nodeIndex))
-				{
-					Debug.Log("Can't call OnNodeSelected() to add a ndoe already selected");
-					return;
-				}
+				//TODO take from save instead of made up
+				JSONObject presetJson = new JSONObject();
+				presetJson["numAbilities"] = 4;
+				presetJson["numKits"] = 1;
+				presetJson["numClasses"] = 1;
+				presetJson["lengthConstellation"] = 8;
+				model = new Model.ConstellationPreset(presetJson);
+				model.presetUpdateEvent += onPresetUpdate;
 
-				selectedNodeIndexList.Add(nodeIndex);
-			}
+				//create ability nodes
+				Vector2 positionMultiplier = new Vector2();
+				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
+				positionMultiplier.y = 0.75f;
+				float scale = Math.Min(canvas.rect.width / (2 * (App.Constellation.HalfSize.x + 1) * positionMultiplier.x), canvas.rect.height / (2 * (App.Constellation.HalfSize.y + 1) * positionMultiplier.y));
+				positionMultiplier.x *= scale;
+				positionMultiplier.y *= scale;
 
-			//no node selected edge case
-			if (selectedAbilityNodeIndexList.Count == 0)
-			{
+				//create constellation nodes
+				PopulateNodes(
+					App.Constellation.AbilityNodeList,
+					abilityMaterial,
+					scale,
+					positionMultiplier,
+					ref abilityNodeList);
+				PopulateNodes(
+					App.Constellation.ClassNodeList,
+					classMaterial,
+					scale,
+					positionMultiplier,
+					ref classNodeList);
+				PopulateNodes(
+					App.Constellation.KitNodeList,
+					kitMaterial,
+					scale,
+					positionMultiplier,
+					ref kitNodeList);
+
 				SetStartingStateList();
-				return;
 			}
 
-			//create state lists and add selected nodes as true
-			List<bool> abilityStateList = new List<bool>(new bool[abilityNodeList.Count]);
-			List<bool> classStateList = new List<bool>(new bool[classNodeList.Count]);
-			List<bool> kitStateList = new List<bool>(new bool[kitNodeList.Count]);
-			for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
-				abilityStateList[selectedAbilityNodeIndexList[i]] = true;
-			for (int i = 0; i < selectedClassNodeIndexList.Count; ++i)
-				classStateList[selectedClassNodeIndexList[i]] = true;
-			for (int i = 0; i < selectedKitNodeIndexList.Count; ++i)
-				kitStateList[selectedKitNodeIndexList[i]] = true;
-
-			//find selectable ability nodes based on length left
-			if (selectedAbilityNodeIndexList.Count < numAbilities)
+			private void SetStartingStateList()
 			{
-				//compute length remaining
-				ConstellationNodeLink[,] linkTable = new ConstellationNodeLink[selectedAbilityNodeIndexList.Count, selectedAbilityNodeIndexList.Count];
-				for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
+				if (model.SelectedAbilityIndexList.Count != 0)
 				{
-					for (int j = i + 1; j < selectedAbilityNodeIndexList.Count; ++j)
-					{
-						ConstellationNode nodeA = abilityNodeList[selectedAbilityNodeIndexList[i]];
-						ConstellationNode nodeB = abilityNodeList[selectedAbilityNodeIndexList[j]];
-						ConstellationNodeLink link = nodeA.GetLinkTo(nodeB);
-
-						linkTable[i, j] = link;
-						linkTable[j, i] = link;
-					}
+					Debug.Log("Can't call SetStartingStateList() with nodes preselected");
+					return;
 				}
-				int routeIndexUsed = -1;
-				int lengthUsed = int.MaxValue;
-				List<int> selectedIndexList = new List<int>();
-				for (int i = 1; i < selectedAbilityNodeIndexList.Count; ++i)
-					selectedIndexList.Add(i);
-				List<List<ConstellationNodeLink>> routeList = GetRouteList(selectedIndexList, linkTable, 0);
-				if (routeList.Count == 0)
-					lengthUsed = 0;
-				for (int i = 0; i < routeList.Count; ++i)
-				{
-					int routeLength = 0;
-					foreach (var link in routeList[i])
-					{
-						routeLength += link.Depth;
-					}
-					if (routeLength < lengthUsed)
-					{
-						routeIndexUsed = i;
-						lengthUsed = routeLength;
-					}
-				}
-				int lengthRemaining = lengthConstellation - lengthUsed;
 
-				//define selectable on routes
-				if (routeIndexUsed != -1)
+				List<bool> abilityStateList = new List<bool>(new bool[App.Constellation.AbilityNodeList.Count]);
+				List<bool> classStateList = new List<bool>(new bool[App.Constellation.ClassNodeList.Count]);
+				List<bool> kitStateList = new List<bool>(new bool[App.Constellation.KitNodeList.Count]);
+				for (int i = 0; i < App.Constellation.StartingAbilityNodeIndexList.Count; ++i)
+					abilityStateList[App.Constellation.StartingAbilityNodeIndexList[i]] = true;
+
+				SetSelectableStateList(abilityStateList, classStateList, kitStateList);
+			}
+
+			private void SetSelectableStateList(List<bool> abilityList, List<bool> classList, List<bool> kitList)
+			{
+				if (abilityList.Count != App.Constellation.AbilityNodeList.Count 
+					|| classList.Count != App.Constellation.ClassNodeList.Count 
+					|| kitList.Count != App.Constellation.KitNodeList.Count)
 				{
-					foreach (var link in routeList[routeIndexUsed])
+					Debug.Log("Can't call SetSelectableStateList() with with wrong amount of states to set");
+					return;
+				}
+
+				for (int i = 0; i < abilityList.Count; ++i)
+					abilityNodeList[i].SelectableNode = abilityList[i];
+				for (int i = 0; i < classList.Count; ++i)
+					classNodeList[i].SelectableNode = classList[i];
+				for (int i = 0; i < kitList.Count; ++i)
+					kitNodeList[i].SelectableNode = kitList[i];
+			}
+
+			private void OnNodeSelected(ConstellationNode node, bool selected)
+			{
+				if (!node.SelectableNode)
+					return;
+
+				if (selected)
+					model.Add(node.Model);
+				else
+					model.Remove(node.Model);
+			}
+
+			private void onPresetUpdate(Model.ConstellationPreset preset, Model.ConstellationNode node, bool added)
+			{ 
+				//no node selected edge case
+				if (model.SelectedAbilityIndexList.Count == 0)
+				{
+					SetStartingStateList();
+					return;
+				}
+
+				//create state lists and add selected nodes as true
+				List<bool> abilityStateList = new List<bool>(new bool[abilityNodeList.Count]);
+				List<bool> classStateList = new List<bool>(new bool[classNodeList.Count]);
+				List<bool> kitStateList = new List<bool>(new bool[kitNodeList.Count]);
+				for (int i = 0; i < model.SelectedAbilityIndexList.Count; ++i)
+					abilityStateList[model.SelectedAbilityIndexList[i]] = true;
+				for (int i = 0; i < model.SelectedClassIndexList.Count; ++i)
+					classStateList[model.SelectedClassIndexList[i]] = true;
+				for (int i = 0; i < model.SelectedKitIndexList.Count; ++i)
+					kitStateList[model.SelectedKitIndexList[i]] = true;
+
+				//find selectable ability nodes based on length left
+				if (model.SelectedAbilityIndexList.Count < model.NumAbilities)
+				{
+					//compute length remaining
+					Model.ConstellationNodeLink[,] linkTable = new Model.ConstellationNodeLink[model.SelectedAbilityIndexList.Count, model.SelectedAbilityIndexList.Count];
+					for (int i = 0; i < model.SelectedAbilityIndexList.Count; ++i)
 					{
-						foreach (var linkedNode in link.nodeList)
+						for (int j = i + 1; j < model.SelectedAbilityIndexList.Count; ++j)
 						{
-							abilityStateList[linkedNode.Index] = true;
+							ConstellationNode nodeA = abilityNodeList[model.SelectedAbilityIndexList[i]];
+							ConstellationNode nodeB = abilityNodeList[model.SelectedAbilityIndexList[j]];
+							Model.ConstellationNodeLink link = nodeA.Model.GetLinkTo(nodeB.Model);
+
+							linkTable[i, j] = link;
+							linkTable[j, i] = link;
+						}
+					}
+					int routeIndexUsed = -1;
+					int lengthUsed = int.MaxValue;
+					List<int> selectedIndexList = new List<int>();
+					for (int i = 1; i < model.SelectedAbilityIndexList.Count; ++i)
+						selectedIndexList.Add(i);
+					List<List<Model.ConstellationNodeLink>> routeList = Model.ConstellationNodeLink.GetRouteList(selectedIndexList, linkTable, 0);
+					if (routeList.Count == 0)
+						lengthUsed = 0;
+					for (int i = 0; i < routeList.Count; ++i)
+					{
+						int routeLength = 0;
+						foreach (var link in routeList[i])
+						{
+							routeLength += link.Depth;
+						}
+						if (routeLength < lengthUsed)
+						{
+							routeIndexUsed = i;
+							lengthUsed = routeLength;
+						}
+					}
+					int lengthRemaining = model.LengthConstellation - lengthUsed;
+
+					//define selectable on routes
+					if (routeIndexUsed != -1)
+					{
+						foreach (var link in routeList[routeIndexUsed])
+						{
+							foreach (var linkedNode in link.nodeList)
+							{
+								abilityStateList[linkedNode.Index] = true;
+							}
+						}
+					}
+
+					//define selectable and unselectable nodes around selected nodes
+					for (int i = 0; i < model.SelectedAbilityIndexList.Count; ++i)
+					{
+						var selectedNode = abilityNodeList[model.SelectedAbilityIndexList[i]];
+						var nodeInRangeList = selectedNode.Model.GetNodeInRangeList(lengthRemaining);
+						foreach (var nodeInRange in nodeInRangeList)
+						{
+							abilityStateList[nodeInRange.Index] = true;
 						}
 					}
 				}
 
-				//define selectable and unselectable nodes around selected nodes
-				for (int i = 0; i < selectedAbilityNodeIndexList.Count; ++i)
+				//find selectable class nodes based on length left
+				if (model.SelectedClassIndexList.Count < model.NumClasses)
 				{
-					var selectedNode = abilityNodeList[selectedAbilityNodeIndexList[i]];
-					var nodeInRangeList = selectedNode.GetNodeInRangeList(lengthRemaining);
-					foreach (var nodeInRange in nodeInRangeList)
+					foreach (var selectedAbilityNodeIndex in model.SelectedAbilityIndexList)
 					{
-						abilityStateList[nodeInRange.Index] = true;
+						foreach (var classNode in App.Constellation.AbilityNodeList[selectedAbilityNodeIndex].ClassNodeList)
+						{
+							classStateList[classNode.Index] = true;
+						}
 					}
 				}
-			}
 
-			//find selectable class nodes based on length left
-			if (selectedClassNodeIndexList.Count < numClasses)
-			{
-				foreach (var selectedAbilityNodeIndex in selectedAbilityNodeIndexList)
+				//find selectable kit nodes based on length left
+				if (model.SelectedKitIndexList.Count < model.NumKits)
 				{
-					foreach (var classNode in abilityNodeList[selectedAbilityNodeIndex].ClassNodeList)
+					foreach (var selectedAbilityNodeIndex in model.SelectedAbilityIndexList)
 					{
-						classStateList[classNode.Index] = true;
+						foreach (var kitNode in App.Constellation.AbilityNodeList[selectedAbilityNodeIndex].KitsNodeList)
+						{
+							kitStateList[kitNode.Index] = true;
+						}
 					}
 				}
+
+				SetSelectableStateList(abilityStateList, classStateList, kitStateList);
 			}
 
-			//find selectable kit nodes based on length left
-			if (selectedKitNodeIndexList.Count < numKits)
+			void PopulateNodes(List<Model.ConstellationNode> nodeModelList_, Material nodeMaterial_, float scale_, Vector2 positionMultiplier_, ref List<ConstellationNode> nodeList_)
 			{
-				foreach (var selectedAbilityNodeIndex in selectedAbilityNodeIndexList)
+				foreach (var nodeModel in nodeModelList_)
 				{
-					foreach (var kitNode in abilityNodeList[selectedAbilityNodeIndex].KitsNodeList)
-					{
-						kitStateList[kitNode.Index] = true;
-					}
+					GameObject gob = Instantiate(prefab);
+					gob.transform.SetParent(canvas.transform);
+
+					ConstellationNode node = gob.GetComponent<ConstellationNode>();
+					node.Setup(nodeModel, nodeMaterial_, positionMultiplier_, scale_);
+					node.selectedEvent += OnNodeSelected;
+					nodeList_.Add(node);
 				}
-			}
-
-			SetSelectableStateList(abilityStateList, classStateList, kitStateList);
-		}
-
-		List<List<ConstellationNodeLink>> GetRouteList(List<int> remainIndexList, ConstellationNodeLink[,] linkTable, int sourceIndex)
-		{
-			List<List<ConstellationNodeLink>> routeList = new List<List<ConstellationNodeLink>>();
-
-			if (remainIndexList.Count == 0)
-				return routeList;
-
-			for (int i = 0; i < remainIndexList.Count; ++i)
-			{
-				ConstellationNodeLink link = linkTable[sourceIndex, remainIndexList[i]];
-				List<List<ConstellationNodeLink>> subRouteList = new List<List<ConstellationNodeLink>>();
-
-				if (remainIndexList.Count > 1)
-				{
-					List<int> subRemainIndexList = new List<int>(remainIndexList);
-					subRemainIndexList.RemoveAt(i);
-
-					subRouteList.AddRange(GetRouteList(subRemainIndexList, linkTable, sourceIndex));
-					subRouteList.AddRange(GetRouteList(subRemainIndexList, linkTable, remainIndexList[i]));
-					for (int j = 0; j < subRouteList.Count; ++j)
-						subRouteList[j].Add(link);
-				}
-				else
-				{
-					subRouteList.Add(new List<ConstellationNodeLink>());
-					subRouteList[0].Add(link);
-				}
-
-				routeList.AddRange(subRouteList);
-			}
-
-			return routeList;
-		}
-
-		void PopulateNodes(JSONArray array_, Material nodeMaterial_, ConstellationNode.ConstellationNodeType type_, float scale_, Vector2 positionMultiplier_, ref List<ConstellationNode> nodeList_)
-		{
-			foreach (var almostNode in array_)
-			{
-				JSONNode json = almostNode.Value;
-				GameObject gob = Instantiate(prefab);
-				gob.transform.SetParent(canvas.transform);
-				gob.transform.localPosition = new Vector3(json["position"]["x"].AsFloat * positionMultiplier_.x, json["position"]["y"].AsFloat * positionMultiplier_.y, 0);
-				gob.transform.localScale = Vector3.one * scale_;
-				gob.transform.localRotation = Quaternion.identity;
-
-				ConstellationNode node = gob.GetComponent<ConstellationNode>();
-				node.Type = type_;
-				node.Mat = nodeMaterial_;
-				node.Index = nodeList_.Count;
-				node.Uuid = json["id"];
-				node.selectedEvent += OnNodeSelected;
-				nodeList_.Add(node);
 			}
 		}
 	}

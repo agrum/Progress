@@ -15,11 +15,13 @@ namespace West
 		static private string abilitiesPage = "ability";
 		static private string classesPage = "class";
 		static private string kitsPage = "kit";
+		static private string constellationPage = "constellation/Hexagon36";
 		static private string logInPage = "login";
 
 		static private bool loaded = false;
 		static private JSONNode session = null;
-		static public JSONNode Model { get; private set; }= null;
+		static public JSONNode Model { get; private set; } = null;
+		static public Model.Constellation Constellation { get; private set; } = null;
 		static private HTTPRequest request = null;
 		static private string callbackScene = null;
 
@@ -106,29 +108,35 @@ namespace West
 
 		static private void RequestGameSettings()
 		{
-			var extraRequestList = new List<HTTPRequest>();
-			extraRequestList.Add(Request(
-				HTTPMethods.Get,
-				abilitiesPage,
-				(JSONNode json) => { Model["abilities"] = json; },
-				(JSONNode json) => { Debug.Log(json); }));
-			extraRequestList.Add(Request(
-				HTTPMethods.Get,
-				classesPage,
-				(JSONNode json) => { Model["classes"] = json; },
-				(JSONNode json) => { Debug.Log(json); }));
-			extraRequestList.Add(Request(
-				HTTPMethods.Get,
-				kitsPage,
-				(JSONNode json) => { Model["kits"] = json; },
-				(JSONNode json) => { Debug.Log(json); }));
-
 			Request(
 				HTTPMethods.Get,
 				bootUpPage,
 				(JSONNode json) => //set game settings if received
 				{
 					Model = json;
+
+					var extraRequestList = new List<HTTPRequest>();
+					extraRequestList.Add(Request(
+						HTTPMethods.Get,
+						abilitiesPage,
+						(JSONNode json_) => { Model["abilities"] = json_; },
+						(JSONNode json_) => { Debug.Log(json_); }));
+					extraRequestList.Add(Request(
+						HTTPMethods.Get,
+						classesPage,
+						(JSONNode json_) => { Model["classes"] = json_; },
+						(JSONNode json_) => { Debug.Log(json_); }));
+					extraRequestList.Add(Request(
+						HTTPMethods.Get,
+						kitsPage,
+						(JSONNode json_) => { Model["kits"] = json_; },
+						(JSONNode json_) => { Debug.Log(json_); }));
+					extraRequestList.Add(Request(
+						HTTPMethods.Get,
+						constellationPage,
+						(JSONNode json_) => { Constellation = new Model.Constellation(json_); },
+						(JSONNode json_) => { Debug.Log(json_); }));
+
 					Async(
 						extraRequestList,
 						(JSONNode json_) =>
