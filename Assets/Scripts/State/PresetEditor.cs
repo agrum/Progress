@@ -20,6 +20,7 @@ namespace West
 			public Material classMaterial = null;
 			public Material kitMaterial = null;
 
+			private bool canStart = false;
 			private Model.ConstellationPreset model = null;
 			private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
 			private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
@@ -27,11 +28,16 @@ namespace West
 
 			void Start()
 			{
-				App.Load(() =>
+				App.Load(() => 
 				{
-					if (gameObject != null)
-						Invoke("Setup", 1.0f);
+					canStart = true;
 				});
+			}
+
+			void LateUpdate()
+			{
+				if (model == null && canStart && canvas.rect.width != 0)
+					Setup();
 			}
 
 			private void Setup()
