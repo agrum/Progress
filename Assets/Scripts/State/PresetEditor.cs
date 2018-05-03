@@ -28,7 +28,7 @@ namespace West
 
 			void Start()
 			{
-				App.Load(() => 
+				App.Content.Constellation.Load(() => 
 				{
 					canStart = true;
 				});
@@ -59,25 +59,25 @@ namespace West
 				Vector2 positionMultiplier = new Vector2();
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
-				float scale = Math.Min(canvas.rect.width / (2 * (App.Constellation.HalfSize.x + 1) * positionMultiplier.x), canvas.rect.height / (2 * (App.Constellation.HalfSize.y + 1) * positionMultiplier.y));
+				float scale = Math.Min(canvas.rect.width / (2 * (App.Content.Constellation.Model.HalfSize.x + 1) * positionMultiplier.x), canvas.rect.height / (2 * (App.Content.Constellation.Model.HalfSize.y + 1) * positionMultiplier.y));
 				positionMultiplier.x *= scale;
 				positionMultiplier.y *= scale;
 
 				//create constellation nodes
 				PopulateNodes(
-					App.Constellation.AbilityNodeList,
+					App.Content.Constellation.Model.AbilityNodeList,
 					abilityMaterial,
 					scale,
 					positionMultiplier,
 					ref abilityNodeList);
 				PopulateNodes(
-					App.Constellation.ClassNodeList,
+					App.Content.Constellation.Model.ClassNodeList,
 					classMaterial,
 					scale,
 					positionMultiplier,
 					ref classNodeList);
 				PopulateNodes(
-					App.Constellation.KitNodeList,
+					App.Content.Constellation.Model.KitNodeList,
 					kitMaterial,
 					scale,
 					positionMultiplier,
@@ -94,20 +94,20 @@ namespace West
 					return;
 				}
 
-				List<bool> abilityStateList = new List<bool>(new bool[App.Constellation.AbilityNodeList.Count]);
-				List<bool> classStateList = new List<bool>(new bool[App.Constellation.ClassNodeList.Count]);
-				List<bool> kitStateList = new List<bool>(new bool[App.Constellation.KitNodeList.Count]);
-				for (int i = 0; i < App.Constellation.StartingAbilityNodeIndexList.Count; ++i)
-					abilityStateList[App.Constellation.StartingAbilityNodeIndexList[i]] = true;
+				List<bool> abilityStateList = new List<bool>(new bool[App.Content.Constellation.Model.AbilityNodeList.Count]);
+				List<bool> classStateList = new List<bool>(new bool[App.Content.Constellation.Model.ClassNodeList.Count]);
+				List<bool> kitStateList = new List<bool>(new bool[App.Content.Constellation.Model.KitNodeList.Count]);
+				for (int i = 0; i < App.Content.Constellation.Model.StartingAbilityNodeIndexList.Count; ++i)
+					abilityStateList[App.Content.Constellation.Model.StartingAbilityNodeIndexList[i]] = true;
 
 				SetSelectableStateList(abilityStateList, classStateList, kitStateList);
 			}
 
 			private void SetSelectableStateList(List<bool> abilityList, List<bool> classList, List<bool> kitList)
 			{
-				if (abilityList.Count != App.Constellation.AbilityNodeList.Count 
-					|| classList.Count != App.Constellation.ClassNodeList.Count 
-					|| kitList.Count != App.Constellation.KitNodeList.Count)
+				if (abilityList.Count != App.Content.Constellation.Model.AbilityNodeList.Count 
+					|| classList.Count != App.Content.Constellation.Model.ClassNodeList.Count 
+					|| kitList.Count != App.Content.Constellation.Model.KitNodeList.Count)
 				{
 					Debug.Log("Can't call SetSelectableStateList() with with wrong amount of states to set");
 					return;
@@ -221,7 +221,7 @@ namespace West
 				{
 					foreach (var selectedAbilityNodeIndex in model.SelectedAbilityIndexList)
 					{
-						foreach (var classNode in App.Constellation.AbilityNodeList[selectedAbilityNodeIndex].ClassNodeList)
+						foreach (var classNode in App.Content.Constellation.Model.AbilityNodeList[selectedAbilityNodeIndex].ClassNodeList)
 						{
 							classStateList[classNode.Index] = true;
 						}
@@ -233,7 +233,7 @@ namespace West
 				{
 					foreach (var selectedAbilityNodeIndex in model.SelectedAbilityIndexList)
 					{
-						foreach (var kitNode in App.Constellation.AbilityNodeList[selectedAbilityNodeIndex].KitsNodeList)
+						foreach (var kitNode in App.Content.Constellation.Model.AbilityNodeList[selectedAbilityNodeIndex].KitsNodeList)
 						{
 							kitStateList[kitNode.Index] = true;
 						}

@@ -104,7 +104,7 @@ namespace West
 			dummyColliderGO.transform.position = new Vector3(position.x, position.z, 0);
 			dummyCollider.radius = radius;
 
-			Vector2 position2D = new Vector2(position.x, position.z);
+			//Vector2 position2D = new Vector2(position.x, position.z);
 			foreach (CircleCollider2D circleCollider in ColliderContainer.GetComponentsInChildren(typeof(CircleCollider2D), true))
 			{
 				if (circleCollider.gameObject.layer == TerrainRoughColliderLayer)

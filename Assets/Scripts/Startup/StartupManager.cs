@@ -14,7 +14,7 @@ namespace West
 		void Start()
 		{
 			text.text = "Starting up";
-			App.Load(()=>{ });
+			App.Content.GameSettings.Load(() => { });
 		}
 	}
 }

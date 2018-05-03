@@ -39,25 +39,30 @@ namespace West
 				Type = type_;
 				Position = position_;
 
+				JSONArray nodeArray;
 				switch (Type)
 				{
 					case NodeType.Ability:
+						nodeArray = App.Content.AbilityList.Json.AsArray;
 						LowerCaseKey = "abilities";
 						UpperCamelCaseKey = "Abilities";
 						break;
 					case NodeType.Class:
+						nodeArray = App.Content.ClassList.Json.AsArray;
 						LowerCaseKey = "classes";
 						UpperCamelCaseKey = "Classes";
 						break;
 					case NodeType.Kit:
+						nodeArray = App.Content.KitList.Json.AsArray;
 						LowerCaseKey = "kits";
 						UpperCamelCaseKey = "Kits";
 						break;
+					default:
+						throw new Exception();
 				}
-
-				JSONArray abilityArray = App.Model[LowerCaseKey].AsArray;
+				
 				Json = null;
-				foreach (var node in abilityArray)
+				foreach (var node in nodeArray)
 				{
 					if (node.Value["_id"] == Uuid)
 					{

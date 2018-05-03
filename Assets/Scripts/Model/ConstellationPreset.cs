@@ -131,10 +131,10 @@ namespace West
 						var newSelectedClassIndexList = new List<int>();
 						foreach (var selectedClassIndex in SelectedClassIndexList)
 						{
-							var selectedClassNode = App.Constellation.ClassNodeList[selectedClassIndex];
+							var selectedClassNode = App.Content.Constellation.Model.ClassNodeList[selectedClassIndex];
 							foreach (var selectedAbilityIndex in SelectedAbilityIndexList)
 							{
-								if (App.Constellation.AbilityNodeList[selectedAbilityIndex].ClassNodeList.Contains(selectedClassNode))
+								if (App.Content.Constellation.Model.AbilityNodeList[selectedAbilityIndex].ClassNodeList.Contains(selectedClassNode))
 								{
 									newSelectedClassIndexList.Add(selectedClassIndex);
 									break;
@@ -145,10 +145,10 @@ namespace West
 						var newSelectedKitIndexList = new List<int>();
 						foreach (var selectedKitIndex in SelectedKitIndexList)
 						{
-							var selectedKitNode = App.Constellation.KitNodeList[selectedKitIndex];
+							var selectedKitNode = App.Content.Constellation.Model.KitNodeList[selectedKitIndex];
 							foreach (var selectedAbilityIndex in SelectedAbilityIndexList)
 							{
-								if (App.Constellation.AbilityNodeList[selectedAbilityIndex].KitsNodeList.Contains(selectedKitNode))
+								if (App.Content.Constellation.Model.AbilityNodeList[selectedAbilityIndex].KitsNodeList.Contains(selectedKitNode))
 								{
 									newSelectedKitIndexList.Add(selectedKitIndex);
 									break;

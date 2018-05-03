@@ -22,13 +22,21 @@ namespace West
 		private Vector2 center = Vector2.zero;
 		private Edge nextEdge = null;
 
-		private bool normalOutdated = true;
-		private bool centerOutdated = true;
+		//private bool normalOutdated = true;
+		//private bool centerOutdated = true;
 
 		public Vector2 Position
 		{
-			get { return position; }
-			set { position = value; normalOutdated = true; centerOutdated = true; }
+			get
+			{
+				return position;
+			}
+			set
+			{
+				position = value;
+				//normalOutdated = true;
+				//centerOutdated = true;
+			}
 		}
 
 		public Vector3 Position3(float y)
@@ -50,8 +58,8 @@ namespace West
 			set
 			{
 				nextEdge = value;
-				normalOutdated = true;
-				centerOutdated = true;
+				//normalOutdated = true;
+				//centerOutdated = true;
 			}
 		}
 
@@ -62,7 +70,7 @@ namespace West
 				if (/*centerOutdated && */nextEdge != null)
 				{
 					center = (position + nextEdge.position) / 2.0f;
-					centerOutdated = false;
+					//centerOutdated = false;
 				}
 				return center;
 			}
@@ -75,7 +83,7 @@ namespace West
 				if (/*normalOutdated && */nextEdge != null)
 				{
 					normal = new Vector2(nextEdge.Position.y - position.y, -(nextEdge.Position.x - position.x));
-					normalOutdated = false;
+					//normalOutdated = false;
 				}
 				return normal;
 			}

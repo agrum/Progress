@@ -9,7 +9,7 @@ namespace West
 	{
 		public float Merp;
 
-		public String Info()
+		public override string Info()
 		{
 			return "";
 		}

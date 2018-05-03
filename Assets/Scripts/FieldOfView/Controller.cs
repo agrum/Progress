@@ -7,14 +7,12 @@ namespace West
 	{
 
 		public float moveSpeed = 6;
-
-		Rigidbody rigidbody;
+		
 		Camera viewCamera;
 		Vector3 velocity;
 
 		void Start()
 		{
-			rigidbody = GetComponent<Rigidbody>();
 			viewCamera = Camera.main;
 		}
 
@@ -27,7 +25,7 @@ namespace West
 
 		void FixedUpdate()
 		{
-			rigidbody.MovePosition(rigidbody.position + velocity * Time.fixedDeltaTime);
+			GetComponent<Rigidbody>().MovePosition(GetComponent<Rigidbody>().position + velocity * Time.fixedDeltaTime);
 		}
 	}
 }

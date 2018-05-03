@@ -1129,6 +1129,14 @@
     <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
     <Compile Include="Assets\Scripts\Model\App.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\AbilityList.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\AppContent.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\Base.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\ClassList.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\Constellation.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\GameSettings.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\KitList.cs" />
+    <Compile Include="Assets\Scripts\Model\CloudContent\Session.cs" />
     <Compile Include="Assets\Scripts\Model\Constellation.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationNode.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationNodeLink.cs" />

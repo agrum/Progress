@@ -10,7 +10,7 @@ namespace West
 		public Player player { get; internal set; }
 		public string keybind { get; internal set; }
 
-		virtual public String Info()
+		virtual public string Info()
 		{
 			return "";
 		}
