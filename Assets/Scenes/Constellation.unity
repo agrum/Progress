@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c39aa18d91da9504f8d5b0fb6ee40f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 1096539060}
+  constellation: {fileID: 1096539064}
   prefab: {fileID: 1097869892902132, guid: 7d501e310db5e584090ac544206a6b10, type: 2}
   abilityMaterial: {fileID: 2100000, guid: f32051b2464798b45bd6315fbf6d2b50, type: 2}
   classMaterial: {fileID: 2100000, guid: d1a808f3571cf3d46916ad07a51d43da, type: 2}
@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 1096539063}
   - component: {fileID: 1096539062}
   - component: {fileID: 1096539061}
+  - component: {fileID: 1096539064}
   m_Layer: 5
   m_Name: Panel (1)
   m_TagString: Untagged
@@ -397,6 +398,17 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1096539059}
+--- !u!114 &1096539064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1096539059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c41e6f6551285c244b5deb5ffc512f7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1446213090
 GameObject:
   m_ObjectHideFlags: 0
