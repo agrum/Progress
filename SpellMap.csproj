@@ -12,12 +12,15 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1128,7 +1131,8 @@
     <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
-    <Compile Include="Assets\Scripts\Model\App.cs" />
+    <Compile Include="Assets\Scripts\App.cs" />
+    <Compile Include="Assets\Scripts\Model\Network\Network.cs" />
     <Compile Include="Assets\Scripts\Model\CloudContent\AbilityList.cs" />
     <Compile Include="Assets\Scripts\Model\CloudContent\AppContent.cs" />
     <Compile Include="Assets\Scripts\Model\CloudContent\Base.cs" />

@@ -25,7 +25,7 @@ namespace West
 						SceneManager.LoadScene("Startup");
 					}
 
-					App.Request(
+					App.Server.Request(
 					HTTPMethods.Get,
 					"gameSettings/Classic",
 					(JSONNode json_) =>
@@ -40,7 +40,7 @@ namespace West
 							return;
 
 						Json = json;
-						var request = App.Request(
+						var request = App.Server.Request(
 							HTTPMethods.Post,
 							"login",
 							(JSONNode json_) => //if log in is successful, try to get game settigns again

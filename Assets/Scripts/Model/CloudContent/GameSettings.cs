@@ -18,7 +18,7 @@ namespace West
 
 				protected override void Build(OnBuilt onBuilt_)
 				{
-					App.Request(
+					App.Server.Request(
 					HTTPMethods.Get,
 					"gameSettings/Classic",
 					(JSONNode json_) =>

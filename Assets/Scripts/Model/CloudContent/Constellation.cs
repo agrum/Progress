@@ -19,7 +19,7 @@ namespace West
 
 				protected override void Build(OnBuilt onBuilt_)
 				{
-					App.Request(
+					App.Server.Request(
 					HTTPMethods.Get,
 					"constellation/Hexagon36",
 					(JSONNode json_) =>
