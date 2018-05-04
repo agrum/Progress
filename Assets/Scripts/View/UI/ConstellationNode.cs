@@ -24,20 +24,14 @@ namespace West
 			private readonly int leaveHash = Animator.StringToHash("Leave");
 			private readonly int clickInHash = Animator.StringToHash("ClickIn");
 			private readonly int clickOutHash = Animator.StringToHash("ClickOut");
-			private readonly int inHash = Animator.StringToHash("In");
-			private readonly int selectedHash = Animator.StringToHash("Selected");
 			private readonly int isUnselectableHash = Animator.StringToHash("IsUnselectable");
 			private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
-			private int highlightLayerIndex;
 			private int selectLayerIndex;
 			private bool preStartedSelectableNode = false;
 			private bool started = false;
-
-			private bool hovered = false;
+			
 			private bool selected = false;
 			private bool isSelectable = false;
-			private int highlightNextTrigger = 0;
-			private int selectNextTrigger = 0;
 
 			public ConstellationNode()
 			{
@@ -96,31 +90,7 @@ namespace West
 
 				SelectableNode = preStartedSelectableNode;
 
-				//animator_ = GetComponent<Animator>();
-				highlightLayerIndex = animator.GetLayerIndex("Hover Layer");
-				selectLayerIndex = animator.GetLayerIndex("Click Layer");
-
 				base.Start();
-			}
-
-			public void Update()
-			{
-				if (highlightNextTrigger != 0 && !animator.IsInTransition(highlightLayerIndex))
-				{
-					if ((animator.GetCurrentAnimatorStateInfo(highlightLayerIndex).shortNameHash == inHash) != hovered)
-					{
-						animator.SetTrigger(highlightNextTrigger);
-						highlightNextTrigger = 0;
-					}
-				}
-				if (selectNextTrigger != 0 && !animator.IsInTransition(selectLayerIndex))
-				{
-					if ((animator.GetCurrentAnimatorStateInfo(selectLayerIndex).shortNameHash == selectedHash) != selected)
-					{
-						animator.SetTrigger(selectNextTrigger);
-						selectNextTrigger = 0;
-					}
-				}
 			}
 
 			public Model.ConstellationNode Model { get { return model; } }
@@ -156,14 +126,14 @@ namespace West
 
 			override public void OnPointerEnter(PointerEventData eventData)
 			{
-				hovered = true;
-				highlightNextTrigger = enterHash;
+				animator.ResetTrigger(leaveHash);
+				animator.SetTrigger(enterHash);
 			}
 
 			override public void OnPointerExit(PointerEventData eventData)
 			{
-				hovered = false;
-				highlightNextTrigger = leaveHash;
+				animator.ResetTrigger(enterHash);
+				animator.SetTrigger(leaveHash);
 			}
 
 			override public void OnPointerUp(PointerEventData eventData)
@@ -173,7 +143,9 @@ namespace West
 					selected = !selected;
 					selectedEvent(this, selected);
 					animator.ResetTrigger(isSelectableHash);
-					selectNextTrigger = selected ? clickInHash : clickOutHash;
+					animator.ResetTrigger(clickInHash);
+					animator.ResetTrigger(clickOutHash);
+					animator.SetTrigger(selected ? clickInHash : clickOutHash);
 				}
 			}
 		}
