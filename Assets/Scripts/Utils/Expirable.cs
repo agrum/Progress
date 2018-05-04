@@ -27,7 +27,7 @@ public class Expirable
 
 		Expirable expriable = this;
 		await Task.Delay((int)((ExpirationTime - Time.time) * 1000.0f));
-		Expire();
+		expriable.Expire();
 		expriable = null;
 	}
 }

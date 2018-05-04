@@ -19,28 +19,21 @@ namespace West
 			public Material abilityMaterial = null;
 			public Material classMaterial = null;
 			public Material kitMaterial = null;
-
-			private bool canStart = false;
+			
 			private Model.ConstellationPreset model = null;
 
 			void Start()
 			{
-				App.Content.Constellation.Load(() => 
+				App.Content.Constellation.Load(() =>
 				{
-					canStart = true;
-				});
-			}
-
-			void LateUpdate()
-			{
-				if (model == null && canStart)
 					Setup();
+				});
 			}
 
 			private void Setup()
 			{
 				//return if object died while waiting for answer
-				if (!gameObject)
+				if (this == null)
 					return;
 
 				//TODO take from save instead of made up

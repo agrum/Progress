@@ -24,6 +24,8 @@ namespace West
 			private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
 			private List<ConstellationNode> kitNodeList = new List<ConstellationNode>();
 
+			private Rect lastRect = new Rect();
+
 			public void Setup(
 				Model.ConstellationPreset model_,
 				GameObject prefab_, 
@@ -39,36 +41,40 @@ namespace West
 				kitMaterial = kitMaterial_;
 				
 				model.presetUpdateEvent += onPresetUpdate;
-
-				//create ability nodes
-				Vector2 positionMultiplier = new Vector2();
-				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
-				positionMultiplier.y = 0.75f;
-				float scale = Math.Min(canvas.rect.width / (2 * (App.Content.Constellation.Model.HalfSize.x + 1) * positionMultiplier.x), canvas.rect.height / (2 * (App.Content.Constellation.Model.HalfSize.y + 1) * positionMultiplier.y));
-				positionMultiplier.x *= scale;
-				positionMultiplier.y *= scale;
-
+				
 				//create constellation nodes
 				PopulateNodes(
 					App.Content.Constellation.Model.AbilityNodeList,
 					abilityMaterial,
-					scale,
-					positionMultiplier,
 					ref abilityNodeList);
 				PopulateNodes(
 					App.Content.Constellation.Model.ClassNodeList,
 					classMaterial,
-					scale,
-					positionMultiplier,
 					ref classNodeList);
 				PopulateNodes(
 					App.Content.Constellation.Model.KitNodeList,
 					kitMaterial,
-					scale,
-					positionMultiplier,
 					ref kitNodeList);
 
 				SetStartingStateList();
+			}
+
+			void Update()
+			{
+				if (canvas && canvas.rect != lastRect)
+				{
+					Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f),  0.75f);
+					float scale = Math.Min(
+						canvas.rect.width / (2 * (App.Content.Constellation.Model.HalfSize.x + 1) * positionMultiplier.x), 
+						canvas.rect.height / (2 * (App.Content.Constellation.Model.HalfSize.y + 1) * positionMultiplier.y));
+
+					foreach (var node in abilityNodeList)
+						node.Scale(scale);
+					foreach (var node in classNodeList)
+						node.Scale(scale);
+					foreach (var node in kitNodeList)
+						node.Scale(scale);
+				}
 			}
 
 			private void SetStartingStateList()
@@ -228,7 +234,7 @@ namespace West
 				SetSelectableStateList(abilityStateList, classStateList, kitStateList);
 			}
 
-			void PopulateNodes(List<Model.ConstellationNode> nodeModelList_, Material nodeMaterial_, float scale_, Vector2 positionMultiplier_, ref List<ConstellationNode> nodeList_)
+			void PopulateNodes(List<Model.ConstellationNode> nodeModelList_, Material nodeMaterial_, ref List<ConstellationNode> nodeList_)
 			{
 				foreach (var nodeModel in nodeModelList_)
 				{
@@ -236,7 +242,7 @@ namespace West
 					gob.transform.SetParent(canvas.transform);
 
 					ConstellationNode node = gob.GetComponent<ConstellationNode>();
-					node.Setup(nodeModel, nodeMaterial_, positionMultiplier_, scale_);
+					node.Setup(nodeModel, nodeMaterial_);
 					node.selectedEvent += OnNodeSelected;
 					nodeList_.Add(node);
 				}

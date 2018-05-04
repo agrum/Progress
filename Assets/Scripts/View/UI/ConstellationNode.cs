@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ namespace West
 
 			private Model.ConstellationNode model;
 			private Material mat;
+			private Vector2 positionMultiplier = new Vector2();
+			private float scale;
 
 			private readonly int enterHash = Animator.StringToHash("Enter");
 			private readonly int leaveHash = Animator.StringToHash("Leave");
@@ -36,14 +39,19 @@ namespace West
 			private int highlightNextTrigger = 0;
 			private int selectNextTrigger = 0;
 
-			public void Setup(Model.ConstellationNode model_, Material mat_, Vector2 positionMultiplier_, float scale_)
+			public ConstellationNode()
+			{
+				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
+				positionMultiplier.y = 0.75f;
+			}
+
+			public void Setup(Model.ConstellationNode model_, Material mat_)
 			{
 				model = model_;
 				mat = mat_;
-
-				gameObject.transform.localPosition = new Vector3(model.Position.x * positionMultiplier_.x, model.Position.y * positionMultiplier_.y, 0);
-				gameObject.transform.localScale = Vector3.one * scale_;
-				gameObject.transform.localRotation = Quaternion.identity;
+				scale = 1.0f;
+				
+				Scale(scale);
 
 				Transform childTranform = gameObject.transform.Find("GameObject");
 				Image stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
@@ -60,7 +68,7 @@ namespace West
 				if (model.Json != null)
 				{
 					string path = "Icons/" + model.UpperCamelCaseKey + "/" + model.Json["name"];
-					Object prefabObject = Resources.Load(path);
+					UnityEngine.Object prefabObject = Resources.Load(path);
 					Texture2D texture = prefabObject as Texture2D;
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
 
@@ -72,6 +80,14 @@ namespace West
 					icon.overrideSprite = null;
 					iconWhite.overrideSprite = null;
 				}
+			}
+
+			public void Scale(float scale_)
+			{
+				scale = scale_;
+				gameObject.transform.localPosition = new Vector3(model.Position.x * positionMultiplier.x, model.Position.y * positionMultiplier.y, 0) * scale; ;
+				gameObject.transform.localScale = Vector3.one * scale;
+				gameObject.transform.localRotation = Quaternion.identity;
 			}
 
 			override protected void Start()
