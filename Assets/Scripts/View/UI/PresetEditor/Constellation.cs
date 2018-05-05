@@ -40,7 +40,7 @@ namespace West
 				classMaterial = classMaterial_;
 				kitMaterial = kitMaterial_;
 				
-				model.presetUpdateEvent += onPresetUpdate;
+				model.presetUpdateEvent += OnPresetUpdate;
 				
 				//create constellation nodes
 				PopulateNodes(
@@ -123,7 +123,7 @@ namespace West
 					model.Remove(node.Model);
 			}
 
-			private void onPresetUpdate(Model.ConstellationPreset preset, Model.ConstellationNode node, bool added)
+			private void OnPresetUpdate()
 			{
 				//no node selected edge case
 				if (model.SelectedAbilityIndexList.Count == 0)
@@ -241,8 +241,8 @@ namespace West
 					GameObject gob = Instantiate(prefab);
 					gob.transform.SetParent(canvas.transform);
 
-					ConstellationNode node = gob.GetComponent<ConstellationNode>();
-					node.Setup(nodeModel, nodeMaterial_);
+					ConstellationNode node = gob.AddComponent<ConstellationNode>();
+					node.Setup(nodeModel, nodeMaterial_, nodeModel.Position);
 					node.selectedEvent += OnNodeSelected;
 					nodeList_.Add(node);
 				}

@@ -15,10 +15,11 @@ namespace West
 			public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 			public event OnSelectedDelegate selectedEvent;
 
-			private Model.ConstellationNode model;
-			private Material mat;
-			private Vector2 positionMultiplier = new Vector2();
-			private float scale;
+			protected Model.ConstellationNode model;
+			protected Material mat;
+			protected Vector2 position = new Vector2();
+			protected Vector2 positionMultiplier = new Vector2();
+			protected float scale;
 
 			private readonly int enterHash = Animator.StringToHash("Enter");
 			private readonly int leaveHash = Animator.StringToHash("Leave");
@@ -26,25 +27,23 @@ namespace West
 			private readonly int clickOutHash = Animator.StringToHash("ClickOut");
 			private readonly int isUnselectableHash = Animator.StringToHash("IsUnselectable");
 			private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
-			private int selectLayerIndex;
 			private bool preStartedSelectableNode = false;
 			private bool started = false;
 			
 			private bool selected = false;
 			private bool isSelectable = false;
 
-			public ConstellationNode()
+			public void Setup(Model.ConstellationNode model_, Material mat_, Vector2 position_)
 			{
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
-			}
-
-			public void Setup(Model.ConstellationNode model_, Material mat_)
-			{
-				model = model_;
+				
 				mat = mat_;
 				scale = 1.0f;
-				
+				position = position_;
+				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
+				positionMultiplier.y = 0.75f;
+
 				Scale(scale);
 
 				Transform childTranform = gameObject.transform.Find("GameObject");
@@ -52,34 +51,50 @@ namespace West
 				Image pulse = childTranform.Find("Pulse").GetComponent<Image>();
 				Image fill = childTranform.Find("HexagonFill").GetComponent<Image>();
 				Image icon = childTranform.Find("Icon").GetComponent<Image>();
-				Image iconWhite = childTranform.Find("White").Find("Icon").GetComponent<Image>();
 
 				stroke.material = mat;
 				pulse.material = mat;
 				fill.material = mat;
 				icon.material = mat;
 
-				if (model.Json != null)
+				Setup(model_);
+			}
+
+			public void Setup(Model.ConstellationNode model_)
+			{
+				model = model_;
+
+				Transform childTranform = gameObject.transform.Find("GameObject");
+				Image pulse = childTranform.Find("Pulse").GetComponent<Image>();
+				Image icon = childTranform.Find("Icon").GetComponent<Image>();
+				Image iconWhite = childTranform.Find("White").Find("Icon").GetComponent<Image>();
+
+				if (model != null && model.Json != null)
 				{
 					string path = "Icons/" + model.UpperCamelCaseKey + "/" + model.Json["name"];
 					UnityEngine.Object prefabObject = Resources.Load(path);
 					Texture2D texture = prefabObject as Texture2D;
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
 
+					pulse.gameObject.SetActive(true);
+					icon.gameObject.SetActive(true);
+					iconWhite.gameObject.SetActive(true);
 					icon.overrideSprite = sprite;
 					iconWhite.overrideSprite = sprite;
 				}
 				else
 				{
-					icon.overrideSprite = null;
-					iconWhite.overrideSprite = null;
+					SelectableNode = false;
+					pulse.gameObject.SetActive(false);
+					icon.gameObject.SetActive(false);
+					iconWhite.gameObject.SetActive(false);
 				}
 			}
 
-			public void Scale(float scale_)
+			public virtual void Scale(float scale_)
 			{
 				scale = scale_;
-				gameObject.transform.localPosition = new Vector3(model.Position.x * positionMultiplier.x, model.Position.y * positionMultiplier.y, 0) * scale; ;
+				gameObject.transform.localPosition = new Vector3(position.x * positionMultiplier.x, position.y * positionMultiplier.y, 0) * scale; ;
 				gameObject.transform.localScale = Vector3.one * scale;
 				gameObject.transform.localRotation = Quaternion.identity;
 			}
@@ -89,6 +104,9 @@ namespace West
 				started = true;
 
 				SelectableNode = preStartedSelectableNode;
+
+				interactable = true;
+				transition = Transition.None;
 
 				base.Start();
 			}
@@ -124,6 +142,21 @@ namespace West
 				}
 			}
 
+			public void SelectNode(bool select)
+			{
+				selected = select;
+				selectedEvent(this, selected);
+				if (SelectableNode)
+					animator.ResetTrigger(isSelectableHash);
+				else
+				{
+					SelectableNode = true;
+				}
+				animator.ResetTrigger(clickInHash);
+				animator.ResetTrigger(clickOutHash);
+				animator.SetTrigger(selected ? clickInHash : clickOutHash);
+			}
+
 			override public void OnPointerEnter(PointerEventData eventData)
 			{
 				animator.ResetTrigger(leaveHash);
@@ -140,12 +173,7 @@ namespace West
 			{
 				if (isSelectable)
 				{
-					selected = !selected;
-					selectedEvent(this, selected);
-					animator.ResetTrigger(isSelectableHash);
-					animator.ResetTrigger(clickInHash);
-					animator.ResetTrigger(clickOutHash);
-					animator.SetTrigger(selected ? clickInHash : clickOutHash);
+					SelectNode(!selected);
 				}
 			}
 		}

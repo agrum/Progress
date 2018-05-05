@@ -1170,8 +1170,9 @@
     <Compile Include="Assets\Scripts\UI\ResourceBar.cs" />
     <Compile Include="Assets\Scripts\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Utils\Pair.cs" />
-    <Compile Include="Assets\Scripts\View\UI\Constellation.cs" />
+    <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\ConstellationNode.cs" />
+    <Compile Include="Assets\Scripts\View\UI\PresetEditor\PresetPreview.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />

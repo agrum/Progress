@@ -21,7 +21,7 @@ namespace West
 			public List<int> SelectedClassIndexList { get; private set; } = new List<int>();
 			public List<int> SelectedKitIndexList { get; private set; } = new List<int>();
 
-			public delegate void OnPresetUpdateDelegate(ConstellationPreset preset, ConstellationNode node, bool added);
+			public delegate void OnPresetUpdateDelegate();
 			public event OnPresetUpdateDelegate presetUpdateEvent;
 
 			public ConstellationPreset(JSONNode json)
@@ -77,7 +77,7 @@ namespace West
 				}
 
 				SelectedIndexList.Add(node.Index);
-				presetUpdateEvent(this, node, true);
+				presetUpdateEvent();
 			}
 
 			public void Remove(ConstellationNode node)
@@ -161,7 +161,7 @@ namespace West
 				else
 					SelectedIndexList.Remove(node.Index);
 
-				presetUpdateEvent(this, node, false);
+				presetUpdateEvent();
 			}
 
 			public void Clear()
