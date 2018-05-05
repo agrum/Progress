@@ -28,7 +28,7 @@ namespace West
 			private Vector2 sizeInt = new Vector2();
 			private Vector2 size = new Vector2();
 			private int nodeAdded = 0;
-
+			
 			public void Setup(
 				Model.ConstellationPreset model_,
 				GameObject prefab_,
@@ -52,31 +52,22 @@ namespace West
 				size.y = sizeInt.y;
 
 				//create constellation nodes
-				List<Model.ConstellationNode> modelAbilityNodeList = new List<Model.ConstellationNode>(model.NumAbilities);
-				for (int i = 0; i < model.NumAbilities; ++i)
-					modelAbilityNodeList.Add((i < model.SelectedAbilityIndexList.Count) 
-						? App.Content.Constellation.Model.AbilityNodeList[model.SelectedAbilityIndexList[i]]
-						: null);
 				PopulateNodes(
-					modelAbilityNodeList,
+					model.NumAbilities,
+					App.Content.Constellation.Model.AbilityNodeList,
+					model.SelectedAbilityIndexList,
 					abilityMaterial,
 					ref abilityNodeList);
-				List<Model.ConstellationNode> modelKitNodeList = new List<Model.ConstellationNode>(model.NumKits);
-				for (int i = 0; i < model.NumKits; ++i)
-					modelKitNodeList.Add((i < model.SelectedKitIndexList.Count)
-						? App.Content.Constellation.Model.KitNodeList[model.SelectedKitIndexList[i]]
-						: null);
 				PopulateNodes(
-					modelKitNodeList,
+					model.NumKits,
+					App.Content.Constellation.Model.KitNodeList,
+					model.SelectedKitIndexList,
 					kitMaterial,
 					ref kitNodeList);
-				List<Model.ConstellationNode> modelClassNodeList = new List<Model.ConstellationNode>(model.NumClasses);
-				for (int i = 0; i < model.NumClasses; ++i)
-					modelClassNodeList.Add((i < model.SelectedClassIndexList.Count)
-						? App.Content.Constellation.Model.ClassNodeList[model.SelectedClassIndexList[i]]
-						: null);
 				PopulateNodes(
-					modelClassNodeList,
+					model.NumClasses,
+					App.Content.Constellation.Model.ClassNodeList,
+					model.SelectedClassIndexList,
 					classMaterial,
 					ref classNodeList);
 			}
@@ -98,48 +89,32 @@ namespace West
 						node.Scale(scale);
 				}
 			}
-
+			
 			private void OnPresetUpdate()
 			{
-				for (int i = 0; i < abilityNodeList.Count; ++i)
-				{
-					if (i < model.SelectedAbilityIndexList.Count)
-					{
-						abilityNodeList[i].Setup(App.Content.Constellation.Model.AbilityNodeList[model.SelectedAbilityIndexList[i]]);
-						abilityNodeList[i].SelectNode(true);
-					}
-					else
-						abilityNodeList[i].Setup(null);
-				}
-				for (int i = 0; i < classNodeList.Count; ++i)
-				{
-					if (i < model.SelectedClassIndexList.Count)
-					{
-						classNodeList[i].Setup(App.Content.Constellation.Model.ClassNodeList[model.SelectedClassIndexList[i]]);
-						classNodeList[i].SelectNode(true);
-					}
-					else
-						classNodeList[i].Setup(null);
-				}
-				for (int i = 0; i < kitNodeList.Count; ++i)
-				{
-					if (i < model.SelectedKitIndexList.Count)
-					{
-						kitNodeList[i].Setup(App.Content.Constellation.Model.KitNodeList[model.SelectedKitIndexList[i]]);
-						kitNodeList[i].SelectNode(true);
-					}
-					else
-						kitNodeList[i].Setup(null);
-				}
+				UpdateVisual(abilityNodeList, model.SelectedAbilityIndexList, App.Content.Constellation.Model.AbilityNodeList);
+				UpdateVisual(classNodeList, model.SelectedClassIndexList, App.Content.Constellation.Model.ClassNodeList);
+				UpdateVisual(kitNodeList, model.SelectedKitIndexList, App.Content.Constellation.Model.KitNodeList);
 			}
 
 			private void OnNodeSelected(ConstellationNode node, bool selected)
 			{
 			}
 
-			void PopulateNodes(List<Model.ConstellationNode> nodeModelList_, Material nodeMaterial_, ref List<ConstellationNode> nodeList_)
+			private void PopulateNodes(
+				int amountNode_,
+				List<Model.ConstellationNode> nodeModelList_, 
+				List<int> nodeIndexList_, 
+				Material nodeMaterial_, 
+				ref List<ConstellationNode> nodeList_)
 			{
-				foreach (var nodeModel in nodeModelList_)
+				List<Model.ConstellationNode> nodeModelSubsetList = new List<Model.ConstellationNode>(model.NumClasses);
+				for (int i = 0; i < amountNode_; ++i)
+					nodeModelSubsetList.Add((i < nodeIndexList_.Count)
+						? nodeModelList_[nodeIndexList_[i]]
+						: null);
+
+				foreach (var nodeModel in nodeModelSubsetList)
 				{
 					GameObject gob = Instantiate(prefab);
 					gob.transform.SetParent(canvas.transform);
@@ -152,6 +127,23 @@ namespace West
 					node.selectedEvent += OnNodeSelected;
 					nodeList_.Add(node);
 					++nodeAdded;
+				}
+			}
+
+			private void UpdateVisual(
+				List<ConstellationNode> nodeViewList,
+				List<int> nodeIndexlist,
+				List<Model.ConstellationNode> nodeModelList)
+			{
+				for (int i = 0; i < nodeViewList.Count; ++i)
+				{
+					if (i < nodeIndexlist.Count)
+					{
+						nodeViewList[i].Setup(nodeModelList[nodeIndexlist[i]]);
+						nodeViewList[i].SelectNode(true);
+					}
+					else
+						nodeViewList[i].Setup(null);
 				}
 			}
 		}
