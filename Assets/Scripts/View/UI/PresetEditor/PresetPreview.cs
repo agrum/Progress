@@ -13,6 +13,8 @@ namespace West
 	{
 		public class PresetPreview : MonoBehaviour
 		{
+			public NodeTextualDetails nodeTextualDetails = null;
+
 			private Model.ConstellationPreset model = null;
 			private RectTransform canvas = null;
 			private GameObject prefab = null;
@@ -103,6 +105,12 @@ namespace West
 					model.Remove(node.Model);
 			}
 
+			private void OnNodeHovered(ConstellationNode node, bool hovered)
+			{
+				if (nodeTextualDetails != null && node.Model != null)
+					nodeTextualDetails.Setup(hovered ? node : null);
+			}
+
 			private void PopulateNodes(
 				int amountNode_,
 				List<Model.ConstellationNode> nodeModelList_, 
@@ -127,6 +135,7 @@ namespace West
 					ConstellationNode node = gob.AddComponent<ConstellationNode>();
 					node.Setup(nodeModel, nodeMaterial_, nodePosition);
 					node.selectedEvent += OnNodeSelected;
+					node.hoveredEvent += OnNodeHovered;
 					nodeList_.Add(node);
 					++nodeAdded;
 				}

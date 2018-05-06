@@ -21,6 +21,8 @@ namespace West
 
 			public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 			public event OnSelectedDelegate selectedEvent;
+			public delegate void OnHoveredDelegate(ConstellationNode node, bool hovered);
+			public event OnHoveredDelegate hoveredEvent;
 
 			protected Model.ConstellationNode model;
 			protected Material mat;
@@ -121,6 +123,7 @@ namespace West
 			}
 
 			public Model.ConstellationNode Model { get { return model; } }
+			public Material Mat { get { return mat; } }
 
 			public State SelectableState
 			{
@@ -163,12 +166,14 @@ namespace West
 			{
 				animator.ResetTrigger(leaveHash);
 				animator.SetTrigger(enterHash);
+				hoveredEvent(this, true);
 			}
 
 			override public void OnPointerExit(PointerEventData eventData)
 			{
 				animator.ResetTrigger(enterHash);
 				animator.SetTrigger(leaveHash);
+				hoveredEvent(this, false);
 			}
 
 			override public void OnPointerUp(PointerEventData eventData)

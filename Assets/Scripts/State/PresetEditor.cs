@@ -14,6 +14,7 @@ namespace West
 	{
 		class PresetEditor : MonoBehaviour
 		{
+			public NodeTextualDetails nodeTextualDetails = null;
 			public Constellation constellation = null;
 			public PresetPreview presetPreview = null;
 			public GameObject prefab = null;
@@ -45,6 +46,7 @@ namespace West
 				presetJson["lengthConstellation"] = 8;
 				model = new Model.ConstellationPreset(presetJson);
 
+				nodeTextualDetails.Setup(null);
 				constellation.Setup(model, prefab, abilityMaterial, classMaterial, kitMaterial);
 				presetPreview.Setup(model, prefab, abilityMaterial, classMaterial, kitMaterial);
 			}
