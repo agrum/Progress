@@ -38,9 +38,35 @@ namespace West
 			
 			private State state = State.Unselectable;
 			private State preStartedState = State.Unselectable;
+			
+			private Transform childTranform;
+			private Image stroke;
+			private Image pulse;
+			private Image fill;
+			private Image icon;
+			private Image iconWhite;
+
+			protected override void Start()
+			{
+				started = true;
+
+				SelectableState = preStartedState;
+
+				interactable = true;
+				transition = Transition.None;
+
+				base.Start();
+			}
 
 			public void Setup(Model.ConstellationNode model_, Material mat_, Vector2 position_)
 			{
+				childTranform = gameObject.transform.Find("GameObject");
+				stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
+				pulse = childTranform.Find("Pulse").GetComponent<Image>();
+				fill = childTranform.Find("HexagonFill").GetComponent<Image>();
+				icon = childTranform.Find("Icon").GetComponent<Image>();
+				iconWhite = childTranform.Find("White").Find("Icon").GetComponent<Image>();
+
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 				
@@ -51,12 +77,6 @@ namespace West
 				positionMultiplier.y = 0.75f;
 
 				Scale(scale);
-
-				Transform childTranform = gameObject.transform.Find("GameObject");
-				Image stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
-				Image pulse = childTranform.Find("Pulse").GetComponent<Image>();
-				Image fill = childTranform.Find("HexagonFill").GetComponent<Image>();
-				Image icon = childTranform.Find("Icon").GetComponent<Image>();
 
 				stroke.material = mat;
 				pulse.material = mat;
@@ -69,11 +89,6 @@ namespace West
 			public void Setup(Model.ConstellationNode model_)
 			{
 				model = model_;
-
-				Transform childTranform = gameObject.transform.Find("GameObject");
-				Image pulse = childTranform.Find("Pulse").GetComponent<Image>();
-				Image icon = childTranform.Find("Icon").GetComponent<Image>();
-				Image iconWhite = childTranform.Find("White").Find("Icon").GetComponent<Image>();
 
 				if (model != null && model.Json != null)
 				{
@@ -103,18 +118,6 @@ namespace West
 				gameObject.transform.localPosition = new Vector3(position.x * positionMultiplier.x, position.y * positionMultiplier.y, 0) * scale; ;
 				gameObject.transform.localScale = Vector3.one * scale;
 				gameObject.transform.localRotation = Quaternion.identity;
-			}
-
-			override protected void Start()
-			{
-				started = true;
-
-				SelectableState = preStartedState;
-
-				interactable = true;
-				transition = Transition.None;
-
-				base.Start();
 			}
 
 			public Model.ConstellationNode Model { get { return model; } }
