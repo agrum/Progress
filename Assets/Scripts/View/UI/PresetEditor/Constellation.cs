@@ -178,6 +178,14 @@ namespace West
 					}
 					int lengthRemaining = model.LengthConstellation - lengthUsed;
 
+					//a fork node might have been removed, elongating routes past the limit.
+					//reset in this case.
+					if (lengthRemaining < 0)
+					{
+						model.Clear();
+						return;
+					}
+
 					//define selectable on routes
 					if (routeIndexUsed != -1)
 					{

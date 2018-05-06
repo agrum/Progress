@@ -120,9 +120,8 @@ namespace West
 				{
 					if (SelectedAbilityIndexList[0] == node.Index) //clear if it's the initial node
 					{
-						SelectedAbilityIndexList.Clear();
-						SelectedClassIndexList.Clear();
-						SelectedKitIndexList.Clear();
+						Clear();
+						return;
 					}
 					else
 					{
@@ -169,6 +168,7 @@ namespace West
 				SelectedAbilityIndexList.Clear();
 				SelectedClassIndexList.Clear();
 				SelectedKitIndexList.Clear();
+				presetUpdateEvent();
 			}
 		}
 	}
