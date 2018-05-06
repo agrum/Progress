@@ -87,7 +87,7 @@ namespace West
 
 				if (node == null)
 				{
-					Debug.Log("ConstellationPreset.Add() node null");
+					Debug.Log("ConstellationPreset.Remove() node null");
 					throw new Exception();
 				}
 
@@ -106,13 +106,13 @@ namespace West
 						limit = NumKits;
 						break;
 					default:
-						Debug.Log("ConstellationPreset.Add() node no type");
+						Debug.Log("ConstellationPreset.Remove() node no type");
 						throw new Exception();
 				}
 
 				if (SelectedIndexList.Count == 0 || !SelectedIndexList.Contains(node.Index))
 				{
-					Debug.Log("ConstellationPreset.Add() can't");
+					Debug.Log("ConstellationPreset.Remove() can't");
 					throw new Exception();
 				}
 

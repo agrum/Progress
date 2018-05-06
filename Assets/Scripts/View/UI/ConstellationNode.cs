@@ -12,6 +12,13 @@ namespace West
 	{
 		public class ConstellationNode : Selectable
 		{
+			public enum State
+			{
+				Unselectable,
+				Selectable,
+				Selected
+			}
+
 			public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
 			public event OnSelectedDelegate selectedEvent;
 
@@ -27,11 +34,10 @@ namespace West
 			private readonly int clickOutHash = Animator.StringToHash("ClickOut");
 			private readonly int isUnselectableHash = Animator.StringToHash("IsUnselectable");
 			private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
-			private bool preStartedSelectableNode = false;
 			private bool started = false;
 			
-			private bool selected = false;
-			private bool isSelectable = false;
+			private State state = State.Unselectable;
+			private State preStartedState = State.Unselectable;
 
 			public void Setup(Model.ConstellationNode model_, Material mat_, Vector2 position_)
 			{
@@ -84,7 +90,7 @@ namespace West
 				}
 				else
 				{
-					SelectableNode = false;
+					SelectableState = State.Unselectable;
 					pulse.gameObject.SetActive(false);
 					icon.gameObject.SetActive(false);
 					iconWhite.gameObject.SetActive(false);
@@ -103,7 +109,7 @@ namespace West
 			{
 				started = true;
 
-				SelectableNode = preStartedSelectableNode;
+				SelectableState = preStartedState;
 
 				interactable = true;
 				transition = Transition.None;
@@ -113,48 +119,41 @@ namespace West
 
 			public Model.ConstellationNode Model { get { return model; } }
 
-			public bool SelectableNode
+			public State SelectableState
 			{
 				get
 				{
-					return isSelectable;
+					return state;
 				}
 				set
 				{
 					if (!started)
 					{
-						preStartedSelectableNode = value;
+						preStartedState = value;
 						return;
 					}
 
-					isSelectable = value;
-					if (isSelectable)
+					animator.ResetTrigger(isUnselectableHash);
+					animator.ResetTrigger(isSelectableHash);
+					animator.ResetTrigger(clickInHash);
+					animator.ResetTrigger(clickOutHash);
+
+					var oldState = state;
+					state = value;
+					if (state == State.Unselectable)
 					{
-						animator.ResetTrigger(isSelectableHash);
-						animator.SetTrigger(isSelectableHash);
+						animator.SetTrigger(isUnselectableHash);
 					}
 					else
 					{
-						selected = false;
-						animator.ResetTrigger(isSelectableHash);
-						animator.SetTrigger(isUnselectableHash);
+						if (oldState != State.Selected)
+							animator.SetTrigger(isSelectableHash);
+						if (state == State.Selected || oldState == State.Selected)
+						{
+							animator.SetTrigger((state == State.Selected) ? clickInHash : clickOutHash);
+						}
 					}
 				}
-			}
-
-			public void SelectNode(bool select)
-			{
-				selected = select;
-				selectedEvent(this, selected);
-				if (SelectableNode)
-					animator.ResetTrigger(isSelectableHash);
-				else
-				{
-					SelectableNode = true;
-				}
-				animator.ResetTrigger(clickInHash);
-				animator.ResetTrigger(clickOutHash);
-				animator.SetTrigger(selected ? clickInHash : clickOutHash);
 			}
 
 			override public void OnPointerEnter(PointerEventData eventData)
@@ -171,10 +170,8 @@ namespace West
 
 			override public void OnPointerUp(PointerEventData eventData)
 			{
-				if (isSelectable)
-				{
-					SelectNode(!selected);
-				}
+				if (SelectableState != State.Unselectable)
+					selectedEvent(this, SelectableState == State.Selectable);
 			}
 		}
 	}

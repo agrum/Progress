@@ -12,15 +12,12 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1121,6 +1118,7 @@
     <Compile Include="Assets\External\SimpleJSON\SimpleJSON.cs" />
     <Compile Include="Assets\External\SimpleJSON\SimpleJSONBinary.cs" />
     <Compile Include="Assets\External\SimpleJSON\SimpleJSONUnity.cs" />
+    <Compile Include="Assets\Scripts\App.cs" />
     <Compile Include="Assets\Scripts\CharacterAnimationIdleSMB.cs" />
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\LivingController.cs" />
@@ -1131,8 +1129,6 @@
     <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
-    <Compile Include="Assets\Scripts\App.cs" />
-    <Compile Include="Assets\Scripts\Model\Network\Network.cs" />
     <Compile Include="Assets\Scripts\Model\CloudContent\AbilityList.cs" />
     <Compile Include="Assets\Scripts\Model\CloudContent\AppContent.cs" />
     <Compile Include="Assets\Scripts\Model\CloudContent\Base.cs" />
@@ -1147,6 +1143,7 @@
     <Compile Include="Assets\Scripts\Model\ConstellationPreset.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
     <Compile Include="Assets\Scripts\Model\Keybinding.cs" />
+    <Compile Include="Assets\Scripts\Model\Network\Network.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Armor.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\BurstShield.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Life.cs" />
@@ -1170,8 +1167,8 @@
     <Compile Include="Assets\Scripts\UI\ResourceBar.cs" />
     <Compile Include="Assets\Scripts\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Utils\Pair.cs" />
-    <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\ConstellationNode.cs" />
+    <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\PresetPreview.cs" />
   </ItemGroup>
   <ItemGroup>

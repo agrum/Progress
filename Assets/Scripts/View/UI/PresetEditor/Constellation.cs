@@ -67,6 +67,7 @@ namespace West
 					float scale = Math.Min(
 						canvas.rect.width / (2 * (App.Content.Constellation.Model.HalfSize.x + 1) * positionMultiplier.x), 
 						canvas.rect.height / (2 * (App.Content.Constellation.Model.HalfSize.y + 1) * positionMultiplier.y));
+					lastRect = new Rect(canvas.rect);
 
 					foreach (var node in abilityNodeList)
 						node.Scale(scale);
@@ -85,16 +86,16 @@ namespace West
 					return;
 				}
 
-				List<bool> abilityStateList = new List<bool>(new bool[App.Content.Constellation.Model.AbilityNodeList.Count]);
-				List<bool> classStateList = new List<bool>(new bool[App.Content.Constellation.Model.ClassNodeList.Count]);
-				List<bool> kitStateList = new List<bool>(new bool[App.Content.Constellation.Model.KitNodeList.Count]);
+				List<ConstellationNode.State> abilityStateList = new List<ConstellationNode.State>(new ConstellationNode.State[App.Content.Constellation.Model.AbilityNodeList.Count]);
+				List<ConstellationNode.State> classStateList = new List<ConstellationNode.State>(new ConstellationNode.State[App.Content.Constellation.Model.ClassNodeList.Count]);
+				List<ConstellationNode.State> kitStateList = new List<ConstellationNode.State>(new ConstellationNode.State[App.Content.Constellation.Model.KitNodeList.Count]);
 				for (int i = 0; i < App.Content.Constellation.Model.StartingAbilityNodeIndexList.Count; ++i)
-					abilityStateList[App.Content.Constellation.Model.StartingAbilityNodeIndexList[i]] = true;
+					abilityStateList[App.Content.Constellation.Model.StartingAbilityNodeIndexList[i]] = ConstellationNode.State.Selectable;
 
 				SetSelectableStateList(abilityStateList, classStateList, kitStateList);
 			}
 
-			private void SetSelectableStateList(List<bool> abilityList, List<bool> classList, List<bool> kitList)
+			private void SetSelectableStateList(List<ConstellationNode.State> abilityList, List<ConstellationNode.State> classList, List<ConstellationNode.State> kitList)
 			{
 				if (abilityList.Count != App.Content.Constellation.Model.AbilityNodeList.Count
 					|| classList.Count != App.Content.Constellation.Model.ClassNodeList.Count
@@ -105,16 +106,16 @@ namespace West
 				}
 
 				for (int i = 0; i < abilityList.Count; ++i)
-					abilityNodeList[i].SelectableNode = abilityList[i];
+					abilityNodeList[i].SelectableState = abilityList[i];
 				for (int i = 0; i < classList.Count; ++i)
-					classNodeList[i].SelectableNode = classList[i];
+					classNodeList[i].SelectableState = classList[i];
 				for (int i = 0; i < kitList.Count; ++i)
-					kitNodeList[i].SelectableNode = kitList[i];
+					kitNodeList[i].SelectableState = kitList[i];
 			}
 
 			private void OnNodeSelected(ConstellationNode node, bool selected)
 			{
-				if (!node.SelectableNode)
+				if (node.SelectableState == ConstellationNode.State.Unselectable)
 					return;
 
 				if (selected)
@@ -133,15 +134,9 @@ namespace West
 				}
 
 				//create state lists and add selected nodes as true
-				List<bool> abilityStateList = new List<bool>(new bool[abilityNodeList.Count]);
-				List<bool> classStateList = new List<bool>(new bool[classNodeList.Count]);
-				List<bool> kitStateList = new List<bool>(new bool[kitNodeList.Count]);
-				for (int i = 0; i < model.SelectedAbilityIndexList.Count; ++i)
-					abilityStateList[model.SelectedAbilityIndexList[i]] = true;
-				for (int i = 0; i < model.SelectedClassIndexList.Count; ++i)
-					classStateList[model.SelectedClassIndexList[i]] = true;
-				for (int i = 0; i < model.SelectedKitIndexList.Count; ++i)
-					kitStateList[model.SelectedKitIndexList[i]] = true;
+				List<ConstellationNode.State> abilityStateList = new List<ConstellationNode.State>(new ConstellationNode.State[abilityNodeList.Count]);
+				List<ConstellationNode.State> classStateList = new List<ConstellationNode.State>(new ConstellationNode.State[classNodeList.Count]);
+				List<ConstellationNode.State> kitStateList = new List<ConstellationNode.State>(new ConstellationNode.State[kitNodeList.Count]);
 
 				//find selectable ability nodes based on length left
 				if (model.SelectedAbilityIndexList.Count < model.NumAbilities)
@@ -190,7 +185,7 @@ namespace West
 						{
 							foreach (var linkedNode in link.nodeList)
 							{
-								abilityStateList[linkedNode.Index] = true;
+								abilityStateList[linkedNode.Index] = ConstellationNode.State.Selectable;
 							}
 						}
 					}
@@ -202,7 +197,7 @@ namespace West
 						var nodeInRangeList = selectedNode.Model.GetNodeInRangeList(lengthRemaining);
 						foreach (var nodeInRange in nodeInRangeList)
 						{
-							abilityStateList[nodeInRange.Index] = true;
+							abilityStateList[nodeInRange.Index] = ConstellationNode.State.Selectable;
 						}
 					}
 				}
@@ -214,7 +209,7 @@ namespace West
 					{
 						foreach (var classNode in App.Content.Constellation.Model.AbilityNodeList[selectedAbilityNodeIndex].ClassNodeList)
 						{
-							classStateList[classNode.Index] = true;
+							classStateList[classNode.Index] = ConstellationNode.State.Selectable;
 						}
 					}
 				}
@@ -226,10 +221,18 @@ namespace West
 					{
 						foreach (var kitNode in App.Content.Constellation.Model.AbilityNodeList[selectedAbilityNodeIndex].KitsNodeList)
 						{
-							kitStateList[kitNode.Index] = true;
+							kitStateList[kitNode.Index] = ConstellationNode.State.Selectable;
 						}
 					}
 				}
+
+				//set selected
+				for (int i = 0; i < model.SelectedAbilityIndexList.Count; ++i)
+					abilityStateList[model.SelectedAbilityIndexList[i]] = ConstellationNode.State.Selected;
+				for (int i = 0; i < model.SelectedClassIndexList.Count; ++i)
+					classStateList[model.SelectedClassIndexList[i]] = ConstellationNode.State.Selected;
+				for (int i = 0; i < model.SelectedKitIndexList.Count; ++i)
+					kitStateList[model.SelectedKitIndexList[i]] = ConstellationNode.State.Selected;
 
 				SetSelectableStateList(abilityStateList, classStateList, kitStateList);
 			}

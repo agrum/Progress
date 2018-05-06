@@ -99,6 +99,8 @@ namespace West
 
 			private void OnNodeSelected(ConstellationNode node, bool selected)
 			{
+				if (node.Model != null && !selected)
+					model.Remove(node.Model);
 			}
 
 			private void PopulateNodes(
@@ -140,7 +142,7 @@ namespace West
 					if (i < nodeIndexlist.Count)
 					{
 						nodeViewList[i].Setup(nodeModelList[nodeIndexlist[i]]);
-						nodeViewList[i].SelectNode(true);
+						nodeViewList[i].SelectableState = ConstellationNode.State.Selected;
 					}
 					else
 						nodeViewList[i].Setup(null);
