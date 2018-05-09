@@ -25,6 +25,7 @@ namespace West
 			public Text Unit = null;
 			public Text Projectile = null;
 			public Text Charge = null;
+			public Text KitDetails = null;
 			public GameObject ExitPanel = null;
 
 			private string nameString;
@@ -39,6 +40,7 @@ namespace West
 			private string unitString;
 			private string projectileString;
 			private string chargeString;
+			private string kitDetailsString;
 
 			void Start()
 			{
@@ -54,6 +56,7 @@ namespace West
 				unitString = Unit.text;
 				projectileString = Projectile.text;
 				chargeString = Charge.text;
+				kitDetailsString = KitDetails.text;
 			}
 
 			public void Setup(ConstellationNode node)
@@ -69,6 +72,7 @@ namespace West
 				Unit.gameObject.SetActive(active);
 				Projectile.gameObject.SetActive(active);
 				Charge.gameObject.SetActive(active);
+				KitDetails.gameObject.SetActive(active);
 				ExitPanel.SetActive(!active);
 
 				Ability.gameObject.SetActive(false);
@@ -180,6 +184,31 @@ namespace West
 				}
 				else
 					Charge.gameObject.SetActive(false);
+
+				if (metrics["kit"].IsObject)
+				{
+					JSONNode kitNode = metrics["kit"];
+					string[] lineSplit = kitDetailsString.Split('\n');
+					KitDetails.text = lineSplit[0];
+					if (kitNode["life"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[1].Replace("#hp#", colorPrefix + kitNode["life"] + colorSuffix);
+					if (kitNode["armor"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[2].Replace("#armor#", colorPrefix + kitNode["armor"] + colorSuffix);
+					if (kitNode["shield"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[3].Replace("#shield#", colorPrefix + kitNode["shield"] + colorSuffix);
+					if (kitNode["damage"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[4].Replace("#damage#", colorPrefix + kitNode["damage"] + colorSuffix);
+					if (kitNode["rate"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[5].Replace("#rate#", colorPrefix + kitNode["rate"] + colorSuffix);
+					if (kitNode["range"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[6].Replace("#range#", colorPrefix + kitNode["range"] + colorSuffix);
+					if (kitNode["angle"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[7].Replace("#angle#", colorPrefix + kitNode["angle"] + colorSuffix);
+					if (kitNode["speed"].AsDouble != 0)
+						KitDetails.text += "\n" + lineSplit[8].Replace("#speed#", colorPrefix + kitNode["speed"] + colorSuffix);
+				}
+				else
+					KitDetails.gameObject.SetActive(false);
 			}
 		}
 	}
