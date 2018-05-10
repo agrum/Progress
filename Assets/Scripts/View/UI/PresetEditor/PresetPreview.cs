@@ -80,8 +80,8 @@ namespace West
 				{
 					Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
 					float scale = Math.Min(
-						canvas.rect.width / ((size.x + 1.0f) * positionMultiplier.x),
-						canvas.rect.height / (2.0f * (size.y + 1.0f) * positionMultiplier.y));
+						canvas.rect.width / ((size.x) * positionMultiplier.x),
+						canvas.rect.height / (2.0f * (size.y + 0.5f) * positionMultiplier.y));
 
 					foreach (var node in abilityNodeList)
 						node.Scale(scale);

@@ -26,7 +26,6 @@ namespace West
 			public Text Projectile = null;
 			public Text Charge = null;
 			public Text KitDetails = null;
-			public GameObject ExitPanel = null;
 
 			private string nameString;
 			private string abilityString;
@@ -73,7 +72,6 @@ namespace West
 				Projectile.gameObject.SetActive(active);
 				Charge.gameObject.SetActive(active);
 				KitDetails.gameObject.SetActive(active);
-				ExitPanel.SetActive(!active);
 
 				Ability.gameObject.SetActive(false);
 				Class.gameObject.SetActive(false);
