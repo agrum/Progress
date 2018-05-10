@@ -5,5 +5,6 @@ module.exports = function () {
 	require('./schemas/abilities')();
 	require('./schemas/classes')();
 	require('./schemas/kits')();
-	require('./schemas/shapes')();
+	require('./schemas/accounts')();
+	require('./schemas/presets')();
 }

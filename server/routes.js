@@ -9,16 +9,18 @@ var isAuthenticated = function (req, res, next) {
 
 router.use('/login', require('./routes/login').router)
 router.use('/signup', require('./routes/signup').router)
+
+router.all('*', isAuthenticated)
+router.use('/user', require('./routes/user').router)
+router.use('/account', require('./routes/account').router)
+router.use('/gameSettings', require('./routes/gameSettings').router)
 router.use('/constellation', require('./routes/constellation').router)
 router.use('/ability', require('./routes/ability').router)
 router.use('/class', require('./routes/class').router)
 router.use('/kit', require('./routes/kit').router)
 
-router.all('*', isAuthenticated)
-router.use('/gameSettings', require('./routes/gameSettings').router)
-
 router.use(function (req, res, next) {
-	var err = new Error('Not Found')
+	var err = new Error('Route not found: ' + req.originalUrl)
 	err.status = 404
 	next(err)
 })

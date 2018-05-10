@@ -28,20 +28,15 @@ namespace West
 
 			private Rect lastRect = new Rect();
 
-			public void Setup(
-				Model.ConstellationPreset model_,
-				GameObject prefab_, 
-				Material abilityMaterial_,
-				Material classMaterial_, 
-				Material kitMaterial_)
+			public void Setup(Model.ConstellationPreset model_)
 			{
 				model = model_;
 				canvas = GetComponent<RectTransform>();
-				prefab = prefab_;
-				abilityMaterial = abilityMaterial_;
-				classMaterial = classMaterial_;
-				kitMaterial = kitMaterial_;
-				
+				prefab = App.Content.ConstellationNode.Prefab;
+				abilityMaterial = App.Content.ConstellationNode.AbilityMaterial;
+				classMaterial = App.Content.ConstellationNode.ClassMaterial;
+				kitMaterial = App.Content.ConstellationNode.KitMaterial;
+
 				model.presetUpdateEvent += OnPresetUpdate;
 				
 				//create constellation nodes

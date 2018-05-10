@@ -17,16 +17,12 @@ namespace West
 			public NodeTextualDetails nodeTextualDetails = null;
 			public Constellation constellation = null;
 			public PresetPreview presetPreview = null;
-			public GameObject prefab = null;
-			public Material abilityMaterial = null;
-			public Material classMaterial = null;
-			public Material kitMaterial = null;
 			
 			private Model.ConstellationPreset model = null;
 
 			void Start()
 			{
-				App.Content.Constellation.Load(() =>
+				App.Content.Account.Load(() =>
 				{
 					Setup();
 				});
@@ -47,8 +43,8 @@ namespace West
 				model = new Model.ConstellationPreset(presetJson);
 
 				nodeTextualDetails.Setup(null);
-				constellation.Setup(model, prefab, abilityMaterial, classMaterial, kitMaterial);
-				presetPreview.Setup(model, prefab, abilityMaterial, classMaterial, kitMaterial);
+				constellation.Setup(model);
+				presetPreview.Setup(model);
 			}
 		}
 	}

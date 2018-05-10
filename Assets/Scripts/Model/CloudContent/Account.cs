@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 using BestHTTP;
+using UnityEngine;
 
 namespace West
 {
@@ -12,30 +13,26 @@ namespace West
 	{
 		namespace CloudContent
 		{
-			public class Constellation : Base
+			public class Account : Base
 			{
 				public JSONNode Json { get; private set; } = null;
-				public Model.Constellation Model { get; private set; } = null;
 
 				protected override void Build(OnBuilt onBuilt_)
 				{
 					App.Server.Request(
 					HTTPMethods.Get,
-					"constellation/Hexagon36",
+					"account/" + App.Content.Session.Account,
 					(JSONNode json_) =>
 					{
 						Json = json_;
-						Model = new Model.Constellation(Json);
+						Debug.Log(Json);
 						onBuilt_();
 					}).Send();
 				}
 
-				public Constellation(ConstellationNode constellationNode_, AbilityList abilityList_, ClassList classList_, KitList kitList_)
+				public Account(Constellation constellation_)
 				{
-					dependencyList.Add(constellationNode_);
-					dependencyList.Add(abilityList_);
-					dependencyList.Add(classList_);
-					dependencyList.Add(kitList_);
+					dependencyList.Add(constellation_);
 				}
 			}
 		}

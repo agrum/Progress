@@ -16,6 +16,9 @@ namespace West
 			public class Session : Base
 			{
 				public JSONNode Json { get; private set; } = null;
+				public string Email { get; private set; } = null;
+				public string Username { get; private set; } = null;
+				public string Account { get; private set; } = null;
 
 				protected override void Build(OnBuilt onBuilt_)
 				{
@@ -27,11 +30,16 @@ namespace West
 
 					App.Server.Request(
 					HTTPMethods.Get,
-					"gameSettings/Classic",
+					"user",
 					(JSONNode json_) =>
 					{
 						SceneManager.LoadScene(callbackScene);
 						Json = json_;
+
+						Email = Json["email"];
+						Username = Json["username"];
+						Account = Json["account"];
+
 						onBuilt_();
 					},
 					(JSONNode json) => //try to log in if not logged in yet

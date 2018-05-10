@@ -17,12 +17,17 @@ module.exports = function () {
 			type: String,
 			unique: true,
 			required: true,
-			trim: true
+			trim: true,
 		},
 		password: {
 			type: String,
 			required: true,
 		},
+		account: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'accounts',
+		}
 	})
 	schema.pre('save', function (next) {
 		var user = this;

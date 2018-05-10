@@ -16,6 +16,8 @@ namespace West
 			public int NumKits { get; private set; }
 			public int NumClasses { get; private set; }
 			public int LengthConstellation { get; private set; }
+			public string Name { get; private set; }
+			public string Constellation { get; private set; }
 
 			public List<int> SelectedAbilityIndexList { get; private set; } = new List<int>();
 			public List<int> SelectedClassIndexList { get; private set; } = new List<int>();
@@ -31,6 +33,8 @@ namespace West
 				NumKits = json["numKits"];
 				NumClasses = json["numClasses"];
 				LengthConstellation = json["lengthConstellation"];
+				Name = json["name"];
+				Constellation = json["constellation"];
 
 				foreach (var almostValue in json["selectedAbilityIndexList"])
 					SelectedAbilityIndexList.Add(almostValue.Value);

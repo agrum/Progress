@@ -14,21 +14,25 @@ namespace West
 		{
 			public class AppContent
 			{
-				private Session Session;
+				public Session Session { get; private set; }
 				public GameSettings GameSettings { get; private set; }
+				public ConstellationNode ConstellationNode { get; private set; }
 				public AbilityList AbilityList { get; private set; }
 				public ClassList ClassList { get; private set; }
 				public KitList KitList { get; private set; }
 				public Constellation Constellation { get; private set; }
+				public Account Account { get; private set; }
 
 				public AppContent()
 				{
 					Session = new Session();
 					GameSettings = new GameSettings(Session);
+					ConstellationNode = new ConstellationNode(Session);
 					AbilityList = new AbilityList(GameSettings);
 					ClassList = new ClassList(GameSettings);
 					KitList = new KitList(GameSettings);
-					Constellation = new Constellation(AbilityList, ClassList, KitList);
+					Constellation = new Constellation(ConstellationNode, AbilityList, ClassList, KitList);
+					Account = new Account(Constellation);
 				}
 			}
 		}
