@@ -12,10 +12,6 @@ namespace West
 	{
 		public class ConstellationPreset
 		{
-			public int NumAbilities { get; private set; }
-			public int NumKits { get; private set; }
-			public int NumClasses { get; private set; }
-			public int LengthConstellation { get; private set; }
 			public string Name { get; private set; }
 			public string Constellation { get; private set; }
 
@@ -28,11 +24,6 @@ namespace West
 
 			public ConstellationPreset(JSONNode json)
 			{
-				//constellation = App.Constellation[json["json"]];
-				NumAbilities = json["numAbilities"];
-				NumKits = json["numKits"];
-				NumClasses = json["numClasses"];
-				LengthConstellation = json["lengthConstellation"];
 				Name = json["name"];
 				Constellation = json["constellation"];
 
@@ -55,19 +46,19 @@ namespace West
 					throw new Exception();
 				}
 
-				switch (node.Type)
+				switch (node.Skill.Type)
 				{
-					case ConstellationNode.NodeType.Ability:
+					case Skill.TypeEnum.Ability:
 						SelectedIndexList = SelectedAbilityIndexList;
-						limit = NumAbilities;
+						limit = App.Content.GameSettings.NumAbilities;
 						break;
-					case ConstellationNode.NodeType.Class:
+					case Skill.TypeEnum.Class:
 						SelectedIndexList = SelectedClassIndexList;
-						limit = NumClasses;
+						limit = App.Content.GameSettings.NumClasses;
 						break;
-					case ConstellationNode.NodeType.Kit:
+					case Skill.TypeEnum.Kit:
 						SelectedIndexList = SelectedKitIndexList;
-						limit = NumKits;
+						limit = App.Content.GameSettings.NumKits;
 						break;
 					default:
 						Debug.Log("ConstellationPreset.Add() node no type");
@@ -95,19 +86,19 @@ namespace West
 					throw new Exception();
 				}
 
-				switch (node.Type)
+				switch (node.Skill.Type)
 				{
-					case ConstellationNode.NodeType.Ability:
+					case Skill.TypeEnum.Ability:
 						SelectedIndexList = SelectedAbilityIndexList;
-						limit = NumAbilities;
+						limit = App.Content.GameSettings.NumAbilities;
 						break;
-					case ConstellationNode.NodeType.Class:
+					case Skill.TypeEnum.Class:
 						SelectedIndexList = SelectedClassIndexList;
-						limit = NumClasses;
+						limit = App.Content.GameSettings.NumClasses;
 						break;
-					case ConstellationNode.NodeType.Kit:
+					case Skill.TypeEnum.Kit:
 						SelectedIndexList = SelectedKitIndexList;
-						limit = NumKits;
+						limit = App.Content.GameSettings.NumKits;
 						break;
 					default:
 						Debug.Log("ConstellationPreset.Remove() node no type");
@@ -120,7 +111,7 @@ namespace West
 					throw new Exception();
 				}
 
-				if (node.Type == ConstellationNode.NodeType.Ability)
+				if (node.Skill.Type == Skill.TypeEnum.Ability)
 				{
 					if (SelectedAbilityIndexList[0] == node.Index) //clear if it's the initial node
 					{

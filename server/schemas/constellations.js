@@ -29,7 +29,7 @@ module.exports = function () {
         abilityToAbilityLinks: [[Number]],
         classToAbilityLinks: [[Number]],
         kitsToAbilityLinks: [[Number]],
-        startingAbilities: [Number]
+        startingAbilities: [Number],
     })
     schema.set('collection', 'constellations')
 

@@ -6,7 +6,11 @@ module.exports = function()
 		name: String,
 		numberOfTeams: Number,
 		numberOfPlayersPerTeam: Number,
-		map: String
+		map: String,
+        presetLength: Number,
+        numberOfAbilities: Number,
+        numberOfClasses: Number,
+        numberOfKits: Number,
 	})
 	schema.set('collection', 'gameSettings')
 

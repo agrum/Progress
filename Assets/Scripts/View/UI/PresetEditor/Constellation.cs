@@ -32,10 +32,10 @@ namespace West
 			{
 				model = model_;
 				canvas = GetComponent<RectTransform>();
-				prefab = App.Content.ConstellationNode.Prefab;
-				abilityMaterial = App.Content.ConstellationNode.AbilityMaterial;
-				classMaterial = App.Content.ConstellationNode.ClassMaterial;
-				kitMaterial = App.Content.ConstellationNode.KitMaterial;
+				prefab = App.Resource.Prefab.ConstellationNode;
+				abilityMaterial = App.Resource.Material.AbilityMaterial;
+				classMaterial = App.Resource.Material.ClassMaterial;
+				kitMaterial = App.Resource.Material.KitMaterial;
 
 				model.presetUpdateEvent += OnPresetUpdate;
 				
@@ -142,7 +142,7 @@ namespace West
 				List<ConstellationNode.State> kitStateList = new List<ConstellationNode.State>(new ConstellationNode.State[kitNodeList.Count]);
 
 				//find selectable ability nodes based on length left
-				if (model.SelectedAbilityIndexList.Count < model.NumAbilities)
+				if (model.SelectedAbilityIndexList.Count < App.Content.GameSettings.NumAbilities)
 				{
 					//compute length remaining
 					Model.ConstellationNodeLink[,] linkTable = new Model.ConstellationNodeLink[model.SelectedAbilityIndexList.Count, model.SelectedAbilityIndexList.Count];
@@ -179,7 +179,7 @@ namespace West
 							lengthUsed = routeLength;
 						}
 					}
-					int lengthRemaining = model.LengthConstellation - lengthUsed;
+					int lengthRemaining = App.Content.GameSettings.LengthConstellation - lengthUsed;
 
 					//a fork node might have been removed, elongating routes past the limit.
 					//reset in this case.
@@ -214,7 +214,7 @@ namespace West
 				}
 
 				//find selectable class nodes based on length left
-				if (model.SelectedClassIndexList.Count < model.NumClasses)
+				if (model.SelectedClassIndexList.Count < App.Content.GameSettings.NumClasses)
 				{
 					foreach (var selectedAbilityNodeIndex in model.SelectedAbilityIndexList)
 					{
@@ -226,7 +226,7 @@ namespace West
 				}
 
 				//find selectable kit nodes based on length left
-				if (model.SelectedKitIndexList.Count < model.NumKits)
+				if (model.SelectedKitIndexList.Count < App.Content.GameSettings.NumKits)
 				{
 					foreach (var selectedAbilityNodeIndex in model.SelectedAbilityIndexList)
 					{

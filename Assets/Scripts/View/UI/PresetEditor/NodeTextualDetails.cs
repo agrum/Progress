@@ -80,32 +80,32 @@ namespace West
 				if (!active)
 					return;
 
-				var nodeModel = node.Model;
-				JSONNode metrics = nodeModel.Json["metrics"];
+				var nodeSkill = node.Model.Skill;
+				JSONNode metrics = nodeSkill.Json["metrics"];
 
 				string colorPrefix = "<color=#" + ColorUtility.ToHtmlStringRGBA(node.Mat.color) + ">";
 				string colorSuffix = "</color>";
 
-				Name.text = nameString.Replace("#content#", nodeModel.Json["name"]);
-				Description.text = descriptionString.Replace("#content#", nodeModel.Json["description"]);
+				Name.text = nameString.Replace("#content#", nodeSkill.Json["name"]);
+				Description.text = descriptionString.Replace("#content#", nodeSkill.Json["description"]);
 
-				switch (node.Model.Type)
+				switch (nodeSkill.Type)
 				{
-					case Model.ConstellationNode.NodeType.Ability:
+					case Model.Skill.TypeEnum.Ability:
 						Ability.text = colorPrefix + abilityString + colorSuffix;
 						Ability.gameObject.SetActive(true);
 						break;
-					case Model.ConstellationNode.NodeType.Class:
+					case Model.Skill.TypeEnum.Class:
 						Class.text = colorPrefix + classString + colorSuffix;
 						Class.gameObject.SetActive(true);
 						break;
-					case Model.ConstellationNode.NodeType.Kit:
+					case Model.Skill.TypeEnum.Kit:
 						Kit.text = colorPrefix + kitString + colorSuffix;
 						Kit.gameObject.SetActive(true);
 						break;
 				}
 
-				Details.text = detailsString.Replace("#content#", nodeModel.Json["details"]);
+				Details.text = detailsString.Replace("#content#", nodeSkill.Json["details"]);
 				foreach (var metric in metrics)
 				{
 					if (metric.Key == "cooldown"

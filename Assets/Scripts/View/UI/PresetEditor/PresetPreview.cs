@@ -13,9 +13,8 @@ namespace West
 	{
 		public class PresetPreview : MonoBehaviour
 		{
-			public NodeTextualDetails nodeTextualDetails = null;
-
 			private Model.ConstellationPreset model = null;
+			private NodeTextualDetails nodeTextualDetails = null;
 			private RectTransform canvas = null;
 			private GameObject prefab = null;
 			private Material abilityMaterial = null;
@@ -31,38 +30,39 @@ namespace West
 			private Vector2 size = new Vector2();
 			private int nodeAdded = 0;
 			
-			public void Setup(Model.ConstellationPreset model_)
+			public void Setup(Model.ConstellationPreset model_, NodeTextualDetails nodeTextualDetails_)
 			{
 				model = model_;
+				nodeTextualDetails = nodeTextualDetails_;
 				canvas = GetComponent<RectTransform>();
-				prefab = App.Content.ConstellationNode.Prefab;
-				abilityMaterial = App.Content.ConstellationNode.AbilityMaterial;
-				classMaterial = App.Content.ConstellationNode.ClassMaterial;
-				kitMaterial = App.Content.ConstellationNode.KitMaterial;
+				prefab = App.Resource.Prefab.ConstellationNode;
+				abilityMaterial = App.Resource.Material.AbilityMaterial;
+				classMaterial = App.Resource.Material.ClassMaterial;
+				kitMaterial = App.Resource.Material.KitMaterial;
 
 				model.presetUpdateEvent += OnPresetUpdate;
 
 				sizeInt.x = 2;
-				sizeInt.y = model.NumAbilities + model.NumClasses + model.NumKits;
+				sizeInt.y = App.Content.GameSettings.NumAbilities + App.Content.GameSettings.NumClasses + App.Content.GameSettings.NumKits;
 				sizeInt.y = sizeInt.y / 2 + sizeInt.y % 2;
 				size.x = sizeInt.x;
 				size.y = sizeInt.y;
 
 				//create constellation nodes
 				PopulateNodes(
-					model.NumAbilities,
+					App.Content.GameSettings.NumAbilities,
 					App.Content.Constellation.Model.AbilityNodeList,
 					model.SelectedAbilityIndexList,
 					abilityMaterial,
 					ref abilityNodeList);
 				PopulateNodes(
-					model.NumKits,
+					App.Content.GameSettings.NumKits,
 					App.Content.Constellation.Model.KitNodeList,
 					model.SelectedKitIndexList,
 					kitMaterial,
 					ref kitNodeList);
 				PopulateNodes(
-					model.NumClasses,
+					App.Content.GameSettings.NumClasses,
 					App.Content.Constellation.Model.ClassNodeList,
 					model.SelectedClassIndexList,
 					classMaterial,
@@ -113,7 +113,7 @@ namespace West
 				Material nodeMaterial_, 
 				ref List<ConstellationNode> nodeList_)
 			{
-				List<Model.ConstellationNode> nodeModelSubsetList = new List<Model.ConstellationNode>(model.NumClasses);
+				List<Model.ConstellationNode> nodeModelSubsetList = new List<Model.ConstellationNode>(App.Content.GameSettings.NumClasses);
 				for (int i = 0; i < amountNode_; ++i)
 					nodeModelSubsetList.Add((i < nodeIndexList_.Count)
 						? nodeModelList_[nodeIndexList_[i]]

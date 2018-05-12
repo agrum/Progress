@@ -12,63 +12,20 @@ namespace West
 	{
 		public class ConstellationNode
 		{
-			public enum NodeType
-			{
-				Ability,
-				Kit,
-				Class
-			}
-
+			public Skill Skill { get; private set; } = null;
 			public int Index { get; private set; } = -1;
-			public string Uuid { get; private set; } = "";
-			public NodeType Type { get; private set; } = NodeType.Ability;
 			public Vector2 Position { get; private set; } = new Vector2Int(0, 0);
-			public JSONNode Json { get; private set; } = null;
-			public string LowerCaseKey { get; private set; } = "";
-			public string UpperCamelCaseKey { get; private set; } = "";
 			public List<ConstellationNode> KitsNodeList { get; set; } = new List<ConstellationNode>();
 			public List<ConstellationNode> ClassNodeList { get; set; } = new List<ConstellationNode>();
 
 			public List<List<ConstellationNodeLink>> abilityNodeLinkListList { get; set; } = new List<List<ConstellationNodeLink>>();
 			public List<ConstellationNodeLink> abilityNodeLinkList { get; set; } = new List<ConstellationNodeLink>();
 
-			public ConstellationNode(int index_, string uuid_, NodeType type_, Vector2 position_)
+			public ConstellationNode(Skill skill_, int index_, Vector2 position_)
 			{
+				Skill = skill_;
 				Index = index_;
-				Uuid = uuid_;
-				Type = type_;
 				Position = position_;
-
-				JSONArray nodeArray;
-				switch (Type)
-				{
-					case NodeType.Ability:
-						nodeArray = App.Content.AbilityList.Json.AsArray;
-						LowerCaseKey = "abilities";
-						UpperCamelCaseKey = "Abilities";
-						break;
-					case NodeType.Class:
-						nodeArray = App.Content.ClassList.Json.AsArray;
-						LowerCaseKey = "classes";
-						UpperCamelCaseKey = "Classes";
-						break;
-					case NodeType.Kit:
-						nodeArray = App.Content.KitList.Json.AsArray;
-						LowerCaseKey = "kits";
-						UpperCamelCaseKey = "Kits";
-						break;
-					default:
-						throw new Exception();
-				}
-				
-				Json = null;
-				foreach (var node in nodeArray)
-				{
-					if (node.Value["_id"] == Uuid)
-					{
-						Json = node.Value;
-					}
-				}
 			}
 
 
