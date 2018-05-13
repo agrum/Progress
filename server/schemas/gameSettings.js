@@ -7,10 +7,11 @@ module.exports = function()
 		numberOfTeams: Number,
 		numberOfPlayersPerTeam: Number,
 		map: String,
+		constellation: mongoose.Schema.Types.ObjectId,
         presetLength: Number,
         numberOfAbilities: Number,
         numberOfClasses: Number,
-        numberOfKits: Number,
+		numberOfKits: Number,
 	})
 	schema.set('collection', 'gameSettings')
 

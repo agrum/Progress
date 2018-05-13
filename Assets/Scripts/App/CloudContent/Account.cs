@@ -27,17 +27,19 @@ namespace West
 					{
 						Json = json_;
 						PresetList.Clear();
-						foreach (var almostPreset in Json["presets"])
-							PresetList.Add(new ConstellationPreset(almostPreset.Value));
+						foreach (var almostJson in Json["presets"])
+							if (almostJson.Value["id_"] == App.Content.GameSettings.Json["constellation"])
+								PresetList.Add(new ConstellationPreset(almostJson.Value));
 
 						Debug.Log(Json);
 						onBuilt_();
 					}).Send();
 				}
 
-				public Account(Constellation constellation_)
+				public Account(GameSettings gameSettings_, ConstellationList constellationList_)
 				{
-					dependencyList.Add(constellation_);
+					dependencyList.Add(gameSettings_);
+					dependencyList.Add(constellationList_);
 				}
 			}
 		}

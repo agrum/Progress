@@ -51,20 +51,20 @@ namespace West
 				//create constellation nodes
 				PopulateNodes(
 					App.Content.GameSettings.NumAbilities,
-					App.Content.Constellation.Model.AbilityNodeList,
-					model.SelectedAbilityIndexList,
+					model.Constellation.AbilityNodeList,
+					model.SelectedAbilityList,
 					abilityMaterial,
 					ref abilityNodeList);
 				PopulateNodes(
 					App.Content.GameSettings.NumKits,
-					App.Content.Constellation.Model.KitNodeList,
-					model.SelectedKitIndexList,
+					model.Constellation.KitNodeList,
+					model.SelectedKitList,
 					kitMaterial,
 					ref kitNodeList);
 				PopulateNodes(
 					App.Content.GameSettings.NumClasses,
-					App.Content.Constellation.Model.ClassNodeList,
-					model.SelectedClassIndexList,
+					model.Constellation.ClassNodeList,
+					model.SelectedClassList,
 					classMaterial,
 					ref classNodeList);
 			}
@@ -89,9 +89,9 @@ namespace West
 			
 			private void OnPresetUpdate()
 			{
-				UpdateVisual(abilityNodeList, model.SelectedAbilityIndexList, App.Content.Constellation.Model.AbilityNodeList);
-				UpdateVisual(classNodeList, model.SelectedClassIndexList, App.Content.Constellation.Model.ClassNodeList);
-				UpdateVisual(kitNodeList, model.SelectedKitIndexList, App.Content.Constellation.Model.KitNodeList);
+				UpdateVisual(abilityNodeList, model.SelectedAbilityList, model.Constellation.AbilityNodeList);
+				UpdateVisual(classNodeList, model.SelectedClassList, model.Constellation.ClassNodeList);
+				UpdateVisual(kitNodeList, model.SelectedKitList, model.Constellation.KitNodeList);
 			}
 
 			private void OnNodeSelected(ConstellationNode node, bool selected)
@@ -105,21 +105,15 @@ namespace West
 				if (nodeTextualDetails != null && node.Model != null)
 					nodeTextualDetails.Setup(hovered ? node : null);
 			}
-
+			
 			private void PopulateNodes(
 				int amountNode_,
 				List<Model.ConstellationNode> nodeModelList_, 
-				List<int> nodeIndexList_, 
+				List<Model.Skill> selectedSkillList_, 
 				Material nodeMaterial_, 
 				ref List<ConstellationNode> nodeList_)
 			{
-				List<Model.ConstellationNode> nodeModelSubsetList = new List<Model.ConstellationNode>(App.Content.GameSettings.NumClasses);
 				for (int i = 0; i < amountNode_; ++i)
-					nodeModelSubsetList.Add((i < nodeIndexList_.Count)
-						? nodeModelList_[nodeIndexList_[i]]
-						: null);
-
-				foreach (var nodeModel in nodeModelSubsetList)
 				{
 					GameObject gob = Instantiate(prefab);
 					gob.transform.SetParent(canvas.transform);
@@ -128,28 +122,40 @@ namespace West
 						-((float) (nodeAdded % sizeInt.x) - (size.x - 1.0f) / 2.0f),
 						-(nodeAdded - (size.y + 2.0f) / 2.0f));
 					ConstellationNode node = gob.AddComponent<ConstellationNode>();
-					node.Setup(nodeModel, nodeMaterial_, nodePosition);
+					node.Setup(null, nodeMaterial_, nodePosition);
 					node.selectedEvent += OnNodeSelected;
 					node.hoveredEvent += OnNodeHovered;
 					nodeList_.Add(node);
 					++nodeAdded;
 				}
+
+				UpdateVisual(nodeList_, selectedSkillList_, nodeModelList_);
 			}
 
+			delegate Model.ConstellationNode getNodeOutOfSkill(Model.Skill skill_);
 			private void UpdateVisual(
-				List<ConstellationNode> nodeViewList,
-				List<int> nodeIndexlist,
-				List<Model.ConstellationNode> nodeModelList)
+				List<ConstellationNode> nodeViewList_,
+				List<Model.Skill> selectedSkillList_,
+				List<Model.ConstellationNode> nodeModelList_)
 			{
-				for (int i = 0; i < nodeViewList.Count; ++i)
+				getNodeOutOfSkill lambda = (Model.Skill skill_) =>
 				{
-					if (i < nodeIndexlist.Count)
+					foreach (var nodeModel in nodeModelList_)
+						if (nodeModel.Skill == skill_)
+							return nodeModel;
+
+					return null;
+				};
+
+				for (int i = 0; i < nodeViewList_.Count; ++i)
+				{
+					if (i < selectedSkillList_.Count)
 					{
-						nodeViewList[i].Setup(nodeModelList[nodeIndexlist[i]]);
-						nodeViewList[i].SelectableState = ConstellationNode.State.Selected;
+						nodeViewList_[i].Setup(lambda(selectedSkillList_[i]));
+						nodeViewList_[i].SelectableState = ConstellationNode.State.Selected;
 					}
 					else
-						nodeViewList[i].Setup(null);
+						nodeViewList_[i].Setup(null);
 				}
 			}
 		}

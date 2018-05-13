@@ -13,11 +13,11 @@ namespace West
 		public class ConstellationPreset
 		{
 			public string Name { get; private set; }
-			public string Constellation { get; private set; }
+			public Constellation Constellation { get; private set; }
 
-			public List<int> SelectedAbilityIndexList { get; private set; } = new List<int>();
-			public List<int> SelectedClassIndexList { get; private set; } = new List<int>();
-			public List<int> SelectedKitIndexList { get; private set; } = new List<int>();
+			public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
+			public List<Skill> SelectedClassList { get; private set; } = new List<Skill>();
+			public List<Skill> SelectedKitList { get; private set; } = new List<Skill>();
 
 			public delegate void OnPresetUpdateDelegate();
 			public event OnPresetUpdateDelegate presetUpdateEvent;
@@ -25,19 +25,19 @@ namespace West
 			public ConstellationPreset(JSONNode json)
 			{
 				Name = json["name"];
-				Constellation = json["constellation"];
+				Constellation = App.Content.ConstellationList[json["constellation"]];
 
-				foreach (var almostValue in json["selectedAbilityIndexList"])
-					SelectedAbilityIndexList.Add(almostValue.Value);
-				foreach (var almostValue in json["selectedClassIndexList"])
-					SelectedClassIndexList.Add(almostValue.Value);
-				foreach (var almostValue in json["selectedKitIndexList"])
-					SelectedKitIndexList.Add(almostValue.Value);
+				foreach (var almostValue in json["abilities"])
+					SelectedAbilityList.Add(App.Content.AbilityList[almostValue.Value]);
+				foreach (var almostValue in json["classes"])
+					SelectedClassList.Add(App.Content.ClassList[almostValue.Value]);
+				foreach (var almostValue in json["kits"])
+					SelectedKitList.Add(App.Content.KitList[almostValue.Value]);
 			}
 
 			public void Add(ConstellationNode node)
 			{
-				List<int> SelectedIndexList;
+				List<Skill> SelectedIndexList;
 				int limit;
 
 				if (node == null)
@@ -49,15 +49,15 @@ namespace West
 				switch (node.Skill.Type)
 				{
 					case Skill.TypeEnum.Ability:
-						SelectedIndexList = SelectedAbilityIndexList;
+						SelectedIndexList = SelectedAbilityList;
 						limit = App.Content.GameSettings.NumAbilities;
 						break;
 					case Skill.TypeEnum.Class:
-						SelectedIndexList = SelectedClassIndexList;
+						SelectedIndexList = SelectedClassList;
 						limit = App.Content.GameSettings.NumClasses;
 						break;
 					case Skill.TypeEnum.Kit:
-						SelectedIndexList = SelectedKitIndexList;
+						SelectedIndexList = SelectedKitList;
 						limit = App.Content.GameSettings.NumKits;
 						break;
 					default:
@@ -71,13 +71,13 @@ namespace West
 					throw new Exception();
 				}
 
-				SelectedIndexList.Add(node.Index);
+				SelectedIndexList.Add(node.Skill);
 				presetUpdateEvent();
 			}
 
 			public void Remove(ConstellationNode node)
 			{
-				List<int> SelectedIndexList;
+				List<Skill> SelectedList;
 				int limit;
 
 				if (node == null)
@@ -89,15 +89,15 @@ namespace West
 				switch (node.Skill.Type)
 				{
 					case Skill.TypeEnum.Ability:
-						SelectedIndexList = SelectedAbilityIndexList;
+						SelectedList = SelectedAbilityList;
 						limit = App.Content.GameSettings.NumAbilities;
 						break;
 					case Skill.TypeEnum.Class:
-						SelectedIndexList = SelectedClassIndexList;
+						SelectedList = SelectedClassList;
 						limit = App.Content.GameSettings.NumClasses;
 						break;
 					case Skill.TypeEnum.Kit:
-						SelectedIndexList = SelectedKitIndexList;
+						SelectedList = SelectedKitList;
 						limit = App.Content.GameSettings.NumKits;
 						break;
 					default:
@@ -105,7 +105,7 @@ namespace West
 						throw new Exception();
 				}
 
-				if (SelectedIndexList.Count == 0 || !SelectedIndexList.Contains(node.Index))
+				if (SelectedList.Count == 0 || !SelectedList.Contains(node.Skill))
 				{
 					Debug.Log("ConstellationPreset.Remove() can't");
 					throw new Exception();
@@ -113,56 +113,65 @@ namespace West
 
 				if (node.Skill.Type == Skill.TypeEnum.Ability)
 				{
-					if (SelectedAbilityIndexList[0] == node.Index) //clear if it's the initial node
+					//clear if preset doesn't contain a starting node
+					bool hasStartingAbility = false;
+					foreach (var startingAbilityNodeIndex in Constellation.StartingAbilityNodeIndexList)
+					{
+						Skill startingSkill = Constellation.AbilityNodeList[startingAbilityNodeIndex].Skill;
+						if (SelectedAbilityList.Contains(startingSkill))
+						{
+							hasStartingAbility = true;
+							break;
+						}
+					}
+					if (!hasStartingAbility)
 					{
 						Clear();
 						return;
 					}
-					else
+
+					SelectedAbilityList.Remove(node.Skill);
+					//unselect classes and kits that were solely dependent on this ability
+					var newSelectedClassList = new List<Skill>();
+					foreach (var selectedClass in SelectedClassList)
 					{
-						SelectedAbilityIndexList.Remove(node.Index);
-						//unselect classes and kits that were solely dependent on this ability
-						var newSelectedClassIndexList = new List<int>();
-						foreach (var selectedClassIndex in SelectedClassIndexList)
+						var selectedClassNode = Constellation.ClassNode(selectedClass);
+						foreach (var selectedAbility in SelectedAbilityList)
 						{
-							var selectedClassNode = App.Content.Constellation.Model.ClassNodeList[selectedClassIndex];
-							foreach (var selectedAbilityIndex in SelectedAbilityIndexList)
+							if (Constellation.AbilityNode(selectedAbility).ClassNodeList.Contains(selectedClassNode))
 							{
-								if (App.Content.Constellation.Model.AbilityNodeList[selectedAbilityIndex].ClassNodeList.Contains(selectedClassNode))
-								{
-									newSelectedClassIndexList.Add(selectedClassIndex);
-									break;
-								}
+								newSelectedClassList.Add(selectedClass);
+								break;
 							}
 						}
-						SelectedClassIndexList = newSelectedClassIndexList;
-						var newSelectedKitIndexList = new List<int>();
-						foreach (var selectedKitIndex in SelectedKitIndexList)
-						{
-							var selectedKitNode = App.Content.Constellation.Model.KitNodeList[selectedKitIndex];
-							foreach (var selectedAbilityIndex in SelectedAbilityIndexList)
-							{
-								if (App.Content.Constellation.Model.AbilityNodeList[selectedAbilityIndex].KitsNodeList.Contains(selectedKitNode))
-								{
-									newSelectedKitIndexList.Add(selectedKitIndex);
-									break;
-								}
-							}
-						}
-						SelectedKitIndexList = newSelectedKitIndexList;
 					}
+					SelectedClassList = newSelectedClassList;
+					var newSelectedKitList = new List<Skill>();
+					foreach (var selectedKit in SelectedKitList)
+					{
+						var selectedKitNode = Constellation.KitNode(selectedKit);
+						foreach (var selectedAbility in SelectedAbilityList)
+						{
+							if (Constellation.AbilityNode(selectedAbility).KitsNodeList.Contains(selectedKitNode))
+							{
+								newSelectedKitList.Add(selectedKit);
+								break;
+							}
+						}
+					}
+					SelectedKitList = newSelectedKitList;
 				}
 				else
-					SelectedIndexList.Remove(node.Index);
+					SelectedList.Remove(node.Skill);
 
 				presetUpdateEvent();
 			}
 
 			public void Clear()
 			{
-				SelectedAbilityIndexList.Clear();
-				SelectedClassIndexList.Clear();
-				SelectedKitIndexList.Clear();
+				SelectedAbilityList.Clear();
+				SelectedClassList.Clear();
+				SelectedKitList.Clear();
 				presetUpdateEvent();
 			}
 		}

@@ -36,8 +36,8 @@ namespace West
 					{
 						Json = json_;
 
-						foreach (var almostSkill in Json)
-							Table.Add(almostSkill.Value["_id"], new Ability(almostSkill.Value));
+						foreach (var almostJson in Json)
+							Table.Add(almostJson.Value["_id"], new Ability(almostJson.Value));
 
 						onBuilt_();
 					}).Send();

@@ -113,17 +113,15 @@ router.get('/setup', function(req, res, next) {
     })
 })
 
-
-router.get('/:name', function(req, res, next) {
-    //console.log(req.params.name)
+router.get('/', function(req, res, next) {
     req.app.db.models.constellations
-    .findOne({'name':req.params.name})
+    .find({})
     .then(document => {
-        console.log('constellation no error')
+        console.error('constellations no error')
         res.send(document);
         })
     .catch(err => {
-        console.error('constellation error')
+        console.error('constellations error')
         console.error(err)
     })
 })

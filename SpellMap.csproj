@@ -1144,7 +1144,7 @@
     <Compile Include="Assets\Scripts\App\CloudContent\AppContent.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Base.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\ClassList.cs" />
-    <Compile Include="Assets\Scripts\App\CloudContent\Constellation.cs" />
+    <Compile Include="Assets\Scripts\App\CloudContent\ConstellationList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\GameSettings.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\KitList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Session.cs" />

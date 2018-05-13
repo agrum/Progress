@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,25 +13,37 @@ namespace West
 	{
 		namespace CloudContent
 		{
-			public class Constellation : Base
+			public class ConstellationList : Base
 			{
 				public JSONNode Json { get; private set; } = null;
-				public Model.Constellation Model { get; private set; } = null;
+
+				public Constellation this[string uuid_]
+				{
+					get
+					{
+						return Table[uuid_] as Constellation;
+					}
+				}
+
+				private Hashtable Table = new Hashtable();
 
 				protected override void Build(OnBuilt onBuilt_)
 				{
 					App.Server.Request(
 					HTTPMethods.Get,
-					"constellation/Hexagon36",
+					"constellation",
 					(JSONNode json_) =>
 					{
 						Json = json_;
-						Model = new Model.Constellation(Json);
+
+						foreach (var almostJson in Json)
+							Table.Add(almostJson.Value["_id"], new Constellation(almostJson.Value));
+						
 						onBuilt_();
 					}).Send();
 				}
 
-				public Constellation(AbilityList abilityList_, ClassList classList_, KitList kitList_)
+				public ConstellationList(AbilityList abilityList_, ClassList classList_, KitList kitList_)
 				{
 					dependencyList.Add(abilityList_);
 					dependencyList.Add(classList_);

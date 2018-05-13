@@ -15,24 +15,36 @@ namespace West
 		{
 			public JSONNode Json { get; private set; } = null;
 			public List<int> StartingAbilityNodeIndexList { get; private set; } = new List<int>();
-			private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
-			private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
-			private List<ConstellationNode> kitNodeList = new List<ConstellationNode>();
+			public List<ConstellationNode> AbilityNodeList { get; private set; } = new List<ConstellationNode>();
+			public List<ConstellationNode> ClassNodeList { get; private set; } = new List<ConstellationNode>();
+			public List<ConstellationNode> KitNodeList { get; private set; } = new List<ConstellationNode>();
 			private Vector2 halfSize = new Vector2(0, 0);
 
-			public List<ConstellationNode> AbilityNodeList
+			public ConstellationNode AbilityNode(Skill skill)
 			{
-				get { return abilityNodeList; }
+				foreach (var abilityNode in AbilityNodeList)
+					if (abilityNode.Skill == skill)
+						return abilityNode;
+
+				return null;
 			}
 
-			public List<ConstellationNode> ClassNodeList
+			public ConstellationNode ClassNode(Skill skill)
 			{
-				get { return classNodeList; }
+				foreach (var classNode in ClassNodeList)
+					if (classNode.Skill == skill)
+						return classNode;
+
+				return null;
 			}
 
-			public List<ConstellationNode> KitNodeList
+			public ConstellationNode KitNode(Skill skill)
 			{
-				get { return kitNodeList; }
+				foreach (var kitNode in KitNodeList)
+					if (kitNode.Skill == skill)
+						return kitNode;
+
+				return null;
 			}
 
 			public Vector2 HalfSize
@@ -64,39 +76,36 @@ namespace West
 				//create constellation nodes
 				PopulateNodes(
 					abilityArray,
-					Skill.TypeEnum.Ability,
-					ref abilityNodeList);
+					Skill.TypeEnum.Ability);
 				PopulateNodes(
 					Json["classes"].AsArray,
-					Skill.TypeEnum.Class,
-					ref classNodeList);
+					Skill.TypeEnum.Class);
 				PopulateNodes(
 					Json["kits"].AsArray,
-					Skill.TypeEnum.Kit,
-					ref kitNodeList);
+					Skill.TypeEnum.Kit);
 
 				//connect nodes directly
 				JSONArray abilityToAbilityLinkArray = Json["abilityToAbilityLinks"].AsArray;
 				foreach (var abilityToAbilityLink in abilityToAbilityLinkArray)
 				{
 					JSONArray link = abilityToAbilityLink.Value.AsArray;
-					new ConstellationNodeLink(abilityNodeList[link[0].AsInt], abilityNodeList[link[1].AsInt]);
+					new ConstellationNodeLink(AbilityNodeList[link[0].AsInt], AbilityNodeList[link[1].AsInt]);
 				}
 				JSONArray classToAbilityLinkArray = Json["classToAbilityLinks"].AsArray;
 				foreach (var classToAbilityLink in classToAbilityLinkArray)
 				{
 					JSONArray link = classToAbilityLink.Value.AsArray;
-					abilityNodeList[link[1].AsInt].ClassNodeList.Add(classNodeList[link[0].AsInt]);
+					AbilityNodeList[link[1].AsInt].ClassNodeList.Add(ClassNodeList[link[0].AsInt]);
 				}
 				JSONArray kitsToAbilityLinkArray = Json["kitsToAbilityLinks"].AsArray;
 				foreach (var kitsToAbilityLink in kitsToAbilityLinkArray)
 				{
 					JSONArray link = kitsToAbilityLink.Value.AsArray;
-					abilityNodeList[link[1].AsInt].KitsNodeList.Add(kitNodeList[link[0].AsInt]);
+					AbilityNodeList[link[1].AsInt].KitsNodeList.Add(KitNodeList[link[0].AsInt]);
 				}
 				
 				//define the longer links between ability nodes
-				foreach (var abilityNode in abilityNodeList)
+				foreach (var abilityNode in AbilityNodeList)
 				{
 					abilityNode.DeepPopulateLinks(2);
 
@@ -110,24 +119,34 @@ namespace West
 				}
 			}
 
-			private void PopulateNodes(JSONArray array_, Skill.TypeEnum type_, ref List<ConstellationNode> nodeList_)
+			private void PopulateNodes(JSONArray array_, Skill.TypeEnum type_)
 			{
 				foreach (var almostNode in array_)
 				{
 					JSONNode json = almostNode.Value;
-
-					Skill skill;
+					
 					switch(type_)
 					{
-						case Skill.TypeEnum.Ability: skill = App.Content.AbilityList[json["id"]]; break;
-						case Skill.TypeEnum.Class: skill = App.Content.ClassList[json["id"]]; break;
-						case Skill.TypeEnum.Kit: skill = App.Content.KitList[json["id"]]; break;
+						case Skill.TypeEnum.Ability:
+							AbilityNodeList.Add(new ConstellationNode(
+								App.Content.AbilityList[json["id"]],
+								AbilityNodeList.Count,
+								new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
+							break;
+						case Skill.TypeEnum.Class:
+							ClassNodeList.Add(new ConstellationNode(
+								App.Content.ClassList[json["id"]],
+								ClassNodeList.Count,
+								new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
+								break;
+						case Skill.TypeEnum.Kit:
+							KitNodeList.Add(new ConstellationNode(
+								App.Content.KitList[json["id"]],
+								KitNodeList.Count,
+								new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
+								break;
 						default: throw new Exception("PopulateNodes() with not type");
 					}
-					nodeList_.Add(new ConstellationNode(
-						skill,
-						nodeList_.Count, 
-						new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 				}
 			}
 		}

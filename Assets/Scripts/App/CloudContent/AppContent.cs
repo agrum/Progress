@@ -19,7 +19,7 @@ namespace West
 				public AbilityList AbilityList { get; private set; }
 				public ClassList ClassList { get; private set; }
 				public KitList KitList { get; private set; }
-				public Constellation Constellation { get; private set; }
+				public ConstellationList ConstellationList { get; private set; }
 				public Account Account { get; private set; }
 
 				public AppContent()
@@ -29,8 +29,8 @@ namespace West
 					AbilityList = new AbilityList(GameSettings);
 					ClassList = new ClassList(GameSettings);
 					KitList = new KitList(GameSettings);
-					Constellation = new Constellation(AbilityList, ClassList, KitList);
-					Account = new Account(Constellation);
+					ConstellationList = new ConstellationList(AbilityList, ClassList, KitList);
+					Account = new Account(GameSettings, ConstellationList);
 				}
 			}
 		}

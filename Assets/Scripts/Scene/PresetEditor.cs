@@ -43,7 +43,7 @@ namespace West
 				model = new Model.ConstellationPreset(presetJson);
 
 				nodeTextualDetails.Setup(null);
-				constellation.Setup(model);
+				constellation.Setup(App.Content.ConstellationList["5aa7523e8d116630ac8cec7c"], model);
 				presetColumn.Setup(model, View.PresetColumn.Mode.Edit, nodeTextualDetails);
 			}
 		}

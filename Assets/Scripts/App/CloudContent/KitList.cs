@@ -17,11 +17,11 @@ namespace West
 			{
 				public JSONNode Json { get; private set; } = null;
 
-				public Ability this[string uuid_]
+				public Kit this[string uuid_]
 				{
 					get
 					{
-						return Table[uuid_] as Ability;
+						return Table[uuid_] as Kit;
 					}
 				}
 
@@ -36,8 +36,8 @@ namespace West
 					{
 						Json = json_;
 
-						foreach (var almostSkill in Json)
-							Table.Add(almostSkill.Value["_id"], new Class(almostSkill.Value));
+						foreach (var almostJson in Json)
+							Table.Add(almostJson.Value["_id"], new Class(almostJson.Value));
 
 						onBuilt_();
 					}).Send();
