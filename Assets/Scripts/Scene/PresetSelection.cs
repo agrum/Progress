@@ -39,25 +39,43 @@ namespace West
 				if (this == null)
 					return;
 
-				//TODO take from save instead of made up
-				JSONObject presetJson = new JSONObject();
-				presetJson["numAbilities"] = 4;
-				presetJson["numKits"] = 1;
-				presetJson["numClasses"] = 1;
-				presetJson["lengthConstellation"] = 8;
-				Model.ConstellationPreset model = new Model.ConstellationPreset(presetJson);
-
 				nodeTextualDetails.Setup(null);
-				for (int i = 0; i < 1; ++i)
+
+				//setup existing preset columns
+				foreach (var preset in App.Content.Account.PresetList)
 				{
 					GameObject gob = Instantiate(presetColumnPrefab);
 					View.PresetColumn presetColumn = gob.GetComponent<View.PresetColumn>();
-					presetColumn.Setup(model, View.PresetColumn.Mode.Display, nodeTextualDetails);
+                    presetColumn.ColumnDestroyedEvent += OnPresetRemoved;
+
+                    presetColumn.Setup(preset, View.PresetColumn.Mode.Display, nodeTextualDetails);
 					presetColumn.transform.SetParent(horizontalLayout.transform, false);
 					presetColumnList.Add(presetColumn);
-					contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * presetColumnList.Count);
 				}
-			}
-		}
+
+                //add empty column to add presets.
+                {
+                    GameObject gob = Instantiate(presetColumnPrefab);
+                    View.PresetColumn presetColumn = gob.GetComponent<View.PresetColumn>();
+                    presetColumn.Setup(null, View.PresetColumn.Mode.Display, nodeTextualDetails);
+                    presetColumn.transform.SetParent(horizontalLayout.transform, false);
+                    presetColumnList.Add(presetColumn);
+                }
+
+                ArrangeUI();
+            }
+
+            private void OnPresetRemoved(View.PresetColumn column_)
+            {
+                presetColumnList.Remove(column_);
+                Destroy(column_.gameObject);
+                ArrangeUI();
+            }
+
+            private void ArrangeUI()
+            {
+                contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * presetColumnList.Count);
+            }
+        }
 	}
 }

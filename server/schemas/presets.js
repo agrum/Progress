@@ -24,11 +24,6 @@ module.exports = function()
 			required: true,
 			ref: 'kits',
 		},
-		kits: {
-			type: String,
-			required: true,
-			ref: 'name',
-		},
 	})
 	schema.set('collection', 'presets')
 

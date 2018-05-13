@@ -12,6 +12,7 @@ namespace West
 	{
 		public class ConstellationPreset
 		{
+            public JSONNode Json { get; private set; } = null;
 			public string Name { get; private set; }
 			public Constellation Constellation { get; private set; }
 
@@ -24,7 +25,8 @@ namespace West
 
 			public ConstellationPreset(JSONNode json)
 			{
-				Name = json["name"];
+                Json = json;
+                Name = json["name"];
 				Constellation = App.Content.ConstellationList[json["constellation"]];
 
 				foreach (var almostValue in json["abilities"])

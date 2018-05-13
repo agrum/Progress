@@ -50,7 +50,7 @@ namespace West
 
 				public HTTPRequest Request(HTTPMethods method, string path, OnAppRespondedDelegate callback)
 				{
-					return Request(method, path, callback, (JSONNode json) => { Debug.Log("Request(+" + path + ") resulted in \n" + json); });
+					return Request(method, path, callback, (JSONNode json) => { Debug.Log("Request(" + path + ") resulted in \n" + json); });
 				}
 
 				public HTTPRequest Request(HTTPMethods method, string path, OnAppRespondedDelegate callback, OnAppRespondedDelegate err)

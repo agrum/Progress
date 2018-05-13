@@ -12,15 +12,12 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1122,23 +1119,6 @@
     <Compile Include="Assets\External\SimpleJSON\SimpleJSONBinary.cs" />
     <Compile Include="Assets\External\SimpleJSON\SimpleJSONUnity.cs" />
     <Compile Include="Assets\Scripts\App\App.cs" />
-    <Compile Include="Assets\Scripts\App\Resource\Material.cs" />
-    <Compile Include="Assets\Scripts\App\Resource\Prefab.cs" />
-    <Compile Include="Assets\Scripts\App\Resource\AppResource.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Ability.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Class.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Kit.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
-    <Compile Include="Assets\Scripts\Model\CharacterAnimationIdleSMB.cs" />
-    <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
-    <Compile Include="Assets\Scripts\Controller\LivingController.cs" />
-    <Compile Include="Assets\Scripts\Model\Cooldown.cs" />
-    <Compile Include="Assets\Scripts\FieldOfView\Controller.cs" />
-    <Compile Include="Assets\Scripts\FieldOfView\FieldOfView.cs" />
-    <Compile Include="Assets\Scripts\Model\Ability\Ability.cs" />
-    <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
-    <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
-    <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\AbilityList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Account.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\AppContent.cs" />
@@ -1148,13 +1128,29 @@
     <Compile Include="Assets\Scripts\App\CloudContent\GameSettings.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\KitList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Session.cs" />
+    <Compile Include="Assets\Scripts\App\Network\Network.cs" />
+    <Compile Include="Assets\Scripts\App\Resource\AppResource.cs" />
+    <Compile Include="Assets\Scripts\App\Resource\Material.cs" />
+    <Compile Include="Assets\Scripts\App\Resource\Prefab.cs" />
+    <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Controller\LivingController.cs" />
+    <Compile Include="Assets\Scripts\FieldOfView\Controller.cs" />
+    <Compile Include="Assets\Scripts\FieldOfView\FieldOfView.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\Ability.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
+    <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
+    <Compile Include="Assets\Scripts\Model\CharacterAnimationIdleSMB.cs" />
     <Compile Include="Assets\Scripts\Model\Constellation.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationNode.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationNodeLink.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationPreset.cs" />
+    <Compile Include="Assets\Scripts\Model\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
     <Compile Include="Assets\Scripts\Model\Keybinding.cs" />
-    <Compile Include="Assets\Scripts\App\Network\Network.cs" />
+    <Compile Include="Assets\Scripts\Model\Nexus\Nexus.cs" />
+    <Compile Include="Assets\Scripts\Model\Nexus\NexusManager.cs" />
+    <Compile Include="Assets\Scripts\Model\Player.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Armor.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\BurstShield.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Life.cs" />
@@ -1162,13 +1158,12 @@
     <Compile Include="Assets\Scripts\Model\Resource\ResourceBehaviour.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\ResourceReserve.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Ability.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Class.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Kit.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
-    <Compile Include="Assets\Scripts\Model\Nexus\Nexus.cs" />
-    <Compile Include="Assets\Scripts\Model\Nexus\NexusManager.cs" />
-    <Compile Include="Assets\Scripts\Model\Player.cs" />
-    <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
-    <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
     <Compile Include="Assets\Scripts\Model\Team\Team.cs" />
     <Compile Include="Assets\Scripts\Model\Team\TeamManager.cs" />
     <Compile Include="Assets\Scripts\Model\Terrain\ColliderToPath.cs" />
@@ -1177,12 +1172,14 @@
     <Compile Include="Assets\Scripts\Model\Terrain\TerrainManager.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Pair.cs" />
-    <Compile Include="Assets\Scripts\View\UI\Shared\ConstellationNode.cs" />
-    <Compile Include="Assets\Scripts\View\UI\Shared\PresetColumn.cs" />
+    <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
+    <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
+    <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\NodeTextualDetails.cs" />
-    <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\PresetPreview.cs" />
+    <Compile Include="Assets\Scripts\View\UI\Shared\ConstellationNode.cs" />
+    <Compile Include="Assets\Scripts\View\UI\Shared\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\WestBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1236,7 +1233,6 @@
     <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
     <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

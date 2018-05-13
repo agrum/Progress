@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SimpleJSON;
 using BestHTTP;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace West
 {
@@ -17,8 +18,12 @@ namespace West
 			{
 				public JSONNode Json { get; private set; } = null;
 				public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
+				public ConstellationPreset EditedPreset { get; private set; } = null;
 
-				protected override void Build(OnBuilt onBuilt_)
+                public delegate void PresetAddedDelegate(ConstellationPreset preset_);
+                public delegate void PresetRemovedDelegate();
+
+                protected override void Build(OnBuilt onBuilt_)
 				{
 					App.Server.Request(
 					HTTPMethods.Get,
@@ -27,8 +32,8 @@ namespace West
 					{
 						Json = json_;
 						PresetList.Clear();
-						foreach (var almostJson in Json["presets"])
-							if (almostJson.Value["id_"] == App.Content.GameSettings.Json["constellation"])
+						foreach (var almostJson in Json["presets"].AsArray)
+							if (almostJson.Value["constellation"] == App.Content.GameSettings.Json["constellation"])
 								PresetList.Add(new ConstellationPreset(almostJson.Value));
 
 						Debug.Log(Json);
@@ -41,7 +46,57 @@ namespace West
 					dependencyList.Add(gameSettings_);
 					dependencyList.Add(constellationList_);
 				}
-			}
+
+				public void AddPreset(PresetAddedDelegate delegate_)
+				{
+					JSONNode presetJson = new JSONObject();
+					presetJson["name"] = "Preset " + PresetList.Count;
+					presetJson["constellation"] = App.Content.GameSettings.Json["constellation"];
+					presetJson["abilities"] = new JSONArray();
+					presetJson["classes"] = new JSONArray();
+					presetJson["kits"] = new JSONArray();
+
+					var request = App.Server.Request(
+						HTTPMethods.Post,
+						"account/preset",
+						(JSONNode json_) =>
+						{
+							ConstellationPreset preset = new ConstellationPreset(json_);
+                            PresetList.Add(preset);
+                            Json["presets"].AsArray.Add(json_);
+
+                            delegate_(preset);
+						});
+					request.AddField("preset", presetJson.ToString());
+					request.Send();
+                }
+
+                public void EditPreset(ConstellationPreset preset_)
+                {
+                    if (!PresetList.Contains(preset_))
+                        return;
+
+                    EditedPreset = preset_;
+                    SceneManager.LoadScene("PresetEditor");
+                }
+
+                public void RemovePreset(ConstellationPreset preset_, PresetRemovedDelegate delegate_)
+                {
+                    if (!PresetList.Contains(preset_))
+                        return;
+
+                    App.Server.Request(
+                        HTTPMethods.Delete,
+                        "account/preset/" + preset_.Json["_id"],
+                        (JSONNode json_) =>
+                        {
+                            PresetList.Remove(preset_);
+                            Json["presets"].AsArray.Remove(preset_.Json);
+
+                            delegate_();
+                        }).Send();
+                }
+            }
 		}
 	}
 }

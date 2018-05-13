@@ -37,7 +37,7 @@ namespace West
 						Json = json_;
 
 						foreach (var almostJson in Json)
-							Table.Add(almostJson.Value["_id"], new Class(almostJson.Value));
+							Table.Add(almostJson.Value["_id"], new Kit(almostJson.Value));
 
 						onBuilt_();
 					}).Send();

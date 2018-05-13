@@ -29,9 +29,12 @@ namespace West
 			public Text nameText = null;
 			public InputField nameInput = null;
 
-			public Model.ConstellationPreset model { get; private set; } = null;
+			public Model.ConstellationPreset Model { get; private set; } = null;
 
-			protected override void Start()
+            public delegate void OnColumnDestroyedDelegate(PresetColumn column_);
+            public event OnColumnDestroyedDelegate ColumnDestroyedEvent;
+
+            protected override void Start()
 			{
 				Debug.Assert(presetPreview != null);
 				Debug.Assert(addButton != null);
@@ -57,8 +60,10 @@ namespace West
 			{
 				SetupOnStarted(() =>
 				{
-					DisableAll();
-					if (model_ == null)
+                    Model = model_;
+
+                    DisableAll();
+					if (Model == null)
 					{
 						if (mode_ == Mode.Display)
 							addButton.gameObject.SetActive(true);
@@ -67,10 +72,10 @@ namespace West
 					}
 					else
 					{
-						presetPreview.Setup(model_, nodeTextualDetails_);
+						presetPreview.Setup(Model, nodeTextualDetails_);
 						if (mode_ == Mode.Display)
 						{
-							nameText.text = model_.Name;
+							nameText.text = Model.Name;
 
 							presetPreview.gameObject.SetActive(true);
 							editButton.gameObject.SetActive(true);
@@ -80,7 +85,7 @@ namespace West
 						}
 						else
 						{
-							nameInput.text = model_.Name;
+							nameInput.text = Model.Name;
 
 							presetPreview.gameObject.SetActive(true);
 							nameInput.gameObject.SetActive(true);
@@ -104,24 +109,26 @@ namespace West
 
 			private void AddClicked()
 			{
-				//add preset to account (account always returns copies, not originals)
-
-				//setup with new created model
-
-				//edit
+				DisableAll();
+				App.Content.Account.AddPreset((Model.ConstellationPreset preset_) =>
+				{
+					App.Content.Account.EditPreset(preset_);
+				});
 			}
 
 			private void EditClicked()
 			{
-				//open PresetEditor scene with active model
+				App.Content.Account.EditPreset(Model);
 			}
 
 			private void DeleteClicked()
-			{
-				//delete preset in account
-
-				//delete self game object
-			}
+            {
+                DisableAll();
+                App.Content.Account.RemovePreset(Model, () =>
+                {
+                    this.ColumnDestroyedEvent(this);
+                });
+            }
 
 			private void ProceedClicked()
 			{
