@@ -55,7 +55,7 @@ namespace West
 					kitMaterial,
 					ref kitNodeList);
 
-				SetStartingStateList();
+                OnPresetUpdate();
             }
 
             void OnDestroy()
