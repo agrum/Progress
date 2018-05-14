@@ -69,6 +69,7 @@ namespace West
             {
                 presetColumnList.Remove(column_);
                 Destroy(column_.gameObject);
+                column_.ColumnDestroyedEvent -= OnPresetRemoved;
                 ArrangeUI();
             }
 

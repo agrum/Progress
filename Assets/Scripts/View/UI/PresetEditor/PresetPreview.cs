@@ -69,6 +69,26 @@ namespace West
 					ref classNodeList);
 			}
 
+            void OnDestroy()
+            {
+                model.presetUpdateEvent -= OnPresetUpdate;
+                foreach (var node in abilityNodeList)
+                {
+                    node.selectedEvent -= OnNodeSelected;
+                    node.hoveredEvent -= OnNodeHovered;
+                }
+                foreach (var node in classNodeList)
+                {
+                    node.selectedEvent -= OnNodeSelected;
+                    node.hoveredEvent -= OnNodeHovered;
+                }
+                foreach (var node in kitNodeList)
+                {
+                    node.selectedEvent -= OnNodeSelected;
+                    node.hoveredEvent -= OnNodeHovered;
+                }
+            }
+
 			void Update()
 			{
 				if (canvas && canvas.rect != lastRect)

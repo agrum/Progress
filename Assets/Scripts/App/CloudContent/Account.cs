@@ -21,6 +21,7 @@ namespace West
 				public ConstellationPreset EditedPreset { get; private set; } = null;
 
                 public delegate void PresetAddedDelegate(ConstellationPreset preset_);
+                public delegate void PresetSavedDelegate();
                 public delegate void PresetRemovedDelegate();
 
                 protected override void Build(OnBuilt onBuilt_)
@@ -80,6 +81,25 @@ namespace West
                     SceneManager.LoadScene("PresetEditor");
                 }
 
+                public void SavePreset(ConstellationPreset preset_)
+                {
+                    if (!PresetList.Contains(preset_) || preset_ != EditedPreset)
+                        return;
+
+                    JSONNode presetJson = preset_.ToJson();
+
+                    var request = App.Server.Request(
+                        HTTPMethods.Put,
+                        "account/preset",
+                        (JSONNode json_) =>
+                        {
+                            EditedPreset = null;
+                            SceneManager.LoadScene("PresetSelection");
+                        });
+                    request.AddField("preset", presetJson.ToString());
+                    request.Send();
+                }
+
                 public void RemovePreset(ConstellationPreset preset_, PresetRemovedDelegate delegate_)
                 {
                     if (!PresetList.Contains(preset_))
@@ -87,11 +107,18 @@ namespace West
 
                     App.Server.Request(
                         HTTPMethods.Delete,
-                        "account/preset/" + preset_.Json["_id"],
+                        "account/preset/" + preset_.Id,
                         (JSONNode json_) =>
                         {
                             PresetList.Remove(preset_);
-                            Json["presets"].AsArray.Remove(preset_.Json);
+                            foreach (var almostJson in Json["presets"].AsArray)
+                            {
+                                if (almostJson.Value["_id"] == preset_.Id)
+                                {
+                                    Json["presets"].AsArray.Remove(almostJson.Value);
+                                    break;
+                                }
+                            }
 
                             delegate_();
                         }).Send();

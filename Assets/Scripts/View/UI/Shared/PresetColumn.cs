@@ -117,8 +117,9 @@ namespace West
 			}
 
 			private void EditClicked()
-			{
-				App.Content.Account.EditPreset(Model);
+            {
+                DisableAll();
+                App.Content.Account.EditPreset(Model);
 			}
 
 			private void DeleteClicked()
@@ -136,9 +137,10 @@ namespace West
 			}
 
 			private void SaveClicked()
-			{
-				//ask account to overwrite save model with local copy
-			}
+            {
+                DisableAll();
+                App.Content.Account.SavePreset(Model);
+            }
 		}
 	}
 }

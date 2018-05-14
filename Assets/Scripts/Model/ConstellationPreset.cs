@@ -12,7 +12,7 @@ namespace West
 	{
 		public class ConstellationPreset
 		{
-            public JSONNode Json { get; private set; } = null;
+            public string Id { get; private set; }
 			public string Name { get; private set; }
 			public Constellation Constellation { get; private set; }
 
@@ -25,7 +25,7 @@ namespace West
 
 			public ConstellationPreset(JSONNode json)
 			{
-                Json = json;
+                Id = json["_id"];
                 Name = json["name"];
 				Constellation = App.Content.ConstellationList[json["constellation"]];
 
@@ -176,6 +176,25 @@ namespace West
 				SelectedKitList.Clear();
 				presetUpdateEvent();
 			}
+
+            public JSONNode ToJson()
+            {
+                JSONNode json = new JSONObject();
+
+                json["name"] = Name;
+                json["constellation"] = Constellation.Json["_id"];
+                json["abilities"] = new JSONArray();
+                json["classes"] = new JSONArray();
+                json["kits"] = new JSONArray();
+                foreach (var skill in SelectedAbilityList)
+                    json["abilities"].Add(skill.Json["_id"]);
+                foreach (var skill in SelectedClassList)
+                    json["classes"].Add(skill.Json["_id"]);
+                foreach (var skill in SelectedKitList)
+                    json["kits"].Add(skill.Json["_id"]);
+
+                return json;
+            }
 		}
 	}
 }
