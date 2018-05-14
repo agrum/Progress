@@ -46,6 +46,22 @@ router.post('/preset', function(req, res, next) {
     })
 })
 
+router.put('/preset', function(req, res, next) {
+    var preset = JSON.parse(req.body.preset);
+    req.app.db.models.presets
+    .findById(preset._id)
+    .then(presetDocument => {
+        presetDocument.set(preset);
+        presetDocument.save();
+        console.error('update preset success')
+        res.send(presetDocument);
+    })
+    .catch(err => {
+        console.error('update preset error')
+        console.error(err)
+    })
+})
+
 router.delete('/preset/:id', function(req, res, next) {
     console.error('remove preset')
     req.app.db.models.presets

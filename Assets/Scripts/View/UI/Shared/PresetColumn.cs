@@ -52,6 +52,7 @@ namespace West
 				deleteButton.onClick.AddListener(DeleteClicked);
 				proceedButton.onClick.AddListener(ProceedClicked);
 				saveButton.onClick.AddListener(SaveClicked);
+                nameInput.onEndEdit.AddListener(NameChanged);
 
 				base.Start();
 			}
@@ -140,6 +141,11 @@ namespace West
             {
                 DisableAll();
                 App.Content.Account.SavePreset(Model);
+            }
+
+            private void NameChanged(string newName)
+            {
+                Model.Name = newName;
             }
 		}
 	}

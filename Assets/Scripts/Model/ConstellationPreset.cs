@@ -13,7 +13,7 @@ namespace West
 		public class ConstellationPreset
 		{
             public string Id { get; private set; }
-			public string Name { get; private set; }
+			public string Name { get; set; }
 			public Constellation Constellation { get; private set; }
 
 			public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
@@ -181,6 +181,7 @@ namespace West
             {
                 JSONNode json = new JSONObject();
 
+                json["_id"] = Id;
                 json["name"] = Name;
                 json["constellation"] = Constellation.Json["_id"];
                 json["abilities"] = new JSONArray();

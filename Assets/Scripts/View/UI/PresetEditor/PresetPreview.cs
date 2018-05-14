@@ -71,7 +71,8 @@ namespace West
 
             void OnDestroy()
             {
-                model.presetUpdateEvent -= OnPresetUpdate;
+                if (model != null)
+                    model.presetUpdateEvent -= OnPresetUpdate;
                 foreach (var node in abilityNodeList)
                 {
                     node.selectedEvent -= OnNodeSelected;
