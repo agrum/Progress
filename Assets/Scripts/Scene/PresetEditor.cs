@@ -17,11 +17,17 @@ namespace West
 			public View.NodeTextualDetails nodeTextualDetails = null;
 			public View.Constellation constellation = null;
 			public View.PresetColumn presetColumn = null;
-			
-			private Model.ConstellationPreset model = null;
+
+            static public Model.ConstellationPreset Model = null;
 
 			void Start()
 			{
+                if (Model == null)
+                {
+                    Debug.Log("Model is null in PresetEditor");
+                    return;
+                }
+
 				App.Content.Account.Load(() =>
 				{
 					Setup();
@@ -33,12 +39,10 @@ namespace West
 				//return if object died while waiting for answer
 				if (this == null)
 					return;
-				
-				model = App.Content.Account.EditedPreset;
 
 				nodeTextualDetails.Setup(null);
-				constellation.Setup(model.Constellation, model);
-				presetColumn.Setup(model, View.PresetColumn.Mode.Edit, nodeTextualDetails);
+				constellation.Setup(Model.Constellation, Model);
+				presetColumn.Setup(Model, View.PresetColumn.Mode.Edit, nodeTextualDetails);
 			}
 		}
 	}

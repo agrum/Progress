@@ -18,7 +18,6 @@ namespace West
 			{
 				public JSONNode Json { get; private set; } = null;
 				public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
-				public ConstellationPreset EditedPreset { get; private set; } = null;
 
                 public delegate void PresetAddedDelegate(ConstellationPreset preset_);
                 public delegate void PresetSavedDelegate();
@@ -72,18 +71,9 @@ namespace West
 					request.Send();
                 }
 
-                public void EditPreset(ConstellationPreset preset_)
+                public void SavePreset(ConstellationPreset preset_, PresetSavedDelegate callback)
                 {
                     if (!PresetList.Contains(preset_))
-                        return;
-
-                    EditedPreset = preset_;
-                    SceneManager.LoadScene("PresetEditor");
-                }
-
-                public void SavePreset(ConstellationPreset preset_)
-                {
-                    if (!PresetList.Contains(preset_) || preset_ != EditedPreset)
                         return;
 
                     JSONNode presetJson = preset_.ToJson();
@@ -93,8 +83,7 @@ namespace West
                         "account/preset",
                         (JSONNode json_) =>
                         {
-                            EditedPreset = null;
-                            SceneManager.LoadScene("PresetSelection");
+                            callback();
                         });
                     request.AddField("preset", presetJson.ToString());
                     request.Send();

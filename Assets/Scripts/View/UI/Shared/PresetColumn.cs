@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SimpleJSON;
+using UnityEngine.SceneManagement;
 
 namespace West
 {
@@ -113,15 +114,21 @@ namespace West
 				DisableAll();
 				App.Content.Account.AddPreset((Model.ConstellationPreset preset_) =>
 				{
-					App.Content.Account.EditPreset(preset_);
+                    Model = preset_;
+                    EditClicked();
 				});
 			}
 
 			private void EditClicked()
             {
                 DisableAll();
-                App.Content.Account.EditPreset(Model);
-			}
+
+                if (!App.Content.Account.PresetList.Contains(Model))
+                    return;
+                
+                Scene.PresetEditor.Model = Model;
+                SceneManager.LoadScene("PresetEditor");
+            }
 
 			private void DeleteClicked()
             {
@@ -140,7 +147,11 @@ namespace West
 			private void SaveClicked()
             {
                 DisableAll();
-                App.Content.Account.SavePreset(Model);
+                App.Content.Account.SavePreset(Model, () =>
+                {
+                    SceneManager.LoadScene("PresetSelection");
+                    Scene.PresetEditor.Model = null;
+                });
             }
 
             private void NameChanged(string newName)

@@ -1172,15 +1172,21 @@
     <Compile Include="Assets\Scripts\Model\Terrain\TerrainManager.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Pair.cs" />
+    <Compile Include="Assets\Scripts\Scene\Landing.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\View\TextButton.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\PresetPreview.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\ConstellationNode.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\WestBehaviour.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonGear.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonPlay.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonSpecialize.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonTrade.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />

@@ -1,5 +1,5 @@
 module.exports = function () {
-	require('./schemas/user')();
+	require('./schemas/usesr')();
 	require('./schemas/gameSettings')();
 	require('./schemas/constellations')();
 	require('./schemas/abilities')();
