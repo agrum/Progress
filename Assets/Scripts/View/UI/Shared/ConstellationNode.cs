@@ -12,34 +12,25 @@ namespace West
 	{
 		public class ConstellationNode : Selectable
 		{
-			public enum State
-			{
-				Unselectable,
-				Selectable,
-				Selected
-			}
-
-			public delegate void OnSelectedDelegate(ConstellationNode node, bool selected);
-			public event OnSelectedDelegate selectedEvent;
-			public delegate void OnHoveredDelegate(ConstellationNode node, bool hovered);
+			public delegate void OnClickedDelegate();
+			public event OnClickedDelegate clickedEvent;
+			public delegate void OnHoveredDelegate(bool hovered);
 			public event OnHoveredDelegate hoveredEvent;
-
-			protected Model.ConstellationNode model;
-			protected Material mat;
-			protected Vector2 position = new Vector2();
+			
+			private string iconPath = null;
+			private Material mat = null;
+			private Vector2 position;
 			protected Vector2 positionMultiplier = new Vector2();
 			protected float scale;
 
 			private readonly int enterHash = Animator.StringToHash("Enter");
 			private readonly int leaveHash = Animator.StringToHash("Leave");
-			private readonly int clickInHash = Animator.StringToHash("ClickIn");
-			private readonly int clickOutHash = Animator.StringToHash("ClickOut");
-			private readonly int isUnselectableHash = Animator.StringToHash("IsUnselectable");
-			private readonly int isSelectableHash = Animator.StringToHash("IsSelectable");
+			private readonly int clickHash = Animator.StringToHash("Click");
+			private readonly int unselectHash = Animator.StringToHash("Unselect");
+			private readonly int selectHash = Animator.StringToHash("Select");
 			private bool started = false;
 			
-			private State state = State.Unselectable;
-			private State preStartedState = State.Unselectable;
+			private bool isSelected = false;
 			
 			private Transform childTranform;
 			private Image stroke;
@@ -52,7 +43,7 @@ namespace West
 			{
 				started = true;
 
-				SelectableState = preStartedState;
+				isSelected = true;
 
 				interactable = true;
 				transition = Transition.None;
@@ -60,8 +51,12 @@ namespace West
 				base.Start();
 			}
 
-			public void Setup(Model.ConstellationNode model_, Material mat_, Vector2 position_)
+			public void Setup(string iconPath_, Material mat_, Vector2 position_)
 			{
+				iconPath = iconPath_;
+				mat = mat_;
+				position = position_;
+
 				childTranform = gameObject.transform.Find("GameObject");
 				stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
 				pulse = childTranform.Find("Pulse").GetComponent<Image>();
@@ -72,9 +67,7 @@ namespace West
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 				
-				mat = mat_;
 				scale = 1.0f;
-				position = position_;
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 
@@ -85,17 +78,10 @@ namespace West
 				fill.material = mat;
 				icon.material = mat;
 
-				Setup(model_);
-			}
-
-			public void Setup(Model.ConstellationNode model_)
-			{
-				model = model_;
-
-				if (model != null && model.Skill.Json != null)
+				if (iconPath_ != null)
 				{
-					string path = "Icons/" + model.Skill.UpperCamelCaseKey + "/" + model.Skill.Json["name"];
-					UnityEngine.Object prefabObject = Resources.Load(path);
+					//string path = "Icons/" + viewModel.Skill().UpperCamelCaseKey + "/" + viewModel.Skill().Json["name"];
+					UnityEngine.Object prefabObject = Resources.Load(iconPath);
 					Texture2D texture = prefabObject as Texture2D;
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
 
@@ -107,7 +93,7 @@ namespace West
 				}
 				else
 				{
-					SelectableState = State.Unselectable;
+					Selected = false;
 					pulse.gameObject.SetActive(false);
 					icon.gameObject.SetActive(false);
 					iconWhite.gameObject.SetActive(false);
@@ -122,43 +108,25 @@ namespace West
 				gameObject.transform.localRotation = Quaternion.identity;
 			}
 
-			public Model.ConstellationNode Model { get { return model; } }
-			public Material Mat { get { return mat; } }
-
-			public State SelectableState
+			public bool Selected
 			{
 				get
 				{
-					return state;
+					return isSelected;
 				}
 				set
 				{
+					isSelected = value;
+
 					if (!started)
-					{
-						preStartedState = value;
 						return;
-					}
 
-					animator.ResetTrigger(isUnselectableHash);
-					animator.ResetTrigger(isSelectableHash);
-					animator.ResetTrigger(clickInHash);
-					animator.ResetTrigger(clickOutHash);
+					animator.ResetTrigger(unselectHash);
+					animator.ResetTrigger(selectHash);
+					animator.ResetTrigger(clickHash);
 
-					var oldState = state;
-					state = value;
-					if (state == State.Unselectable)
-					{
-						animator.SetTrigger(isUnselectableHash);
-					}
-					else
-					{
-						if (oldState != State.Selected)
-							animator.SetTrigger(isSelectableHash);
-						if (state == State.Selected || oldState == State.Selected)
-						{
-							animator.SetTrigger((state == State.Selected) ? clickInHash : clickOutHash);
-						}
-					}
+					animator.SetTrigger(clickHash);
+					animator.SetTrigger(isSelected ? selectHash : unselectHash);
 				}
 			}
 
@@ -166,20 +134,19 @@ namespace West
 			{
 				animator.ResetTrigger(leaveHash);
 				animator.SetTrigger(enterHash);
-				hoveredEvent(this, true);
+				hoveredEvent(true);
 			}
 
 			override public void OnPointerExit(PointerEventData eventData)
 			{
 				animator.ResetTrigger(enterHash);
 				animator.SetTrigger(leaveHash);
-				hoveredEvent(this, false);
+				hoveredEvent(false);
 			}
 
 			override public void OnPointerUp(PointerEventData eventData)
 			{
-				if (SelectableState != State.Unselectable)
-					selectedEvent(this, SelectableState == State.Selectable);
+				clickedEvent();
 			}
 		}
 	}

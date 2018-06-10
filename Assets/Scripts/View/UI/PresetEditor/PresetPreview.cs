@@ -21,9 +21,9 @@ namespace West
 			private Material classMaterial = null;
 			private Material kitMaterial = null;
 
-			private List<ConstellationNode> abilityNodeList = new List<ConstellationNode>();
-			private List<ConstellationNode> classNodeList = new List<ConstellationNode>();
-			private List<ConstellationNode> kitNodeList = new List<ConstellationNode>();
+			private List<ViewModel.NodePreset> abilityNodeList = new List<ViewModel.NodePreset>();
+			private List<ViewModel.NodePreset> classNodeList = new List<ViewModel.NodePreset>();
+			private List<ViewModel.NodePreset> kitNodeList = new List<ViewModel.NodePreset>();
 
 			private Rect lastRect = new Rect();
 			private Vector2 sizeInt = new Vector2();
@@ -114,25 +114,13 @@ namespace West
 				UpdateVisual(classNodeList, model.SelectedClassList, model.Constellation.ClassNodeList);
 				UpdateVisual(kitNodeList, model.SelectedKitList, model.Constellation.KitNodeList);
 			}
-
-			private void OnNodeSelected(ConstellationNode node, bool selected)
-			{
-				if (node.Model != null && !selected)
-					model.Remove(node.Model);
-			}
-
-			private void OnNodeHovered(ConstellationNode node, bool hovered)
-			{
-				if (nodeTextualDetails != null && node.Model != null)
-					nodeTextualDetails.Setup(hovered ? node : null);
-			}
 			
 			private void PopulateNodes(
 				int amountNode_,
 				List<Model.ConstellationNode> nodeModelList_, 
 				List<Model.Skill> selectedSkillList_, 
 				Material nodeMaterial_, 
-				ref List<ConstellationNode> nodeList_)
+				ref List<ViewModel.NodePreset> nodeList_)
 			{
 				for (int i = 0; i < amountNode_; ++i)
 				{
@@ -143,21 +131,19 @@ namespace West
 						-((float) (nodeAdded % sizeInt.x) - (size.x - 1.0f) / 2.0f),
 						-(nodeAdded - (size.y + 2.0f) / 2.0f));
 					ConstellationNode node = gob.AddComponent<ConstellationNode>();
-					node.Setup(null, nodeMaterial_, nodePosition);
-					node.selectedEvent += OnNodeSelected;
-					node.hoveredEvent += OnNodeHovered;
-					nodeList_.Add(node);
+					nodeList_.Add(null);
 					++nodeAdded;
 				}
 
-				UpdateVisual(nodeList_, selectedSkillList_, nodeModelList_);
+				UpdateVisual(nodeList_, selectedSkillList_, nodeModelList_, nodeMaterial_);
 			}
 
 			delegate Model.ConstellationNode getNodeOutOfSkill(Model.Skill skill_);
 			private void UpdateVisual(
-				List<ConstellationNode> nodeViewList_,
+				List<ViewModel.NodePreset> nodeViewList_,
 				List<Model.Skill> selectedSkillList_,
-				List<Model.ConstellationNode> nodeModelList_)
+				List<Model.ConstellationNode> nodeModelList_,
+				Material nodeMaterial_)
 			{
 				getNodeOutOfSkill lambda = (Model.Skill skill_) =>
 				{
@@ -169,15 +155,7 @@ namespace West
 				};
 
 				for (int i = 0; i < nodeViewList_.Count; ++i)
-				{
-					if (i < selectedSkillList_.Count)
-					{
-						nodeViewList_[i].Setup(lambda(selectedSkillList_[i]));
-						nodeViewList_[i].SelectableState = ConstellationNode.State.Selected;
-					}
-					else
-						nodeViewList_[i].Setup(null);
-				}
+					nodeViewList_[i].UpdateNode((i < selectedSkillList_.Count) ? lambda(selectedSkillList_[i]) : null);
 			}
 		}
 	}

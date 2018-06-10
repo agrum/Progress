@@ -58,9 +58,9 @@ namespace West
 				kitDetailsString = KitDetails.text;
 			}
 
-			public void Setup(ConstellationNode node)
+			public void Setup(Model.Skill skill, Material mat)
 			{
-				bool active = (node != null && node.Model != null);
+				bool active = (skill != null);
 
 				Name.gameObject.SetActive(active);
 				Description.gameObject.SetActive(active);
@@ -79,17 +79,16 @@ namespace West
 
 				if (!active)
 					return;
+				
+				JSONNode metrics = skill.Json["metrics"];
 
-				var nodeSkill = node.Model.Skill;
-				JSONNode metrics = nodeSkill.Json["metrics"];
-
-				string colorPrefix = "<color=#" + ColorUtility.ToHtmlStringRGBA(node.Mat.color) + ">";
+				string colorPrefix = "<color=#" + ColorUtility.ToHtmlStringRGBA(mat.color) + ">";
 				string colorSuffix = "</color>";
 
-				Name.text = nameString.Replace("#content#", nodeSkill.Json["name"]);
-				Description.text = descriptionString.Replace("#content#", nodeSkill.Json["description"]);
+				Name.text = nameString.Replace("#content#", skill.Json["name"]);
+				Description.text = descriptionString.Replace("#content#", skill.Json["description"]);
 
-				switch (nodeSkill.Type)
+				switch (skill.Type)
 				{
 					case Model.Skill.TypeEnum.Ability:
 						Ability.text = colorPrefix + abilityString + colorSuffix;
@@ -105,7 +104,7 @@ namespace West
 						break;
 				}
 
-				Details.text = detailsString.Replace("#content#", nodeSkill.Json["details"]);
+				Details.text = detailsString.Replace("#content#", skill.Json["details"]);
 				foreach (var metric in metrics)
 				{
 					if (metric.Key == "cooldown"

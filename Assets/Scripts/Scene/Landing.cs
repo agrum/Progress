@@ -1,39 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using BestHTTP;
-using SimpleJSON;
-using UnityEngine.UI;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace West
 {
     namespace Scene
     {
         class Landing : MonoBehaviour
-        {
-            public View.TextButton buttonPlayV = null;
-            public View.TextButton buttonSpecializeV = null;
+		{
+			public Canvas canvas = null;
+			public View.TextButton buttonPlayV = null;
+			public View.TextButton buttonSpecializeV = null;
             public View.TextButton buttonGearV = null;
             public View.TextButton buttonTradeV = null;
 
-            private ViewModel.ButtonPlay buttonPlayVM = null;
-            private ViewModel.ButtonSpecialize buttonSpecializeVM = null;
-            private ViewModel.ButtonGear buttonGearVM = null;
-            private ViewModel.ButtonTrade buttonTradeVM = null;
-
             void Start()
-            {
-                if (buttonPlayV == null
-                    || buttonSpecializeV == null
-                    || buttonGearV == null
-                    || buttonTradeV == null)
-                {
-                    Debug.Log("View buttons are null in Landing");
-                    return;
-                }
+			{
+				Debug.Assert(canvas != null);
+				Debug.Assert(buttonPlayV != null);
+				Debug.Assert(buttonSpecializeV != null);
+				Debug.Assert(buttonGearV != null);
+				Debug.Assert(buttonTradeV != null);
+				
+                canvas.gameObject.SetActive(false);
 
                 App.Content.Account.Load(() =>
                 {
@@ -45,12 +33,11 @@ namespace West
             {
                 if (this == null)
                     return;
+				
+				buttonPlayV.clickEvent += () => { SceneManager.LoadScene("PresetSelection"); };
 
-                buttonPlayVM = new ViewModel.ButtonPlay(buttonPlayV);
-                buttonSpecializeVM = new ViewModel.ButtonSpecialize(buttonSpecializeV);
-                buttonGearVM = new ViewModel.ButtonGear(buttonGearV);
-                buttonTradeVM = new ViewModel.ButtonTrade(buttonTradeV);
-            }
+				canvas.gameObject.SetActive(true);
+			}
         }
     }
 }

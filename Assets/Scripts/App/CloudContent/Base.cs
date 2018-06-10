@@ -46,7 +46,7 @@ namespace West
 							dependencies_loaded = false;
 							break;
 						}
-
+					
 					//define all dependency acquired callback
 					OnBuilt selfBuiltCallback = () =>
 					{

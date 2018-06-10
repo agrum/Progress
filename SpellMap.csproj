@@ -12,12 +12,15 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1176,6 +1179,7 @@
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodePreset.cs" />
     <Compile Include="Assets\Scripts\View\TextButton.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\NodeTextualDetails.cs" />
@@ -1183,10 +1187,6 @@
     <Compile Include="Assets\Scripts\View\UI\Shared\ConstellationNode.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\WestBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonGear.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonPlay.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonSpecialize.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\Landing\ButtonTrade.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />

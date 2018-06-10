@@ -22,7 +22,7 @@ namespace West
 			}
 
 			public PresetPreview presetPreview = null;
-			public Button addButton = null;
+            public Button addButton = null;
 			public Button editButton = null;
 			public Button deleteButton = null;
 			public Button proceedButton = null;
@@ -38,8 +38,8 @@ namespace West
             protected override void Start()
 			{
 				Debug.Assert(presetPreview != null);
-				Debug.Assert(addButton != null);
-				Debug.Assert(editButton != null);
+                Debug.Assert(addButton != null);
+                Debug.Assert(editButton != null);
 				Debug.Assert(deleteButton != null);
 				Debug.Assert(proceedButton != null);
 				Debug.Assert(saveButton != null);
@@ -47,9 +47,9 @@ namespace West
 				Debug.Assert(nameInput != null);
 
 				DisableAll();
-
-				addButton.onClick.AddListener(AddClicked);
-				editButton.onClick.AddListener(EditClicked);
+                
+                addButton.onClick.AddListener(AddClicked);
+                editButton.onClick.AddListener(EditClicked);
 				deleteButton.onClick.AddListener(DeleteClicked);
 				proceedButton.onClick.AddListener(ProceedClicked);
 				saveButton.onClick.AddListener(SaveClicked);
@@ -107,19 +107,19 @@ namespace West
 				saveButton.gameObject.SetActive(false);
 				nameText.gameObject.SetActive(false);
 				nameInput.gameObject.SetActive(false);
-			}
+            }
 
-			private void AddClicked()
-			{
-				DisableAll();
-				App.Content.Account.AddPreset((Model.ConstellationPreset preset_) =>
-				{
+            private void AddClicked()
+            {
+                DisableAll();
+                App.Content.Account.AddPreset((Model.ConstellationPreset preset_) =>
+                {
                     Model = preset_;
                     EditClicked();
-				});
-			}
+                });
+            }
 
-			private void EditClicked()
+            private void EditClicked()
             {
                 DisableAll();
 
