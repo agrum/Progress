@@ -10,7 +10,7 @@ namespace West
 {
 	namespace View
 	{
-		public class ConstellationNode : Selectable
+		public class Node : Selectable
 		{
 			public delegate void OnClickedDelegate();
 			public event OnClickedDelegate clickedEvent;
@@ -21,7 +21,6 @@ namespace West
 			private Material mat = null;
 			private Vector2 position;
 			protected Vector2 positionMultiplier = new Vector2();
-			protected float scale;
 
 			private readonly int enterHash = Animator.StringToHash("Enter");
 			private readonly int leaveHash = Animator.StringToHash("Leave");
@@ -67,11 +66,10 @@ namespace West
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 				
-				scale = 1.0f;
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 
-				Scale(scale);
+				Scale(1.0f);
 
 				stroke.material = mat;
 				pulse.material = mat;
@@ -102,9 +100,8 @@ namespace West
 
 			public virtual void Scale(float scale_)
 			{
-				scale = scale_;
-				gameObject.transform.localPosition = new Vector3(position.x * positionMultiplier.x, position.y * positionMultiplier.y, 0) * scale; ;
-				gameObject.transform.localScale = Vector3.one * scale;
+				gameObject.transform.localPosition = new Vector3(position.x * positionMultiplier.x, position.y * positionMultiplier.y, 0) * scale_; ;
+				gameObject.transform.localScale = Vector3.one * scale_;
 				gameObject.transform.localRotation = Quaternion.identity;
 			}
 

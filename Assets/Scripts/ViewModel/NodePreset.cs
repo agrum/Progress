@@ -6,16 +6,17 @@ namespace West
 	{
 		public class NodePreset
 		{
-			private View.ConstellationNode viewNode;
+			private View.Node viewNode;
 			private View.NodeTextualDetails viewDetails;
 			private Model.ConstellationNode modelNode;
 			private Model.ConstellationPreset modelPreset;
 			private bool canEdit;
 			private Material mat;
 			private Vector2 position;
+			private float scale = 1.0f;
 
 			public NodePreset(
-				View.ConstellationNode viewNode_, 
+				View.Node viewNode_, 
 				View.NodeTextualDetails viewDetails_,
 				Model.ConstellationNode modelNode_,
 				Model.ConstellationPreset modelPreset_, 
@@ -40,6 +41,12 @@ namespace West
 				UpdateNode(modelNode_);
 			}
 
+			~NodePreset()
+			{
+				viewNode.hoveredEvent -= Hovered;
+				viewNode.clickedEvent -= Clicked;
+			}
+
 			public void UpdateNode(Model.ConstellationNode modelNode_)
 			{
 				modelNode = modelNode_;
@@ -50,6 +57,12 @@ namespace West
 					position);
 			}
 
+			public virtual void Scale(float scale_)
+			{
+				scale = scale_;
+				viewNode.Scale(scale);
+			}
+
 			public void Hovered(bool on)
 			{
 				if (viewDetails != null)
@@ -58,8 +71,11 @@ namespace West
 
 			public void Clicked()
 			{
-				if (modelNode != null)
+				if (canEdit && modelNode != null)
+				{
 					modelPreset.Remove(modelNode);
+					UpdateNode(null);
+				}
 			}
 		}
 	}

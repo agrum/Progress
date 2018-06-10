@@ -16,7 +16,7 @@ namespace West
 			public GameObject presetColumnPrefab = null;
             public Button backButton = null;
 
-            private List<View.PresetColumn> presetColumnList = new List<View.PresetColumn>();
+            private List<ViewModel.PresetColumn> presetColumnList = new List<ViewModel.PresetColumn>();
 
 			void Start()
 			{
@@ -40,27 +40,36 @@ namespace West
 				if (this == null)
 					return;
 				
-				nodeTextualDetails.Setup(null);
+				nodeTextualDetails.Setup(null, null);
                 backButton.onClick.AddListener(BackClicked);
 
                 //setup existing preset columns
                 foreach (var preset in App.Content.Account.PresetList)
 				{
 					GameObject gob = Instantiate(presetColumnPrefab);
-					View.PresetColumn presetColumn = gob.GetComponent<View.PresetColumn>();
-                    presetColumn.ColumnDestroyedEvent += OnPresetRemoved;
+					View.PresetColumn viewPresetColumn = gob.GetComponent<View.PresetColumn>();
+					viewPresetColumn.transform.SetParent(horizontalLayout.transform, false);
 
-                    presetColumn.Setup(preset, View.PresetColumn.Mode.Display, nodeTextualDetails);
-					presetColumn.transform.SetParent(horizontalLayout.transform, false);
+					ViewModel.PresetColumn presetColumn = new ViewModel.PresetColumn(
+						viewPresetColumn,
+						nodeTextualDetails,
+						preset,
+						ViewModel.PresetColumn.Mode.Display);
+                    presetColumn.ColumnDestroyedEvent += OnPresetRemoved;
 					presetColumnList.Add(presetColumn);
 				}
 
                 //add empty column to add presets.
                 {
                     GameObject gob = Instantiate(presetColumnPrefab);
-                    View.PresetColumn presetColumn = gob.GetComponent<View.PresetColumn>();
-                    presetColumn.Setup(null, View.PresetColumn.Mode.Display, nodeTextualDetails);
-                    presetColumn.transform.SetParent(horizontalLayout.transform, false);
+                    View.PresetColumn viewPresetColumn = gob.GetComponent<View.PresetColumn>();
+					viewPresetColumn.transform.SetParent(horizontalLayout.transform, false);
+
+					ViewModel.PresetColumn presetColumn = new ViewModel.PresetColumn(
+						viewPresetColumn,
+						nodeTextualDetails,
+						null,
+						ViewModel.PresetColumn.Mode.Display);
                     presetColumnList.Add(presetColumn);
                 }
 
@@ -69,11 +78,9 @@ namespace West
 				canvas.gameObject.SetActive(true);
 			}
 
-            private void OnPresetRemoved(View.PresetColumn column_)
+            private void OnPresetRemoved(ViewModel.PresetColumn column_)
             {
                 presetColumnList.Remove(column_);
-                Destroy(column_.gameObject);
-                column_.ColumnDestroyedEvent -= OnPresetRemoved;
                 ArrangeUI();
             }
 

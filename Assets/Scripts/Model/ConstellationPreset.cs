@@ -37,18 +37,18 @@ namespace West
 					SelectedKitList.Add(App.Content.KitList[almostValue.Value]);
 			}
 
-			public void Add(ConstellationNode node)
+			public void Add(Skill skill)
 			{
 				List<Skill> SelectedIndexList;
 				int limit;
 
-				if (node == null)
+				if (skill == null)
 				{
-					Debug.Log("ConstellationPreset.Add() node null");
+					Debug.Log("ConstellationPreset.Add() skill null");
 					throw new Exception();
 				}
 
-				switch (node.Skill.Type)
+				switch (skill.Type)
 				{
 					case Skill.TypeEnum.Ability:
 						SelectedIndexList = SelectedAbilityList;
@@ -63,7 +63,7 @@ namespace West
 						limit = App.Content.GameSettings.NumKits;
 						break;
 					default:
-						Debug.Log("ConstellationPreset.Add() node no type");
+						Debug.Log("ConstellationPreset.Add() skill no type");
 						throw new Exception();
 				}
 
@@ -73,22 +73,22 @@ namespace West
 					throw new Exception();
 				}
 
-				SelectedIndexList.Add(node.Skill);
+				SelectedIndexList.Add(skill);
 				presetUpdateEvent();
 			}
 
-			public void Remove(ConstellationNode node)
+			public void Remove(Skill skill)
 			{
 				List<Skill> SelectedList;
 				int limit;
 
-				if (node == null)
+				if (skill == null)
 				{
-					Debug.Log("ConstellationPreset.Remove() node null");
+					Debug.Log("ConstellationPreset.Remove() skill null");
 					throw new Exception();
 				}
 
-				switch (node.Skill.Type)
+				switch (skill.Type)
 				{
 					case Skill.TypeEnum.Ability:
 						SelectedList = SelectedAbilityList;
@@ -103,17 +103,17 @@ namespace West
 						limit = App.Content.GameSettings.NumKits;
 						break;
 					default:
-						Debug.Log("ConstellationPreset.Remove() node no type");
+						Debug.Log("ConstellationPreset.Remove() skill no type");
 						throw new Exception();
 				}
 
-				if (SelectedList.Count == 0 || !SelectedList.Contains(node.Skill))
+				if (SelectedList.Count == 0 || !SelectedList.Contains(skill))
 				{
 					Debug.Log("ConstellationPreset.Remove() can't");
 					throw new Exception();
 				}
 
-				if (node.Skill.Type == Skill.TypeEnum.Ability)
+				if (skill.Type == Skill.TypeEnum.Ability)
 				{
 					//clear if preset doesn't contain a starting node
 					bool hasStartingAbility = false;
@@ -132,7 +132,7 @@ namespace West
 						return;
 					}
 
-					SelectedAbilityList.Remove(node.Skill);
+					SelectedAbilityList.Remove(skill);
 					//unselect classes and kits that were solely dependent on this ability
 					var newSelectedClassList = new List<Skill>();
 					foreach (var selectedClass in SelectedClassList)
@@ -164,9 +164,42 @@ namespace West
 					SelectedKitList = newSelectedKitList;
 				}
 				else
-					SelectedList.Remove(node.Skill);
+					SelectedList.Remove(skill);
 
 				presetUpdateEvent();
+			}
+
+			public bool Has(Skill skill)
+			{
+				List<Skill> SelectedList;
+				int limit;
+
+				if (skill == null)
+				{
+					Debug.Log("ConstellationPreset.Has() skill null");
+					throw new Exception();
+				}
+
+				switch (skill.Type)
+				{
+					case Skill.TypeEnum.Ability:
+						SelectedList = SelectedAbilityList;
+						limit = App.Content.GameSettings.NumAbilities;
+						break;
+					case Skill.TypeEnum.Class:
+						SelectedList = SelectedClassList;
+						limit = App.Content.GameSettings.NumClasses;
+						break;
+					case Skill.TypeEnum.Kit:
+						SelectedList = SelectedKitList;
+						limit = App.Content.GameSettings.NumKits;
+						break;
+					default:
+						Debug.Log("ConstellationPreset.Has() skill no type");
+						throw new Exception();
+				}
+
+				return SelectedList.Contains(skill);
 			}
 
 			public void Clear()

@@ -1179,13 +1179,17 @@
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\Constellation.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeConstellation.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodePreset.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\PresetColumn.cs" />
+    <Compile Include="Assets\Scripts\View\PresetPreview.cs" />
     <Compile Include="Assets\Scripts\View\TextButton.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\UI\PresetEditor\NodeTextualDetails.cs" />
-    <Compile Include="Assets\Scripts\View\UI\PresetEditor\PresetPreview.cs" />
-    <Compile Include="Assets\Scripts\View\UI\Shared\ConstellationNode.cs" />
-    <Compile Include="Assets\Scripts\View\UI\Shared\PresetColumn.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\PresetPreview.cs" />
+    <Compile Include="Assets\Scripts\View\Node.cs" />
+    <Compile Include="Assets\Scripts\View\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\View\UI\Shared\WestBehaviour.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -9,37 +9,45 @@ using UnityEngine.UI;
 
 namespace West
 {
-	namespace View
+	namespace ViewModel
 	{
-		public class PresetPreview : MonoBehaviour
+		public class PresetPreview
 		{
+			private View.PresetPreview view = null;
+			private View.NodeTextualDetails nodeTextualDetails = null;
 			private Model.ConstellationPreset model = null;
-			private NodeTextualDetails nodeTextualDetails = null;
+			private bool canEdit = false;
 			private RectTransform canvas = null;
 			private GameObject prefab = null;
 			private Material abilityMaterial = null;
 			private Material classMaterial = null;
 			private Material kitMaterial = null;
 
-			private List<ViewModel.NodePreset> abilityNodeList = new List<ViewModel.NodePreset>();
-			private List<ViewModel.NodePreset> classNodeList = new List<ViewModel.NodePreset>();
-			private List<ViewModel.NodePreset> kitNodeList = new List<ViewModel.NodePreset>();
-
-			private Rect lastRect = new Rect();
+			private List<NodePreset> abilityNodeList = new List<NodePreset>();
+			private List<NodePreset> classNodeList = new List<NodePreset>();
+			private List<NodePreset> kitNodeList = new List<NodePreset>();
+			
 			private Vector2 sizeInt = new Vector2();
 			private Vector2 size = new Vector2();
 			private int nodeAdded = 0;
 			
-			public void Setup(Model.ConstellationPreset model_, NodeTextualDetails nodeTextualDetails_)
+			public PresetPreview(
+				View.PresetPreview viewPresetPreview,
+				View.NodeTextualDetails nodeTextualDetails_,
+				Model.ConstellationPreset model_,
+				bool canEdit_)
 			{
-				model = model_;
+				view = viewPresetPreview;
 				nodeTextualDetails = nodeTextualDetails_;
-				canvas = GetComponent<RectTransform>();
+				model = model_;
+				canEdit = canEdit_;
+				canvas = view.GetComponent<RectTransform>();
 				prefab = App.Resource.Prefab.ConstellationNode;
 				abilityMaterial = App.Resource.Material.AbilityMaterial;
 				classMaterial = App.Resource.Material.ClassMaterial;
 				kitMaterial = App.Resource.Material.KitMaterial;
 
+				viewPresetPreview.SizeChangedEvent += OnSizeChanged;
 				model.presetUpdateEvent += OnPresetUpdate;
 
 				sizeInt.x = 2;
@@ -73,39 +81,21 @@ namespace West
             {
                 if (model != null)
                     model.presetUpdateEvent -= OnPresetUpdate;
-                foreach (var node in abilityNodeList)
-                {
-                    node.selectedEvent -= OnNodeSelected;
-                    node.hoveredEvent -= OnNodeHovered;
-                }
-                foreach (var node in classNodeList)
-                {
-                    node.selectedEvent -= OnNodeSelected;
-                    node.hoveredEvent -= OnNodeHovered;
-                }
-                foreach (var node in kitNodeList)
-                {
-                    node.selectedEvent -= OnNodeSelected;
-                    node.hoveredEvent -= OnNodeHovered;
-                }
             }
 
-			void Update()
+			void OnSizeChanged()
 			{
-				if (canvas && canvas.rect != lastRect)
-				{
-					Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
-					float scale = Math.Min(
-						canvas.rect.width / ((size.x) * positionMultiplier.x),
-						canvas.rect.height / (2.0f * (size.y + 0.5f) * positionMultiplier.y));
+				Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
+				float scale = Math.Min(
+					canvas.rect.width / ((size.x) * positionMultiplier.x),
+					canvas.rect.height / (2.0f * (size.y + 0.5f) * positionMultiplier.y));
 
-					foreach (var node in abilityNodeList)
-						node.Scale(scale);
-					foreach (var node in classNodeList)
-						node.Scale(scale);
-					foreach (var node in kitNodeList)
-						node.Scale(scale);
-				}
+				foreach (var node in abilityNodeList)
+					node.Scale(scale);
+				foreach (var node in classNodeList)
+					node.Scale(scale);
+				foreach (var node in kitNodeList)
+					node.Scale(scale);
 			}
 			
 			private void OnPresetUpdate()
@@ -120,30 +110,35 @@ namespace West
 				List<Model.ConstellationNode> nodeModelList_, 
 				List<Model.Skill> selectedSkillList_, 
 				Material nodeMaterial_, 
-				ref List<ViewModel.NodePreset> nodeList_)
+				ref List<NodePreset> nodeList_)
 			{
 				for (int i = 0; i < amountNode_; ++i)
 				{
-					GameObject gob = Instantiate(prefab);
-					gob.transform.SetParent(canvas.transform);
+					GameObject gob = view.Add(prefab);
 
 					Vector2 nodePosition = new Vector2(
 						-((float) (nodeAdded % sizeInt.x) - (size.x - 1.0f) / 2.0f),
 						-(nodeAdded - (size.y + 2.0f) / 2.0f));
-					ConstellationNode node = gob.AddComponent<ConstellationNode>();
-					nodeList_.Add(null);
+					View.Node node = gob.AddComponent<View.Node>();
+					nodeList_.Add(new NodePreset(
+						node,
+						nodeTextualDetails,
+						null,
+						model,
+						canEdit,
+						nodeMaterial_,
+						nodePosition));
 					++nodeAdded;
 				}
 
-				UpdateVisual(nodeList_, selectedSkillList_, nodeModelList_, nodeMaterial_);
+				UpdateVisual(nodeList_, selectedSkillList_, nodeModelList_);
 			}
 
 			delegate Model.ConstellationNode getNodeOutOfSkill(Model.Skill skill_);
 			private void UpdateVisual(
-				List<ViewModel.NodePreset> nodeViewList_,
+				List<NodePreset> nodeViewList_,
 				List<Model.Skill> selectedSkillList_,
-				List<Model.ConstellationNode> nodeModelList_,
-				Material nodeMaterial_)
+				List<Model.ConstellationNode> nodeModelList_)
 			{
 				getNodeOutOfSkill lambda = (Model.Skill skill_) =>
 				{
