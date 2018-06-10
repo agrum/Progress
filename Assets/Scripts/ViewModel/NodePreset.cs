@@ -24,9 +24,9 @@ namespace West
 				Material mat_, 
 				Vector2 position_)
 			{
-				Debug.Assert(viewNode != null);
-				Debug.Assert(modelPreset != null);
-				Debug.Assert(mat != null);
+				Debug.Assert(viewNode_ != null);
+				Debug.Assert(modelPreset_ != null);
+				Debug.Assert(mat_ != null);
 
 				viewNode = viewNode_;
 				viewDetails = viewDetails_;
@@ -73,7 +73,7 @@ namespace West
 			{
 				if (canEdit && modelNode != null)
 				{
-					modelPreset.Remove(modelNode);
+					modelPreset.Remove(modelNode.Skill);
 					UpdateNode(null);
 				}
 			}

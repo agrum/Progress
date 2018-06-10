@@ -15,15 +15,13 @@ namespace West
 
             static public Model.ConstellationPreset Model = null;
 
-			void Start()
-            {
-                Debug.Assert(backButton != null);
+			private ViewModel.Constellation viewModelConstellation = null;
+			private ViewModel.PresetColumn viewModelPresetColumn = null;
 
-                if (Model == null)
-                {
-                    Debug.Log("Model is null in PresetEditor");
-                    return;
-                }
+			void Start()
+			{
+				Debug.Assert(backButton != null);
+				Debug.Assert(Model != null);
 
 				App.Content.Account.Load(() =>
 				{
@@ -38,9 +36,9 @@ namespace West
 					return;
 
                 backButton.onClick.AddListener(BackClicked);
-                nodeTextualDetails.Setup(null);
-				constellation.Setup(Model.Constellation, Model);
-				presetColumn.Setup(Model, View.PresetColumn.Mode.Edit, nodeTextualDetails);
+                nodeTextualDetails.Setup(null, null);
+				viewModelConstellation = new ViewModel.Constellation(constellation, Model.Constellation, Model);
+				viewModelPresetColumn = new ViewModel.PresetColumn(presetColumn, nodeTextualDetails, Model, ViewModel.PresetColumn.Mode.Edit);
             }
 
             private void BackClicked()

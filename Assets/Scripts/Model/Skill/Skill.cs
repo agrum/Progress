@@ -19,9 +19,6 @@ namespace West
 				None,
 			}
 
-			public delegate void OnBoundDelegate(ConstellationPreset preset, bool bound);
-			public event OnBoundDelegate skillBoundEvent;
-
 			public TypeEnum Type { get; private set; } = TypeEnum.None;
 			public JSONNode Json { get; private set; } = null;
 			public string Uuid { get; private set; } = "";

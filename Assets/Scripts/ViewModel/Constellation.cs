@@ -28,8 +28,9 @@ namespace West
 			private List<NodeConstellation> classNodeList = new List<NodeConstellation>();
 			private List<NodeConstellation> kitNodeList = new List<NodeConstellation>();
 
-			public void Setup(Model.Constellation model_, Model.ConstellationPreset preset_)
+			public Constellation(View.Constellation view_, Model.Constellation model_, Model.ConstellationPreset preset_)
 			{
+				view = view_;
 				model = model_;
 				preset = preset_;
 				canvas = view.GetComponent<RectTransform>();

@@ -91,6 +91,7 @@ namespace West
 					return;
 
 				Scene.PresetEditor.Model = Model;
+				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
 				SceneManager.LoadScene("PresetEditor");
 			}
 
