@@ -50,6 +50,14 @@ namespace West
 				base.Start();
 			}
 
+			override protected void OnDestroy()
+			{
+				clickedEvent = null;
+				hoveredEvent = null;
+
+				base.OnDestroy();
+			}
+
 			public void Setup(string iconPath_, Material mat_, Vector2 position_)
 			{
 				iconPath = iconPath_;
@@ -113,6 +121,7 @@ namespace West
 				}
 				set
 				{
+					bool oldValue = isSelected;
 					isSelected = value;
 
 					if (!started)
@@ -122,8 +131,11 @@ namespace West
 					animator.ResetTrigger(selectHash);
 					animator.ResetTrigger(clickHash);
 
-					animator.SetTrigger(clickHash);
-					animator.SetTrigger(isSelected ? selectHash : unselectHash);
+					if (oldValue != isSelected)
+					{
+						animator.SetTrigger(clickHash);
+						animator.SetTrigger(isSelected ? selectHash : unselectHash);
+					}
 				}
 			}
 

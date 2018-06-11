@@ -113,7 +113,7 @@ namespace West
 					throw new Exception();
 				}
 
-				if (skill.Type == Skill.TypeEnum.Ability)
+				/*if (skill.Type == Skill.TypeEnum.Ability)
 				{
 					//clear if preset doesn't contain a starting node
 					bool hasStartingAbility = false;
@@ -163,7 +163,7 @@ namespace West
 					}
 					SelectedKitList = newSelectedKitList;
 				}
-				else
+				else*/
 					SelectedList.Remove(skill);
 
 				presetUpdateEvent();

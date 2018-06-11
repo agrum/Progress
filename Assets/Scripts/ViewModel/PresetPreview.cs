@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimpleJSON;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace West
 {
 	namespace ViewModel
 	{
-		public class PresetPreview
+		public class PresetPreview : MonoBehaviour
 		{
-			private View.PresetPreview view = null;
+			public View.PresetPreview view = null;
+
 			private View.NodeTextualDetails nodeTextualDetails = null;
 			private Model.ConstellationPreset model = null;
 			private bool canEdit = false;
@@ -31,12 +27,14 @@ namespace West
 			private Vector2 size = new Vector2();
 			private int nodeAdded = 0;
 			
-			public PresetPreview(
+			public void Setup(
 				View.PresetPreview viewPresetPreview,
 				View.NodeTextualDetails nodeTextualDetails_,
 				Model.ConstellationPreset model_,
 				bool canEdit_)
 			{
+				Debug.Assert(model_ != null);
+
 				view = viewPresetPreview;
 				nodeTextualDetails = nodeTextualDetails_;
 				model = model_;
@@ -47,7 +45,7 @@ namespace West
 				classMaterial = App.Resource.Material.ClassMaterial;
 				kitMaterial = App.Resource.Material.KitMaterial;
 
-				viewPresetPreview.SizeChangedEvent += OnSizeChanged;
+				view.SizeChangedEvent += OnSizeChanged;
 				model.presetUpdateEvent += OnPresetUpdate;
 
 				sizeInt.x = 2;
@@ -77,13 +75,13 @@ namespace West
 					ref classNodeList);
 			}
 
-            void OnDestroy()
-            {
-                if (model != null)
-                    model.presetUpdateEvent -= OnPresetUpdate;
-            }
+			public void OnDestroy()
+			{
+				model.presetUpdateEvent -= OnPresetUpdate;
+				view.SizeChangedEvent -= OnSizeChanged;
+			}
 
-			void OnSizeChanged()
+			public void OnSizeChanged()
 			{
 				Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
 				float scale = Math.Min(

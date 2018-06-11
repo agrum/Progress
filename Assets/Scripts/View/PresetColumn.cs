@@ -60,6 +60,17 @@ namespace West
 				StartedEvent();
 			}
 
+			void OnDestroy()
+			{
+				StartedEvent = null;
+				AddClickedEvent = null;
+				EditClickedEvent = null;
+				DeleteClickedEvent = null;
+				ProceedClickedEvent = null;
+				SaveClickedEvent = null;
+				NameChanegdEvent = null;
+			}
+
 			public void SetModeAddition()
 			{
 				DisableAll();

@@ -28,7 +28,6 @@ namespace West
 			private View.NodeTextualDetails details = null;
 			public Model.ConstellationPreset Model { get; private set; } = null;
 			private Mode mode;
-			private PresetPreview preview = null;
 
 			public PresetColumn(
 				View.PresetColumn view_,
@@ -50,6 +49,11 @@ namespace West
 				view.StartedEvent += ViewStarted;
 			}
 
+			~PresetColumn()
+			{
+				Debug.Log("~PresetColumn()");
+			}
+
 			private void ViewStarted()
 			{
 				if (Model == null)
@@ -64,12 +68,12 @@ namespace West
 					if (mode == Mode.Display)
 					{
 						view.SetModeDisplay(Model.Name);
-						preview = new PresetPreview(view.presetPreview, details, Model, false);
+						view.gameObject.AddComponent<PresetPreview>().Setup(view.presetPreview, details, Model, false);
 					}
 					else
 					{
 						view.SetModeEdit(Model.Name);
-						preview = new PresetPreview(view.presetPreview, details, Model, true);
+						view.gameObject.AddComponent<PresetPreview>().Setup(view.presetPreview, details, Model, true);
 					}
 				}
 			}
