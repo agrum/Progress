@@ -12,12 +12,15 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1147,6 +1150,7 @@
     <Compile Include="Assets\Scripts\Model\ConstellationPreset.cs" />
     <Compile Include="Assets\Scripts\Model\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
+    <Compile Include="Assets\Scripts\Model\HoveredNode.cs" />
     <Compile Include="Assets\Scripts\Model\Keybinding.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\Nexus.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\NexusManager.cs" />
@@ -1176,6 +1180,7 @@
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\INode.cs" />
     <Compile Include="Assets\Scripts\View\Constellation.cs" />
     <Compile Include="Assets\Scripts\View\Node.cs" />
     <Compile Include="Assets\Scripts\View\NodeTextualDetails.cs" />
@@ -1240,6 +1245,7 @@
     <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
     <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

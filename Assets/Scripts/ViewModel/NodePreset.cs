@@ -1,81 +1,113 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
-namespace West
+namespace West.ViewModel
 {
-	namespace ViewModel
+	public class NodePreset : INode
 	{
-		public class NodePreset
+		public event OnVoidChanged SkillChanged = delegate { };
+		public event OnBoolChanged SelectionChanged = delegate { };
+		public event OnFloatChanged ScaleChanged = delegate { };
+
+		private Model.Skill skill;
+		private Model.ConstellationPreset preset;
+		private Model.HoveredSkill hovered;
+		private Model.Skill.TypeEnum type;
+		private int index;
+
+		private bool canEdit;
+		private Material mat;
+		private Vector2 position;
+		private float scale = 1.0f;
+
+		public NodePreset(
+			Model.Skill skill_,
+			Model.ConstellationPreset preset_,
+			Model.HoveredSkill hovered_,
+			Model.Skill.TypeEnum type_,
+			int index_,
+			bool canEdit_, 
+			Material mat_, 
+			Vector2 position_)
 		{
-			private View.Node viewNode;
-			private View.NodeTextualDetails viewDetails;
-			private Model.ConstellationNode modelNode;
-			private Model.ConstellationPreset modelPreset;
-			private bool canEdit;
-			private Material mat;
-			private Vector2 position;
-			private float scale = 1.0f;
+			Debug.Assert(preset_ != null);
+			Debug.Assert(mat_ != null);
 
-			public NodePreset(
-				View.Node viewNode_, 
-				View.NodeTextualDetails viewDetails_,
-				Model.ConstellationNode modelNode_,
-				Model.ConstellationPreset modelPreset_, 
-				bool canEdit_, 
-				Material mat_, 
-				Vector2 position_)
+			skill = skill_;
+			preset = preset_;
+			hovered = hovered_;
+			type = type_;
+			index = index_;
+			canEdit = canEdit_;
+			mat = mat_;
+			position = position_;
+
+			preset.presetUpdateEvent += PresetUpdated;
+		}
+
+		~NodePreset()
+		{
+			preset.presetUpdateEvent -= PresetUpdated;
+
+			SkillChanged = null;
+			SelectionChanged = null;
+			ScaleChanged = null;
+		}
+
+
+		public void PresetUpdated()
+		{
+			List<Model.Skill> list = null;
+			switch (type)
 			{
-				Debug.Assert(viewNode_ != null);
-				Debug.Assert(modelPreset_ != null);
-				Debug.Assert(mat_ != null);
-
-				viewNode = viewNode_;
-				viewDetails = viewDetails_;
-				modelPreset = modelPreset_;
-				canEdit = canEdit_;
-				mat = mat_;
-				position = position_;
-				
-				viewNode.hoveredEvent += Hovered;
-				viewNode.clickedEvent += Clicked;
-
-				UpdateNode(modelNode_);
+				case Model.Skill.TypeEnum.Ability:
+					list = preset.SelectedAbilityList;
+					break;
+				case Model.Skill.TypeEnum.Class:
+					list = preset.SelectedClassList;
+					break;
+				case Model.Skill.TypeEnum.Kit:
+					list = preset.SelectedKitList;
+					break;
 			}
 
-			~NodePreset()
-			{
-				viewNode.hoveredEvent -= Hovered;
-				viewNode.clickedEvent -= Clicked;
-			}
+			skill = list[index];
+			SkillChanged();
+		}
 
-			public void UpdateNode(Model.ConstellationNode modelNode_)
-			{
-				modelNode = modelNode_;
+		public string IconPath()
+		{
+			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
+		}
 
-				viewNode.Setup(
-					modelNode == null ? null : "Icons/" + modelNode.Skill.UpperCamelCaseKey + "/" + modelNode.Skill.Json["name"],
-					mat,
-					position);
-			}
+		public Material Mat()
+		{
+			return mat;
+		}
 
-			public virtual void Scale(float scale_)
-			{
-				scale = scale_;
-				viewNode.Scale(scale);
-			}
+		public Vector2 Position()
+		{
+			return position;
+		}
 
-			public void Hovered(bool on)
-			{
-				if (viewDetails != null)
-					viewDetails.Setup((on && modelNode != null) ? modelNode.Skill : null, mat);
-			}
+		public virtual void Scale(float scale_)
+		{
+			scale = scale_;
+			ScaleChanged(scale);
+		}
 
-			public void Clicked()
+		public void Hovered(bool on)
+		{
+			hovered.Skill = (on && skill != null) ? skill : null;
+		}
+
+		public void Clicked()
+		{
+			if (canEdit && skill != null)
 			{
-				if (canEdit && modelNode != null)
-				{
-					modelPreset.Remove(modelNode.Skill);
-					UpdateNode(null);
-				}
+				preset.Remove(skill);
+				skill = null;
+				SkillChanged();
 			}
 		}
 	}

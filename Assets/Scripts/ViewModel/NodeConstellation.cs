@@ -2,101 +2,109 @@
 using System.Collections.Generic;
 using System;
 
-namespace West
+namespace West.ViewModel
 {
-	namespace ViewModel
+	public class NodeConstellation : INode
 	{
-		public class NodeConstellation
+		public event OnVoidChanged SkillChanged = delegate { };
+		public event OnBoolChanged SelectionChanged = delegate { };
+		public event OnFloatChanged ScaleChanged = delegate { };
+
+		private Model.Skill skill;
+		private Model.ConstellationPreset preset;
+		private Model.HoveredSkill hovered;
+
+		private Material mat;
+		private Vector2 position;
+		private float scale = 1.0f;
+
+		public NodeConstellation(
+			Model.Skill skill_,
+			Model.ConstellationPreset preset_,
+			Model.HoveredSkill hovered_,
+			Material mat_,
+			Vector2 position_)
 		{
-			private View.Node viewNode;
-			private View.NodeTextualDetails viewDetails;
-			private Model.ConstellationNode modelNode;
-			private Model.ConstellationPreset modelPreset;
-			private Material mat;
-			private Vector2 position;
-			private float scale = 1.0f;
+			Debug.Assert(skill_ != null);
+			Debug.Assert(preset_ != null);
+			Debug.Assert(hovered_ != null);
+			Debug.Assert(mat_ != null);
 
-			public NodeConstellation(
-				View.Node viewNode_,
-				View.NodeTextualDetails viewDetails_,
-				Model.ConstellationNode modelNode_,
-				Model.ConstellationPreset modelPreset_,
-				Material mat_,
-				Vector2 position_)
+			skill = skill_;
+			preset = preset_;
+			hovered = hovered_;
+			mat = mat_;
+			position = position_;
+			
+			preset.presetUpdateEvent += PresetUpdated;
+		}
+
+		~NodeConstellation()
+		{
+			preset.presetUpdateEvent -= PresetUpdated;
+
+			SkillChanged = null;
+			SelectionChanged = null;
+			ScaleChanged = null;
+		}
+
+		public void PresetUpdated()
+		{
+			List<Model.Skill> list = null;
+			switch (skill.Type)
 			{
-				Debug.Assert(viewNode_ != null);
-				Debug.Assert(modelNode_ != null);
-				Debug.Assert(modelPreset_ != null);
-				Debug.Assert(mat_ != null);
-
-				viewNode = viewNode_;
-				viewDetails = viewDetails_;
-				modelNode = modelNode_;
-				modelPreset = modelPreset_;
-				mat = mat_;
-				position = position_;
-
-				viewNode.hoveredEvent += Hovered;
-				viewNode.clickedEvent += Clicked;
-				modelPreset.presetUpdateEvent += PresetUpdated;
-
-				viewNode.Setup(
-					modelNode == null ? null : "Icons/" + modelNode.Skill.UpperCamelCaseKey + "/" + modelNode.Skill.Json["name"],
-					mat,
-					position);
-				PresetUpdated();
+				case Model.Skill.TypeEnum.Ability:
+					list = preset.SelectedAbilityList;
+					break;
+				case Model.Skill.TypeEnum.Class:
+					list = preset.SelectedClassList;
+					break;
+				case Model.Skill.TypeEnum.Kit:
+					list = preset.SelectedKitList;
+					break;
 			}
 
-			~NodeConstellation()
+			SelectionChanged(list.Contains(skill));
+		}
+
+		public string IconPath()
+		{
+			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
+		}
+
+		public Material Mat()
+		{
+			return mat;
+		}
+
+		public Vector2 Position()
+		{
+			return position;
+		}
+
+		public virtual void Scale(float scale_)
+		{
+			scale = scale_;
+			ScaleChanged(scale);
+		}
+
+		public void Hovered(bool on)
+		{
+			hovered.Skill = (on && skill != null) ? skill : null;
+		}
+
+		public void Clicked()
+		{
+			try
 			{
-				viewNode.hoveredEvent -= Hovered;
-				viewNode.clickedEvent -= Clicked;
+				if (preset.Has(skill))
+					preset.Remove(skill);
+				else
+					preset.Add(skill);
 			}
-
-			public void PresetUpdated()
+			catch (Exception)
 			{
-				List<Model.Skill> list = null;
-				switch (modelNode.Skill.Type)
-				{
-					case Model.Skill.TypeEnum.Ability:
-						list = modelPreset.SelectedAbilityList;
-						break;
-					case Model.Skill.TypeEnum.Class:
-						list = modelPreset.SelectedClassList;
-						break;
-					case Model.Skill.TypeEnum.Kit:
-						list = modelPreset.SelectedKitList;
-						break;
-				}
-
-				viewNode.Selected = list.Contains(modelNode.Skill);
-			}
-
-			public virtual void Scale(float scale_)
-			{
-				scale = scale_;
-				viewNode.Scale(scale);
-			}
-
-			public void Hovered(bool on)
-			{
-				if (viewDetails != null)
-					viewDetails.Setup((on && modelNode != null) ? modelNode.Skill : null, mat);
-			}
-
-			public void Clicked()
-			{
-				try
-				{
-					if (modelPreset.Has(modelNode.Skill))
-						modelPreset.Remove(modelNode.Skill);
-					else
-						modelPreset.Add(modelNode.Skill);
-				}
-				catch (Exception)
-				{
-					Debug.Log("ViewModel.NodeConstellation.Clicked()");
-				}
+				Debug.Log("ViewModel.NodeConstellation.Clicked()");
 			}
 		}
 	}

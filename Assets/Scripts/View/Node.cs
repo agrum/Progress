@@ -1,25 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using SimpleJSON;
 
 namespace West
 {
 	namespace View
 	{
 		public class Node : Selectable
-		{
-			public delegate void OnClickedDelegate();
-			public event OnClickedDelegate clickedEvent;
-			public delegate void OnHoveredDelegate(bool hovered);
-			public event OnHoveredDelegate hoveredEvent;
-			
-			private string iconPath = null;
-			private Material mat = null;
-			private Vector2 position;
+		{			
+			private ViewModel.INode viewModel = null;
 			protected Vector2 positionMultiplier = new Vector2();
 
 			private readonly int enterHash = Animator.StringToHash("Enter");
@@ -52,17 +42,17 @@ namespace West
 
 			override protected void OnDestroy()
 			{
-				clickedEvent = null;
-				hoveredEvent = null;
-
 				base.OnDestroy();
 			}
 
-			public void Setup(string iconPath_, Material mat_, Vector2 position_)
+			public void SetContext(ViewModel.INode viewModel_)
 			{
-				iconPath = iconPath_;
-				mat = mat_;
-				position = position_;
+				Debug.Assert(viewModel_ != null);
+
+				viewModel = viewModel_;
+				viewModel.SkillChanged += SkillUpdated;
+				viewModel.ScaleChanged += Scale;
+				viewModel.SelectionChanged += Selection;
 
 				childTranform = gameObject.transform.Find("GameObject");
 				stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
@@ -73,21 +63,26 @@ namespace West
 
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
-				
+
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 
 				Scale(1.0f);
 
-				stroke.material = mat;
-				pulse.material = mat;
-				fill.material = mat;
-				icon.material = mat;
+				stroke.material = viewModel.Mat();
+				pulse.material = viewModel.Mat();
+				fill.material = viewModel.Mat();
+				icon.material = viewModel.Mat();
 
-				if (iconPath_ != null)
+				SkillUpdated();
+			}
+
+			public void SkillUpdated()
+			{
+				if (viewModel.IconPath() != null)
 				{
 					//string path = "Icons/" + viewModel.Skill().UpperCamelCaseKey + "/" + viewModel.Skill().Json["name"];
-					UnityEngine.Object prefabObject = Resources.Load(iconPath);
+					UnityEngine.Object prefabObject = Resources.Load(viewModel.IconPath());
 					Texture2D texture = prefabObject as Texture2D;
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
 
@@ -99,43 +94,36 @@ namespace West
 				}
 				else
 				{
-					Selected = false;
+					Selection(false);
 					pulse.gameObject.SetActive(false);
 					icon.gameObject.SetActive(false);
 					iconWhite.gameObject.SetActive(false);
 				}
 			}
 
-			public virtual void Scale(float scale_)
+			public void Scale(float scale_)
 			{
-				gameObject.transform.localPosition = new Vector3(position.x * positionMultiplier.x, position.y * positionMultiplier.y, 0) * scale_; ;
+				gameObject.transform.localPosition = new Vector3(viewModel.Position().x * positionMultiplier.x, viewModel.Position().y * positionMultiplier.y, 0) * scale_; ;
 				gameObject.transform.localScale = Vector3.one * scale_;
 				gameObject.transform.localRotation = Quaternion.identity;
 			}
 
-			public bool Selected
+			public void Selection(bool selected_)
 			{
-				get
+				bool oldValue = isSelected;
+				isSelected = selected_;
+
+				if (!started)
+					return;
+
+				animator.ResetTrigger(unselectHash);
+				animator.ResetTrigger(selectHash);
+				animator.ResetTrigger(clickHash);
+
+				if (oldValue != isSelected)
 				{
-					return isSelected;
-				}
-				set
-				{
-					bool oldValue = isSelected;
-					isSelected = value;
-
-					if (!started)
-						return;
-
-					animator.ResetTrigger(unselectHash);
-					animator.ResetTrigger(selectHash);
-					animator.ResetTrigger(clickHash);
-
-					if (oldValue != isSelected)
-					{
-						animator.SetTrigger(clickHash);
-						animator.SetTrigger(isSelected ? selectHash : unselectHash);
-					}
+					animator.SetTrigger(clickHash);
+					animator.SetTrigger(isSelected ? selectHash : unselectHash);
 				}
 			}
 
@@ -143,19 +131,19 @@ namespace West
 			{
 				animator.ResetTrigger(leaveHash);
 				animator.SetTrigger(enterHash);
-				hoveredEvent(true);
+				viewModel.Hovered(true);
 			}
 
 			override public void OnPointerExit(PointerEventData eventData)
 			{
 				animator.ResetTrigger(enterHash);
 				animator.SetTrigger(leaveHash);
-				hoveredEvent(false);
+				viewModel.Hovered(false);
 			}
 
 			override public void OnPointerUp(PointerEventData eventData)
 			{
-				clickedEvent();
+				viewModel.Clicked();
 			}
 		}
 	}

@@ -26,7 +26,7 @@ namespace West
 			private Vector2 sizeInt = new Vector2();
 			private Vector2 size = new Vector2();
 			private int nodeAdded = 0;
-			
+
 			public void Setup(
 				View.PresetPreview viewPresetPreview,
 				View.NodeTextualDetails nodeTextualDetails_,
