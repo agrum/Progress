@@ -17,6 +17,7 @@ namespace West
 			public Button backButton = null;
 
 			private List<ViewModel.PresetColumn> presetColumnList = new List<ViewModel.PresetColumn>();
+			private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
 			void Start()
 			{

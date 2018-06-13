@@ -9,21 +9,21 @@ namespace West.ViewModel
 		public event OnBoolChanged SelectionChanged = delegate { };
 		public event OnFloatChanged ScaleChanged = delegate { };
 
-		private Model.Skill skill;
+		private Model.Skill skill = null;
 		private Model.ConstellationPreset preset;
 		private Model.HoveredSkill hovered;
+		private Model.Json scale;
 		private Model.Skill.TypeEnum type;
 		private int index;
 
 		private bool canEdit;
 		private Material mat;
 		private Vector2 position;
-		private float scale = 1.0f;
 
 		public NodePreset(
-			Model.Skill skill_,
 			Model.ConstellationPreset preset_,
 			Model.HoveredSkill hovered_,
+			Model.Json scale_,
 			Model.Skill.TypeEnum type_,
 			int index_,
 			bool canEdit_, 
@@ -32,10 +32,10 @@ namespace West.ViewModel
 		{
 			Debug.Assert(preset_ != null);
 			Debug.Assert(mat_ != null);
-
-			skill = skill_;
+			
 			preset = preset_;
 			hovered = hovered_;
+			scale = scale_;
 			type = type_;
 			index = index_;
 			canEdit = canEdit_;
@@ -43,17 +43,20 @@ namespace West.ViewModel
 			position = position_;
 
 			preset.presetUpdateEvent += PresetUpdated;
+			scale.ChangedEvent += ScaleUpdated;
+
+			PresetUpdated();
 		}
 
 		~NodePreset()
 		{
 			preset.presetUpdateEvent -= PresetUpdated;
+			scale.ChangedEvent -= ScaleUpdated;
 
 			SkillChanged = null;
 			SelectionChanged = null;
 			ScaleChanged = null;
 		}
-
 
 		public void PresetUpdated()
 		{
@@ -71,8 +74,20 @@ namespace West.ViewModel
 					break;
 			}
 
-			skill = list[index];
-			SkillChanged();
+			Model.Skill newSkill = null;
+			if (list.Count > index)
+				newSkill = list[index];
+
+			if (newSkill != skill)
+			{
+				skill = newSkill;
+				SkillChanged();
+			}
+		}
+
+		public virtual void ScaleUpdated(string key)
+		{
+			ScaleChanged((float) scale["scale"].AsDouble);
 		}
 
 		public string IconPath()
@@ -90,15 +105,10 @@ namespace West.ViewModel
 			return position;
 		}
 
-		public virtual void Scale(float scale_)
-		{
-			scale = scale_;
-			ScaleChanged(scale);
-		}
-
 		public void Hovered(bool on)
 		{
-			hovered.Skill = (on && skill != null) ? skill : null;
+			if (hovered != null)
+				hovered.Skill = (on && skill != null) ? skill : null;
 		}
 
 		public void Clicked()

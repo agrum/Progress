@@ -43,6 +43,14 @@ namespace West
 			override protected void OnDestroy()
 			{
 				base.OnDestroy();
+
+				if (viewModel != null)
+				{
+					viewModel.SkillChanged -= SkillUpdated;
+					viewModel.ScaleChanged -= Scale;
+					viewModel.SelectionChanged -= Selection;
+					viewModel = null;
+				}
 			}
 
 			public void SetContext(ViewModel.INode viewModel_)
@@ -81,7 +89,6 @@ namespace West
 			{
 				if (viewModel.IconPath() != null)
 				{
-					//string path = "Icons/" + viewModel.Skill().UpperCamelCaseKey + "/" + viewModel.Skill().Json["name"];
 					UnityEngine.Object prefabObject = Resources.Load(viewModel.IconPath());
 					Texture2D texture = prefabObject as Texture2D;
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);

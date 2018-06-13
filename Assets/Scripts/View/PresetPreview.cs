@@ -16,8 +16,18 @@ namespace West
 			public delegate void OnSizeChangedDelegate();
 			public event OnSizeChangedDelegate SizeChangedEvent = delegate { };
 
+			private ViewModel.PresetPreview viewModel;
+
 			private RectTransform rectTransform = null;
 			private Rect lastRect = new Rect();
+
+			public void SetContext(ViewModel.PresetPreview viewModel_)
+			{
+				Debug.Assert(viewModel_ != null);
+
+				viewModel = viewModel_;
+				viewModel.AttachChild += AttachChild;
+			}
 
 			void Start()
 			{
@@ -33,11 +43,15 @@ namespace West
 				}
 			}
 
-			public GameObject Add(GameObject prefab)
+			void OnDestroy()
 			{
-				GameObject gob = GameObject.Instantiate(prefab);
+				viewModel.AttachChild -= AttachChild;
+				viewModel = null;
+			}
+
+			public void AttachChild(GameObject gob)
+			{
 				gob.transform.SetParent(transform);
-				return gob;
 			}
 		}
 	}

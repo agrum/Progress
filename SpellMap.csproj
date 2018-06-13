@@ -1154,6 +1154,7 @@
     <Compile Include="Assets\Scripts\Model\Keybinding.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\Nexus.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\NexusManager.cs" />
+    <Compile Include="Assets\Scripts\Model\Json.cs" />
     <Compile Include="Assets\Scripts\Model\Player.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Armor.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\BurstShield.cs" />

@@ -15,17 +15,6 @@ namespace West
 	{
 		class PresetColumn : MonoBehaviour
 		{
-			public delegate void OnStartedDelegate();
-			public event OnStartedDelegate StartedEvent = delegate { };
-			public delegate void OnButtonClickedDelegate();
-			public event OnButtonClickedDelegate AddClickedEvent = delegate { };
-			public event OnButtonClickedDelegate EditClickedEvent = delegate { };
-			public event OnButtonClickedDelegate DeleteClickedEvent = delegate { };
-			public event OnButtonClickedDelegate ProceedClickedEvent = delegate { };
-			public event OnButtonClickedDelegate SaveClickedEvent = delegate { };
-			public delegate void OnInputFinishedDelegate(string text);
-			public event OnInputFinishedDelegate NameChanegdEvent = delegate { };
-
 			public PresetPreview presetPreview = null;
             public Button addButton = null;
 			public Button editButton = null;
@@ -35,9 +24,22 @@ namespace West
 			public Text nameText = null;
 			public InputField nameInput = null;
 
-			public Model.ConstellationPreset Model { get; private set; } = null;
+			private ViewModel.PresetColumn viewModel;
 
-            protected void Start()
+			public void SetContext(ViewModel.PresetColumn viewModel_)
+			{
+				Debug.Assert(viewModel_ != null);
+
+				viewModel = viewModel_;
+				viewModel.PresetDestroyed += DestroySelf;
+
+				presetPreview.SetContext(new ViewModel.PresetPreview(
+					viewModel.preset, 
+					viewModel.hovered, 
+					viewModel.mode == ViewModel.PresetColumn.Mode.Edit));
+			}
+
+            private void Start()
 			{
 				Debug.Assert(presetPreview != null);
                 Debug.Assert(addButton != null);
@@ -50,34 +52,38 @@ namespace West
 
 				DisableAll();
                 
-                addButton.onClick.AddListener(AddClicked);
-                editButton.onClick.AddListener(EditClicked);
-				deleteButton.onClick.AddListener(DeleteClicked);
-				proceedButton.onClick.AddListener(ProceedClicked);
-				saveButton.onClick.AddListener(SaveClicked);
-                nameInput.onEndEdit.AddListener(NameChanged);
+                addButton.onClick.AddListener(viewModel.AddClicked);
+                editButton.onClick.AddListener(viewModel.EditClicked);
+				deleteButton.onClick.AddListener(viewModel.DeleteClicked);
+				proceedButton.onClick.AddListener(viewModel.ProceedClicked);
+				saveButton.onClick.AddListener(viewModel.SaveClicked);
+                nameInput.onEndEdit.AddListener(viewModel.NameChanged);
 
-				StartedEvent();
+				if (viewModel.mode == ViewModel.PresetColumn.Mode.Addition)
+					SetModeAddition();
+				else if (viewModel.mode == ViewModel.PresetColumn.Mode.Display)
+					SetModeDisplay(viewModel.preset.Name);
+				else
+					SetModeEdit(viewModel.preset.Name);
 			}
-
-			void OnDestroy()
+			
+			private void DestroySelf()
 			{
-				StartedEvent = null;
-				AddClickedEvent = null;
-				EditClickedEvent = null;
-				DeleteClickedEvent = null;
-				ProceedClickedEvent = null;
-				SaveClickedEvent = null;
-				NameChanegdEvent = null;
+				Destroy(gameObject);
 			}
 
-			public void SetModeAddition()
+			private void OnDestroy()
+			{
+				viewModel = null;
+			}
+
+			private void SetModeAddition()
 			{
 				DisableAll();
 				addButton.gameObject.SetActive(true);
 			}
 
-			public void SetModeDisplay(string name)
+			private void SetModeDisplay(string name)
 			{
 				DisableAll();
 				nameText.text = name;
@@ -88,7 +94,7 @@ namespace West
 				proceedButton.gameObject.SetActive(true);
 			}
 
-			public void SetModeEdit(string name)
+			private void SetModeEdit(string name)
 			{
 				DisableAll();
 				nameInput.text = name;
@@ -97,7 +103,7 @@ namespace West
 				saveButton.gameObject.SetActive(true);
 			}
 
-			public void DisableAll()
+			private void DisableAll()
 			{
 				presetPreview.gameObject.SetActive(false);
 				addButton.gameObject.SetActive(false);
@@ -108,36 +114,6 @@ namespace West
 				nameText.gameObject.SetActive(false);
 				nameInput.gameObject.SetActive(false);
             }
-
-            private void AddClicked()
-            {
-				AddClickedEvent();
-            }
-
-            private void EditClicked()
-			{
-				EditClickedEvent();
-            }
-
-			private void DeleteClicked()
-			{
-				DeleteClickedEvent();
-			}
-
-			private void ProceedClicked()
-			{
-				ProceedClickedEvent();
-			}
-
-			private void SaveClicked()
-			{
-				SaveClickedEvent();
-			}
-
-            private void NameChanged(string newName)
-			{
-				NameChanegdEvent(newName);
-			}
 		}
 	}
 }

@@ -13,15 +13,16 @@ namespace West.ViewModel
 		private Model.Skill skill;
 		private Model.ConstellationPreset preset;
 		private Model.HoveredSkill hovered;
+		private Model.Json scale;
 
 		private Material mat;
 		private Vector2 position;
-		private float scale = 1.0f;
 
 		public NodeConstellation(
 			Model.Skill skill_,
 			Model.ConstellationPreset preset_,
 			Model.HoveredSkill hovered_,
+			Model.Json scale_,
 			Material mat_,
 			Vector2 position_)
 		{
@@ -33,15 +34,18 @@ namespace West.ViewModel
 			skill = skill_;
 			preset = preset_;
 			hovered = hovered_;
+			scale = scale_;
 			mat = mat_;
 			position = position_;
 			
 			preset.presetUpdateEvent += PresetUpdated;
+			scale.ChangedEvent += ScaleUpdated;
 		}
 
 		~NodeConstellation()
 		{
 			preset.presetUpdateEvent -= PresetUpdated;
+			scale.ChangedEvent -= ScaleUpdated;
 
 			SkillChanged = null;
 			SelectionChanged = null;
@@ -67,6 +71,11 @@ namespace West.ViewModel
 			SelectionChanged(list.Contains(skill));
 		}
 
+		public virtual void ScaleUpdated(string key)
+		{
+			ScaleChanged((float)scale["scale"].AsDouble);
+		}
+
 		public string IconPath()
 		{
 			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
@@ -80,12 +89,6 @@ namespace West.ViewModel
 		public Vector2 Position()
 		{
 			return position;
-		}
-
-		public virtual void Scale(float scale_)
-		{
-			scale = scale_;
-			ScaleChanged(scale);
 		}
 
 		public void Hovered(bool on)

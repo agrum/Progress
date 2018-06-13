@@ -17,36 +17,27 @@ namespace West
 		{
 			public enum Mode
 			{
+				Addition,
 				Display,
 				Edit
 			}
+			public event OnVoidDelegate PresetDestroyed = delegate { };
 
 			public delegate void OnColumnDestroyedDelegate(PresetColumn column_);
 			public event OnColumnDestroyedDelegate ColumnDestroyedEvent;
-
-			private View.PresetColumn view = null;
-			private View.NodeTextualDetails details = null;
-			public Model.ConstellationPreset Model { get; private set; } = null;
-			private Mode mode;
+			
+			public Model.ConstellationPreset preset;
+			public Model.HoveredSkill hovered;
+			public Mode mode;
 
 			public PresetColumn(
-				View.PresetColumn view_,
-				View.NodeTextualDetails nodeTextualDetails_,
 				Model.ConstellationPreset model_,
+				Model.HoveredSkill hovered_,
 				Mode mode_)
 			{
-				view = view_;
-				details = nodeTextualDetails_;
-				Model = model_;
+				preset = model_;
+				hovered = hovered_;
 				mode = mode_;
-
-				view.AddClickedEvent += AddClicked;
-				view.EditClickedEvent += EditClicked;
-				view.DeleteClickedEvent += DeleteClicked;
-				view.ProceedClickedEvent += ProceedClicked;
-				view.SaveClickedEvent += SaveClicked;
-				view.NameChanegdEvent += NameChanged;
-				view.StartedEvent += ViewStarted;
 			}
 
 			~PresetColumn()
@@ -54,89 +45,50 @@ namespace West
 				Debug.Log("~PresetColumn()");
 			}
 
-			private void ViewStarted()
+			public void AddClicked()
 			{
-				if (Model == null)
-				{
-					if (mode == Mode.Display)
-						view.SetModeAddition();
-					else
-						Debug.Log("PresetColumn.Setup() not supported");
-				}
-				else
-				{
-					if (mode == Mode.Display)
-					{
-						view.SetModeDisplay(Model.Name);
-						view.gameObject.AddComponent<PresetPreview>().Setup(view.presetPreview, details, Model, false);
-					}
-					else
-					{
-						view.SetModeEdit(Model.Name);
-						view.gameObject.AddComponent<PresetPreview>().Setup(view.presetPreview, details, Model, true);
-					}
-				}
-			}
-
-			private void AddClicked()
-			{
-				view.DisableAll();
 				App.Content.Account.AddPreset((Model.ConstellationPreset preset_) =>
 				{
-					Model = preset_;
+					preset = preset_;
 					EditClicked();
 				});
 			}
 
-			private void EditClicked()
+			public void EditClicked()
 			{
-				view.DisableAll();
-				if (!App.Content.Account.PresetList.Contains(Model))
+				if (!App.Content.Account.PresetList.Contains(preset))
 					return;
 
-				Scene.PresetEditor.Model = Model;
+				Scene.PresetEditor.Model = preset;
 				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
 				SceneManager.LoadScene("PresetEditor");
 			}
 
-			private void DeleteClicked()
+			public void DeleteClicked()
 			{
-				view.DisableAll();
-				App.Content.Account.RemovePreset(Model, () =>
+				App.Content.Account.RemovePreset(preset, () =>
 				{
-					view.AddClickedEvent -= AddClicked;
-					view.EditClickedEvent -= EditClicked;
-					view.DeleteClickedEvent -= DeleteClicked;
-					view.ProceedClickedEvent -= ProceedClicked;
-					view.SaveClickedEvent -= SaveClicked;
-					view.NameChanegdEvent -= NameChanged;
-					view.StartedEvent -= ViewStarted;
-					view.transform.SetParent(null, false);
-					GameObject.Destroy(view.gameObject);
-					view = null;
-
-					ColumnDestroyedEvent(this);
+					PresetDestroyed();
 				});
 			}
 
-			private void ProceedClicked()
+			public void ProceedClicked()
 			{
 				//nothing yet
 			}
 
-			private void SaveClicked()
+			public void SaveClicked()
 			{
-				view.DisableAll();
-				App.Content.Account.SavePreset(Model, () =>
+				App.Content.Account.SavePreset(preset, () =>
 				{
 					SceneManager.LoadScene("PresetSelection");
 					Scene.PresetEditor.Model = null;
 				});
 			}
 
-			private void NameChanged(string newName)
+			public void NameChanged(string newName)
 			{
-				Model.Name = newName;
+				preset.Name = newName;
 			}
 		}
 	}

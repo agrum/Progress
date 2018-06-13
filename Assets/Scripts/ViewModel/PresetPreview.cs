@@ -6,47 +6,39 @@ namespace West
 {
 	namespace ViewModel
 	{
-		public class PresetPreview : MonoBehaviour
+		public class PresetPreview
 		{
-			public View.PresetPreview view = null;
+			public event OnGameObjectDelegate AttachChild = delegate { };
 
-			private View.NodeTextualDetails nodeTextualDetails = null;
 			private Model.ConstellationPreset model = null;
+			private Model.HoveredSkill hoveredModel = null;
+			private Model.Json scaleModel = new Model.Json();
 			private bool canEdit = false;
 			private RectTransform canvas = null;
 			private GameObject prefab = null;
 			private Material abilityMaterial = null;
 			private Material classMaterial = null;
 			private Material kitMaterial = null;
-
-			private List<NodePreset> abilityNodeList = new List<NodePreset>();
-			private List<NodePreset> classNodeList = new List<NodePreset>();
-			private List<NodePreset> kitNodeList = new List<NodePreset>();
 			
 			private Vector2 sizeInt = new Vector2();
 			private Vector2 size = new Vector2();
 			private int nodeAdded = 0;
 
-			public void Setup(
-				View.PresetPreview viewPresetPreview,
-				View.NodeTextualDetails nodeTextualDetails_,
+			public PresetPreview(
 				Model.ConstellationPreset model_,
+				Model.HoveredSkill hoveredModel_,
 				bool canEdit_)
 			{
 				Debug.Assert(model_ != null);
-
-				view = viewPresetPreview;
-				nodeTextualDetails = nodeTextualDetails_;
+				
 				model = model_;
+				hoveredModel = hoveredModel_;
+				scaleModel["scale"] = 1.0;
 				canEdit = canEdit_;
-				canvas = view.GetComponent<RectTransform>();
 				prefab = App.Resource.Prefab.ConstellationNode;
 				abilityMaterial = App.Resource.Material.AbilityMaterial;
 				classMaterial = App.Resource.Material.ClassMaterial;
 				kitMaterial = App.Resource.Material.KitMaterial;
-
-				view.SizeChangedEvent += OnSizeChanged;
-				model.presetUpdateEvent += OnPresetUpdate;
 
 				sizeInt.x = 2;
 				sizeInt.y = App.Content.GameSettings.NumAbilities + App.Content.GameSettings.NumClasses + App.Content.GameSettings.NumKits;
@@ -59,96 +51,61 @@ namespace West
 					App.Content.GameSettings.NumAbilities,
 					model.Constellation.AbilityNodeList,
 					model.SelectedAbilityList,
-					abilityMaterial,
-					ref abilityNodeList);
+					Model.Skill.TypeEnum.Ability,
+					abilityMaterial);
 				PopulateNodes(
 					App.Content.GameSettings.NumKits,
 					model.Constellation.KitNodeList,
 					model.SelectedKitList,
-					kitMaterial,
-					ref kitNodeList);
+					Model.Skill.TypeEnum.Class,
+					kitMaterial);
 				PopulateNodes(
 					App.Content.GameSettings.NumClasses,
 					model.Constellation.ClassNodeList,
 					model.SelectedClassList,
-					classMaterial,
-					ref classNodeList);
+					Model.Skill.TypeEnum.Kit,
+					classMaterial);
 			}
 
-			public void OnDestroy()
+			~PresetPreview()
 			{
-				model.presetUpdateEvent -= OnPresetUpdate;
-				view.SizeChangedEvent -= OnSizeChanged;
+				AttachChild = null;
 			}
 
-			public void OnSizeChanged()
+			public void SizeChanged(Rect rect)
 			{
 				Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
-				float scale = Math.Min(
-					canvas.rect.width / ((size.x) * positionMultiplier.x),
-					canvas.rect.height / (2.0f * (size.y + 0.5f) * positionMultiplier.y));
-
-				foreach (var node in abilityNodeList)
-					node.Scale(scale);
-				foreach (var node in classNodeList)
-					node.Scale(scale);
-				foreach (var node in kitNodeList)
-					node.Scale(scale);
-			}
-			
-			private void OnPresetUpdate()
-			{
-				UpdateVisual(abilityNodeList, model.SelectedAbilityList, model.Constellation.AbilityNodeList);
-				UpdateVisual(classNodeList, model.SelectedClassList, model.Constellation.ClassNodeList);
-				UpdateVisual(kitNodeList, model.SelectedKitList, model.Constellation.KitNodeList);
+				scaleModel["scale"] = Math.Min(
+					rect.width / ((size.x) * positionMultiplier.x),
+					rect.height / (2.0f * (size.y + 0.5f) * positionMultiplier.y));
 			}
 			
 			private void PopulateNodes(
 				int amountNode_,
 				List<Model.ConstellationNode> nodeModelList_, 
 				List<Model.Skill> selectedSkillList_, 
-				Material nodeMaterial_, 
-				ref List<NodePreset> nodeList_)
+				Model.Skill.TypeEnum type_,
+				Material nodeMaterial_)
 			{
 				for (int i = 0; i < amountNode_; ++i)
 				{
-					GameObject gob = view.Add(prefab);
+					GameObject gob = GameObject.Instantiate(prefab);
+					AttachChild(gob);
 
 					Vector2 nodePosition = new Vector2(
 						-((float) (nodeAdded % sizeInt.x) - (size.x - 1.0f) / 2.0f),
 						-(nodeAdded - (size.y + 2.0f) / 2.0f));
-					View.Node node = gob.AddComponent<View.Node>();
-					nodeList_.Add(new NodePreset(
-						node,
-						nodeTextualDetails,
-						null,
+					gob.GetComponent<View.Node>().SetContext(new NodePreset(
 						model,
+						hoveredModel,
+						scaleModel,
+						type_,
+						i,
 						canEdit,
 						nodeMaterial_,
 						nodePosition));
 					++nodeAdded;
 				}
-
-				UpdateVisual(nodeList_, selectedSkillList_, nodeModelList_);
-			}
-
-			delegate Model.ConstellationNode getNodeOutOfSkill(Model.Skill skill_);
-			private void UpdateVisual(
-				List<NodePreset> nodeViewList_,
-				List<Model.Skill> selectedSkillList_,
-				List<Model.ConstellationNode> nodeModelList_)
-			{
-				getNodeOutOfSkill lambda = (Model.Skill skill_) =>
-				{
-					foreach (var nodeModel in nodeModelList_)
-						if (nodeModel.Skill == skill_)
-							return nodeModel;
-
-					return null;
-				};
-
-				for (int i = 0; i < nodeViewList_.Count; ++i)
-					nodeViewList_[i].UpdateNode((i < selectedSkillList_.Count) ? lambda(selectedSkillList_[i]) : null);
 			}
 		}
 	}

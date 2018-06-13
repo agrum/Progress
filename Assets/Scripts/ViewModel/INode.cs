@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
+using SimpleJSON;
 
 namespace West.ViewModel
 {
-	public delegate void OnVoidChanged();
-	public delegate void OnBoolChanged(bool value);
-	public delegate void OnFloatChanged(float value);
+	public delegate void OnVoidDelegate();
+	public delegate void OnBoolDelegate(bool value);
+	public delegate void OnFloatDelegate(float value);
+	public delegate void OnStringDelegate(string value);
+	public delegate void OnJsonDelegate(JSONNode value);
+	public delegate void OnGameObjectDelegate(GameObject obj);
 
 	public interface INode
 	{
-		event OnVoidChanged SkillChanged;
-		event OnBoolChanged SelectionChanged;
-		event OnFloatChanged ScaleChanged;
+		event OnVoidDelegate SkillChanged;
+		event OnBoolDelegate SelectionChanged;
+		event OnFloatDelegate ScaleChanged;
 
 		string IconPath();
 		Material Mat();
