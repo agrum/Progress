@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using SimpleJSON;
-using UnityEngine.SceneManagement;
 
 namespace West
 {
@@ -31,12 +23,9 @@ namespace West
 				Debug.Assert(viewModel_ != null);
 
 				viewModel = viewModel_;
-				viewModel.PresetDestroyed += DestroySelf;
+				viewModel.PresetDestroyed += OnPresetDestroyed;
 
-				presetPreview.SetContext(new ViewModel.PresetPreview(
-					viewModel.preset, 
-					viewModel.hovered, 
-					viewModel.mode == ViewModel.PresetColumn.Mode.Edit));
+				presetPreview.SetContext(viewModel.CreatePreviewContext());
 			}
 
             private void Start()
@@ -67,13 +56,14 @@ namespace West
 					SetModeEdit(viewModel.preset.Name);
 			}
 			
-			private void DestroySelf()
+			private void OnPresetDestroyed()
 			{
 				Destroy(gameObject);
 			}
 
 			private void OnDestroy()
 			{
+				viewModel.PresetDestroyed -= OnPresetDestroyed;
 				viewModel = null;
 			}
 

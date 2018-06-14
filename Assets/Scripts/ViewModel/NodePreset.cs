@@ -5,9 +5,9 @@ namespace West.ViewModel
 {
 	public class NodePreset : INode
 	{
-		public event OnVoidChanged SkillChanged = delegate { };
-		public event OnBoolChanged SelectionChanged = delegate { };
-		public event OnFloatChanged ScaleChanged = delegate { };
+		public event OnVoidDelegate SkillChanged = delegate { };
+		public event OnBoolDelegate SelectionChanged = delegate { };
+		public event OnFloatDelegate ScaleChanged = delegate { };
 
 		private Model.Skill skill = null;
 		private Model.ConstellationPreset preset;

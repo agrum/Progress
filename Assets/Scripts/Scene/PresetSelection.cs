@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -15,8 +14,7 @@ namespace West
 			public HorizontalLayoutGroup horizontalLayout = null;
 			public GameObject presetColumnPrefab = null;
 			public Button backButton = null;
-
-			private List<ViewModel.PresetColumn> presetColumnList = new List<ViewModel.PresetColumn>();
+			
 			private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
 			void Start()
@@ -48,51 +46,56 @@ namespace West
 				foreach (var preset in App.Content.Account.PresetList)
 				{
 					GameObject gob = Instantiate(presetColumnPrefab);
+					gob.transform.SetParent(horizontalLayout.transform, false);
 					View.PresetColumn viewPresetColumn = gob.GetComponent<View.PresetColumn>();
-					viewPresetColumn.transform.SetParent(horizontalLayout.transform, false);
 
-					ViewModel.PresetColumn presetColumn = new ViewModel.PresetColumn(
-						viewPresetColumn,
-						nodeTextualDetails,
+					viewPresetColumn.SetContext(new ViewModel.PresetColumn(
 						preset,
-						ViewModel.PresetColumn.Mode.Display);
-					presetColumn.ColumnDestroyedEvent += OnPresetRemoved;
-					presetColumnList.Add(presetColumn);
+						hovered,
+						ViewModel.PresetColumn.Mode.Display));
 				}
 
 				//add empty column to add presets.
 				{
 					GameObject gob = Instantiate(presetColumnPrefab);
+					gob.transform.SetParent(horizontalLayout.transform, false);
 					View.PresetColumn viewPresetColumn = gob.GetComponent<View.PresetColumn>();
-					viewPresetColumn.transform.SetParent(horizontalLayout.transform, false);
 
-					ViewModel.PresetColumn presetColumn = new ViewModel.PresetColumn(
-						viewPresetColumn,
-						nodeTextualDetails,
+					viewPresetColumn.SetContext(new ViewModel.PresetColumn(
 						null,
-						ViewModel.PresetColumn.Mode.Display);
-					presetColumnList.Add(presetColumn);
+						hovered,
+						ViewModel.PresetColumn.Mode.Display));
 				}
 
 				ArrangeUI();
+
+				App.Content.Account.PresetAdded += OnPresetAdded;
+				App.Content.Account.PresetRemoved += OnPresetRemoved;
 
 				canvas.gameObject.SetActive(true);
 			}
 
 			void OnDestroy()
 			{
-				presetColumnList.Clear();
+				App.Content.Account.PresetAdded -= OnPresetAdded;
+				App.Content.Account.PresetRemoved -= OnPresetRemoved;
 			}
 
-            private void OnPresetRemoved(ViewModel.PresetColumn column_)
-            {
-                presetColumnList.Remove(column_);
-                ArrangeUI();
-            }
+			private void OnPresetAdded(Model.ConstellationPreset preset)
+			{
+				PresetEditor.Model = preset;
+				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+				SceneManager.LoadScene("PresetEditor");
+			}
 
-            private void ArrangeUI()
+			private void OnPresetRemoved(Model.ConstellationPreset preset)
+			{
+				ArrangeUI();
+			}
+
+			private void ArrangeUI()
             {
-                contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * presetColumnList.Count);
+                contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * (App.Content.Account.PresetList.Count + 1));
             }
 
             private void BackClicked()

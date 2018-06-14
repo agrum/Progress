@@ -1,94 +1,97 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
-using SimpleJSON;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace West
+namespace West.ViewModel
 {
-	namespace ViewModel
+	interface IPresetColumn
 	{
-		class PresetColumn
+		event OnVoidDelegate PresetDestroyed;
+	}
+
+	class PresetColumn : IPresetColumn
+	{
+		public enum Mode
 		{
-			public enum Mode
-			{
-				Addition,
-				Display,
-				Edit
-			}
-			public event OnVoidDelegate PresetDestroyed = delegate { };
-
-			public delegate void OnColumnDestroyedDelegate(PresetColumn column_);
-			public event OnColumnDestroyedDelegate ColumnDestroyedEvent;
+			Addition,
+			Display,
+			Edit
+		}
+		public event OnVoidDelegate PresetDestroyed = delegate { };
 			
-			public Model.ConstellationPreset preset;
-			public Model.HoveredSkill hovered;
-			public Mode mode;
+		public Model.ConstellationPreset preset;
+		public Model.HoveredSkill hovered;
+		public Mode mode;
 
-			public PresetColumn(
-				Model.ConstellationPreset model_,
-				Model.HoveredSkill hovered_,
-				Mode mode_)
+		public PresetColumn(
+			Model.ConstellationPreset model_,
+			Model.HoveredSkill hovered_,
+			Mode mode_)
+		{
+			preset = model_;
+			hovered = hovered_;
+			mode = mode_;
+
+			App.Content.Account.PresetRemoved += OnPresetRemoved;
+		}
+
+		~PresetColumn()
+		{
+			App.Content.Account.PresetRemoved -= OnPresetRemoved;
+		}
+
+		public IPresetPreview CreatePreviewContext()
+		{
+			return new PresetPreview(
+					preset,
+					hovered,
+					mode == Mode.Edit);
+		}
+
+		public void AddClicked()
+		{
+			App.Content.Account.AddPreset();
+		}
+
+		public void EditClicked()
+		{
+			if (!App.Content.Account.PresetList.Contains(preset))
+				return;
+
+			Scene.PresetEditor.Model = preset;
+			GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+			SceneManager.LoadScene("PresetEditor");
+		}
+
+		public void DeleteClicked()
+		{
+			App.Content.Account.RemovePreset(preset);
+		}
+
+		public void ProceedClicked()
+		{
+			//nothing yet
+		}
+
+		public void SaveClicked()
+		{
+			App.Content.Account.SavePreset(preset);
+			/*, () =>
 			{
-				preset = model_;
-				hovered = hovered_;
-				mode = mode_;
-			}
+				SceneManager.LoadScene("PresetSelection");
+				Scene.PresetEditor.Model = null;
+			});*/
+		}
 
-			~PresetColumn()
+		public void NameChanged(string newName)
+		{
+			preset.Name = newName;
+		}
+
+		private void OnPresetRemoved(Model.ConstellationPreset preset_)
+		{
+			if (preset == preset_)
 			{
-				Debug.Log("~PresetColumn()");
-			}
-
-			public void AddClicked()
-			{
-				App.Content.Account.AddPreset((Model.ConstellationPreset preset_) =>
-				{
-					preset = preset_;
-					EditClicked();
-				});
-			}
-
-			public void EditClicked()
-			{
-				if (!App.Content.Account.PresetList.Contains(preset))
-					return;
-
-				Scene.PresetEditor.Model = preset;
-				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
-				SceneManager.LoadScene("PresetEditor");
-			}
-
-			public void DeleteClicked()
-			{
-				App.Content.Account.RemovePreset(preset, () =>
-				{
-					PresetDestroyed();
-				});
-			}
-
-			public void ProceedClicked()
-			{
-				//nothing yet
-			}
-
-			public void SaveClicked()
-			{
-				App.Content.Account.SavePreset(preset, () =>
-				{
-					SceneManager.LoadScene("PresetSelection");
-					Scene.PresetEditor.Model = null;
-				});
-			}
-
-			public void NameChanged(string newName)
-			{
-				preset.Name = newName;
+				PresetDestroyed();
 			}
 		}
 	}

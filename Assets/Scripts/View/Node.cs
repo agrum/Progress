@@ -40,27 +40,14 @@ namespace West
 				base.Start();
 			}
 
-			override protected void OnDestroy()
-			{
-				base.OnDestroy();
-
-				if (viewModel != null)
-				{
-					viewModel.SkillChanged -= SkillUpdated;
-					viewModel.ScaleChanged -= Scale;
-					viewModel.SelectionChanged -= Selection;
-					viewModel = null;
-				}
-			}
-
 			public void SetContext(ViewModel.INode viewModel_)
 			{
 				Debug.Assert(viewModel_ != null);
 
 				viewModel = viewModel_;
-				viewModel.SkillChanged += SkillUpdated;
-				viewModel.ScaleChanged += Scale;
-				viewModel.SelectionChanged += Selection;
+				viewModel.SkillChanged += OnSkillChanged;
+				viewModel.ScaleChanged += OnScaleChanged;
+				viewModel.SelectionChanged += OnSelectionChanged;
 
 				childTranform = gameObject.transform.Find("GameObject");
 				stroke = childTranform.Find("HexagonStroke").GetComponent<Image>();
@@ -75,17 +62,30 @@ namespace West
 				positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 				positionMultiplier.y = 0.75f;
 
-				Scale(1.0f);
+				OnScaleChanged(1.0f);
 
 				stroke.material = viewModel.Mat();
 				pulse.material = viewModel.Mat();
 				fill.material = viewModel.Mat();
 				icon.material = viewModel.Mat();
 
-				SkillUpdated();
+				OnSkillChanged();
 			}
 
-			public void SkillUpdated()
+			override protected void OnDestroy()
+			{
+				base.OnDestroy();
+
+				if (viewModel != null)
+				{
+					viewModel.SkillChanged -= OnSkillChanged;
+					viewModel.ScaleChanged -= OnScaleChanged;
+					viewModel.SelectionChanged -= OnSelectionChanged;
+					viewModel = null;
+				}
+			}
+
+			public void OnSkillChanged()
 			{
 				if (viewModel.IconPath() != null)
 				{
@@ -101,21 +101,21 @@ namespace West
 				}
 				else
 				{
-					Selection(false);
+					OnSelectionChanged(false);
 					pulse.gameObject.SetActive(false);
 					icon.gameObject.SetActive(false);
 					iconWhite.gameObject.SetActive(false);
 				}
 			}
 
-			public void Scale(float scale_)
+			public void OnScaleChanged(float scale_)
 			{
 				gameObject.transform.localPosition = new Vector3(viewModel.Position().x * positionMultiplier.x, viewModel.Position().y * positionMultiplier.y, 0) * scale_; ;
 				gameObject.transform.localScale = Vector3.one * scale_;
 				gameObject.transform.localRotation = Quaternion.identity;
 			}
 
-			public void Selection(bool selected_)
+			public void OnSelectionChanged(bool selected_)
 			{
 				bool oldValue = isSelected;
 				isSelected = selected_;

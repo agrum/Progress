@@ -21,7 +21,7 @@ namespace West
 			public List<Skill> SelectedKitList { get; private set; } = new List<Skill>();
 
 			public delegate void OnPresetUpdateDelegate();
-			public event OnPresetUpdateDelegate presetUpdateEvent;
+			public event OnPresetUpdateDelegate PresetUpdated;
 
 			public ConstellationPreset(JSONNode json)
 			{
@@ -74,7 +74,7 @@ namespace West
 				}
 
 				SelectedIndexList.Add(skill);
-				presetUpdateEvent();
+				PresetUpdated();
 			}
 
 			public void Remove(Skill skill)
@@ -166,7 +166,7 @@ namespace West
 				else*/
 					SelectedList.Remove(skill);
 
-				presetUpdateEvent();
+				PresetUpdated();
 			}
 
 			public bool Has(Skill skill)
@@ -207,7 +207,7 @@ namespace West
 				SelectedAbilityList.Clear();
 				SelectedClassList.Clear();
 				SelectedKitList.Clear();
-				presetUpdateEvent();
+				PresetUpdated();
 			}
 
             public JSONNode ToJson()

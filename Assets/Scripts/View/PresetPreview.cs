@@ -1,58 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimpleJSON;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
-namespace West
+namespace West.View
 {
-	namespace View
+	public class PresetPreview : MonoBehaviour
 	{
-		public class PresetPreview : MonoBehaviour
+		public delegate void OnSizeChangedDelegate();
+		public event OnSizeChangedDelegate SizeChangedEvent = delegate { };
+
+		private ViewModel.IPresetPreview viewModel;
+
+		private RectTransform rectTransform = null;
+		private Rect lastRect = new Rect();
+
+		public void SetContext(ViewModel.IPresetPreview viewModel_)
 		{
-			public delegate void OnSizeChangedDelegate();
-			public event OnSizeChangedDelegate SizeChangedEvent = delegate { };
+			Debug.Assert(viewModel_ != null);
 
-			private ViewModel.PresetPreview viewModel;
+			viewModel = viewModel_;
+			viewModel.NodeAdded += OnNodeAdded;
+		}
 
-			private RectTransform rectTransform = null;
-			private Rect lastRect = new Rect();
+		void Start()
+		{
+			rectTransform = GetComponent<RectTransform>();
+		}
 
-			public void SetContext(ViewModel.PresetPreview viewModel_)
+		void Update()
+		{
+			if (rectTransform && rectTransform.rect != lastRect)
 			{
-				Debug.Assert(viewModel_ != null);
-
-				viewModel = viewModel_;
-				viewModel.AttachChild += AttachChild;
+				lastRect = rectTransform.rect;
+				SizeChangedEvent();
 			}
+		}
 
-			void Start()
-			{
-				rectTransform = GetComponent<RectTransform>();
-			}
+		void OnDestroy()
+		{
+			viewModel.NodeAdded -= OnNodeAdded;
+			viewModel = null;
+		}
 
-			void Update()
-			{
-				if (rectTransform && rectTransform.rect != lastRect)
-				{
-					lastRect = rectTransform.rect;
-					SizeChangedEvent();
-				}
-			}
-
-			void OnDestroy()
-			{
-				viewModel.AttachChild -= AttachChild;
-				viewModel = null;
-			}
-
-			public void AttachChild(GameObject gob)
-			{
-				gob.transform.SetParent(transform);
-			}
+		public void OnNodeAdded(ViewModel.Factory factory)
+		{
+			GameObject gob = GameObject.Instantiate(App.Resource.Prefab.ConstellationNode);
+			gob.GetComponent<Node>().SetContext(factory() as ViewModel.INode);
+			gob.transform.SetParent(transform);
 		}
 	}
 }

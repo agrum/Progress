@@ -19,11 +19,13 @@ namespace West
 				public JSONNode Json { get; private set; } = null;
 				public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
 
-                public delegate void PresetAddedDelegate(ConstellationPreset preset_);
-                public delegate void PresetSavedDelegate();
-                public delegate void PresetRemovedDelegate();
+                public delegate void PresetDelegate(ConstellationPreset preset_);
+				public event PresetDelegate PresetAdded = delegate { };
+				public event PresetDelegate PresetSaved = delegate { };
+				public event PresetDelegate PresetRemoved = delegate { };
 
-                protected override void Build(OnBuilt onBuilt_)
+
+				protected override void Build(OnBuilt onBuilt_)
 				{
 					App.Server.Request(
 					HTTPMethods.Get,
@@ -47,7 +49,7 @@ namespace West
 					dependencyList.Add(constellationList_);
 				}
 
-				public void AddPreset(PresetAddedDelegate delegate_)
+				public void AddPreset()
 				{
 					JSONNode presetJson = new JSONObject();
 					presetJson["name"] = "Preset " + PresetList.Count;
@@ -65,13 +67,13 @@ namespace West
                             PresetList.Add(preset);
                             Json["presets"].AsArray.Add(json_);
 
-                            delegate_(preset);
+							PresetAdded(preset);
 						});
 					request.AddField("preset", presetJson.ToString());
 					request.Send();
                 }
 
-                public void SavePreset(ConstellationPreset preset_, PresetSavedDelegate callback)
+                public void SavePreset(ConstellationPreset preset_)
                 {
                     if (!PresetList.Contains(preset_))
                         return;
@@ -83,13 +85,13 @@ namespace West
                         "account/preset",
                         (JSONNode json_) =>
                         {
-                            callback();
+							PresetSaved(preset_);
                         });
                     request.AddField("preset", presetJson.ToString());
                     request.Send();
                 }
 
-                public void RemovePreset(ConstellationPreset preset_, PresetRemovedDelegate delegate_)
+                public void RemovePreset(ConstellationPreset preset_)
                 {
                     if (!PresetList.Contains(preset_))
                         return;
@@ -109,7 +111,7 @@ namespace West
                                 }
                             }
 
-                            delegate_();
+							PresetRemoved(preset_);
                         }).Send();
                 }
             }

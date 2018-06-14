@@ -3,14 +3,7 @@ using SimpleJSON;
 
 namespace West.ViewModel
 {
-	public delegate void OnVoidDelegate();
-	public delegate void OnBoolDelegate(bool value);
-	public delegate void OnFloatDelegate(float value);
-	public delegate void OnStringDelegate(string value);
-	public delegate void OnJsonDelegate(JSONNode value);
-	public delegate void OnGameObjectDelegate(GameObject obj);
-
-	public interface INode
+	public interface INode : IBase
 	{
 		event OnVoidDelegate SkillChanged;
 		event OnBoolDelegate SelectionChanged;
