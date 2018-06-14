@@ -7,7 +7,7 @@ namespace West
 	{
 		class PresetColumn : MonoBehaviour
 		{
-			public PresetPreview presetPreview = null;
+			public NodeMap presetPreview = null;
             public Button addButton = null;
 			public Button editButton = null;
 			public Button deleteButton = null;

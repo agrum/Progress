@@ -2,17 +2,14 @@
 
 namespace West.View
 {
-	public class PresetPreview : MonoBehaviour
+	public class NodeMap : MonoBehaviour
 	{
-		public delegate void OnSizeChangedDelegate();
-		public event OnSizeChangedDelegate SizeChangedEvent = delegate { };
-
-		private ViewModel.IPresetPreview viewModel;
+		private ViewModel.INodeMap viewModel;
 
 		private RectTransform rectTransform = null;
 		private Rect lastRect = new Rect();
 
-		public void SetContext(ViewModel.IPresetPreview viewModel_)
+		public void SetContext(ViewModel.INodeMap viewModel_)
 		{
 			Debug.Assert(viewModel_ != null);
 
@@ -30,7 +27,7 @@ namespace West.View
 			if (rectTransform && rectTransform.rect != lastRect)
 			{
 				lastRect = rectTransform.rect;
-				SizeChangedEvent();
+				viewModel.SizeChanged(lastRect);
 			}
 		}
 
@@ -42,7 +39,7 @@ namespace West.View
 
 		public void OnNodeAdded(ViewModel.Factory factory)
 		{
-			GameObject gob = GameObject.Instantiate(App.Resource.Prefab.ConstellationNode);
+			GameObject gob = Instantiate(App.Resource.Prefab.ConstellationNode);
 			gob.GetComponent<Node>().SetContext(factory() as ViewModel.INode);
 			gob.transform.SetParent(transform);
 		}

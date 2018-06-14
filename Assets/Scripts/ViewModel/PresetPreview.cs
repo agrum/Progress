@@ -4,12 +4,7 @@ using UnityEngine;
 
 namespace West.ViewModel
 {
-	public interface IPresetPreview : IBase
-	{
-		event OnElementAdded NodeAdded;
-	}
-
-	public class PresetPreview : IPresetPreview
+	public class PresetPreview : INodeMap
 	{
 		public event OnElementAdded NodeAdded = delegate { };
 
@@ -17,7 +12,6 @@ namespace West.ViewModel
 		private Model.HoveredSkill hoveredModel = null;
 		private Model.Json scaleModel = new Model.Json();
 		private bool canEdit = false;
-		private RectTransform canvas = null;
 		private Material abilityMaterial = null;
 		private Material classMaterial = null;
 		private Material kitMaterial = null;

@@ -39,7 +39,7 @@ namespace West.ViewModel
 			App.Content.Account.PresetRemoved -= OnPresetRemoved;
 		}
 
-		public IPresetPreview CreatePreviewContext()
+		public INodeMap CreatePreviewContext()
 		{
 			return new PresetPreview(
 					preset,
@@ -75,11 +75,6 @@ namespace West.ViewModel
 		public void SaveClicked()
 		{
 			App.Content.Account.SavePreset(preset);
-			/*, () =>
-			{
-				SceneManager.LoadScene("PresetSelection");
-				Scene.PresetEditor.Model = null;
-			});*/
 		}
 
 		public void NameChanged(string newName)

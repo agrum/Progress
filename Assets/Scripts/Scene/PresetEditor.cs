@@ -9,14 +9,13 @@ namespace West
 		class PresetEditor : MonoBehaviour
         {
             public View.NodeTextualDetails nodeTextualDetails = null;
-            public View.Constellation constellation = null;
+            public View.NodeMap constellation = null;
 			public View.PresetColumn presetColumn = null;
             public Button backButton = null;
 
             static public Model.ConstellationPreset Model = null;
 
-			private ViewModel.Constellation viewModelConstellation = null;
-			private ViewModel.PresetColumn viewModelPresetColumn = null;
+			private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
 			void Start()
 			{
@@ -37,11 +36,21 @@ namespace West
 
                 backButton.onClick.AddListener(BackClicked);
                 nodeTextualDetails.Setup(null, null);
-				viewModelConstellation = new ViewModel.Constellation(constellation, Model.Constellation, Model);
-				viewModelPresetColumn = new ViewModel.PresetColumn(presetColumn, nodeTextualDetails, Model, ViewModel.PresetColumn.Mode.Edit);
-            }
+				constellation.SetContext(new ViewModel.Constellation(Model.Constellation, Model));
+				presetColumn.SetContext(new ViewModel.PresetColumn(Model, hovered, ViewModel.PresetColumn.Mode.Edit));
+				
+				App.Content.Account.PresetSaved += OnPresetSaved;
+			}
 
-            private void BackClicked()
+			private void OnPresetSaved(Model.ConstellationPreset preset)
+			{
+				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+				SceneManager.LoadScene("PresetSelection");
+				Model = null;
+			}
+
+
+			private void BackClicked()
             {
                 SceneManager.LoadScene("PresetSelection");
             }

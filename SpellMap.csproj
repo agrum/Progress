@@ -1183,11 +1183,11 @@
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
     <Compile Include="Assets\Scripts\ViewModel\IBase.cs" />
     <Compile Include="Assets\Scripts\ViewModel\INode.cs" />
-    <Compile Include="Assets\Scripts\View\Constellation.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\INodeMap.cs" />
+    <Compile Include="Assets\Scripts\View\NodeMap.cs" />
     <Compile Include="Assets\Scripts\View\Node.cs" />
     <Compile Include="Assets\Scripts\View\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\View\PresetColumn.cs" />
-    <Compile Include="Assets\Scripts\View\PresetPreview.cs" />
     <Compile Include="Assets\Scripts\View\TextButton.cs" />
     <Compile Include="Assets\Scripts\View\WestBehaviour.cs" />
     <Compile Include="Assets\Scripts\ViewModel\Constellation.cs" />

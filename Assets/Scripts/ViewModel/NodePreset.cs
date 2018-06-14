@@ -42,23 +42,23 @@ namespace West.ViewModel
 			mat = mat_;
 			position = position_;
 
-			preset.presetUpdateEvent += PresetUpdated;
-			scale.ChangedEvent += ScaleUpdated;
+			preset.PresetUpdated += OnPresetUpdated;
+			scale.ChangedEvent += OnScaleUpdated;
 
-			PresetUpdated();
+			OnPresetUpdated();
 		}
 
 		~NodePreset()
 		{
-			preset.presetUpdateEvent -= PresetUpdated;
-			scale.ChangedEvent -= ScaleUpdated;
+			preset.PresetUpdated -= OnPresetUpdated;
+			scale.ChangedEvent -= OnScaleUpdated;
 
 			SkillChanged = null;
 			SelectionChanged = null;
 			ScaleChanged = null;
 		}
 
-		public void PresetUpdated()
+		public void OnPresetUpdated()
 		{
 			List<Model.Skill> list = null;
 			switch (type)
@@ -85,7 +85,7 @@ namespace West.ViewModel
 			}
 		}
 
-		public virtual void ScaleUpdated(string key)
+		public void OnScaleUpdated(string key)
 		{
 			ScaleChanged((float) scale["scale"].AsDouble);
 		}
