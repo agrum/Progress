@@ -14,7 +14,6 @@ namespace West
 
 			private readonly int enterHash = Animator.StringToHash("Enter");
 			private readonly int leaveHash = Animator.StringToHash("Leave");
-			private readonly int clickHash = Animator.StringToHash("Click");
 			private readonly int unselectHash = Animator.StringToHash("Unselect");
 			private readonly int selectHash = Animator.StringToHash("Select");
 			private bool started = false;
@@ -32,13 +31,13 @@ namespace West
 			{
 				started = true;
 
-				isSelected = true;
-
 				interactable = true;
 				transition = Transition.None;
 
-				base.Start();
-			}
+                base.Start();
+
+                OnSelectionChanged(isSelected);
+            }
 
 			public void SetContext(ViewModel.INode viewModel_)
 			{
@@ -70,7 +69,8 @@ namespace West
 				icon.material = viewModel.Mat();
 
 				OnSkillChanged();
-			}
+                OnSelectionChanged(viewModel.Selected());
+            }
 
 			override protected void OnDestroy()
 			{
@@ -116,7 +116,6 @@ namespace West
 
 			public void OnSelectionChanged(bool selected_)
 			{
-				bool oldValue = isSelected;
 				isSelected = selected_;
 
 				if (!started)
@@ -124,13 +123,8 @@ namespace West
 
 				animator.ResetTrigger(unselectHash);
 				animator.ResetTrigger(selectHash);
-				animator.ResetTrigger(clickHash);
-
-				if (oldValue != isSelected)
-				{
-					animator.SetTrigger(clickHash);
-					animator.SetTrigger(isSelected ? selectHash : unselectHash);
-				}
+                
+				animator.SetTrigger(isSelected ? selectHash : unselectHash);
 			}
 
 			override public void OnPointerEnter(PointerEventData eventData)

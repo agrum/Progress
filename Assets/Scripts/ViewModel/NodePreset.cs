@@ -19,8 +19,9 @@ namespace West.ViewModel
 		private bool canEdit;
 		private Material mat;
 		private Vector2 position;
+        List<Model.Skill> selectedSkillList = null;
 
-		public NodePreset(
+        public NodePreset(
 			Model.ConstellationPreset preset_,
 			Model.HoveredSkill hovered_,
 			Model.Json scale_,
@@ -41,8 +42,21 @@ namespace West.ViewModel
 			canEdit = canEdit_;
 			mat = mat_;
 			position = position_;
+            
+            switch (type)
+            {
+                case Model.Skill.TypeEnum.Ability:
+                    selectedSkillList = preset.SelectedAbilityList;
+                    break;
+                case Model.Skill.TypeEnum.Class:
+                    selectedSkillList = preset.SelectedClassList;
+                    break;
+                case Model.Skill.TypeEnum.Kit:
+                    selectedSkillList = preset.SelectedKitList;
+                    break;
+            }
 
-			preset.PresetUpdated += OnPresetUpdated;
+            preset.PresetUpdated += OnPresetUpdated;
 			scale.ChangedEvent += OnScaleUpdated;
 
 			OnPresetUpdated();
@@ -60,37 +74,29 @@ namespace West.ViewModel
 
 		public void OnPresetUpdated()
 		{
-			List<Model.Skill> list = null;
-			switch (type)
-			{
-				case Model.Skill.TypeEnum.Ability:
-					list = preset.SelectedAbilityList;
-					break;
-				case Model.Skill.TypeEnum.Class:
-					list = preset.SelectedClassList;
-					break;
-				case Model.Skill.TypeEnum.Kit:
-					list = preset.SelectedKitList;
-					break;
-			}
-
 			Model.Skill newSkill = null;
-			if (list.Count > index)
-				newSkill = list[index];
+			if (selectedSkillList.Count > index)
+				newSkill = selectedSkillList[index];
 
 			if (newSkill != skill)
 			{
 				skill = newSkill;
-				SkillChanged();
-			}
+                SelectionChanged(Selected());
+                SkillChanged();
+            }
 		}
 
 		public void OnScaleUpdated(string key)
 		{
 			ScaleChanged((float) scale["scale"].AsDouble);
-		}
+        }
 
-		public string IconPath()
+        public bool Selected()
+        {
+            return selectedSkillList.Contains(skill);
+        }
+
+        public string IconPath()
 		{
 			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
 		}

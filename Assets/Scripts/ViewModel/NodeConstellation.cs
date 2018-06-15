@@ -17,30 +17,44 @@ namespace West.ViewModel
 
 		private Material mat;
 		private Vector2 position;
+        List<Model.Skill> selectedSkillList = null;
 
-		public NodeConstellation(
-			Model.Skill skill_,
-			Model.ConstellationPreset preset_,
-			Model.HoveredSkill hovered_,
-			Model.Json scale_,
-			Material mat_,
-			Vector2 position_)
-		{
-			Debug.Assert(skill_ != null);
-			Debug.Assert(preset_ != null);
-			Debug.Assert(hovered_ != null);
-			Debug.Assert(mat_ != null);
+        public NodeConstellation(
+            Model.Skill skill_,
+            Model.ConstellationPreset preset_,
+            Model.HoveredSkill hovered_,
+            Model.Json scale_,
+            Material mat_,
+            Vector2 position_)
+        {
+            Debug.Assert(skill_ != null);
+            Debug.Assert(preset_ != null);
+            Debug.Assert(hovered_ != null);
+            Debug.Assert(mat_ != null);
 
-			skill = skill_;
-			preset = preset_;
-			hovered = hovered_;
-			scale = scale_;
-			mat = mat_;
-			position = position_;
-			
-			preset.PresetUpdated += OnPresetUpdated;
-			scale.ChangedEvent += OnScaleUpdated;
-		}
+            skill = skill_;
+            preset = preset_;
+            hovered = hovered_;
+            scale = scale_;
+            mat = mat_;
+            position = position_;
+
+            switch (skill.Type)
+            {
+                case Model.Skill.TypeEnum.Ability:
+                    selectedSkillList = preset.SelectedAbilityList;
+                    break;
+                case Model.Skill.TypeEnum.Class:
+                    selectedSkillList = preset.SelectedClassList;
+                    break;
+                case Model.Skill.TypeEnum.Kit:
+                    selectedSkillList = preset.SelectedKitList;
+                    break;
+            }
+
+            preset.PresetUpdated += OnPresetUpdated;
+            scale.ChangedEvent += OnScaleUpdated;
+        }
 
 		~NodeConstellation()
 		{
@@ -54,29 +68,20 @@ namespace West.ViewModel
 
 		public void OnPresetUpdated()
 		{
-			List<Model.Skill> list = null;
-			switch (skill.Type)
-			{
-				case Model.Skill.TypeEnum.Ability:
-					list = preset.SelectedAbilityList;
-					break;
-				case Model.Skill.TypeEnum.Class:
-					list = preset.SelectedClassList;
-					break;
-				case Model.Skill.TypeEnum.Kit:
-					list = preset.SelectedKitList;
-					break;
-			}
-
-			SelectionChanged(list.Contains(skill));
+            SelectionChanged(Selected());
 		}
 
 		public virtual void OnScaleUpdated(string key)
 		{
 			ScaleChanged((float)scale["scale"].AsDouble);
-		}
+        }
 
-		public string IconPath()
+        public bool Selected()
+        {
+            return selectedSkillList.Contains(skill);
+        }
+
+        public string IconPath()
 		{
 			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
 		}

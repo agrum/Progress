@@ -54,13 +54,13 @@ namespace West.ViewModel
 				App.Content.GameSettings.NumKits,
 				model.Constellation.KitNodeList,
 				model.SelectedKitList,
-				Model.Skill.TypeEnum.Class,
+				Model.Skill.TypeEnum.Kit,
 				kitMaterial);
 			PopulateNodes(
 				App.Content.GameSettings.NumClasses,
 				model.Constellation.ClassNodeList,
 				model.SelectedClassList,
-				Model.Skill.TypeEnum.Kit,
+				Model.Skill.TypeEnum.Class,
 				classMaterial);
 		}
 

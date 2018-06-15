@@ -10,17 +10,23 @@ namespace West.ViewModel
 
 		private Model.Constellation model = null;
 		private Model.ConstellationPreset preset = null;
-		private Model.HoveredSkill hoveredModel = null;
+		private Model.HoveredSkill hovered = null;
 		private Model.Json scaleModel = new Model.Json();
 		
 		private Material abilityMaterial = null;
 		private Material classMaterial = null;
 		private Material kitMaterial = null;
 
-        public NodeMapConstellation(Model.Constellation model_, Model.ConstellationPreset preset_)
+        public NodeMapConstellation(Model.Constellation model_, Model.ConstellationPreset preset_, Model.HoveredSkill hovered_)
         {
+            Debug.Assert(model_ != null);
+            Debug.Assert(preset_ != null);
+            Debug.Assert(hovered_ != null);
+
             model = model_;
             preset = preset_;
+            hovered = hovered_;
+
             scaleModel["scale"] = 1.0;
             abilityMaterial = App.Resource.Material.AbilityMaterial;
             classMaterial = App.Resource.Material.ClassMaterial;
@@ -57,7 +63,7 @@ namespace West.ViewModel
 					return new NodeConstellation(
 					nodeModel.Skill,
 					preset,
-					hoveredModel,
+                    hovered,
 					scaleModel,
 					nodeMaterial_,
 					nodeModel.Position);

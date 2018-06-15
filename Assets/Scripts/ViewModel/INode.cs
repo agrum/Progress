@@ -9,11 +9,12 @@ namespace West.ViewModel
 		event OnBoolDelegate SelectionChanged;
 		event OnFloatDelegate ScaleChanged;
 
-		string IconPath();
+        bool Selected();
+        string IconPath();
 		Material Mat();
 		Vector2 Position();
 
-		void Clicked();
-		void Hovered(bool on);
+        void Clicked();
+        void Hovered(bool on);
 	}
 }
