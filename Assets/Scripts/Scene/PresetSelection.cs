@@ -39,7 +39,7 @@ namespace West
 				if (this == null)
 					return;
 
-				nodeTextualDetails.Setup(null, null);
+				nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
 				backButton.onClick.AddListener(BackClicked);
 
 				//setup existing preset columns

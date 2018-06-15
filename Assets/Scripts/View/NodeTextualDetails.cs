@@ -27,7 +27,9 @@ namespace West
 			public Text Charge = null;
 			public Text KitDetails = null;
 
-			private string nameString;
+            ViewModel.NodeTextualDetails viewModel;
+
+            private string nameString;
 			private string abilityString;
 			private string classString;
 			private string kitString;
@@ -58,7 +60,21 @@ namespace West
 				kitDetailsString = KitDetails.text;
 			}
 
-			public void Setup(Model.Skill skill, Material mat)
+            public void SetContext(ViewModel.NodeTextualDetails viewModel_)
+            {
+                Debug.Assert(viewModel_ != null);
+
+                viewModel = viewModel_;
+                viewModel.SkillChanged += OnSkillChanged;
+            }
+
+            void OnDestroy()
+            {
+                viewModel.SkillChanged -= OnSkillChanged;
+                viewModel = null;
+            }
+
+			private void OnSkillChanged(JSONNode skill)
 			{
 				bool active = (skill != null);
 
@@ -80,31 +96,31 @@ namespace West
 				if (!active)
 					return;
 				
-				JSONNode metrics = skill.Json["metrics"];
+				JSONNode metrics = skill["metrics"];
 
-				string colorPrefix = "<color=#" + ColorUtility.ToHtmlStringRGBA(mat.color) + ">";
+				string colorPrefix = "<color=#" + skill["color"] + ">";
 				string colorSuffix = "</color>";
 
-				Name.text = nameString.Replace("#content#", skill.Json["name"]);
-				Description.text = descriptionString.Replace("#content#", skill.Json["description"]);
+				Name.text = nameString.Replace("#content#", skill["color"]["name"]);
+				Description.text = descriptionString.Replace("#content#", skill["color"]["description"]);
 
-				switch (skill.Type)
-				{
-					case Model.Skill.TypeEnum.Ability:
-						Ability.text = colorPrefix + abilityString + colorSuffix;
-						Ability.gameObject.SetActive(true);
-						break;
-					case Model.Skill.TypeEnum.Class:
-						Class.text = colorPrefix + classString + colorSuffix;
-						Class.gameObject.SetActive(true);
-						break;
-					case Model.Skill.TypeEnum.Kit:
-						Kit.text = colorPrefix + kitString + colorSuffix;
-						Kit.gameObject.SetActive(true);
-						break;
+                if (skill["typeName"] == "Abilities")
+                {
+                    Ability.text = colorPrefix + abilityString + colorSuffix;
+                    Ability.gameObject.SetActive(true);
+                }
+                else if (skill["typeName"] == "Classes")
+                {
+                    Class.text = colorPrefix + classString + colorSuffix;
+                    Class.gameObject.SetActive(true);
+                }
+                else if (skill["typeName"] == "Kits")
+                { 
+					Kit.text = colorPrefix + kitString + colorSuffix;
+                    Kit.gameObject.SetActive(true);
 				}
 
-				Details.text = detailsString.Replace("#content#", skill.Json["details"]);
+				Details.text = detailsString.Replace("#content#", skill["details"]);
 				foreach (var metric in metrics)
 				{
 					if (metric.Key == "cooldown"
