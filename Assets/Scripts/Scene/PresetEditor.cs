@@ -36,7 +36,7 @@ namespace West
 
                 backButton.onClick.AddListener(BackClicked);
                 nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
-				constellation.SetContext(new ViewModel.Constellation(Model.Constellation, Model));
+				constellation.SetContext(new ViewModel.NodeMapConstellation(Model.Constellation, Model));
 				presetColumn.SetContext(new ViewModel.PresetColumn(Model, hovered, ViewModel.PresetColumn.Mode.Edit));
 				
 				App.Content.Account.PresetSaved += OnPresetSaved;

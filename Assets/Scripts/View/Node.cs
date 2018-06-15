@@ -75,14 +75,13 @@ namespace West
 			override protected void OnDestroy()
 			{
 				base.OnDestroy();
-
-				if (viewModel != null)
-				{
-					viewModel.SkillChanged -= OnSkillChanged;
-					viewModel.ScaleChanged -= OnScaleChanged;
-					viewModel.SelectionChanged -= OnSelectionChanged;
-					viewModel = null;
-				}
+                if (viewModel == null)
+                    return;
+                
+				viewModel.SkillChanged -= OnSkillChanged;
+				viewModel.ScaleChanged -= OnScaleChanged;
+				viewModel.SelectionChanged -= OnSelectionChanged;
+				viewModel = null;
 			}
 
 			public void OnSkillChanged()

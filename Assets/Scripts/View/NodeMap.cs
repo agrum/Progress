@@ -15,6 +15,8 @@ namespace West.View
 
 			viewModel = viewModel_;
 			viewModel.NodeAdded += OnNodeAdded;
+
+            viewModel.PopulateNodes();
 		}
 
 		void Start()
@@ -32,8 +34,11 @@ namespace West.View
 		}
 
 		void OnDestroy()
-		{
-			viewModel.NodeAdded -= OnNodeAdded;
+        {
+            if (viewModel == null)
+                return;
+
+            viewModel.NodeAdded -= OnNodeAdded;
 			viewModel = null;
 		}
 

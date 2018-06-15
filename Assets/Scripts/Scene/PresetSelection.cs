@@ -64,7 +64,7 @@ namespace West
 					viewPresetColumn.SetContext(new ViewModel.PresetColumn(
 						null,
 						hovered,
-						ViewModel.PresetColumn.Mode.Display));
+						ViewModel.PresetColumn.Mode.Addition));
 				}
 
 				ArrangeUI();

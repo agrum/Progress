@@ -70,6 +70,9 @@ namespace West
 
             void OnDestroy()
             {
+                if (viewModel == null)
+                    return;
+
                 viewModel.SkillChanged -= OnSkillChanged;
                 viewModel = null;
             }

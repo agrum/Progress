@@ -6,6 +6,7 @@ namespace West.ViewModel
 	{
 		event OnElementAdded NodeAdded;
 
-		void SizeChanged(Rect rect);
-	}
+        void PopulateNodes();
+        void SizeChanged(Rect rect);
+    }
 }

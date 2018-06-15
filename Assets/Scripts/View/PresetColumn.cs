@@ -62,8 +62,11 @@ namespace West
 			}
 
 			private void OnDestroy()
-			{
-				viewModel.PresetDestroyed -= OnPresetDestroyed;
+            {
+                if (viewModel == null)
+                    return;
+
+                viewModel.PresetDestroyed -= OnPresetDestroyed;
 				viewModel = null;
 			}
 

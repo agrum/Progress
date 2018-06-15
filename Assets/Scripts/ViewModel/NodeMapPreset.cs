@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace West.ViewModel
 {
-	public class PresetPreview : INodeMap
+	public class NodeMapPreset : INodeMap
 	{
 		public event OnElementAdded NodeAdded = delegate { };
 
@@ -20,28 +20,30 @@ namespace West.ViewModel
 		private Vector2 size = new Vector2();
 		private int nodeAdded = 0;
 
-		public PresetPreview(
-			Model.ConstellationPreset model_,
-			Model.HoveredSkill hoveredModel_,
-			bool canEdit_)
-		{
-			Debug.Assert(model_ != null);
-				
-			model = model_;
-			hoveredModel = hoveredModel_;
-			scaleModel["scale"] = 1.0;
-			canEdit = canEdit_;
-			abilityMaterial = App.Resource.Material.AbilityMaterial;
-			classMaterial = App.Resource.Material.ClassMaterial;
-			kitMaterial = App.Resource.Material.KitMaterial;
+        public NodeMapPreset(
+            Model.ConstellationPreset model_,
+            Model.HoveredSkill hoveredModel_,
+            bool canEdit_)
+        {
+            Debug.Assert(model_ != null);
 
-			sizeInt.x = 2;
-			sizeInt.y = App.Content.GameSettings.NumAbilities + App.Content.GameSettings.NumClasses + App.Content.GameSettings.NumKits;
-			sizeInt.y = sizeInt.y / 2 + sizeInt.y % 2;
-			size.x = sizeInt.x;
-			size.y = sizeInt.y;
+            model = model_;
+            hoveredModel = hoveredModel_;
+            scaleModel["scale"] = 1.0;
+            canEdit = canEdit_;
+            abilityMaterial = App.Resource.Material.AbilityMaterial;
+            classMaterial = App.Resource.Material.ClassMaterial;
+            kitMaterial = App.Resource.Material.KitMaterial;
 
-			//create constellation nodes
+            sizeInt.x = 2;
+            sizeInt.y = App.Content.GameSettings.NumAbilities + App.Content.GameSettings.NumClasses + App.Content.GameSettings.NumKits;
+            sizeInt.y = sizeInt.y / 2 + sizeInt.y % 2;
+            size.x = sizeInt.x;
+            size.y = sizeInt.y;
+        }
+
+		public void PopulateNodes()
+        { 
 			PopulateNodes(
 				App.Content.GameSettings.NumAbilities,
 				model.Constellation.AbilityNodeList,
@@ -62,7 +64,7 @@ namespace West.ViewModel
 				classMaterial);
 		}
 
-		~PresetPreview()
+		~NodeMapPreset()
 		{
 			NodeAdded = null;
 		}

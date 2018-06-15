@@ -41,10 +41,13 @@ namespace West.ViewModel
 
 		public INodeMap CreatePreviewContext()
 		{
-			return new PresetPreview(
-					preset,
-					hovered,
-					mode == Mode.Edit);
+            if (preset != null)
+                return new NodeMapPreset(
+                        preset,
+                        hovered,
+                        mode == Mode.Edit);
+            else
+                return new NodeMapEmpty();
 		}
 
 		public void AddClicked()

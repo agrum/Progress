@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace West.ViewModel
 {
-	public class Constellation : INodeMap
+	public class NodeMapConstellation : INodeMap
 	{
 		public event OnElementAdded NodeAdded = delegate { };
 
@@ -17,17 +17,19 @@ namespace West.ViewModel
 		private Material classMaterial = null;
 		private Material kitMaterial = null;
 
-		public Constellation(Model.Constellation model_, Model.ConstellationPreset preset_)
-		{
-			model = model_;
-			preset = preset_;
-			scaleModel["scale"] = 1.0;
-			abilityMaterial = App.Resource.Material.AbilityMaterial;
-			classMaterial = App.Resource.Material.ClassMaterial;
-			kitMaterial = App.Resource.Material.KitMaterial;
+        public NodeMapConstellation(Model.Constellation model_, Model.ConstellationPreset preset_)
+        {
+            model = model_;
+            preset = preset_;
+            scaleModel["scale"] = 1.0;
+            abilityMaterial = App.Resource.Material.AbilityMaterial;
+            classMaterial = App.Resource.Material.ClassMaterial;
+            kitMaterial = App.Resource.Material.KitMaterial;
+        }
 
-			//create constellation nodes
-			PopulateNodes(
+        public void PopulateNodes()
+        {
+            PopulateNodes(
 				model.AbilityNodeList,
 				abilityMaterial);
 			PopulateNodes(

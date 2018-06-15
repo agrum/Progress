@@ -1181,21 +1181,21 @@
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\NodetextualDetails.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeMapEmpty.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\View\Node.cs" />
     <Compile Include="Assets\Scripts\View\NodeMap.cs" />
     <Compile Include="Assets\Scripts\View\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\View\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\View\TextButton.cs" />
-    <Compile Include="Assets\Scripts\View\WestBehaviour.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\Constellation.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeMapConstellation.cs" />
     <Compile Include="Assets\Scripts\ViewModel\IBase.cs" />
     <Compile Include="Assets\Scripts\ViewModel\INode.cs" />
     <Compile Include="Assets\Scripts\ViewModel\INodeMap.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodeConstellation.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodePreset.cs" />
     <Compile Include="Assets\Scripts\ViewModel\PresetColumn.cs" />
-    <Compile Include="Assets\Scripts\ViewModel\PresetPreview.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeMapPreset.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />
