@@ -1,49 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SimpleJSON;
+﻿using SimpleJSON;
 using BestHTTP;
+using System.Collections.Generic;
 
-namespace West
+namespace West.Model.CloudContent
 {
-	namespace Model
+	public class GameSettings : Base
 	{
-		namespace CloudContent
+		public JSONNode Json { get; private set; } = null;
+
+		public int NumAbilities { get; private set; }
+		public int NumClasses { get; private set; }
+		public int NumKits { get; private set; }
+		public int LengthConstellation { get; private set; }
+        public JSONNode UpDownUpgradeSkillDictionnary { get; private set; }
+
+        protected override void Build(OnBuilt onBuilt_)
 		{
-			public class GameSettings : Base
+			App.Server.Request(
+			HTTPMethods.Get,
+			"gameSettings/Classic",
+			(JSONNode json_) =>
 			{
-				public JSONNode Json { get; private set; } = null;
+				Json = json_;
 
-				public int NumAbilities { get; private set; }
-				public int NumClasses { get; private set; }
-				public int NumKits { get; private set; }
-				public int LengthConstellation { get; private set; }
+				NumAbilities = Json["numberOfAbilities"];
+				NumClasses = Json["numberOfClasses"];
+				NumKits = Json["numberOfKits"];
+				LengthConstellation = Json["presetLength"];
+                UpDownUpgradeSkillDictionnary = Json["upDownUpgradeSkillDictionnary"];
 
-				protected override void Build(OnBuilt onBuilt_)
-				{
-					App.Server.Request(
-					HTTPMethods.Get,
-					"gameSettings/Classic",
-					(JSONNode json_) =>
-					{
-						Json = json_;
+				onBuilt_();
+			}).Send();
+		}
 
-						NumAbilities = Json["numberOfAbilities"];
-						NumClasses = Json["numberOfClasses"];
-						NumKits = Json["numberOfKits"];
-						LengthConstellation = Json["presetLength"];
-
-						onBuilt_();
-					}).Send();
-				}
-
-				public GameSettings(Session session_)
-				{
-					dependencyList.Add(session_);
-				}
-			}
+		public GameSettings(Session session_)
+		{
+			dependencyList.Add(session_);
 		}
 	}
 }

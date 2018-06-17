@@ -2,14 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
-    req.app.db.models.classes
+    req.app.db.models.skills
     .find({})
     .then(document => {
-        console.error('classes no error')
+        console.error('skills no error')
         res.send(document);
         })
     .catch(err => {
-        console.error('classes error')
+        console.error('skills error')
         console.error(err)
     })
 })

@@ -125,19 +125,19 @@ namespace West
 					{
 						case Skill.TypeEnum.Ability:
 							AbilityNodeList.Add(new ConstellationNode(
-								App.Content.AbilityList[json["id"]],
+								App.Content.SkillList.Ability(json["id"]),
 								AbilityNodeList.Count,
 								new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 							break;
 						case Skill.TypeEnum.Class:
 							ClassNodeList.Add(new ConstellationNode(
-								App.Content.ClassList[json["id"]],
+								App.Content.SkillList.Class(json["id"]),
 								ClassNodeList.Count,
 								new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 								break;
 						case Skill.TypeEnum.Kit:
 							KitNodeList.Add(new ConstellationNode(
-								App.Content.KitList[json["id"]],
+								App.Content.SkillList.Kit(json["id"]),
 								KitNodeList.Count,
 								new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 								break;

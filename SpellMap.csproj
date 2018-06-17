@@ -1122,15 +1122,14 @@
     <Compile Include="Assets\External\SimpleJSON\SimpleJSONBinary.cs" />
     <Compile Include="Assets\External\SimpleJSON\SimpleJSONUnity.cs" />
     <Compile Include="Assets\Scripts\App\App.cs" />
-    <Compile Include="Assets\Scripts\App\CloudContent\AbilityList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Account.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\AppContent.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Base.cs" />
-    <Compile Include="Assets\Scripts\App\CloudContent\ClassList.cs" />
+    <Compile Include="Assets\Scripts\App\CloudContent\Champion.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\ConstellationList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\GameSettings.cs" />
-    <Compile Include="Assets\Scripts\App\CloudContent\KitList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Session.cs" />
+    <Compile Include="Assets\Scripts\App\CloudContent\SkillList.cs" />
     <Compile Include="Assets\Scripts\App\Network\Network.cs" />
     <Compile Include="Assets\Scripts\App\Resource\AppResource.cs" />
     <Compile Include="Assets\Scripts\App\Resource\Material.cs" />
@@ -1167,6 +1166,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\Class.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Kit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\SkillMetric.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
     <Compile Include="Assets\Scripts\Model\Team\Team.cs" />

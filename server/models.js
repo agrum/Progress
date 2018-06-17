@@ -5,6 +5,8 @@ module.exports = function () {
 	require('./schemas/abilities')();
 	require('./schemas/classes')();
 	require('./schemas/kits')();
+	require('./schemas/skills')();
+	require('./schemas/champions')();
 	require('./schemas/accounts')();
 	require('./schemas/presets')();
 }

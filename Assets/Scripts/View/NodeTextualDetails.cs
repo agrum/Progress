@@ -186,7 +186,7 @@ namespace West
 						Unit.text += "\n" + lineSplit[3].Replace("#duration#", colorPrefix + unitNode["duration"] + colorSuffix);
 					if (unitNode["vision"].AsDouble != 0)
 						Unit.text += "\n" + lineSplit[4].Replace("#vision#", colorPrefix + unitNode["vision"] + colorSuffix);
-					if (unitNode["placementRange"].AsDouble != 0)
+					if (unitNode["range"].AsDouble != 0)
 						Unit.text += "\n" + lineSplit[5].Replace("#placementRange#", colorPrefix + unitNode["placementRange"] + colorSuffix);
 				}
 				else

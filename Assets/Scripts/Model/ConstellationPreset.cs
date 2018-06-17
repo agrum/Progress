@@ -30,11 +30,11 @@ namespace West
 				Constellation = App.Content.ConstellationList[json["constellation"]];
 
 				foreach (var almostValue in json["abilities"])
-					SelectedAbilityList.Add(App.Content.AbilityList[almostValue.Value]);
+					SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
 				foreach (var almostValue in json["classes"])
-					SelectedClassList.Add(App.Content.ClassList[almostValue.Value]);
+					SelectedClassList.Add(App.Content.SkillList.Class(almostValue.Value));
 				foreach (var almostValue in json["kits"])
-					SelectedKitList.Add(App.Content.KitList[almostValue.Value]);
+					SelectedKitList.Add(App.Content.SkillList.Kit(almostValue.Value));
 			}
 
 			public void Add(Skill skill)

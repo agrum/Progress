@@ -3,10 +3,10 @@ let mongoose = require('mongoose');
 module.exports = function()
 {
 	let schema = new mongoose.Schema({
-        presets: {
+        champions: {
 			type: [mongoose.Schema.Types.ObjectId],
 			required: true,
-			ref: 'presets',
+			ref: 'champions',
 		}
 	})
 	schema.set('collection', 'accounts')

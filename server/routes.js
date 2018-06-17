@@ -9,6 +9,7 @@ var isAuthenticated = function (req, res, next) {
 
 router.use('/login', require('./routes/login').router)
 router.use('/signup', require('./routes/signup').router)
+router.use('/skill', require('./routes/skill').router)
 
 router.all('*', isAuthenticated)
 router.use('/user', require('./routes/user').router)
