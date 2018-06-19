@@ -39,7 +39,7 @@ namespace West
 				constellation.SetContext(new ViewModel.NodeMapConstellation(Model.Constellation, Model, hovered));
 				presetColumn.SetContext(new ViewModel.PresetColumn(Model, hovered, ViewModel.PresetColumn.Mode.Edit));
 				
-				App.Content.Account.PresetSaved += OnPresetSaved;
+				App.Content.Account.ActiveChampion.PresetSaved += OnPresetSaved;
 			}
 
 			private void OnPresetSaved(Model.ConstellationPreset preset)

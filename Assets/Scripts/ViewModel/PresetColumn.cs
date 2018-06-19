@@ -31,12 +31,12 @@ namespace West.ViewModel
 			hovered = hovered_;
 			mode = mode_;
 
-			App.Content.Account.PresetRemoved += OnPresetRemoved;
+			App.Content.Account.ActiveChampion.PresetRemoved += OnPresetRemoved;
 		}
 
 		~PresetColumn()
 		{
-			App.Content.Account.PresetRemoved -= OnPresetRemoved;
+			App.Content.Account.ActiveChampion.PresetRemoved -= OnPresetRemoved;
 		}
 
 		public INodeMap CreatePreviewContext()
@@ -52,12 +52,12 @@ namespace West.ViewModel
 
 		public void AddClicked()
 		{
-			App.Content.Account.AddPreset();
+			App.Content.Account.ActiveChampion.AddEmptyPreset();
 		}
 
 		public void EditClicked()
 		{
-			if (!App.Content.Account.PresetList.Contains(preset))
+			if (!App.Content.Account.ActiveChampion.PresetList.Contains(preset))
 				return;
 
 			Scene.PresetEditor.Model = preset;
@@ -67,7 +67,7 @@ namespace West.ViewModel
 
 		public void DeleteClicked()
 		{
-			App.Content.Account.RemovePreset(preset);
+			App.Content.Account.ActiveChampion.RemovePreset(preset);
 		}
 
 		public void ProceedClicked()
@@ -77,7 +77,7 @@ namespace West.ViewModel
 
 		public void SaveClicked()
 		{
-			App.Content.Account.SavePreset(preset);
+			App.Content.Account.ActiveChampion.SavePreset(preset);
 		}
 
 		public void NameChanged(string newName)

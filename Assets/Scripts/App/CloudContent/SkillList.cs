@@ -2,30 +2,30 @@
 using SimpleJSON;
 using BestHTTP;
 
-namespace West.Model.CloudContent
+namespace West.CloudContent
 {
     public class SkillList : Base
     {
         public JSONNode Json { get; private set; } = null;
 
-        public Ability Ability(string uuid_)
+        public Model.Ability Ability(string uuid_)
         {
-            return abilityTable[uuid_] as Ability;
+            return abilityTable[uuid_] as Model.Ability;
         }
 
-        public Class Class(string uuid_)
+        public Model.Class Class(string uuid_)
         {
-            return classTable[uuid_] as Class;
+            return classTable[uuid_] as Model.Class;
         }
 
-        public Kit Kit(string uuid_)
+        public Model.Kit Kit(string uuid_)
         {
-            return kitTable[uuid_] as Kit;
+            return kitTable[uuid_] as Model.Kit;
         }
 
-        private Dictionary<string, Skill> abilityTable = new Dictionary<string, Skill>();
-        private Dictionary<string, Skill> classTable = new Dictionary<string, Skill>();
-        private Dictionary<string, Skill> kitTable = new Dictionary<string, Skill>();
+        private Dictionary<string, Model.Skill> abilityTable = new Dictionary<string, Model.Skill>();
+        private Dictionary<string, Model.Skill> classTable = new Dictionary<string, Model.Skill>();
+        private Dictionary<string, Model.Skill> kitTable = new Dictionary<string, Model.Skill>();
 
         protected override void Build(OnBuilt onBuilt_)
         {
@@ -39,11 +39,11 @@ namespace West.Model.CloudContent
                 foreach (var almostJson in Json)
                 {
                     if (almostJson.Value["type"] == "ability")
-                        abilityTable.Add(almostJson.Value["_id"], new Ability(almostJson.Value));
+                        abilityTable.Add(almostJson.Value["_id"], new Model.Ability(almostJson.Value));
                     else if (almostJson.Value["type"] == "class")
-                        classTable.Add(almostJson.Value["_id"], new Class(almostJson.Value));
+                        classTable.Add(almostJson.Value["_id"], new Model.Class(almostJson.Value));
                     else if (almostJson.Value["type"] == "kit")
-                        kitTable.Add(almostJson.Value["_id"], new Kit(almostJson.Value));
+                        kitTable.Add(almostJson.Value["_id"], new Model.Kit(almostJson.Value));
                 }
 
                 onBuilt_();

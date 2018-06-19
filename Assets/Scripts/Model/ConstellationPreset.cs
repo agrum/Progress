@@ -10,6 +10,20 @@ namespace West
 {
 	namespace Model
 	{
+        public class PresetLimits
+        {
+            public int Ability { get; private set; } = 0;
+            public int Class { get; private set; } = 0;
+            public int Kit { get; private set; } = 0;
+
+            public PresetLimits(int ability_, int class_, int kit_)
+            {
+                Ability = ability_;
+                Class = class_;
+                Kit = kit_;
+            }
+        }
+
 		public class ConstellationPreset
 		{
             public string Id { get; private set; }
@@ -23,13 +37,16 @@ namespace West
 			public delegate void OnPresetUpdateDelegate();
 			public event OnPresetUpdateDelegate PresetUpdated;
 
-			public ConstellationPreset(JSONNode json)
+            private PresetLimits limits = null;
+
+            public ConstellationPreset(JSONNode json, PresetLimits limits_)
 			{
                 Id = json["_id"];
                 Name = json["name"];
 				Constellation = App.Content.ConstellationList[json["constellation"]];
+                limits = limits_;
 
-				foreach (var almostValue in json["abilities"])
+                foreach (var almostValue in json["abilities"])
 					SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
 				foreach (var almostValue in json["classes"])
 					SelectedClassList.Add(App.Content.SkillList.Class(almostValue.Value));
@@ -52,15 +69,15 @@ namespace West
 				{
 					case Skill.TypeEnum.Ability:
 						SelectedIndexList = SelectedAbilityList;
-						limit = App.Content.GameSettings.NumAbilities;
+						limit = limits.Ability;
 						break;
 					case Skill.TypeEnum.Class:
 						SelectedIndexList = SelectedClassList;
-						limit = App.Content.GameSettings.NumClasses;
+						limit = limits.Class;
 						break;
 					case Skill.TypeEnum.Kit:
 						SelectedIndexList = SelectedKitList;
-						limit = App.Content.GameSettings.NumKits;
+                        limit = limits.Kit; //App.Content.GameSettings.NumKits;
 						break;
 					default:
 						Debug.Log("ConstellationPreset.Add() skill no type");

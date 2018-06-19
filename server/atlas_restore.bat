@@ -1,0 +1,1 @@
+mongorestore --host West-shard-0/west-shard-00-00-1wi8d.mongodb.net:27017,west-shard-00-01-1wi8d.mongodb.net:27017,west-shard-00-02-1wi8d.mongodb.net:27017 --ssl --username agrum --password [mBi2le48f3f --authenticationDatabase admin 

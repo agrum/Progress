@@ -2,7 +2,7 @@
 using System.Threading;
 using UnityEngine;
 
-namespace West.Model.CloudContent
+namespace West.CloudContent
 {
 	public abstract class Base
 	{

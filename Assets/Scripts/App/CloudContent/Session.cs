@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using BestHTTP;
 
-namespace West.Model.CloudContent
+namespace West.CloudContent
 {
 	public class Session : Base
 	{

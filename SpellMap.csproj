@@ -1125,7 +1125,6 @@
     <Compile Include="Assets\Scripts\App\CloudContent\Account.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\AppContent.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Base.cs" />
-    <Compile Include="Assets\Scripts\App\CloudContent\Champion.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\ConstellationList.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\GameSettings.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Session.cs" />
@@ -1142,6 +1141,7 @@
     <Compile Include="Assets\Scripts\Model\Ability\BoxedEffect.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\OffencePullSelf.cs" />
     <Compile Include="Assets\Scripts\Model\Ability\RocketPunch.cs" />
+    <Compile Include="Assets\Scripts\Model\Champion.cs" />
     <Compile Include="Assets\Scripts\Model\CharacterAnimationIdleSMB.cs" />
     <Compile Include="Assets\Scripts\Model\Constellation.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationNode.cs" />
@@ -1179,13 +1179,16 @@
     <Compile Include="Assets\Scripts\Model\Utils\Pair.cs" />
     <Compile Include="Assets\Scripts\Scene\Landing.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
+    <Compile Include="Assets\Scripts\Scene\ChampionSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\ChampionColumn.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodeMapEmpty.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\View\Node.cs" />
     <Compile Include="Assets\Scripts\View\NodeMap.cs" />
     <Compile Include="Assets\Scripts\View\NodeTextualDetails.cs" />
+    <Compile Include="Assets\Scripts\View\ChampionColumn.cs" />
     <Compile Include="Assets\Scripts\View\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\View\TextButton.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodeMapConstellation.cs" />

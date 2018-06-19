@@ -6,26 +6,24 @@ namespace West
 {
 	namespace Scene
 	{
-		class PresetSelection : MonoBehaviour
+		class ChampionSelection : MonoBehaviour
 		{
 			public Canvas canvas = null;
-			public View.NodeTextualDetails nodeTextualDetails = null;
 			public RectTransform contentElement = null;
 			public HorizontalLayoutGroup horizontalLayout = null;
-			public GameObject presetColumnPrefab = null;
-			public Button backButton = null;
-			
-			private Model.HoveredSkill hovered = new Model.HoveredSkill();
+            public GameObject championColumnPrefab = null;
+            public GameObject additionColumnPrefab = null;
+
+            private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
 			void Start()
 			{
 				Debug.Assert(canvas != null);
-				Debug.Assert(nodeTextualDetails != null);
 				Debug.Assert(horizontalLayout != null);
-				Debug.Assert(presetColumnPrefab != null);
-				Debug.Assert(backButton != null);
+                Debug.Assert(championColumnPrefab != null);
+                Debug.Assert(additionColumnPrefab != null);
 
-				canvas.gameObject.SetActive(false);
+                canvas.gameObject.SetActive(false);
 
 				App.Content.Account.Load(() =>
 				{
@@ -39,32 +37,30 @@ namespace West
 				if (this == null)
 					return;
 
-				nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
-				backButton.onClick.AddListener(BackClicked);
+                //deactivate any champion
+                App.Content.Account.ActivateChampion(null);
 
 				//setup existing preset columns
-				foreach (var preset in App.Content.Account.ActiveChampion.PresetList)
+				foreach (var champion in App.Content.Account.ChampionList)
 				{
-					GameObject gob = Instantiate(presetColumnPrefab);
+					GameObject gob = Instantiate(championColumnPrefab);
 					gob.transform.SetParent(horizontalLayout.transform, false);
-					View.PresetColumn viewPresetColumn = gob.GetComponent<View.PresetColumn>();
+					View.ChampionColumn viewChampionColumn = gob.GetComponent<View.ChampionColumn>();
 
-					viewPresetColumn.SetContext(new ViewModel.PresetColumn(
-						preset,
-						hovered,
-						ViewModel.PresetColumn.Mode.Display));
+                    viewChampionColumn.SetContext(new ViewModel.ChampionColumn(champion, hovered, false));
 				}
 
 				//add empty column to add presets.
 				{
-					GameObject gob = Instantiate(presetColumnPrefab);
+					GameObject gob = Instantiate(additionColumnPrefab);
 					gob.transform.SetParent(horizontalLayout.transform, false);
-					View.PresetColumn viewPresetColumn = gob.GetComponent<View.PresetColumn>();
+					Button addBtn = gob.GetComponentInChildren<Button>();
 
-					viewPresetColumn.SetContext(new ViewModel.PresetColumn(
-						null,
-						hovered,
-						ViewModel.PresetColumn.Mode.Addition));
+                    addBtn.onClick.AddListener(() =>
+                    {
+                        GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+                        SceneManager.LoadScene("ChampionCreator");
+                    });
 				}
 
 				ArrangeUI();
@@ -96,11 +92,6 @@ namespace West
 			private void ArrangeUI()
             {
                 contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * (App.Content.Account.ActiveChampion.PresetList.Count + 1));
-            }
-
-            private void BackClicked()
-            {
-                SceneManager.LoadScene("Landing");
             }
         }
 	}

@@ -3,106 +3,121 @@ using SimpleJSON;
 using BestHTTP;
 using UnityEngine;
 
-namespace West.Model.CloudContent
+namespace West.CloudContent
 {
-	public class Account : Base
-	{
-		public JSONNode Json { get; private set; } = null;
-		public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
+    public class Account : Base
+    {
+        public JSONNode Json { get; private set; } = null;
+        public List<Model.Champion> ChampionList { get; private set; } = new List<Model.Champion>();
+        public Model.Champion ActiveChampion { get; private set; } = null;
 
-        public delegate void PresetDelegate(ConstellationPreset preset_);
-		public event PresetDelegate PresetAdded = delegate { };
-		public event PresetDelegate PresetSaved = delegate { };
-		public event PresetDelegate PresetRemoved = delegate { };
+        public delegate void VoidDelegate();
+        public delegate void ChampionDelegate(Model.Champion champion_);
+        public event VoidDelegate ActiveChampionChanged = delegate { };
+        public event ChampionDelegate ChampionAdded = delegate { };
+        public event ChampionDelegate ChampionSaved = delegate { };
+        public event ChampionDelegate ChampionRemoved = delegate { };
 
+        protected override void Build(OnBuilt onBuilt_)
+        {
+            App.Server.Request(
+            HTTPMethods.Get,
+            "account/" + App.Content.Session.Account,
+            (JSONNode json_) =>
+            {
+                Json = json_;
+                ChampionList.Clear();
+                foreach (var almostJson in Json["champions"].AsArray)
+                    ChampionList.Add(new Model.Champion(almostJson.Value));
 
-		protected override void Build(OnBuilt onBuilt_)
-		{
-			App.Server.Request(
-			HTTPMethods.Get,
-			"account/" + App.Content.Session.Account,
-			(JSONNode json_) =>
-			{
-				Json = json_;
-				PresetList.Clear();
-				foreach (var almostJson in Json["presets"].AsArray)
-					if (almostJson.Value["constellation"] == App.Content.GameSettings.Json["constellation"])
-						PresetList.Add(new ConstellationPreset(almostJson.Value));
-
-				Debug.Log(Json);
-				onBuilt_();
-			}).Send();
-		}
-
-		public Account(GameSettings gameSettings_, ConstellationList constellationList_)
-		{
-			dependencyList.Add(gameSettings_);
-			dependencyList.Add(constellationList_);
-		}
-
-		public void AddPreset()
-		{
-			JSONNode presetJson = new JSONObject();
-			presetJson["name"] = "Preset " + PresetList.Count;
-			presetJson["constellation"] = App.Content.GameSettings.Json["constellation"];
-			presetJson["abilities"] = new JSONArray();
-			presetJson["classes"] = new JSONArray();
-			presetJson["kits"] = new JSONArray();
-
-			var request = App.Server.Request(
-				HTTPMethods.Post,
-				"account/preset",
-				(JSONNode json_) =>
-				{
-					ConstellationPreset preset = new ConstellationPreset(json_);
-                    PresetList.Add(preset);
-                    Json["presets"].AsArray.Add(json_);
-
-					PresetAdded(preset);
-				});
-			request.AddField("preset", presetJson.ToString());
-			request.Send();
+                Debug.Log(Json);
+                onBuilt_();
+            }).Send();
         }
 
-        public void SavePreset(ConstellationPreset preset_)
+        public Account(SkillList skillList_)
         {
-            if (!PresetList.Contains(preset_))
+            dependencyList.Add(skillList_);
+        }
+
+        public void ActivateChampion(Model.Champion champion_)
+        {
+            if (!loaded)
                 return;
 
-            JSONNode presetJson = preset_.ToJson();
+            if (champion_ == null || !ChampionList.Contains(champion_))
+                return;
+
+            if (ActiveChampion != null)
+                ActiveChampion.Detach();
+
+            ActiveChampion = champion_;
+            ActiveChampionChanged();
+        }
+
+        public void AddChampion(Model.Champion champion_)
+        {
+            if (!loaded)
+                return;
 
             var request = App.Server.Request(
-                HTTPMethods.Put,
-                "account/preset",
+                HTTPMethods.Post,
+                "champion",
                 (JSONNode json_) =>
                 {
-					PresetSaved(preset_);
+                    Model.Champion champion = new Model.Champion(json_);
+                    ChampionList.Add(champion);
+                    Json["champions"].AsArray.Add(json_);
+
+                    ChampionAdded(champion);
                 });
-            request.AddField("preset", presetJson.ToString());
+            request.AddField("champion", champion_.Json.ToString());
             request.Send();
         }
 
-        public void RemovePreset(ConstellationPreset preset_)
+        public void SaveChampion(Model.Champion champion_)
         {
-            if (!PresetList.Contains(preset_))
+            if (!loaded)
+                return;
+
+            if (!ChampionList.Contains(champion_))
+                return;
+
+            var request = App.Server.Request(
+                HTTPMethods.Put,
+                "champion",
+                (JSONNode json_) =>
+                {
+                    ChampionSaved(champion_);
+                });
+            request.AddField("champion", champion_.Json.ToString());
+            request.Send();
+        }
+
+        public void RemoveChampion(Model.Champion champion_)
+        {
+            if (!loaded)
+                return;
+
+            if (!ChampionList.Contains(champion_))
                 return;
 
             App.Server.Request(
                 HTTPMethods.Delete,
-                "account/preset/" + preset_.Id,
+                "champion/" + champion_.Json["_id"],
                 (JSONNode json_) =>
                 {
-                    PresetList.Remove(preset_);
-                    foreach (var almostJson in Json["presets"].AsArray)
+                    ChampionList.Remove(champion_);
+                    foreach (var almostJson in Json["champions"].AsArray)
                     {
-                        if (almostJson.Value["_id"] == preset_.Id)
+                        if (almostJson.Value["_id"] == champion_.Json["_id"])
                         {
-                            Json["presets"].AsArray.Remove(almostJson.Value);
+                            Json["champions"].AsArray.Remove(almostJson.Value);
                             break;
                         }
                     }
 
-					PresetRemoved(preset_);
+                    ChampionRemoved(champion_);
                 }).Send();
         }
     }

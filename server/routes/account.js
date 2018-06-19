@@ -5,8 +5,8 @@ router.get('/:id', function(req, res, next) {
     req.app.db.models.accounts
     .findOne({ '_id' : req.params.id })
     .populate({
-        path: 'presets',
-        model: 'presets'
+        path: 'champions',
+        model: 'champions'
     })
     .then(document => {
         console.error(document)
@@ -15,63 +15,6 @@ router.get('/:id', function(req, res, next) {
         })
     .catch(err => {
         console.error('accounts error')
-        console.error(err)
-    })
-})
-
-router.post('/preset', function(req, res, next) {
-    var preset = JSON.parse(req.body.preset);
-    req.app.db.models.presets
-    .create(preset)
-    .then(presetDocument => {
-        console.error('add preset success')
-        console.error(presetDocument)
-        req.app.db.models.accounts
-        .findOne({ _id: req.user.account })
-        .then(accountDocument => {
-            accountDocument.presets.push(presetDocument._id);
-            accountDocument.save();
-
-            console.error('add preset to account success')
-            res.send(presetDocument);
-          })
-        .catch(err => {
-            console.error('add preset to account error')
-            console.error(err)
-        })
-    })
-    .catch(err => {
-        console.error('add preset error')
-        console.error(err)
-    })
-})
-
-router.put('/preset', function(req, res, next) {
-    var preset = JSON.parse(req.body.preset);
-    req.app.db.models.presets
-    .findById(preset._id)
-    .then(presetDocument => {
-        presetDocument.set(preset);
-        presetDocument.save();
-        console.error('update preset success')
-        res.send(presetDocument);
-    })
-    .catch(err => {
-        console.error('update preset error')
-        console.error(err)
-    })
-})
-
-router.delete('/preset/:id', function(req, res, next) {
-    console.error('remove preset')
-    req.app.db.models.presets
-    .remove({ _id: req.params.id })
-    .then(document => {
-        console.error('remove preset success')
-        res.send(document);
-    })
-    .catch(err => {
-        console.error('remove preset error')
         console.error(err)
     })
 })

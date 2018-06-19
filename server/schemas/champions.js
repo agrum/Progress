@@ -13,6 +13,11 @@ module.exports = function()
 			type: Number,
 			required: true,
 		},
+		classes: {
+			type: [mongoose.Schema.Types.ObjectId],
+			required: true,
+			ref: 'skills',
+		},
         presets: {
 			type: [mongoose.Schema.Types.ObjectId],
 			required: true,

@@ -1,6 +1,6 @@
 ﻿
 
-namespace West.Model.CloudContent
+namespace West.CloudContent
 {
 	public class AppContent
 	{
@@ -8,15 +8,15 @@ namespace West.Model.CloudContent
 		public GameSettings GameSettings { get; private set; }
 		public SkillList SkillList { get; private set; }
 		public ConstellationList ConstellationList { get; private set; }
-		public Account Account { get; private set; }
+        public Account Account { get; private set; }
 
-		public AppContent()
+        public AppContent()
 		{
 			Session = new Session();
 			GameSettings = new GameSettings(Session);
             SkillList = new SkillList(GameSettings);
-			ConstellationList = new ConstellationList(SkillList);
-			Account = new Account(GameSettings, ConstellationList);
+            Account = new Account(SkillList);
+            ConstellationList = new ConstellationList(SkillList);
 		}
 	}
 }

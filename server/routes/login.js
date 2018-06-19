@@ -27,6 +27,7 @@ router.post('/', function (req, res, next) {
             {
                 info.error = err
             }
+            req.session.west = {}
             return res.send(info)
         })
     })(req, res)

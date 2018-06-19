@@ -11,7 +11,7 @@ namespace West
 	public class App
 	{
 		static public Model.Resource.AppResource Resource { get; private set; } = new Model.Resource.AppResource();
-		static public Model.CloudContent.AppContent Content { get; private set; } = new Model.CloudContent.AppContent();
+		static public CloudContent.AppContent Content { get; private set; } = new CloudContent.AppContent();
 		static public Model.Network.Server Server { get; private set; } = new Model.Network.Server();
 	}
 }
