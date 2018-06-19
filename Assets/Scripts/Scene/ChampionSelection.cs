@@ -64,34 +64,25 @@ namespace West
 				}
 
 				ArrangeUI();
-
-				App.Content.Account.ActiveChampion.PresetAdded += OnPresetAdded;
-				App.Content.Account.ActiveChampion.PresetRemoved += OnPresetRemoved;
+                
+				App.Content.Account.ChampionRemoved += OnChampionRemoved;
 
 				canvas.gameObject.SetActive(true);
 			}
 
 			void OnDestroy()
 			{
-				App.Content.Account.ActiveChampion.PresetAdded -= OnPresetAdded;
-				App.Content.Account.ActiveChampion.PresetRemoved -= OnPresetRemoved;
+				App.Content.Account.ChampionRemoved -= OnChampionRemoved;
 			}
 
-			private void OnPresetAdded(Model.ConstellationPreset preset)
-			{
-				PresetEditor.Model = preset;
-				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
-				SceneManager.LoadScene("PresetEditor");
-			}
-
-			private void OnPresetRemoved(Model.ConstellationPreset preset)
+			private void OnChampionRemoved(Model.Champion champion)
 			{
 				ArrangeUI();
 			}
 
 			private void ArrangeUI()
             {
-                contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * (App.Content.Account.ActiveChampion.PresetList.Count + 1));
+                contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * (App.Content.Account.ChampionList.Count + 1));
             }
         }
 	}
