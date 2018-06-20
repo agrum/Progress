@@ -5,7 +5,7 @@ namespace West
 {
 	namespace View
 	{
-		class ChampionColumn : MonoBehaviour
+		class ChampionColumnPreview : MonoBehaviour
 		{
 			public NodeMap classPreview = null;
 			public Button deleteButton = null;
@@ -14,9 +14,9 @@ namespace West
             public Text levelText = null;
             public Text gearText = null;
 
-            private ViewModel.ChampionColumn viewModel;
+            private ViewModel.ChampionColumnPreview viewModel;
 
-			public void SetContext(ViewModel.ChampionColumn viewModel_)
+			public void SetContext(ViewModel.ChampionColumnPreview viewModel_)
 			{
 				Debug.Assert(viewModel_ != null);
 

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using SimpleJSON;
 
 namespace West
 {
@@ -45,9 +46,9 @@ namespace West
 				{
 					GameObject gob = Instantiate(championColumnPrefab);
 					gob.transform.SetParent(horizontalLayout.transform, false);
-					View.ChampionColumn viewChampionColumn = gob.GetComponent<View.ChampionColumn>();
+					View.ChampionColumnPreview viewChampionColumn = gob.GetComponent<View.ChampionColumnPreview>();
 
-                    viewChampionColumn.SetContext(new ViewModel.ChampionColumn(champion, hovered, false));
+                    viewChampionColumn.SetContext(new ViewModel.ChampionColumnPreview(champion, hovered, false));
 				}
 
 				//add empty column to add presets.

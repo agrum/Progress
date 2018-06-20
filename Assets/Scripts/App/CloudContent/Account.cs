@@ -28,7 +28,7 @@ namespace West.CloudContent
                 Json = json_;
                 ChampionList.Clear();
                 foreach (var almostJson in Json["champions"].AsArray)
-                    ChampionList.Add(new Model.Champion(almostJson.Value));
+                    ChampionList.Add(new Model.Champion(almostJson.Value.AsObject));
 
                 Debug.Log(Json);
                 onBuilt_();
@@ -55,23 +55,27 @@ namespace West.CloudContent
             ActiveChampionChanged();
         }
 
-        public void AddChampion(Model.Champion champion_)
+        public void AddChampion(string name, JSONArray classes)
         {
             if (!loaded)
                 return;
+
+            JSONObject championJson = new JSONObject();
+            championJson["name"] = name;
+            championJson["classes"] = classes;
 
             var request = App.Server.Request(
                 HTTPMethods.Post,
                 "champion",
                 (JSONNode json_) =>
                 {
-                    Model.Champion champion = new Model.Champion(json_);
+                    Model.Champion champion = new Model.Champion(json_.AsObject);
                     ChampionList.Add(champion);
                     Json["champions"].AsArray.Add(json_);
 
                     ChampionAdded(champion);
                 });
-            request.AddField("champion", champion_.Json.ToString());
+            request.AddField("champion", championJson);
             request.Send();
         }
 

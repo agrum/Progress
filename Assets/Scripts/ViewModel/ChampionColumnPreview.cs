@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace West.ViewModel
 {
-    public class ChampionColumn : IBase
+    public class ChampionColumnPreview : IBase
     {
         public event OnVoidDelegate ChampionDestroyed = delegate { };
 
@@ -12,7 +12,7 @@ namespace West.ViewModel
         private Model.HoveredSkill hovered = null;
         private bool canEdit = false;
 
-        public ChampionColumn(
+        public ChampionColumnPreview(
             Model.Champion champion_,
             Model.HoveredSkill hovered_,
             bool canEdit_)

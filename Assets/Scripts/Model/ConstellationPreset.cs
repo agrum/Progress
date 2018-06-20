@@ -43,7 +43,8 @@ namespace West
 			{
                 Id = json["_id"];
                 Name = json["name"];
-				Constellation = App.Content.ConstellationList[json["constellation"]];
+                Constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
+                //Constellation = App.Content.ConstellationList[json["constellation"]];
                 limits = limits_;
 
                 foreach (var almostValue in json["abilities"])

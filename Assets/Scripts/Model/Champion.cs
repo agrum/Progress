@@ -9,7 +9,7 @@ namespace West
     {
         public class Champion : CloudContent.Base
         {
-            public JSONNode Json { get; private set; } = null;
+            public JSONObject Json { get; private set; } = null;
             public ConstellationPreset ClassPreset { get; private set; } = null;
             public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
 
@@ -25,7 +25,7 @@ namespace West
                 "champion/" + Json["_d"],
                 (JSONNode json_) =>
                 {
-                    Json = json_;
+                    Json = json_.AsObject;
                     PresetList.Clear();
                     foreach (var almostJson in Json["presets"].AsArray)
                         if (almostJson.Value["constellation"] == App.Content.GameSettings.Json["constellation"])
@@ -33,11 +33,7 @@ namespace West
                                 almostJson.Value,
                                 new PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits)));
 
-                    JSONObject fakeClassPreset = new JSONObject();
-                    fakeClassPreset["classes"] = Json["classes"].AsArray;
-                    new ConstellationPreset(
-                        fakeClassPreset,
-                        new PresetLimits(0, 3, 0));
+                    PopulateFakeClassPreset(Json["classes"].AsArray);
 
                     PresetAdded = delegate { };
                     PresetSaved = delegate { };
@@ -48,9 +44,10 @@ namespace West
                 }).Send();
             }
 
-            public Champion(JSONNode json_)
+            public Champion(JSONObject json_)
             {
                 Json = json_;
+                PopulateFakeClassPreset(Json["classes"].AsArray);
                 dependencyList.Add(App.Content.GameSettings);
                 dependencyList.Add(App.Content.SkillList);
             }
@@ -138,6 +135,15 @@ namespace West
 
                         PresetRemoved(preset_);
                     }).Send();
+            }
+
+            private void PopulateFakeClassPreset(JSONArray array_)
+            {
+                JSONObject fakeClassPreset = new JSONObject();
+                fakeClassPreset["classes"] = array_;
+                ClassPreset = new ConstellationPreset(
+                    fakeClassPreset,
+                    new PresetLimits(0, 3, 0));
             }
         }
     }
