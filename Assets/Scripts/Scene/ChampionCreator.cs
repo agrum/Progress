@@ -53,6 +53,7 @@ namespace West
 
             private void BackClicked()
             {
+                GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
                 SceneManager.LoadScene("ChampionSelection");
             }
         }

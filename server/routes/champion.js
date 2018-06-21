@@ -25,7 +25,7 @@ router.post('/', function(req, res, next) {
     req.app.db.models.champions
     .create(champion)
     .then(championDocument => {
-        console.error('add preset success')
+        console.error('add champion success')
         console.error(championDocument)
         req.app.db.models.accounts
         .update(

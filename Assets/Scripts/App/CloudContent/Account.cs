@@ -79,25 +79,6 @@ namespace West.CloudContent
             request.Send();
         }
 
-        public void SaveChampion(Model.Champion champion_)
-        {
-            if (!loaded)
-                return;
-
-            if (!ChampionList.Contains(champion_))
-                return;
-
-            var request = App.Server.Request(
-                HTTPMethods.Put,
-                "champion",
-                (JSONNode json_) =>
-                {
-                    ChampionSaved(champion_);
-                });
-            request.AddField("champion", champion_.Json.ToString());
-            request.Send();
-        }
-
         public void RemoveChampion(Model.Champion champion_)
         {
             if (!loaded)

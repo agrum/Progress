@@ -22,7 +22,7 @@ namespace West
             {
                 App.Server.Request(
                 HTTPMethods.Get,
-                "champion/" + Json["_d"],
+                "champion/" + Json["_id"],
                 (JSONNode json_) =>
                 {
                     Json = json_.AsObject;
