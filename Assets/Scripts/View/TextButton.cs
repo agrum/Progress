@@ -27,6 +27,14 @@ namespace West
             {
                 clickEvent();
             }
+
+            private void OnDestroy()
+            {
+                Button btn = GetComponent<Button>();
+                btn.onClick.RemoveAllListeners();
+                clickEvent = null;
+            }
+
             public void OnPointerEnter(PointerEventData pointerEventData)
             {
                 Image image = GetComponent<Image>();

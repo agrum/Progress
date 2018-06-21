@@ -26,7 +26,7 @@ namespace West.View
 
 		void Update()
 		{
-			if (rectTransform && rectTransform.rect != lastRect)
+			if (viewModel != null && rectTransform && rectTransform.rect != lastRect)
 			{
 				lastRect = rectTransform.rect;
 				viewModel.SizeChanged(lastRect);

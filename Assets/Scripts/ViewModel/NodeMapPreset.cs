@@ -45,19 +45,19 @@ namespace West.ViewModel
 		public void PopulateNodes()
         { 
 			PopulateNodes(
-				App.Content.GameSettings.NumAbilities,
+				model.Limits.Ability,
 				model.Constellation.AbilityNodeList,
 				model.SelectedAbilityList,
 				Model.Skill.TypeEnum.Ability,
 				abilityMaterial);
 			PopulateNodes(
-				App.Content.GameSettings.NumKits,
+                model.Limits.Kit,
 				model.Constellation.KitNodeList,
 				model.SelectedKitList,
 				Model.Skill.TypeEnum.Kit,
 				kitMaterial);
 			PopulateNodes(
-				App.Content.GameSettings.NumClasses,
+                model.Limits.Class,
 				model.Constellation.ClassNodeList,
 				model.SelectedClassList,
 				Model.Skill.TypeEnum.Class,

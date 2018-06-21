@@ -10,17 +10,17 @@ namespace West
         {
             public View.NodeTextualDetails nodeTextualDetails = null;
             public View.NodeMap constellation = null;
-            public View.PresetColumn presetColumn = null;
+            public View.ChampionColumnCreate championColumn = null;
             public Button backButton = null;
 
-            private Model.ConstellationPreset preset = new Model.ConstellationPreset(new SimpleJSON.JSONObject(), new Model.PresetLimits(0, 3, 0));
+            private Model.ConstellationPreset preset = null;
             private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
             void Start()
             {
                 Debug.Assert(backButton != null);
 
-                App.Content.Account.Load(() =>
+                App.Content.ConstellationList.Load(() =>
                 {
                     Setup();
                 });
@@ -32,13 +32,14 @@ namespace West
                 if (this == null)
                     return;
 
+                preset = new Model.ConstellationPreset(new SimpleJSON.JSONObject(), new Model.PresetLimits(0, 3, 0));
                 backButton.onClick.AddListener(BackClicked);
                 nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
                 constellation.SetContext(new ViewModel.NodeMapConstellation(
                     App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]], 
                     preset, 
                     hovered));
-                presetColumn.SetContext(new ViewModel.PresetColumn(preset, hovered, ViewModel.PresetColumn.Mode.Edit));
+                championColumn.SetContext(new ViewModel.ChampionColumnCreate(preset, hovered));
 
                 App.Content.Account.ChampionAdded += OnChampionAdded;
             }

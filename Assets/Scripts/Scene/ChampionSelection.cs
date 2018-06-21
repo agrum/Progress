@@ -55,13 +55,9 @@ namespace West
 				{
 					GameObject gob = Instantiate(additionColumnPrefab);
 					gob.transform.SetParent(horizontalLayout.transform, false);
-					Button addBtn = gob.GetComponentInChildren<Button>();
+                    View.TextButton addBtn = gob.GetComponentInChildren<View.TextButton>();
 
-                    addBtn.onClick.AddListener(() =>
-                    {
-                        GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
-                        SceneManager.LoadScene("ChampionCreator");
-                    });
+                    addBtn.clickEvent += OnAddClicked;
 				}
 
 				ArrangeUI();
@@ -84,6 +80,12 @@ namespace West
 			private void ArrangeUI()
             {
                 contentElement.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 150.0f * (App.Content.Account.ChampionList.Count + 1));
+            }
+
+            private void OnAddClicked()
+            {
+                GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+                SceneManager.LoadScene("ChampionCreator");
             }
         }
 	}

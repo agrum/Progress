@@ -100,7 +100,7 @@ namespace West
 
             private void BackClicked()
             {
-                SceneManager.LoadScene("Landing");
+                SceneManager.LoadScene("ChampionSelection");
             }
         }
 	}

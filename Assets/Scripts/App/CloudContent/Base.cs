@@ -51,6 +51,7 @@ namespace West.CloudContent
 			if (dependencies_loaded)
 			{
 				Build(selfBuiltCallback);
+                return;
 			}
 
 			//otherwise define per-dependency-built callback

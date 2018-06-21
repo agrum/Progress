@@ -5,7 +5,7 @@ namespace West
 {
     namespace View
     {
-        class ChampionColumnCreate : MonoBehaviour
+        class ChampionColumnCreate : WestBehaviour
         {
             public NodeMap presetPreview = null;
             public Button createButton = null;
@@ -20,16 +20,19 @@ namespace West
                 viewModel = viewModel_;
 
                 presetPreview.SetContext(viewModel.CreatePreviewContext());
+
+                Delay(() =>
+                {
+                    createButton.onClick.AddListener(viewModel.CreateClicked);
+                    nameInput.onEndEdit.AddListener(viewModel.NameChanged);
+                });
             }
 
-            private void Start()
+            protected override void WestStart()
             {
                 Debug.Assert(presetPreview != null);
                 Debug.Assert(createButton != null);
-                Debug.Assert(nameInput != null);
-                
-                createButton.onClick.AddListener(viewModel.CreateClicked);
-                nameInput.onEndEdit.AddListener(viewModel.NameChanged);
+                Debug.Assert(nameInput != null);            
             }
 
             private void OnDestroy()

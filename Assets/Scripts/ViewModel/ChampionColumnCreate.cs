@@ -6,8 +6,6 @@ namespace West.ViewModel
 {
     class ChampionColumnCreate : IBase
     {
-        public event OnVoidDelegate PresetDestroyed = delegate { };
-
         public Model.ConstellationPreset preset;
         public Model.HoveredSkill hovered;
 
@@ -35,8 +33,8 @@ namespace West.ViewModel
                 return;
 
             JSONArray classes = new JSONArray();
-            foreach (var c in preset.SelectedClassList)
-                classes.Add(c.Json["_id"]);
+            foreach (var skill in preset.SelectedClassList)
+                classes.Add(skill.Json["_id"]);
 
             App.Content.Account.AddChampion(name, classes);
         }

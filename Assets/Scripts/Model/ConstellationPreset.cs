@@ -29,15 +29,14 @@ namespace West
             public string Id { get; private set; }
 			public string Name { get; set; }
 			public Constellation Constellation { get; private set; }
+            public PresetLimits Limits { get; private set; } = null;
 
-			public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
+            public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
 			public List<Skill> SelectedClassList { get; private set; } = new List<Skill>();
 			public List<Skill> SelectedKitList { get; private set; } = new List<Skill>();
 
 			public delegate void OnPresetUpdateDelegate();
 			public event OnPresetUpdateDelegate PresetUpdated;
-
-            private PresetLimits limits = null;
 
             public ConstellationPreset(JSONNode json, PresetLimits limits_)
 			{
@@ -45,7 +44,7 @@ namespace West
                 Name = json["name"];
                 Constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
                 //Constellation = App.Content.ConstellationList[json["constellation"]];
-                limits = limits_;
+                Limits = limits_;
 
                 foreach (var almostValue in json["abilities"])
 					SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
@@ -70,15 +69,15 @@ namespace West
 				{
 					case Skill.TypeEnum.Ability:
 						SelectedIndexList = SelectedAbilityList;
-						limit = limits.Ability;
+						limit = Limits.Ability;
 						break;
 					case Skill.TypeEnum.Class:
 						SelectedIndexList = SelectedClassList;
-						limit = limits.Class;
+						limit = Limits.Class;
 						break;
 					case Skill.TypeEnum.Kit:
 						SelectedIndexList = SelectedKitList;
-                        limit = limits.Kit; //App.Content.GameSettings.NumKits;
+                        limit = Limits.Kit; //App.Content.GameSettings.NumKits;
 						break;
 					default:
 						Debug.Log("ConstellationPreset.Add() skill no type");

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/ChampionSelection.unity
+    guid: 0b742d2d59210ac40a0e92a675bc88aa
+  - enabled: 1
     path: Assets/Scenes/Landing.unity
     guid: d95fb89564be290499eb4d1694a55003
   - enabled: 1
@@ -20,3 +23,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World.unity
     guid: 1b2f5c14b2139ea41bd32befa6ce9524
+  - enabled: 1
+    path: Assets/Scenes/ChampionCreator.unity
+    guid: f00f001fdbed5fb40b6bf8da0ea3cfc4
