@@ -1183,6 +1183,7 @@
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeEmpty.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnCreate.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnPreview.cs" />
     <Compile Include="Assets\Scripts\View\Node.cs" />

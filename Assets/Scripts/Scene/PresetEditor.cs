@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 namespace West
 {
@@ -34,9 +35,18 @@ namespace West
 				if (this == null)
 					return;
 
+                var champion = App.Content.Account.ActiveChampion;
+                List<Model.Skill> filteredSkillList = new List<Model.Skill>();
+                foreach (var node in Model.Constellation.AbilityNodeList)
+                    filteredSkillList.Add(node.Skill);
+                foreach (var node in Model.Constellation.KitNodeList)
+                    filteredSkillList.Add(node.Skill);
+                foreach (var skill in champion.ClassPreset.SelectedClassList)
+                    filteredSkillList.Add(skill);
+
                 backButton.onClick.AddListener(BackClicked);
                 nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
-				constellation.SetContext(new ViewModel.NodeMapConstellation(Model.Constellation, Model, hovered));
+				constellation.SetContext(new ViewModel.NodeMapConstellation(Model.Constellation, Model, filteredSkillList, hovered));
 				presetColumn.SetContext(new ViewModel.PresetColumn(Model, hovered, ViewModel.PresetColumn.Mode.Edit));
 				
 				App.Content.Account.ActiveChampion.PresetSaved += OnPresetSaved;

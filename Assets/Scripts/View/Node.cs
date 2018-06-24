@@ -91,13 +91,14 @@ namespace West
 					UnityEngine.Object prefabObject = Resources.Load(viewModel.IconPath());
 					Texture2D texture = prefabObject as Texture2D;
 					Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
-
-					pulse.gameObject.SetActive(true);
+                    
+                    pulse.gameObject.SetActive(true);
 					icon.gameObject.SetActive(true);
 					iconWhite.gameObject.SetActive(true);
 					icon.overrideSprite = sprite;
 					iconWhite.overrideSprite = sprite;
-				}
+                    OnSelectionChanged(true);
+                }
 				else
 				{
 					OnSelectionChanged(false);
@@ -120,7 +121,7 @@ namespace West
 
 				if (!started)
 					return;
-
+                
 				animator.ResetTrigger(unselectHash);
 				animator.ResetTrigger(selectHash);
                 

@@ -12,12 +12,20 @@ namespace West.ViewModel
 		private Model.ConstellationPreset preset = null;
 		private Model.HoveredSkill hovered = null;
 		private Model.Json scaleModel = new Model.Json();
-		
-		private Material abilityMaterial = null;
+
+        private List<Model.Skill> filteredAbilityList = new List<Model.Skill>();
+        private List<Model.Skill> filteredClassList = new List<Model.Skill>();
+        private List<Model.Skill> filteredKitList = new List<Model.Skill>();
+
+        private Material abilityMaterial = null;
 		private Material classMaterial = null;
 		private Material kitMaterial = null;
 
-        public NodeMapConstellation(Model.Constellation model_, Model.ConstellationPreset preset_, Model.HoveredSkill hovered_)
+        public NodeMapConstellation(
+            Model.Constellation model_,
+            Model.ConstellationPreset preset_,
+            List<Model.Skill> filtererSkills_,
+            Model.HoveredSkill hovered_)
         {
             Debug.Assert(model_ != null);
             Debug.Assert(preset_ != null);
@@ -31,19 +39,41 @@ namespace West.ViewModel
             abilityMaterial = App.Resource.Material.AbilityMaterial;
             classMaterial = App.Resource.Material.ClassMaterial;
             kitMaterial = App.Resource.Material.KitMaterial;
+
+            foreach (var skill in filtererSkills_)
+            {
+                switch (skill.Type)
+                {
+                    case Model.Skill.TypeEnum.Ability:
+                        filteredAbilityList.Add(skill);
+                        break;
+                    case Model.Skill.TypeEnum.Class:
+                        filteredClassList.Add(skill);
+                        break;
+                    case Model.Skill.TypeEnum.Kit:
+                        filteredKitList.Add(skill);
+                        break;
+                    default:
+                        Debug.Log("NodeMapPreset() weird filter given");
+                        break;
+                }
+            }
         }
 
         public void PopulateNodes()
         {
             PopulateNodes(
 				model.AbilityNodeList,
-				abilityMaterial);
+                filteredAbilityList,
+                abilityMaterial);
 			PopulateNodes(
 				model.ClassNodeList,
-				classMaterial);
+                filteredClassList,
+                classMaterial);
 			PopulateNodes(
 				model.KitNodeList,
-				kitMaterial);
+                filteredKitList,
+                kitMaterial);
 		}
 
 		public void SizeChanged(Rect rect)
@@ -54,20 +84,29 @@ namespace West.ViewModel
 				rect.height / (2 * (model.HalfSize.y + 1) * positionMultiplier.y));
 		}
 
-		void PopulateNodes(List<Model.ConstellationNode> nodeModelList_, Material nodeMaterial_)
+		void PopulateNodes(
+            List<Model.ConstellationNode> nodeModelList_,
+            List<Model.Skill> filteredSkillList_,
+            Material nodeMaterial_)
 		{
 			foreach (var nodeModel in nodeModelList_)
 			{
 				NodeAdded(() =>
 				{
-					return new NodeConstellation(
-					nodeModel.Skill,
-					preset,
-                    hovered,
-					scaleModel,
-					nodeMaterial_,
-					nodeModel.Position);
-				});
+                    if (filteredSkillList_.Contains(nodeModel.Skill))
+					    return new NodeConstellation(
+                            nodeModel.Skill,
+					        preset,
+                            hovered,
+					        scaleModel,
+					        nodeMaterial_,
+					        nodeModel.Position);
+                    else
+                        return new NodeEmpty(
+                            scaleModel,
+                            nodeMaterial_,
+                            nodeModel.Position);
+                });
 			}
 		}
 	}

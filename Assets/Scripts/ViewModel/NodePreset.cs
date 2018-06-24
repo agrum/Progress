@@ -77,11 +77,10 @@ namespace West.ViewModel
 			Model.Skill newSkill = null;
 			if (selectedSkillList.Count > index)
 				newSkill = selectedSkillList[index];
-
-			if (newSkill != skill)
-			{
-				skill = newSkill;
-                SelectionChanged(Selected());
+            
+            if (newSkill != skill)
+            {
+                skill = newSkill;
                 SkillChanged();
             }
 		}
@@ -122,8 +121,6 @@ namespace West.ViewModel
 			if (canEdit && skill != null)
 			{
 				preset.Remove(skill);
-				skill = null;
-				SkillChanged();
 			}
 		}
 	}
