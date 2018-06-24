@@ -15,6 +15,58 @@ router.get('/', function (req, res, next) {
         })
 })
 
+router.get('/copy', function (req, res, next) {
+    var queries = []
+    queries.push((cb) => {
+        req.app.db.models.abilities
+        .find({})
+        .then(documents => {
+            for (var i = 0; i < documents.length; ++i)
+                documents[i].type = "ability"
+            req.app.db.models.skills
+            .insertMany(documents)
+            .then(documents_ =>
+            {
+                cb(null, "ok");
+            })
+        })
+    });
+    queries.push((cb) => {
+        req.app.db.models.kits
+        .find({})
+        .then(documents => {
+            for (var i = 0; i < documents.length; ++i)
+                documents[i].type = "kit"
+            req.app.db.models.skills
+            .insertMany(documents)
+            .then(documents_ =>
+            {
+                cb(null, "ok");
+            })
+        })
+    });
+    queries.push((cb) => {
+        req.app.db.models.classes
+        .find({})
+        .then(documents => {
+            for (var i = 0; i < documents.length; ++i)
+                documents[i].type = "class"
+            req.app.db.models.skills
+            .insertMany(documents)
+            .then(documents_ =>
+            {
+                cb(null, "ok");
+            })
+        })
+    });
+
+    async.parallel(queries, () =>
+    {
+        console.error('skills no error')
+        res.send({});
+    })
+})
+
 router.get('/convert', function (req, res, next) {
     req.app.db.models.skills
         .find({})

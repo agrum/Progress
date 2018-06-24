@@ -14,6 +14,7 @@ module.exports = function()
         type: String,
 		name: String,
 		description: String,
+		details: String,
         metrics: mongoose.Schema.Types.Mixed,
         metrics2: [ metricSchema ],
 	})

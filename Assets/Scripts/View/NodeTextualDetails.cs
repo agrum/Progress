@@ -99,8 +99,6 @@ namespace West
 				if (!active)
 					return;
 				
-				JSONNode metrics = skill["metrics"];
-
 				string colorPrefix = "<color=#" + skill["color"] + ">";
 				string colorSuffix = "</color>";
 
@@ -122,48 +120,52 @@ namespace West
 					Kit.text = colorPrefix + kitString + colorSuffix;
                     Kit.gameObject.SetActive(true);
 				}
+                
+                Cooldown.gameObject.SetActive(false);
+                CastTime.gameObject.SetActive(false);
+                Modifier.gameObject.SetActive(false);
+                Projectile.gameObject.SetActive(false);
+                Unit.gameObject.SetActive(false);
+                Charge.gameObject.SetActive(false);
+                KitDetails.gameObject.SetActive(false);
 
-				Details.text = detailsString.Replace("#content#", skill["details"]);
-				foreach (var metric in metrics)
-				{
-					if (metric.Key == "cooldown"
-						|| metric.Key == "castTime"
-						|| metric.Key == "modifier"
-						|| metric.Key == "projectile"
-						|| metric.Key == "unit"
-						|| metric.Key == "stack"
-						|| metric.Key == "charge")
-						continue;
+                Details.text = detailsString.Replace("#content#", skill["details"]);
+                if (viewModel.Desc != null)
+                {
+                    foreach (var entry in viewModel.Desc)
+                    {
+                        Details.text = Details.text.Replace("#" + entry.Key + "#", colorPrefix + entry.Value + colorSuffix);
+                    }
+                }
 
-					Details.text = Details.text.Replace("#" + metric.Key + "#", colorPrefix + metric.Value + colorSuffix);
-				}
+                if (viewModel.Misc != null)
+                {
+                    if (viewModel.Misc.ContainsKey("cooldown"))
+                    {
+                        Cooldown.gameObject.SetActive(true);
+                        Cooldown.text = cooldownString.Replace("#cooldown#", colorPrefix + viewModel.Misc["cooldown"] + colorSuffix);
+                    }
+                    else if (viewModel.Misc.ContainsKey("castTime"))
+                    {
+                        CastTime.gameObject.SetActive(true);
+                        CastTime.text = castTimeString.Replace("#castTime#", colorPrefix + viewModel.Misc["castTime"] + colorSuffix);
+                    }
+                }
+                
+                if (viewModel.Modifler != null)
+                {
+                    Modifier.gameObject.SetActive(true);
+                    string[] lineSplit = modifierString.Split('\n');
+                    Modifier.text = lineSplit[0];
+                    if (viewModel.Modifler.ContainsKey("range"))
+                        Modifier.text += "\n" + lineSplit[1].Replace("#range#", colorPrefix + viewModel.Modifler["range"] + colorSuffix);
+                    if (viewModel.Modifler.ContainsKey("duration"))
+                        Modifier.text += "\n" + lineSplit[2].Replace("#duration#", colorPrefix + viewModel.Modifler["duration"] + colorSuffix);
+                    if (viewModel.Modifler.ContainsKey("stack"))
+                        Modifier.text += "\n" + lineSplit[3].Replace("#stack#", colorPrefix + viewModel.Modifler["stack"] + colorSuffix);
+                }
 
-				if (metrics["cooldown"].IsNumber)
-					Cooldown.text = cooldownString.Replace("#cooldown#", colorPrefix + metrics["cooldown"] + colorSuffix);
-				else
-					Cooldown.gameObject.SetActive(false);
-
-				if (metrics["castTime"].IsNumber)
-					CastTime.text = castTimeString.Replace("#castTime#", colorPrefix + metrics["castTime"] + colorSuffix);
-				else
-					CastTime.gameObject.SetActive(false);
-
-				if (metrics["modifier"].IsObject)
-				{
-					JSONNode modifiertNode = metrics["modifier"];
-					string[] lineSplit = modifierString.Split('\n');
-					Modifier.text = lineSplit[0];
-					if (modifiertNode["range"].AsDouble != 0)
-						Modifier.text += "\n" + lineSplit[1].Replace("#range#", colorPrefix + modifiertNode["range"] + colorSuffix);
-					if (modifiertNode["duration"].AsDouble != 0)
-						Modifier.text += "\n" + lineSplit[2].Replace("#duration#", colorPrefix + modifiertNode["duration"] + colorSuffix);
-					if (modifiertNode["stack"].AsDouble != 0)
-						Modifier.text += "\n" + lineSplit[3].Replace("#stack#", colorPrefix + modifiertNode["stack"] + colorSuffix);
-				}
-				else
-					Modifier.gameObject.SetActive(false);
-
-				if (metrics["projectile"].IsObject)
+				/*if (metrics["projectile"].IsObject)
 				{
 					JSONNode projectiletNode = metrics["projectile"];
 					Projectile.text = projectileString.Replace("#range#", colorPrefix + projectiletNode["range"] + colorSuffix);
@@ -224,7 +226,7 @@ namespace West
 						KitDetails.text += "\n" + lineSplit[8].Replace("#speed#", colorPrefix + kitNode["speed"] + colorSuffix);
 				}
 				else
-					KitDetails.gameObject.SetActive(false);
+					KitDetails.gameObject.SetActive(false);*/
 			}
 		}
 	}
