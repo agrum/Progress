@@ -104,8 +104,8 @@ namespace West
 				string colorPrefix = "<color=#" + skill["color"] + ">";
 				string colorSuffix = "</color>";
 
-				Name.text = nameString.Replace("#content#", skill["color"]["name"]);
-				Description.text = descriptionString.Replace("#content#", skill["color"]["description"]);
+				Name.text = nameString.Replace("#content#", skill["name"]);
+				Description.text = descriptionString.Replace("#content#", skill["description"]);
 
                 if (skill["typeName"] == "Abilities")
                 {

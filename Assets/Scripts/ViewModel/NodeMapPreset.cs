@@ -16,7 +16,7 @@ namespace West.ViewModel
 		private Material classMaterial = null;
 		private Material kitMaterial = null;
 			
-		private Vector2 sizeInt = new Vector2();
+		private Vector2Int sizeInt = new Vector2Int();
 		private Vector2 size = new Vector2();
 		private int nodeAdded = 0;
 
@@ -36,8 +36,8 @@ namespace West.ViewModel
             kitMaterial = App.Resource.Material.KitMaterial;
 
             sizeInt.x = 2;
-            sizeInt.y = App.Content.GameSettings.NumAbilities + App.Content.GameSettings.NumClasses + App.Content.GameSettings.NumKits;
-            sizeInt.y = sizeInt.y / 2 + sizeInt.y % 2;
+            sizeInt.y = model.Limits.Ability + model.Limits.Class + model.Limits.Kit;
+            //sizeInt.y = sizeInt.y / 2 + sizeInt.y % 2;
             size.x = sizeInt.x;
             size.y = sizeInt.y;
         }
@@ -72,9 +72,12 @@ namespace West.ViewModel
 		public void SizeChanged(Rect rect)
 		{
 			Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
-			scaleModel["scale"] = Math.Min(
+            int numberNodes = model.Limits.Ability + model.Limits.Class + model.Limits.Kit;
+            Debug.Log("scale x: " + rect.width / ((size.x) * positionMultiplier.x));
+            Debug.Log("scale y: " + rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
+            scaleModel["scale"] = Math.Min(
 				rect.width / ((size.x) * positionMultiplier.x),
-				rect.height / (2.0f * (size.y + 0.5f) * positionMultiplier.y));
+				rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
 		}
 			
 		private void PopulateNodes(
@@ -91,7 +94,8 @@ namespace West.ViewModel
 				{
 					Vector2 nodePosition = new Vector2(
 						-((float)(localNodeAdded % sizeInt.x) - (size.x - 1.0f) / 2.0f),
-						-(localNodeAdded - (size.y + 2.0f) / 2.0f));
+                        (size.y - 1.0f) / 2.0f - localNodeAdded);
+                    Debug.Log(nodePosition);
 					return new NodePreset(
 						model,
 						hoveredModel,
