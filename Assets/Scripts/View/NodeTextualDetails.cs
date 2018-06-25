@@ -43,7 +43,10 @@ namespace West
 			private string chargeString;
 			private string kitDetailsString;
 
-			void Start()
+            private string colorPrefix;
+            private string colorSuffix;
+
+            void Start()
 			{
 				nameString = Name.text;
 				abilityString = Ability.text;
@@ -99,8 +102,8 @@ namespace West
 				if (!active)
 					return;
 				
-				string colorPrefix = "<color=#" + skill["color"] + ">";
-				string colorSuffix = "</color>";
+				colorPrefix = "<color=#" + skill["color"] + ">";
+				colorSuffix = "</color>";
 
 				Name.text = nameString.Replace("#content#", skill["name"]);
 				Description.text = descriptionString.Replace("#content#", skill["description"]);
@@ -134,7 +137,7 @@ namespace West
                 {
                     foreach (var entry in viewModel.Desc)
                     {
-                        Details.text = Details.text.Replace("#" + entry.Key + "#", colorPrefix + entry.Value + colorSuffix);
+                        Details.text = Replace(Details.text, entry.Key, entry.Value);
                     }
                 }
 
@@ -143,12 +146,12 @@ namespace West
                     if (viewModel.Misc.ContainsKey("cooldown"))
                     {
                         Cooldown.gameObject.SetActive(true);
-                        Cooldown.text = cooldownString.Replace("#cooldown#", colorPrefix + viewModel.Misc["cooldown"] + colorSuffix);
+                        Cooldown.text = Replace(cooldownString, "cooldown", viewModel.Misc["cooldown"]);
                     }
                     else if (viewModel.Misc.ContainsKey("castTime"))
                     {
                         CastTime.gameObject.SetActive(true);
-                        CastTime.text = castTimeString.Replace("#castTime#", colorPrefix + viewModel.Misc["castTime"] + colorSuffix);
+                        CastTime.text = Replace(castTimeString, "castTime", viewModel.Misc["castTime"]);
                     }
                 }
                 
@@ -158,11 +161,11 @@ namespace West
                     string[] lineSplit = modifierString.Split('\n');
                     Modifier.text = lineSplit[0];
                     if (viewModel.Modifler.ContainsKey("range"))
-                        Modifier.text += "\n" + lineSplit[1].Replace("#range#", colorPrefix + viewModel.Modifler["range"] + colorSuffix);
+                        Modifier.text += "\n" + Replace(lineSplit[1], "range", viewModel.Modifler["range"]);
                     if (viewModel.Modifler.ContainsKey("duration"))
-                        Modifier.text += "\n" + lineSplit[2].Replace("#duration#", colorPrefix + viewModel.Modifler["duration"] + colorSuffix);
+                        Modifier.text += "\n" + Replace(lineSplit[2], "duration", viewModel.Modifler["duration"]);
                     if (viewModel.Modifler.ContainsKey("stack"))
-                        Modifier.text += "\n" + lineSplit[3].Replace("#stack#", colorPrefix + viewModel.Modifler["stack"] + colorSuffix);
+                        Modifier.text += "\n" + Replace(lineSplit[3], "stack", viewModel.Modifler["stack"]);
                 }
 
 				/*if (metrics["projectile"].IsObject)
@@ -228,6 +231,14 @@ namespace West
 				else
 					KitDetails.gameObject.SetActive(false);*/
 			}
+
+            private string Replace(string text, string pattern, string replacement)
+            {
+                if (text.Contains("#" + pattern + "#"))
+                    return text.Replace("#" + pattern + "#", colorPrefix + replacement + colorSuffix);
+
+                return text.Replace("%" + pattern + "%", colorPrefix + (Convert.ToDouble(replacement) * 100) + "%" + colorSuffix);
+            }
 		}
 	}
 }
