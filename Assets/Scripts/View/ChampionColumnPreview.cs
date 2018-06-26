@@ -35,14 +35,14 @@ namespace West
                 Debug.Assert(levelText != null);
                 Debug.Assert(gearText != null);
 
-                DisableAll();
-                
+                EnableAll(true);
+
 				deleteButton.onClick.AddListener(viewModel.DeleteClicked);
 				proceedButton.onClick.AddListener(viewModel.ProceedClicked);
 
                 nameText.text = viewModel.Name();
-                levelText.text = viewModel.Level().ToString();
-                gearText.text = viewModel.Gear().ToString();
+                levelText.text += ": " + viewModel.Level().ToString();
+                gearText.text += ": " + viewModel.Gear().ToString();
             }
 			
 			private void OnChampionDestroyed()
@@ -59,13 +59,13 @@ namespace West
 				viewModel = null;
 			}
 
-			private void DisableAll()
+			private void EnableAll(bool enable)
 			{
-				deleteButton.gameObject.SetActive(false);
-				proceedButton.gameObject.SetActive(false);
-                nameText.gameObject.SetActive(false);
-                levelText.gameObject.SetActive(false);
-                gearText.gameObject.SetActive(false);
+				deleteButton.gameObject.SetActive(enable);
+				proceedButton.gameObject.SetActive(enable);
+                nameText.gameObject.SetActive(enable);
+                levelText.gameObject.SetActive(enable);
+                gearText.gameObject.SetActive(enable);
             }
 		}
 	}

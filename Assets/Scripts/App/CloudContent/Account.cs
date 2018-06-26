@@ -35,9 +35,9 @@ namespace West.CloudContent
             }).Send();
         }
 
-        public Account(SkillList skillList_)
+        public Account(ConstellationList constellationList_)
         {
-            dependencyList.Add(skillList_);
+            dependencyList.Add(constellationList_);
         }
 
         public void ActivateChampion(Model.Champion champion_)
@@ -62,6 +62,7 @@ namespace West.CloudContent
 
             JSONObject championJson = new JSONObject();
             championJson["name"] = name;
+            championJson["level"] = 0;
             championJson["classes"] = classes;
 
             Debug.Log(championJson);
@@ -76,8 +77,14 @@ namespace West.CloudContent
                     Json["champions"].AsArray.Add(json_);
 
                     ChampionAdded(champion);
+                },
+                (JSONNode json_) =>
+                {
+                    App.Resource.Prefab.Popup().Setup(
+                        "Network error",
+                        json_.ToString());
                 });
-            request.AddField("champion", championJson);
+            request.AddField("champion", championJson.ToString());
             request.Send();
         }
 

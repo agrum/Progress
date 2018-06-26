@@ -71,10 +71,14 @@ namespace West.ViewModel
 
 		public void SizeChanged(Rect rect)
 		{
-			Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
+			Vector2 positionMultiplier = new Vector2((float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
             int numberNodes = model.Limits.Ability + model.Limits.Class + model.Limits.Kit;
+            Debug.Log("rect x: " + rect.width);
+            Debug.Log("rect y: " + rect.height);
+            Debug.Log("scale x: " + rect.width / ((size.x - 0.5f) * positionMultiplier.x));
+            Debug.Log("scale y: " + rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
             scaleModel["scale"] = Math.Min(
-				rect.width / ((size.x) * positionMultiplier.x),
+				rect.width / ((size.x - 0.5f) * positionMultiplier.x),
 				rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
 		}
 			

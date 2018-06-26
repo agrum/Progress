@@ -15,8 +15,8 @@ namespace West.CloudContent
 			Session = new Session();
 			GameSettings = new GameSettings(Session);
             SkillList = new SkillList(GameSettings);
-            Account = new Account(SkillList);
             ConstellationList = new ConstellationList(SkillList);
+            Account = new Account(ConstellationList);
 		}
 	}
 }

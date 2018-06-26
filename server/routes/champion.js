@@ -21,6 +21,8 @@ router.get('/:id', function(req, res, next) {
 })
 
 router.post('/', function(req, res, next) {
+	console.log(req.body)
+
     var champion = JSON.parse(req.body.champion);
     req.app.db.models.champions
     .create(champion)
@@ -30,7 +32,7 @@ router.post('/', function(req, res, next) {
         req.app.db.models.accounts
         .update(
 			{ _id: req.user.account },
-			{ $push: { 'champions': championDocument_id }})
+			{ $push: { 'champions': championDocument._id }})
         .then(accountDocument => {
             //accountDocument.champions.push(championDocument._id);
             //accountDocument.save();
@@ -84,7 +86,6 @@ router.delete('/:id', function(req, res, next) {
             console.error('remove preset to champion error')
             console.error(err)
         })
-        res.send(document);
     })
     .catch(err => {
         console.error('remove champion error')

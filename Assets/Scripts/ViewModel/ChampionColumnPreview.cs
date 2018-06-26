@@ -17,7 +17,7 @@ namespace West.ViewModel
             Model.HoveredSkill hovered_,
             bool canEdit_)
         {
-            Debug.Assert(champion != null);
+            Debug.Assert(champion_ != null);
 
             champion = champion_;
             hovered = hovered_;

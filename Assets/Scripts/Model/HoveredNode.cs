@@ -9,7 +9,7 @@ namespace West.Model
 	public class HoveredSkill
 	{
 		public delegate void OnChanged();
-		public event OnChanged ChangedEvent;
+		public event OnChanged ChangedEvent = delegate { };
 
 		private Skill skill = null;
 

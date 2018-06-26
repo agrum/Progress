@@ -8,8 +8,9 @@ namespace West
 	namespace Scene
 	{
 		class ChampionSelection : MonoBehaviour
-		{
-			public Canvas canvas = null;
+        {
+            public View.NodeTextualDetails nodeTextualDetails = null;
+            public Canvas canvas = null;
 			public RectTransform contentElement = null;
 			public HorizontalLayoutGroup horizontalLayout = null;
             public GameObject championColumnPrefab = null;
@@ -18,9 +19,10 @@ namespace West
             private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
 			void Start()
-			{
-				Debug.Assert(canvas != null);
-				Debug.Assert(horizontalLayout != null);
+            {
+                Debug.Assert(nodeTextualDetails != null);
+                Debug.Assert(canvas != null);
+                Debug.Assert(horizontalLayout != null);
                 Debug.Assert(championColumnPrefab != null);
                 Debug.Assert(additionColumnPrefab != null);
 
@@ -60,7 +62,9 @@ namespace West
                     addBtn.clickEvent += OnAddClicked;
 				}
 
-				ArrangeUI();
+                nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
+
+                ArrangeUI();
                 
 				App.Content.Account.ChampionRemoved += OnChampionRemoved;
 
