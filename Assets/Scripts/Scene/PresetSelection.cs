@@ -84,8 +84,8 @@ namespace West
 			private void OnPresetAdded(Model.ConstellationPreset preset)
 			{
 				PresetEditor.Model = preset;
-				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
-				SceneManager.LoadScene("PresetEditor");
+                App.Resource.Prefab.LoadingCanvas();
+                SceneManager.LoadScene("PresetEditor");
 			}
 
 			private void OnPresetRemoved(Model.ConstellationPreset preset)

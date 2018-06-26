@@ -53,9 +53,9 @@ namespace West
 			}
 
 			private void OnPresetSaved(Model.ConstellationPreset preset)
-			{
-				GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
-				SceneManager.LoadScene("PresetSelection");
+            {
+                App.Resource.Prefab.LoadingCanvas();
+                SceneManager.LoadScene("PresetSelection");
 				Model = null;
 			}
 

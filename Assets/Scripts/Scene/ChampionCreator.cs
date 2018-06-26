@@ -54,14 +54,14 @@ namespace West
             private void OnChampionAdded(Model.Champion champion)
             {
                 App.Content.Account.ActivateChampion(champion);
-                GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+                App.Resource.Prefab.LoadingCanvas();
                 SceneManager.LoadScene("PresetSelection");
             }
 
 
             private void BackClicked()
             {
-                GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+                App.Resource.Prefab.LoadingCanvas();
                 SceneManager.LoadScene("ChampionSelection");
             }
         }

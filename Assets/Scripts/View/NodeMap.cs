@@ -44,9 +44,9 @@ namespace West.View
 
 		public void OnNodeAdded(ViewModel.Factory factory)
 		{
-			GameObject gob = Instantiate(App.Resource.Prefab.ConstellationNode);
-			gob.GetComponent<Node>().SetContext(factory() as ViewModel.INode);
-			gob.transform.SetParent(transform);
+			Node node = App.Resource.Prefab.Node();
+            node.SetContext(factory() as ViewModel.INode);
+            node.transform.SetParent(transform);
 		}
 	}
 }

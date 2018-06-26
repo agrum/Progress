@@ -61,8 +61,8 @@ namespace West.ViewModel
 				return;
 
 			Scene.PresetEditor.Model = preset;
-			GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
-			SceneManager.LoadScene("PresetEditor");
+            App.Resource.Prefab.LoadingCanvas();
+            SceneManager.LoadScene("PresetEditor");
 		}
 
 		public void DeleteClicked()

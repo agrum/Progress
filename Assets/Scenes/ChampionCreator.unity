@@ -1510,12 +1510,12 @@ Prefab:
     - target: {fileID: 224670758767278694, guid: 45985fa3986d78a4687f4df7ca81a4e0,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -9
       objectReference: {fileID: 0}
     - target: {fileID: 224670758767278694, guid: 45985fa3986d78a4687f4df7ca81a4e0,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 224299429464146890, guid: 45985fa3986d78a4687f4df7ca81a4e0,
         type: 2}

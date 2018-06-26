@@ -73,8 +73,6 @@ namespace West.ViewModel
 		{
 			Vector2 positionMultiplier = new Vector2(0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f), 0.75f);
             int numberNodes = model.Limits.Ability + model.Limits.Class + model.Limits.Kit;
-            Debug.Log("scale x: " + rect.width / ((size.x) * positionMultiplier.x));
-            Debug.Log("scale y: " + rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
             scaleModel["scale"] = Math.Min(
 				rect.width / ((size.x) * positionMultiplier.x),
 				rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
@@ -95,7 +93,6 @@ namespace West.ViewModel
 					Vector2 nodePosition = new Vector2(
 						-((float)(localNodeAdded % sizeInt.x) - (size.x - 1.0f) / 2.0f),
                         (size.y - 1.0f) / 2.0f - localNodeAdded);
-                    Debug.Log(nodePosition);
 					return new NodePreset(
 						model,
 						hoveredModel,

@@ -84,7 +84,7 @@ namespace West
 
             private void OnAddClicked()
             {
-                GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+                App.Resource.Prefab.LoadingCanvas();
                 SceneManager.LoadScene("ChampionCreator");
             }
         }

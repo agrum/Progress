@@ -54,7 +54,7 @@ namespace West.ViewModel
         public void ProceedClicked()
         {
             App.Content.Account.ActivateChampion(champion);
-            GameObject.Instantiate(Resources.Load("Prefabs/LoadingCanvas", typeof(GameObject)));
+            App.Resource.Prefab.LoadingCanvas();
             SceneManager.LoadScene("Landing");
         }
 

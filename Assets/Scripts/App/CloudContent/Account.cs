@@ -64,6 +64,8 @@ namespace West.CloudContent
             championJson["name"] = name;
             championJson["classes"] = classes;
 
+            Debug.Log(championJson);
+
             var request = App.Server.Request(
                 HTTPMethods.Post,
                 "champion",
