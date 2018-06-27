@@ -24,9 +24,9 @@ namespace West
                     return GameObject.Instantiate(App.Resource.Prefab.constellationNode).GetComponent<View.Node>();
                 }
 
-                public void LoadingCanvas()
+                public GameObject LoadingCanvas()
                 {
-                    GameObject.Instantiate(App.Resource.Prefab.loadingCanvas);
+                    return GameObject.Instantiate(App.Resource.Prefab.loadingCanvas);
                 }
 
                 public View.Popup Popup()

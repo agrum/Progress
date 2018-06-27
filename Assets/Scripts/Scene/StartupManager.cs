@@ -10,12 +10,8 @@ namespace West
 	{
 		public class StartupManager : MonoBehaviour
 		{
-			public Text text;
-
-			// Use this for initialization
 			void Start()
 			{
-				text.text = "Starting up";
 				App.Content.GameSettings.Load(() => { });
 			}
 		}

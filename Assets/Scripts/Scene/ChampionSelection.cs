@@ -26,11 +26,13 @@ namespace West
                 Debug.Assert(championColumnPrefab != null);
                 Debug.Assert(additionColumnPrefab != null);
 
-                canvas.gameObject.SetActive(false);
+                var loadingScreen = App.Resource.Prefab.LoadingCanvas();
 
 				App.Content.Account.Load(() =>
 				{
-					Setup();
+                    Destroy(loadingScreen);
+
+                    Setup();
 				});
 			}
 
