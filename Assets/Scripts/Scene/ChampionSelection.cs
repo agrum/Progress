@@ -10,7 +10,6 @@ namespace West
 		class ChampionSelection : MonoBehaviour
         {
             public View.NodeTextualDetails nodeTextualDetails = null;
-            public Canvas canvas = null;
 			public RectTransform contentElement = null;
 			public HorizontalLayoutGroup horizontalLayout = null;
             public GameObject championColumnPrefab = null;
@@ -21,7 +20,6 @@ namespace West
 			void Start()
             {
                 Debug.Assert(nodeTextualDetails != null);
-                Debug.Assert(canvas != null);
                 Debug.Assert(horizontalLayout != null);
                 Debug.Assert(championColumnPrefab != null);
                 Debug.Assert(additionColumnPrefab != null);
@@ -69,8 +67,6 @@ namespace West
                 ArrangeUI();
                 
 				App.Content.Account.ChampionRemoved += OnChampionRemoved;
-
-				canvas.gameObject.SetActive(true);
 			}
 
 			void OnDestroy()

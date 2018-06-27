@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 namespace West
 {
@@ -11,6 +12,7 @@ namespace West
 			public View.TextButton buttonSpecializeV = null;
             public View.TextButton buttonGearV = null;
             public View.TextButton buttonTradeV = null;
+            public Button backButton = null;
 
             void Start()
 			{
@@ -34,9 +36,15 @@ namespace West
                     return;
 				
 				buttonPlayV.clickEvent += () => { App.Scene.Load("PresetSelection"); };
+                backButton.onClick.AddListener(BackClicked);
 
-				canvas.gameObject.SetActive(true);
-			}
+                canvas.gameObject.SetActive(true);
+            }
+            
+            private void BackClicked()
+            {
+                App.Scene.Load("ChampionSelection");
+            }
         }
     }
 }
