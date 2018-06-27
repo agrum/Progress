@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 namespace West
 {
@@ -84,8 +83,7 @@ namespace West
 			private void OnPresetAdded(Model.ConstellationPreset preset)
 			{
 				PresetEditor.Model = preset;
-                App.Resource.Prefab.LoadingCanvas();
-                SceneManager.LoadScene("PresetEditor");
+                App.Scene.Load("PresetEditor");
 			}
 
 			private void OnPresetRemoved(Model.ConstellationPreset preset)
@@ -100,7 +98,7 @@ namespace West
 
             private void BackClicked()
             {
-                SceneManager.LoadScene("ChampionSelection");
+                App.Scene.Load("ChampionSelection");
             }
         }
 	}

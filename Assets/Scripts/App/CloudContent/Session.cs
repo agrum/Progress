@@ -16,15 +16,15 @@ namespace West.CloudContent
 			if (SceneManager.GetActiveScene().name != "Startup")
 			{
 				callbackScene = SceneManager.GetActiveScene().name;
-				SceneManager.LoadScene("Startup");
+                App.Scene.Load("Startup");
 			}
 
 			App.Server.Request(
 			HTTPMethods.Get,
 			"user",
 			(JSONNode json_) =>
-			{
-				SceneManager.LoadScene(callbackScene);
+            {
+                App.Scene.Load(callbackScene);
 				Json = json_;
 
 				Email = Json["email"];

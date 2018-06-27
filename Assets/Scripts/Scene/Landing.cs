@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace West
 {
@@ -34,7 +33,7 @@ namespace West
                 if (this == null)
                     return;
 				
-				buttonPlayV.clickEvent += () => { SceneManager.LoadScene("PresetSelection"); };
+				buttonPlayV.clickEvent += () => { App.Scene.Load("PresetSelection"); };
 
 				canvas.gameObject.SetActive(true);
 			}

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace West.ViewModel
 {
@@ -61,9 +60,8 @@ namespace West.ViewModel
 				return;
 
 			Scene.PresetEditor.Model = preset;
-            App.Resource.Prefab.LoadingCanvas();
-            SceneManager.LoadScene("PresetEditor");
-		}
+            App.Scene.Load("PresetEditor");
+        }
 
 		public void DeleteClicked()
 		{

@@ -88,8 +88,7 @@ namespace West
 
             private void OnAddClicked()
             {
-                App.Resource.Prefab.LoadingCanvas();
-                SceneManager.LoadScene("ChampionCreator");
+                App.Scene.Load("ChampionCreator");
             }
         }
 	}

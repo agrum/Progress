@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 namespace West
@@ -54,15 +53,13 @@ namespace West
             private void OnChampionAdded(Model.Champion champion)
             {
                 App.Content.Account.ActivateChampion(champion);
-                App.Resource.Prefab.LoadingCanvas();
-                SceneManager.LoadScene("PresetSelection");
+                App.Scene.Load("Landing");
             }
 
 
             private void BackClicked()
             {
-                App.Resource.Prefab.LoadingCanvas();
-                SceneManager.LoadScene("ChampionSelection");
+                App.Scene.Load("ChampionSelection");
             }
         }
     }

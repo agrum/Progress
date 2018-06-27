@@ -1180,6 +1180,7 @@
     <Compile Include="Assets\Scripts\Scene\ChampionCreator.cs" />
     <Compile Include="Assets\Scripts\Scene\ChampionSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\Landing.cs" />
+    <Compile Include="Assets\Scripts\Scene\Loader.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />

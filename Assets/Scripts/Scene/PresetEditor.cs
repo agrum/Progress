@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 namespace West
@@ -54,15 +53,14 @@ namespace West
 
 			private void OnPresetSaved(Model.ConstellationPreset preset)
             {
-                App.Resource.Prefab.LoadingCanvas();
-                SceneManager.LoadScene("PresetSelection");
+                App.Scene.Load("PresetSelection");
 				Model = null;
 			}
 
 
 			private void BackClicked()
             {
-                SceneManager.LoadScene("PresetSelection");
+                App.Scene.Load("PresetSelection");
             }
         }
 	}

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using SimpleJSON;
-using UnityEngine.SceneManagement;
 
 namespace West.ViewModel
 {
@@ -54,8 +53,7 @@ namespace West.ViewModel
         public void ProceedClicked()
         {
             App.Content.Account.ActivateChampion(champion);
-            App.Resource.Prefab.LoadingCanvas();
-            SceneManager.LoadScene("Landing");
+            App.Scene.Load("Landing");
         }
 
         private void OnChampionRemoved(Model.Champion champion_)
