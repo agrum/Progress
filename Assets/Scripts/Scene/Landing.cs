@@ -13,6 +13,9 @@ namespace West
             public View.TextButton buttonGearV = null;
             public View.TextButton buttonTradeV = null;
             public Button backButton = null;
+            public Text ExplorerName = null;
+            public Text ExplorerLevel = null;
+            public Text ExplorerGear = null;
 
             void Start()
 			{
