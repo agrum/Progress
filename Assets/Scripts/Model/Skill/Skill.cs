@@ -1,11 +1,12 @@
 ﻿using System;
 using SimpleJSON;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Model
 {
 	public class Skill
-	{
+    {
 		public enum TypeEnum
 		{
 			Ability,
@@ -21,7 +22,17 @@ namespace Assets.Scripts.Model
 		public string LowerCaseKey { get; private set; } = "";
 		public string UpperCamelCaseKey { get; private set; } = "";
 
-		protected Skill(JSONNode json_, TypeEnum type_)
+        public SkillMetric Metric(string category_, string name_)
+        {
+            return metricMap[SkillMetric.Hash(category_, name_)];
+        }
+
+        public IList<SkillMetric> MetrictList { get { return metricList.AsReadOnly(); } }
+
+        private List<SkillMetric> metricList = null;
+        private Dictionary<string, SkillMetric> metricMap = null;
+
+        protected Skill(JSONNode json_, TypeEnum type_)
 		{
 			Type = type_;
 			Json = json_;
@@ -52,6 +63,13 @@ namespace Assets.Scripts.Model
 
             Json["color"] = ColorUtility.ToHtmlStringRGBA(Material.color);
             Json["typeName"] = UpperCamelCaseKey;
+
+            foreach (var metricNode in Json["metric2"].AsArray)
+            {
+                SkillMetric metric = new SkillMetric(metricNode.Value.AsObject);
+                metricList.Add(metric);
+                metricMap.Add(SkillMetric.Hash(metric.Category, metric.Name), metric);
+            }
         }
 	}
 }

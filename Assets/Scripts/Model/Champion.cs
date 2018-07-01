@@ -10,6 +10,7 @@ namespace Assets.Scripts.Model
         public JSONObject Json { get; private set; } = null;
         public ConstellationPreset ClassPreset { get; private set; } = null;
         public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
+        public ChampionUpgrades Upgrades { get; private set; } = null;
 
         public delegate void PresetDelegate(ConstellationPreset preset_);
         public event PresetDelegate PresetAdded = delegate { };
@@ -32,6 +33,8 @@ namespace Assets.Scripts.Model
                             new PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits)));
 
                 PopulateFakeClassPreset(Json["classes"].AsArray);
+
+                Upgrades = new ChampionUpgrades(Json["skillUpgrades"].AsArray);
 
                 PresetAdded = delegate { };
                 PresetSaved = delegate { };

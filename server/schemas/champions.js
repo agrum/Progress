@@ -3,7 +3,11 @@ let mongoose = require('mongoose');
 module.exports = function()
 {
 	let upgrade = new mongoose.Schema({
-		skillMetric: {
+		metricCategory: {
+			type: String,
+			required: true,
+        },
+		metricName: {
 			type: String,
 			required: true,
         },

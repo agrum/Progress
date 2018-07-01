@@ -39,9 +39,24 @@ namespace Assets.Scripts.Model
 					return kitNode;
 
 			return null;
-		}
+        }
 
-		public Vector2 HalfSize
+        public Skill Skill(string uuid)
+        {
+            foreach (var node in AbilityNodeList)
+                if (node.Skill.Uuid == uuid)
+                    return node.Skill;
+            foreach (var node in ClassNodeList)
+                if (node.Skill.Uuid == uuid)
+                    return node.Skill;
+            foreach (var node in KitNodeList)
+                if (node.Skill.Uuid == uuid)
+                    return node.Skill;
+            return null;
+        }
+
+
+        public Vector2 HalfSize
 		{
 			get { return halfSize; }
 		}
