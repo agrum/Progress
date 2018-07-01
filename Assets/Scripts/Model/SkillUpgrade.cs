@@ -26,17 +26,21 @@ namespace Assets.Scripts.Model
 
         public JSONObject Json { get; private set; }
 
-        public MetricUpgrade(string category_, string name_)
+        private SkillMetric metric = null;
+
+        public MetricUpgrade(string category_, string name_, Skill skill_)
         {
             Json = new JSONObject();
             Category = category_;
             Name = name_;
             Level = 0;
+            metric = skill_.Metric(Category, Name);
         }
 
-        public MetricUpgrade(JSONObject json_)
+        public MetricUpgrade(JSONObject json_, Skill skill_)
         {
             Json = json_;
+            metric = skill_.Metric(Category, Name);
         }
 
         public void Upgrade(SpecializeSign sign_)
@@ -114,7 +118,7 @@ namespace Assets.Scripts.Model
 
             foreach (var node in json_["upgrades"].AsArray)
             {
-                var metricUpgrade = new MetricUpgrade(node.Value.AsObject);
+                var metricUpgrade = new MetricUpgrade(node.Value.AsObject, skill);
                 metricUpgradeMap.Add((metricUpgrade.Category + metricUpgrade.Name), metricUpgrade);
             }
         }
@@ -131,6 +135,26 @@ namespace Assets.Scripts.Model
             }
 
             return false;
+        }
+
+        public float Overallweight()
+        {
+            float cumulativeLevel = 0;
+            foreach (var metricUpgrades in metricUpgradeMap)
+                cumulativeLevel += System.Math.Abs(metricUpgrades.Value.Level);
+            return cumulativeLevel;
+        }
+
+        public float Handicap()
+        {
+            float cumulativeLevel = 0;
+            foreach (var metricUpgrades in metricUpgradeMap)
+                cumulativeLevel += metricUpgrades.Value.Level;
+
+            if (cumulativeLevel > 0)
+                return (float)System.Math.Sqrt(1.0f + cumulativeLevel * 0.025f) - 1.0f;
+            else
+                return -((float)System.Math.Sqrt(1.0f - cumulativeLevel * 0.025f) - 1.0f);
         }
     }
 }

@@ -4,31 +4,38 @@ namespace Assets.Scripts.ViewModel
 {
     public class SkillSpecializer
     {
-        public event OnJsonDelegate SkillChanged = delegate { };
+        public event OnElementAdded NodeAdded = delegate { };
+        public event OnElementAdded SpecializerFieldAdded = delegate { };
 
-        private Model.HoveredSkill hovered = null;
+        private Model.Skill skill = null;
+        private Model.SkillUpgrade skillUpgrade = null;
 
-        public SkillSpecializer(Model.HoveredSkill hovered_)
+        public SkillSpecializer(Model.Skill skill_)
         {
-            Debug.Assert(hovered_ != null);
+            Debug.Assert(skill_ != null);
 
-            hovered = hovered_;
-            hovered.ChangedEvent += OnHoveredChanged;
+            skill = skill_;
+            skillUpgrade = App.Content.Account.ActiveChampion.Upgrades[skill];
         }
 
         ~SkillSpecializer()
         {
-            hovered.ChangedEvent -= OnHoveredChanged;
+            SpecializerFieldAdded = null;
         }
 
-        private void OnHoveredChanged()
+        public string Name()
         {
-            if (hovered.Skill != null)
-            {
+            return skill.Json["name"];
+        }
 
-            }
+        public float Handicap()
+        {
+            return skillUpgrade.Handicap();
+        }
 
-            SkillChanged(hovered.Skill != null ? hovered.Skill.Json : null);
+        public float OverallWeight()
+        {
+            return skillUpgrade.Overallweight();
         }
     }
 }
