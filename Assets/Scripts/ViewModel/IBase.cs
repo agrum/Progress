@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SimpleJSON;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	public delegate void OnVoidDelegate();
 	public delegate void OnBoolDelegate(bool value);

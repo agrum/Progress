@@ -1,53 +1,49 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace West
+namespace Assets.Scripts.Scene
 {
-    namespace Scene
-    {
-        class Landing : MonoBehaviour
+    class Landing : MonoBehaviour
+	{
+		public View.TextButton buttonPlayV = null;
+		public View.TextButton buttonSpecializeV = null;
+        public View.TextButton buttonGearV = null;
+        public View.TextButton buttonTradeV = null;
+        public Button backButton = null;
+        public View.ChampionHeadline championHeadline = null;
+
+        void Start()
 		{
-			public Canvas canvas = null;
-			public View.TextButton buttonPlayV = null;
-			public View.TextButton buttonSpecializeV = null;
-            public View.TextButton buttonGearV = null;
-            public View.TextButton buttonTradeV = null;
-            public Button backButton = null;
-            public Text ExplorerName = null;
-            public Text ExplorerLevel = null;
-            public Text ExplorerGear = null;
+			Debug.Assert(buttonPlayV != null);
+			Debug.Assert(buttonSpecializeV != null);
+			Debug.Assert(buttonGearV != null);
+            Debug.Assert(buttonTradeV != null);
+            Debug.Assert(championHeadline != null);
 
-            void Start()
-			{
-				Debug.Assert(canvas != null);
-				Debug.Assert(buttonPlayV != null);
-				Debug.Assert(buttonSpecializeV != null);
-				Debug.Assert(buttonGearV != null);
-				Debug.Assert(buttonTradeV != null);
-				
-                canvas.gameObject.SetActive(false);
+            var loadingScreen = App.Resource.Prefab.LoadingCanvas();
 
-                App.Content.Account.Load(() =>
-                {
-                    Setup();
-                });
-            }
-
-            private void Setup()
+            App.Content.Account.Load(() =>
             {
-                if (this == null)
-                    return;
-				
-				buttonPlayV.clickEvent += () => { App.Scene.Load("PresetSelection"); };
-                backButton.onClick.AddListener(BackClicked);
+                Destroy(loadingScreen);
 
-                canvas.gameObject.SetActive(true);
-            }
+                Setup();
+            });
+        }
+
+        private void Setup()
+        {
+            if (this == null)
+                return;
+
+            buttonPlayV.clickEvent += () => { App.Scene.Load("PresetSelection"); };
+            buttonSpecializeV.clickEvent += () => { App.Scene.Load("SpecializeOverview"); };
+            backButton.onClick.AddListener(BackClicked);
+            championHeadline.Setup();
+        }
             
-            private void BackClicked()
-            {
-                App.Scene.Load("ChampionSelection");
-            }
+        private void BackClicked()
+        {
+            App.Scene.Load("ChampionSelection");
         }
     }
 }

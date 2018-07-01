@@ -6,246 +6,243 @@ using System.Threading.Tasks;
 using SimpleJSON;
 using UnityEngine;
 
-namespace West
+namespace Assets.Scripts.Model
 {
-	namespace Model
-	{
-        public class PresetLimits
+    public class PresetLimits
+    {
+        public int Ability { get; private set; } = 0;
+        public int Class { get; private set; } = 0;
+        public int Kit { get; private set; } = 0;
+
+        public PresetLimits(int ability_, int class_, int kit_)
         {
-            public int Ability { get; private set; } = 0;
-            public int Class { get; private set; } = 0;
-            public int Kit { get; private set; } = 0;
-
-            public PresetLimits(int ability_, int class_, int kit_)
-            {
-                Ability = ability_;
-                Class = class_;
-                Kit = kit_;
-            }
+            Ability = ability_;
+            Class = class_;
+            Kit = kit_;
         }
+    }
 
-		public class ConstellationPreset
+	public class ConstellationPreset
+	{
+        public string Id { get; private set; }
+		public string Name { get; set; }
+		public Constellation Constellation { get; private set; }
+        public PresetLimits Limits { get; protected set; } = null;
+
+        public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
+		public List<Skill> SelectedClassList { get; private set; } = new List<Skill>();
+		public List<Skill> SelectedKitList { get; private set; } = new List<Skill>();
+
+		public delegate void OnPresetUpdateDelegate();
+		public event OnPresetUpdateDelegate PresetUpdated;
+
+        public ConstellationPreset(JSONNode json, PresetLimits limits_)
 		{
-            public string Id { get; private set; }
-			public string Name { get; set; }
-			public Constellation Constellation { get; private set; }
-            public PresetLimits Limits { get; private set; } = null;
+            Id = json["_id"];
+            Name = json["name"];
+            Constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
+            //Constellation = App.Content.ConstellationList[json["constellation"]];
+            Limits = limits_;
 
-            public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
-			public List<Skill> SelectedClassList { get; private set; } = new List<Skill>();
-			public List<Skill> SelectedKitList { get; private set; } = new List<Skill>();
+            foreach (var almostValue in json["abilities"])
+				SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
+			foreach (var almostValue in json["classes"])
+				SelectedClassList.Add(App.Content.SkillList.Class(almostValue.Value));
+			foreach (var almostValue in json["kits"])
+				SelectedKitList.Add(App.Content.SkillList.Kit(almostValue.Value));
+		}
 
-			public delegate void OnPresetUpdateDelegate();
-			public event OnPresetUpdateDelegate PresetUpdated;
+		public void Add(Skill skill)
+		{
+			List<Skill> SelectedIndexList;
+			int limit;
 
-            public ConstellationPreset(JSONNode json, PresetLimits limits_)
+			if (skill == null)
 			{
-                Id = json["_id"];
-                Name = json["name"];
-                Constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-                //Constellation = App.Content.ConstellationList[json["constellation"]];
-                Limits = limits_;
-
-                foreach (var almostValue in json["abilities"])
-					SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
-				foreach (var almostValue in json["classes"])
-					SelectedClassList.Add(App.Content.SkillList.Class(almostValue.Value));
-				foreach (var almostValue in json["kits"])
-					SelectedKitList.Add(App.Content.SkillList.Kit(almostValue.Value));
+				Debug.Log("ConstellationPreset.Add() skill null");
+				throw new Exception();
 			}
 
-			public void Add(Skill skill)
+			switch (skill.Type)
 			{
-				List<Skill> SelectedIndexList;
-				int limit;
-
-				if (skill == null)
-				{
-					Debug.Log("ConstellationPreset.Add() skill null");
+				case Skill.TypeEnum.Ability:
+					SelectedIndexList = SelectedAbilityList;
+					limit = Limits.Ability;
+					break;
+				case Skill.TypeEnum.Class:
+					SelectedIndexList = SelectedClassList;
+					limit = Limits.Class;
+					break;
+				case Skill.TypeEnum.Kit:
+					SelectedIndexList = SelectedKitList;
+                    limit = Limits.Kit; //App.Content.GameSettings.NumKits;
+					break;
+				default:
+					Debug.Log("ConstellationPreset.Add() skill no type");
 					throw new Exception();
-				}
-
-				switch (skill.Type)
-				{
-					case Skill.TypeEnum.Ability:
-						SelectedIndexList = SelectedAbilityList;
-						limit = Limits.Ability;
-						break;
-					case Skill.TypeEnum.Class:
-						SelectedIndexList = SelectedClassList;
-						limit = Limits.Class;
-						break;
-					case Skill.TypeEnum.Kit:
-						SelectedIndexList = SelectedKitList;
-                        limit = Limits.Kit; //App.Content.GameSettings.NumKits;
-						break;
-					default:
-						Debug.Log("ConstellationPreset.Add() skill no type");
-						throw new Exception();
-				}
-
-				if (SelectedIndexList.Count >= limit)
-				{
-					Debug.Log("ConstellationPreset.Add() can't");
-					throw new Exception();
-				}
-
-				SelectedIndexList.Add(skill);
-				PresetUpdated();
 			}
 
-			public void Remove(Skill skill)
+			if (SelectedIndexList.Count >= limit)
 			{
-				List<Skill> SelectedList;
-				int limit;
+				Debug.Log("ConstellationPreset.Add() can't");
+				throw new Exception();
+			}
 
-				if (skill == null)
-				{
-					Debug.Log("ConstellationPreset.Remove() skill null");
+			SelectedIndexList.Add(skill);
+			PresetUpdated();
+		}
+
+		public void Remove(Skill skill)
+		{
+			List<Skill> SelectedList;
+			int limit;
+
+			if (skill == null)
+			{
+				Debug.Log("ConstellationPreset.Remove() skill null");
+				throw new Exception();
+			}
+
+			switch (skill.Type)
+			{
+				case Skill.TypeEnum.Ability:
+					SelectedList = SelectedAbilityList;
+					limit = App.Content.GameSettings.NumAbilities;
+					break;
+				case Skill.TypeEnum.Class:
+					SelectedList = SelectedClassList;
+					limit = App.Content.GameSettings.NumClasses;
+					break;
+				case Skill.TypeEnum.Kit:
+					SelectedList = SelectedKitList;
+					limit = App.Content.GameSettings.NumKits;
+					break;
+				default:
+					Debug.Log("ConstellationPreset.Remove() skill no type");
 					throw new Exception();
-				}
+			}
 
-				switch (skill.Type)
-				{
-					case Skill.TypeEnum.Ability:
-						SelectedList = SelectedAbilityList;
-						limit = App.Content.GameSettings.NumAbilities;
-						break;
-					case Skill.TypeEnum.Class:
-						SelectedList = SelectedClassList;
-						limit = App.Content.GameSettings.NumClasses;
-						break;
-					case Skill.TypeEnum.Kit:
-						SelectedList = SelectedKitList;
-						limit = App.Content.GameSettings.NumKits;
-						break;
-					default:
-						Debug.Log("ConstellationPreset.Remove() skill no type");
-						throw new Exception();
-				}
+			if (SelectedList.Count == 0 || !SelectedList.Contains(skill))
+			{
+				Debug.Log("ConstellationPreset.Remove() can't");
+				throw new Exception();
+			}
 
-				if (SelectedList.Count == 0 || !SelectedList.Contains(skill))
+			/*if (skill.Type == Skill.TypeEnum.Ability)
+			{
+				//clear if preset doesn't contain a starting node
+				bool hasStartingAbility = false;
+				foreach (var startingAbilityNodeIndex in Constellation.StartingAbilityNodeIndexList)
 				{
-					Debug.Log("ConstellationPreset.Remove() can't");
-					throw new Exception();
-				}
-
-				/*if (skill.Type == Skill.TypeEnum.Ability)
-				{
-					//clear if preset doesn't contain a starting node
-					bool hasStartingAbility = false;
-					foreach (var startingAbilityNodeIndex in Constellation.StartingAbilityNodeIndexList)
+					Skill startingSkill = Constellation.AbilityNodeList[startingAbilityNodeIndex].Skill;
+					if (SelectedAbilityList.Contains(startingSkill))
 					{
-						Skill startingSkill = Constellation.AbilityNodeList[startingAbilityNodeIndex].Skill;
-						if (SelectedAbilityList.Contains(startingSkill))
+						hasStartingAbility = true;
+						break;
+					}
+				}
+				if (!hasStartingAbility)
+				{
+					Clear();
+					return;
+				}
+
+				SelectedAbilityList.Remove(skill);
+				//unselect classes and kits that were solely dependent on this ability
+				var newSelectedClassList = new List<Skill>();
+				foreach (var selectedClass in SelectedClassList)
+				{
+					var selectedClassNode = Constellation.ClassNode(selectedClass);
+					foreach (var selectedAbility in SelectedAbilityList)
+					{
+						if (Constellation.AbilityNode(selectedAbility).ClassNodeList.Contains(selectedClassNode))
 						{
-							hasStartingAbility = true;
+							newSelectedClassList.Add(selectedClass);
 							break;
 						}
 					}
-					if (!hasStartingAbility)
+				}
+				SelectedClassList = newSelectedClassList;
+				var newSelectedKitList = new List<Skill>();
+				foreach (var selectedKit in SelectedKitList)
+				{
+					var selectedKitNode = Constellation.KitNode(selectedKit);
+					foreach (var selectedAbility in SelectedAbilityList)
 					{
-						Clear();
-						return;
-					}
-
-					SelectedAbilityList.Remove(skill);
-					//unselect classes and kits that were solely dependent on this ability
-					var newSelectedClassList = new List<Skill>();
-					foreach (var selectedClass in SelectedClassList)
-					{
-						var selectedClassNode = Constellation.ClassNode(selectedClass);
-						foreach (var selectedAbility in SelectedAbilityList)
+						if (Constellation.AbilityNode(selectedAbility).KitsNodeList.Contains(selectedKitNode))
 						{
-							if (Constellation.AbilityNode(selectedAbility).ClassNodeList.Contains(selectedClassNode))
-							{
-								newSelectedClassList.Add(selectedClass);
-								break;
-							}
+							newSelectedKitList.Add(selectedKit);
+							break;
 						}
 					}
-					SelectedClassList = newSelectedClassList;
-					var newSelectedKitList = new List<Skill>();
-					foreach (var selectedKit in SelectedKitList)
-					{
-						var selectedKitNode = Constellation.KitNode(selectedKit);
-						foreach (var selectedAbility in SelectedAbilityList)
-						{
-							if (Constellation.AbilityNode(selectedAbility).KitsNodeList.Contains(selectedKitNode))
-							{
-								newSelectedKitList.Add(selectedKit);
-								break;
-							}
-						}
-					}
-					SelectedKitList = newSelectedKitList;
 				}
-				else*/
-					SelectedList.Remove(skill);
-
-				PresetUpdated();
+				SelectedKitList = newSelectedKitList;
 			}
+			else*/
+				SelectedList.Remove(skill);
 
-			public bool Has(Skill skill)
-			{
-				List<Skill> SelectedList;
-				int limit;
-
-				if (skill == null)
-				{
-					Debug.Log("ConstellationPreset.Has() skill null");
-					throw new Exception();
-				}
-
-				switch (skill.Type)
-				{
-					case Skill.TypeEnum.Ability:
-						SelectedList = SelectedAbilityList;
-						limit = App.Content.GameSettings.NumAbilities;
-						break;
-					case Skill.TypeEnum.Class:
-						SelectedList = SelectedClassList;
-						limit = App.Content.GameSettings.NumClasses;
-						break;
-					case Skill.TypeEnum.Kit:
-						SelectedList = SelectedKitList;
-						limit = App.Content.GameSettings.NumKits;
-						break;
-					default:
-						Debug.Log("ConstellationPreset.Has() skill no type");
-						throw new Exception();
-				}
-
-				return SelectedList.Contains(skill);
-			}
-
-			public void Clear()
-			{
-				SelectedAbilityList.Clear();
-				SelectedClassList.Clear();
-				SelectedKitList.Clear();
-				PresetUpdated();
-			}
-
-            public JSONNode ToJson()
-            {
-                JSONNode json = new JSONObject();
-
-                json["_id"] = Id;
-                json["name"] = Name;
-                json["constellation"] = Constellation.Json["_id"];
-                json["abilities"] = new JSONArray();
-                json["classes"] = new JSONArray();
-                json["kits"] = new JSONArray();
-                foreach (var skill in SelectedAbilityList)
-                    json["abilities"].Add(skill.Json["_id"]);
-                foreach (var skill in SelectedClassList)
-                    json["classes"].Add(skill.Json["_id"]);
-                foreach (var skill in SelectedKitList)
-                    json["kits"].Add(skill.Json["_id"]);
-
-                return json;
-            }
+			PresetUpdated();
 		}
+
+		public bool Has(Skill skill)
+		{
+			List<Skill> SelectedList;
+			int limit;
+
+			if (skill == null)
+			{
+				Debug.Log("ConstellationPreset.Has() skill null");
+				throw new Exception();
+			}
+
+			switch (skill.Type)
+			{
+				case Skill.TypeEnum.Ability:
+					SelectedList = SelectedAbilityList;
+					limit = App.Content.GameSettings.NumAbilities;
+					break;
+				case Skill.TypeEnum.Class:
+					SelectedList = SelectedClassList;
+					limit = App.Content.GameSettings.NumClasses;
+					break;
+				case Skill.TypeEnum.Kit:
+					SelectedList = SelectedKitList;
+					limit = App.Content.GameSettings.NumKits;
+					break;
+				default:
+					Debug.Log("ConstellationPreset.Has() skill no type");
+					throw new Exception();
+			}
+
+			return SelectedList.Contains(skill);
+		}
+
+		public void Clear()
+		{
+			SelectedAbilityList.Clear();
+			SelectedClassList.Clear();
+			SelectedKitList.Clear();
+			PresetUpdated();
+		}
+
+        public JSONNode ToJson()
+        {
+            JSONNode json = new JSONObject();
+
+            json["_id"] = Id;
+            json["name"] = Name;
+            json["constellation"] = Constellation.Json["_id"];
+            json["abilities"] = new JSONArray();
+            json["classes"] = new JSONArray();
+            json["kits"] = new JSONArray();
+            foreach (var skill in SelectedAbilityList)
+                json["abilities"].Add(skill.Json["_id"]);
+            foreach (var skill in SelectedClassList)
+                json["classes"].Add(skill.Json["_id"]);
+            foreach (var skill in SelectedKitList)
+                json["kits"].Add(skill.Json["_id"]);
+
+            return json;
+        }
 	}
 }

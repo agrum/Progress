@@ -2,7 +2,7 @@
 using BestHTTP;
 using System.Collections.Generic;
 
-namespace West.CloudContent
+namespace Assets.Scripts.CloudContent
 {
 	public class GameSettings : Base
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace West
+namespace Assets.Scripts
 {
 	public class CharacterAnimationIdleSMB : StateMachineBehaviour
 	{
@@ -19,7 +19,7 @@ namespace West
 			if (m_crouchingLayerIndex == -1)
 				m_crouchingLayerIndex = animator.GetLayerIndex("Crouching");
 
-			Player player = animator.GetComponent<Player>();
+			West.Player player = animator.GetComponent<West.Player>();
 			float angle = (player.facingDirection - player.walkingDirection) % 360.0f;
 			if (angle < 0.0f)
 				angle += 360.0f;

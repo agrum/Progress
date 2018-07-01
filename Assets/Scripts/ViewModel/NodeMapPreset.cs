@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	public class NodeMapPreset : INodeMap
 	{
@@ -46,19 +46,16 @@ namespace West.ViewModel
         { 
 			PopulateNodes(
 				model.Limits.Ability,
-				model.Constellation.AbilityNodeList,
 				model.SelectedAbilityList,
 				Model.Skill.TypeEnum.Ability,
 				abilityMaterial);
 			PopulateNodes(
                 model.Limits.Kit,
-				model.Constellation.KitNodeList,
 				model.SelectedKitList,
 				Model.Skill.TypeEnum.Kit,
 				kitMaterial);
 			PopulateNodes(
                 model.Limits.Class,
-				model.Constellation.ClassNodeList,
 				model.SelectedClassList,
 				Model.Skill.TypeEnum.Class,
 				classMaterial);
@@ -84,7 +81,6 @@ namespace West.ViewModel
 			
 		private void PopulateNodes(
 			int amountNode_,
-			List<Model.ConstellationNode> nodeModelList_, 
 			List<Model.Skill> selectedSkillList_, 
 			Model.Skill.TypeEnum type_,
 			Material nodeMaterial_)

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace West.View
+namespace Assets.Scripts.View
 {
 	public class NodeMap : MonoBehaviour
 	{

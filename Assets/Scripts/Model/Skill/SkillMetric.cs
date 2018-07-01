@@ -3,7 +3,7 @@ using SimpleJSON;
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace West.Model
+namespace Assets.Scripts.Model
 {
     public class SkillMetric
     {

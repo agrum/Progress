@@ -1,14 +1,8 @@
-﻿namespace West
-{
-	namespace Model
+﻿namespace Assets.Scripts.Model.Resource
+{ 
+	public class AppResource
 	{
-		namespace Resource
-		{ 
-			public class AppResource
-			{
-				public Prefab Prefab { get; private set; } = new Prefab();
-				public Material Material { get; private set; } = new Material();
-			}
-		}
+		public Prefab Prefab { get; private set; } = new Prefab();
+		public Material Material { get; private set; } = new Material();
 	}
 }

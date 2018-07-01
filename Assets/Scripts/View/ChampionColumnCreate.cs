@@ -1,47 +1,44 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace West
+namespace Assets.Scripts.View
 {
-    namespace View
+    class ChampionColumnCreate : WestBehaviour
     {
-        class ChampionColumnCreate : WestBehaviour
+        public NodeMap presetPreview = null;
+        public Button createButton = null;
+        public InputField nameInput = null;
+
+        private ViewModel.ChampionColumnCreate viewModel;
+
+        public void SetContext(ViewModel.ChampionColumnCreate viewModel_)
         {
-            public NodeMap presetPreview = null;
-            public Button createButton = null;
-            public InputField nameInput = null;
+            Debug.Assert(viewModel_ != null);
 
-            private ViewModel.ChampionColumnCreate viewModel;
+            viewModel = viewModel_;
 
-            public void SetContext(ViewModel.ChampionColumnCreate viewModel_)
+            presetPreview.SetContext(viewModel.CreatePreviewContext());
+
+            Delay(() =>
             {
-                Debug.Assert(viewModel_ != null);
+                createButton.onClick.AddListener(viewModel.CreateClicked);
+                nameInput.onEndEdit.AddListener(viewModel.NameChanged);
+            });
+        }
 
-                viewModel = viewModel_;
+        protected override void WestStart()
+        {
+            Debug.Assert(presetPreview != null);
+            Debug.Assert(createButton != null);
+            Debug.Assert(nameInput != null);            
+        }
 
-                presetPreview.SetContext(viewModel.CreatePreviewContext());
-
-                Delay(() =>
-                {
-                    createButton.onClick.AddListener(viewModel.CreateClicked);
-                    nameInput.onEndEdit.AddListener(viewModel.NameChanged);
-                });
-            }
-
-            protected override void WestStart()
-            {
-                Debug.Assert(presetPreview != null);
-                Debug.Assert(createButton != null);
-                Debug.Assert(nameInput != null);            
-            }
-
-            private void OnDestroy()
-            {
-                if (viewModel == null)
-                    return;
+        private void OnDestroy()
+        {
+            if (viewModel == null)
+                return;
                 
-                viewModel = null;
-            }
+            viewModel = null;
         }
     }
 }

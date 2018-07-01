@@ -135,6 +135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224645108789852670}
   - component: {fileID: 222489336290342552}
+  - component: {fileID: 114397489957915888}
   m_Layer: 5
   m_Name: DespecSlider
   m_TagString: Untagged
@@ -329,6 +330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224200407019486168}
   - component: {fileID: 222342701294453668}
+  - component: {fileID: 114461518283597628}
   m_Layer: 5
   m_Name: SpecSlider
   m_TagString: Untagged
@@ -508,6 +510,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 224751669450013092}
+  - component: {fileID: 114394551237839722}
   m_Layer: 5
   m_Name: SpecializationField
   m_TagString: Untagged
@@ -1029,6 +1032,34 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114394551237839722
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1644985786446282}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d9ecb6cfe9166e49a10abbb89bfb583, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  plusButton: {fileID: 114973164000341442}
+  minusButton: {fileID: 114705983977182952}
+  plusSlider: {fileID: 114461518283597628}
+  minusSlider: {fileID: 114397489957915888}
+--- !u!114 &114397489957915888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1095730226922946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbeda246cdbc0b046b66eb1b57c1bdc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainSlider: {fileID: 114060240908602038}
+  progressSlider: {fileID: 114622184821563844}
 --- !u!114 &114425712419901152
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1110,6 +1141,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114461518283597628
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1454957096344560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbeda246cdbc0b046b66eb1b57c1bdc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainSlider: {fileID: 114724161871936806}
+  progressSlider: {fileID: 114131771449613506}
 --- !u!114 &114556341763486008
 MonoBehaviour:
   m_ObjectHideFlags: 1

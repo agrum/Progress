@@ -12,15 +12,12 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1183,6 +1180,7 @@
     <Compile Include="Assets\Scripts\Scene\Loader.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
+    <Compile Include="Assets\Scripts\Scene\SpecializeOverview.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnCreate.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnPreview.cs" />
@@ -1192,8 +1190,12 @@
     <Compile Include="Assets\Scripts\View\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\View\Popup.cs" />
     <Compile Include="Assets\Scripts\View\PresetColumn.cs" />
+    <Compile Include="Assets\Scripts\View\ProgressSlider.cs" />
+    <Compile Include="Assets\Scripts\View\SkillSpecializationField.cs" />
+    <Compile Include="Assets\Scripts\View\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\View\TextButton.cs" />
     <Compile Include="Assets\Scripts\View\WestBehaviour.cs" />
+    <Compile Include="Assets\Scripts\View\WestText.cs" />
     <Compile Include="Assets\Scripts\ViewModel\ChampionColumnCreate.cs" />
     <Compile Include="Assets\Scripts\ViewModel\ChampionColumnPreview.cs" />
     <Compile Include="Assets\Scripts\ViewModel\IBase.cs" />
@@ -1207,6 +1209,8 @@
     <Compile Include="Assets\Scripts\ViewModel\NodePreset.cs" />
     <Compile Include="Assets\Scripts\ViewModel\NodeTextualDetails.cs" />
     <Compile Include="Assets\Scripts\ViewModel\PresetColumn.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\SkillSpecializationField.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\SkillSpecializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />

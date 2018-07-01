@@ -1,6 +1,6 @@
 ﻿using SimpleJSON;
 
-namespace West.Model
+namespace Assets.Scripts.Model
 {
 	public class Json
 	{

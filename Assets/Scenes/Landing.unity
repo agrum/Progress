@@ -470,6 +470,12 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4c7a477124661964cbef6a692ee30126, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &491462921 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114725282011359104, guid: 4c7a477124661964cbef6a692ee30126,
+    type: 2}
+  m_PrefabInternal: {fileID: 491462920}
+  m_Script: {fileID: 11500000, guid: 255c212d3106904488051953aa6771b5, type: 3}
 --- !u!1001 &600222902
 Prefab:
   m_ObjectHideFlags: 0
@@ -1322,9 +1328,7 @@ MonoBehaviour:
   buttonGearV: {fileID: 600222904}
   buttonTradeV: {fileID: 1897537738}
   backButton: {fileID: 1504022354}
-  ExplorerName: {fileID: 0}
-  ExplorerLevel: {fileID: 0}
-  ExplorerGear: {fileID: 0}
+  championHeadline: {fileID: 491462921}
 --- !u!1001 &1897537736
 Prefab:
   m_ObjectHideFlags: 0

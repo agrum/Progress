@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace West.View
+namespace Assets.Scripts.View
 { 
     public class Popup : WestBehaviour
     {

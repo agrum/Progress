@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using SimpleJSON;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	public interface INode : IBase
 	{

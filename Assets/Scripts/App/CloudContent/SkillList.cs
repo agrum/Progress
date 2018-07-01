@@ -2,7 +2,7 @@
 using SimpleJSON;
 using BestHTTP;
 
-namespace West.CloudContent
+namespace Assets.Scripts.CloudContent
 {
     public class SkillList : Base
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	public class NodeEmpty : INode
 	{

@@ -2,65 +2,62 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-namespace West
+namespace Assets.Scripts.Scene
 {
-    namespace Scene
+    class ChampionCreator : MonoBehaviour
     {
-        class ChampionCreator : MonoBehaviour
+        public View.NodeTextualDetails nodeTextualDetails = null;
+        public View.NodeMap constellation = null;
+        public View.ChampionColumnCreate championColumn = null;
+        public Button backButton = null;
+
+        private Model.ConstellationPreset preset = null;
+        private Model.HoveredSkill hovered = new Model.HoveredSkill();
+
+        void Start()
         {
-            public View.NodeTextualDetails nodeTextualDetails = null;
-            public View.NodeMap constellation = null;
-            public View.ChampionColumnCreate championColumn = null;
-            public Button backButton = null;
+            Debug.Assert(backButton != null);
 
-            private Model.ConstellationPreset preset = null;
-            private Model.HoveredSkill hovered = new Model.HoveredSkill();
-
-            void Start()
+            App.Content.ConstellationList.Load(() =>
             {
-                Debug.Assert(backButton != null);
+                Setup();
+            });
+        }
 
-                App.Content.ConstellationList.Load(() =>
-                {
-                    Setup();
-                });
-            }
+        private void Setup()
+        {
+            //return if object died while waiting for answer
+            if (this == null)
+                return;
 
-            private void Setup()
-            {
-                //return if object died while waiting for answer
-                if (this == null)
-                    return;
+            var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
+            List<Model.Skill> filteredSkillList = new List<Model.Skill>();
+            foreach (var node in constellationModel.ClassNodeList)
+                filteredSkillList.Add(node.Skill);
 
-                var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-                List<Model.Skill> filteredSkillList = new List<Model.Skill>();
-                foreach (var node in constellationModel.ClassNodeList)
-                    filteredSkillList.Add(node.Skill);
+            preset = new Model.ConstellationPreset(new SimpleJSON.JSONObject(), new Model.PresetLimits(0, 3, 0));
+            backButton.onClick.AddListener(BackClicked);
+            nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
+            constellation.SetContext(new ViewModel.NodeMapConstellation(
+                constellationModel, 
+                preset,
+                filteredSkillList,
+                hovered));
+            championColumn.SetContext(new ViewModel.ChampionColumnCreate(preset, hovered));
 
-                preset = new Model.ConstellationPreset(new SimpleJSON.JSONObject(), new Model.PresetLimits(0, 3, 0));
-                backButton.onClick.AddListener(BackClicked);
-                nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
-                constellation.SetContext(new ViewModel.NodeMapConstellation(
-                    constellationModel, 
-                    preset,
-                    filteredSkillList,
-                    hovered));
-                championColumn.SetContext(new ViewModel.ChampionColumnCreate(preset, hovered));
+            App.Content.Account.ChampionAdded += OnChampionAdded;
+        }
 
-                App.Content.Account.ChampionAdded += OnChampionAdded;
-            }
-
-            private void OnChampionAdded(Model.Champion champion)
-            {
-                App.Content.Account.ActivateChampion(champion);
-                App.Scene.Load("Landing");
-            }
+        private void OnChampionAdded(Model.Champion champion)
+        {
+            App.Content.Account.ActivateChampion(champion);
+            App.Scene.Load("Landing");
+        }
 
 
-            private void BackClicked()
-            {
-                App.Scene.Load("ChampionSelection");
-            }
+        private void BackClicked()
+        {
+            App.Scene.Load("ChampionSelection");
         }
     }
 }

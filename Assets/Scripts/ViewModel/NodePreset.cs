@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	public class NodePreset : INode
 	{

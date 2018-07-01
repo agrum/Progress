@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using SimpleJSON;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
     class ChampionColumnCreate : IBase
     {

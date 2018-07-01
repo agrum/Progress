@@ -1,6 +1,6 @@
 ﻿using UnityEngine.SceneManagement;
 
-namespace West.Model
+namespace Assets.Scripts.Scene
 {
     public class Loader
     {

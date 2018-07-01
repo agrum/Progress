@@ -5,16 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace West
+namespace Assets.Scripts.Model
 {
-	namespace Model
+	public class Class : Skill
 	{
-		public class Class : Skill
+		public Class(JSONNode json_) : base(json_, Skill.TypeEnum.Class)
 		{
-			public Class(JSONNode json_) : base(json_, Skill.TypeEnum.Class)
-			{
 
-			}
 		}
 	}
 }

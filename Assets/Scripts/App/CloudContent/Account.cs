@@ -3,7 +3,7 @@ using SimpleJSON;
 using BestHTTP;
 using UnityEngine;
 
-namespace West.CloudContent
+namespace Assets.Scripts.CloudContent
 {
     public class Account : Base
     {

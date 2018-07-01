@@ -1,6 +1,6 @@
 ﻿
 
-namespace West.CloudContent
+namespace Assets.Scripts.CloudContent
 {
 	public class AppContent
 	{

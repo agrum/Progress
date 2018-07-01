@@ -2,7 +2,7 @@
 using SimpleJSON;
 using UnityEngine;
 
-namespace West.Model
+namespace Assets.Scripts.Model
 {
 	public class Skill
 	{

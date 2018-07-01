@@ -2,6 +2,26 @@ let mongoose = require('mongoose');
 
 module.exports = function()
 {
+	let upgrade = new mongoose.Schema({
+		skillMetric: {
+			type: String,
+			required: true,
+        },
+		level: {
+			type: Number,
+			required: true,
+		},
+	})
+
+	let skillUpgrade = new mongoose.Schema({
+		skill: {
+			type: mongoose.Schema.Types.ObjectId,
+			required: true,
+			ref: 'skills',
+		},
+		upgrades : [upgrade]
+	})
+
 	let schema = new mongoose.Schema({
 		name: {
 			type: String,
@@ -23,11 +43,7 @@ module.exports = function()
 			required: true,
 			ref: 'presets',
         },
-        upgrades: {
-			type: [mongoose.Schema.Types.ObjectId],
-			required: true,
-			ref: 'skills',
-        },
+        skillUpgrades: [skillUpgrade],
 	})
 	schema.set('collection', 'champions')
 

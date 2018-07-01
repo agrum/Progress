@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace West.View
+namespace Assets.Scripts.View
 {
     public class ChampionHeadline : WestBehaviour
     {
-        public Text championName = null;
-        public Text level = null;
-        public Text gear = null;
+        public WestText championName = null;
+        public WestText level = null;
+        public WestText gear = null;
 
         public void Setup()
         {
@@ -20,8 +20,8 @@ namespace West.View
                 Delay(() =>
                 {
                     championName.text = App.Content.Account.ActiveChampion.Json["name"];
-                    level.text = level.text.Replace("#0#", App.Content.Account.ActiveChampion.Json["level"]);
-                    gear.text = level.text.Replace("#0#", App.Content.Account.ActiveChampion.Json["gear"]);
+                    level.text = level.Reference.Replace("#0#", App.Content.Account.ActiveChampion.Json["level"]);
+                    gear.text = level.Reference.Replace("#0#", App.Content.Account.ActiveChampion.Json["gear"]);
                 });
             });
         }

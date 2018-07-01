@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SimpleJSON;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
     public class NodeTextualDetails
     {

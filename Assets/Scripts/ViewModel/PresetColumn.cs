@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	interface IPresetColumn
 	{

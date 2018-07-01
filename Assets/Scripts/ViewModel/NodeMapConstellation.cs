@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace West.ViewModel
+namespace Assets.Scripts.ViewModel
 {
 	public class NodeMapConstellation : INodeMap
 	{

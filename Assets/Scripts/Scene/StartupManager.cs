@@ -4,16 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace West
+namespace Assets.Scripts.Scene
 {
-	namespace Scene
+	public class StartupManager : MonoBehaviour
 	{
-		public class StartupManager : MonoBehaviour
+		void Start()
 		{
-			void Start()
-			{
-				App.Content.GameSettings.Load(() => { });
-			}
+			App.Content.GameSettings.Load(() => { });
 		}
 	}
 }
