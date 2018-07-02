@@ -73,8 +73,8 @@ namespace Assets.Scripts.View
 			colorPrefix = "<color=#" + skill["color"] + ">";
 			colorSuffix = "</color>";
 
-			Name.FormatPair("#content#", skill["name"]);
-			Description.FormatPair("#content#", skill["description"]);
+			Name.FormatPair("content", skill["name"]);
+			Description.FormatPair("content", skill["description"]);
 
             if (skill["typeName"] == "Abilities")
             {
@@ -101,7 +101,7 @@ namespace Assets.Scripts.View
             KitDetails.gameObject.SetActive(false);
 
             WestString description = skill["details"];
-            Details.Format("#content#", description.Format(viewModel.Desc));
+            Details.FormatPair("content", description.Format(viewModel.Desc));
 
             if (viewModel.Misc.ContainsKey("cooldown"))
             {

@@ -10,7 +10,8 @@ namespace Assets.Scripts.View
         {
             base.Start();
 
-            reference = text;
+            if (reference == null)
+                reference = text;
         }
 
         public WestString Reference
@@ -31,7 +32,7 @@ namespace Assets.Scripts.View
 
         public void FormatPair(string key_, string value_)
         {
-            text = Reference.Format(key_, value_);
+            text = Reference.FormatPair(key_, value_);
         }
 
         public void Format(ICollection<KeyValuePair<string, string>> replacements_)

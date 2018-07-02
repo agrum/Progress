@@ -67,18 +67,29 @@ namespace Assets.Scripts.View
 
         private string Replace(string text_, string pattern_, string replacement_)
         {
-            if (Color != null)
+            if (text_.Contains("#" + pattern_ + "#"))
             {
-                if (text_.Contains("#" + pattern_ + "#"))
-                    return text_.Replace("#" + pattern_ + "#", replacement_);
-                return text_.Replace("%" + pattern_ + "%", (System.Convert.ToDouble(replacement_) * 100.0).ToString());
+                if (Color != null)
+                    replacement_ = colorPrefix + Color + ">" + replacement_ + colorSuffix;
+                return text_.Replace("#" + pattern_ + "#", replacement_);
             }
-            else
+            else if (text_.Contains("%" + pattern_ + "%"))
             {
-                if (text_.Contains("#" + pattern_ + "#"))
-                    return text_.Replace("#" + pattern_ + "#", colorPrefix + Color + ">" + replacement_ + colorSuffix);
-                return text_.Replace("%" + pattern_ + "%", colorPrefix + Color + ">" + (System.Convert.ToDouble(replacement_) * 100.0).ToString() + colorSuffix);
+                try
+                {
+                    double number = (System.Convert.ToDouble(replacement_) * 100.0);
+                    if (Color != null)
+                        replacement_ = colorPrefix + Color + ">" + number.ToString() + "%" + colorSuffix;
+                    else
+                        replacement_ = number.ToString() + "%";
+                    return text_.Replace("%" + pattern_ + "%", replacement_);
+                }
+                catch (System.FormatException)
+                {
+
+                }
             }
+            return text_;
         }
     }
 }

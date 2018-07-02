@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224599505471879216}
   - component: {fileID: 222072356863447522}
-  - component: {fileID: 114860093710657488}
+  - component: {fileID: 114243999561322612}
   m_Layer: 5
   m_Name: Cooldown
   m_TagString: Untagged
@@ -37,7 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224954101187830678}
   - component: {fileID: 222302769273620534}
-  - component: {fileID: 114664569566552834}
+  - component: {fileID: 114481157873062222}
   m_Layer: 5
   m_Name: Unit
   m_TagString: Untagged
@@ -71,7 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224102852402610488}
   - component: {fileID: 222766136131066376}
-  - component: {fileID: 114055216968395866}
+  - component: {fileID: 114522661748480422}
   m_Layer: 5
   m_Name: Ability
   m_TagString: Untagged
@@ -105,7 +105,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224231087645119226}
   - component: {fileID: 222555306407569018}
-  - component: {fileID: 114948985295623178}
+  - component: {fileID: 114390081375795122}
   m_Layer: 5
   m_Name: Kit
   m_TagString: Untagged
@@ -122,7 +122,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224787200541342796}
   - component: {fileID: 222520139399334320}
-  - component: {fileID: 114445425036951090}
+  - component: {fileID: 114836327432733366}
   m_Layer: 5
   m_Name: Class
   m_TagString: Untagged
@@ -139,7 +139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224545236659205574}
   - component: {fileID: 222246802445189280}
-  - component: {fileID: 114447021151709624}
+  - component: {fileID: 114677102793491798}
   m_Layer: 5
   m_Name: Projectile
   m_TagString: Untagged
@@ -156,7 +156,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224468811318335502}
   - component: {fileID: 222977713238642656}
-  - component: {fileID: 114797099317973084}
+  - component: {fileID: 114072343472048688}
   m_Layer: 5
   m_Name: Charge
   m_TagString: Untagged
@@ -190,7 +190,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224963943582656270}
   - component: {fileID: 222529440819218726}
-  - component: {fileID: 114535442711511482}
+  - component: {fileID: 114015514584907652}
   m_Layer: 5
   m_Name: Modifier
   m_TagString: Untagged
@@ -243,7 +243,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224986904231659278}
   - component: {fileID: 222380987716858332}
-  - component: {fileID: 114454877314021302}
+  - component: {fileID: 114186904889441142}
   m_Layer: 5
   m_Name: CastTime
   m_TagString: Untagged
@@ -277,7 +277,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224299429464146890}
   - component: {fileID: 222296720308725716}
-  - component: {fileID: 114663531141087126}
+  - component: {fileID: 114301146416636528}
   m_Layer: 5
   m_Name: Kit
   m_TagString: Untagged
@@ -285,15 +285,15 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &114055216968395866
+--- !u!114 &114015514584907652
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1166041178246256}
+  m_GameObject: {fileID: 1631138000395358}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -306,10 +306,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 20
+    m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 2
+    m_MinSize: 10
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -317,7 +317,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ability
+  m_Text: "<b>Modifier</b>:\n - Range: #range# meters\n - Duration: #duration# seconds\n
+    - Stackable: #stack# times"
 --- !u!114 &114057505844543320
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -351,6 +352,72 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '<b>Details</b>: #content#'
+--- !u!114 &114072343472048688
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1550286308941858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "<b>Charge</b>:\n - Max: #max#\n - Recharge time: #duration# seconds"
+--- !u!114 &114186904889441142
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1986378579168006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: '<b>Cast tiime</b>: #castTime# seconds'
 --- !u!114 &114209106356225608
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -384,6 +451,74 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: "<b>Stack</b>:\n - Max: #max#\n - Duration: #duration# seconds"
+--- !u!114 &114243999561322612
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1005490350286036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: '<b>Cooldown</b>: #cooldown# seconds'
+--- !u!114 &114301146416636528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1997403943826416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "<b>Kit</b>:\n - Health: #hp#\n - Armor: #armor#\n - Shield: #shield#\n
+    - Damage: #damage#\n - Rate: #rate# attacks/s\n - Range: #range# meters\n - Cone:
+    #angle# degrees\n - Speed: #speed# meters/s"
 --- !u!114 &114324278939977752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -419,15 +554,15 @@ MonoBehaviour:
   m_Text: '
 
 '
---- !u!114 &114445425036951090
+--- !u!114 &114390081375795122
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1283868106132934}
+  m_GameObject: {fileID: 1254025698881442}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -451,13 +586,13 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Class
---- !u!114 &114447021151709624
+  m_Text: Kit
+--- !u!114 &114481157873062222
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1368400481492412}
+  m_GameObject: {fileID: 1115793787357640}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
@@ -484,17 +619,18 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "<b>Projectile</b>:\n - Range: #range# meters\n - Speed #speed# meters/s\n
-    - Size: #width# meters"
---- !u!114 &114454877314021302
+  m_Text: "<b>Unit</b>:\n - HP: #hp# health\n - Size: #width# meters\n - Lifespan:
+    #duration# seconds\n - Vision: #vision# meters\n - Placement: #placementRange#
+    meters"
+--- !u!114 &114522661748480422
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1986378579168006}
+  m_GameObject: {fileID: 1166041178246256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -507,10 +643,10 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
+    m_FontSize: 20
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 10
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 0
     m_AlignByGeometry: 0
@@ -518,41 +654,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '<b>Cast tiime</b>: #castTime# seconds'
---- !u!114 &114535442711511482
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1631138000395358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "<b>Modifier</b>:\n - Range: #range# meters\n - Duration: #duration# seconds\n
-    - Stackable: #stack# times"
+  m_Text: Ability
 --- !u!114 &114565203144261012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -586,15 +688,15 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: <b>#content#</b>
---- !u!114 &114663531141087126
+--- !u!114 &114677102793491798
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1997403943826416}
+  m_GameObject: {fileID: 1368400481492412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -618,44 +720,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "<b>Kit</b>:\n - Health: #hp#\n - Armor: #armor#\n - Shield: #shield#\n
-    - Damage: #damage#\n - Rate: #rate# attacks/s\n - Range: #range# meters\n - Cone:
-    #angle# degrees\n - Speed: #speed# meters/s"
---- !u!114 &114664569566552834
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1115793787357640}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "<b>Unit</b>:\n - HP: #hp# health\n - Size: #width# meters\n - Lifespan:
-    #duration# seconds\n - Vision: #vision# meters\n - Placement: #placementRange#
-    meters"
+  m_Text: "<b>Projectile</b>:\n - Range: #range# meters\n - Speed #speed# meters/s\n
+    - Size: #width# meters"
 --- !u!114 &114683441480044068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -711,105 +777,15 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: '<b>Description</b>: #content#'
---- !u!114 &114797099317973084
+--- !u!114 &114836327432733366
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1550286308941858}
+  m_GameObject: {fileID: 1283868106132934}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: "<b>Charge</b>:\n - Max: #max#\n - Recharge time: #duration# seconds"
---- !u!114 &114837141346669396
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1889317903729060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c15b15a89e787e64baf23685906fcbfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Name: {fileID: 0}
-  Ability: {fileID: 114055216968395866}
-  Class: {fileID: 114445425036951090}
-  Kit: {fileID: 114948985295623178}
-  Description: {fileID: 0}
-  Details: {fileID: 0}
-  Cooldown: {fileID: 114860093710657488}
-  CastTime: {fileID: 114454877314021302}
-  Modifier: {fileID: 114535442711511482}
-  Unit: {fileID: 114664569566552834}
-  Projectile: {fileID: 114447021151709624}
-  Charge: {fileID: 0}
-  KitDetails: {fileID: 114663531141087126}
---- !u!114 &114860093710657488
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1005490350286036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 0
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 14
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 10
-    m_MaxSize: 40
-    m_Alignment: 0
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: '<b>Cooldown</b>: #cooldown# seconds'
---- !u!114 &114948985295623178
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1254025698881442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -833,7 +809,32 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Kit
+  m_Text: Class
+--- !u!114 &114837141346669396
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1889317903729060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c15b15a89e787e64baf23685906fcbfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Name: {fileID: 114565203144261012}
+  Ability: {fileID: 114522661748480422}
+  Class: {fileID: 114836327432733366}
+  Kit: {fileID: 114390081375795122}
+  Description: {fileID: 114735901545851920}
+  Details: {fileID: 114057505844543320}
+  Cooldown: {fileID: 114243999561322612}
+  CastTime: {fileID: 114186904889441142}
+  Modifier: {fileID: 114015514584907652}
+  Unit: {fileID: 114481157873062222}
+  Projectile: {fileID: 114677102793491798}
+  Charge: {fileID: 114072343472048688}
+  Stack: {fileID: 114209106356225608}
+  KitDetails: {fileID: 114301146416636528}
 --- !u!114 &114977238885334016
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1045,8 +1046,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -30}
-  m_SizeDelta: {x: 0, y: -60}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224299429464146890
 RectTransform:
@@ -1063,7 +1064,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 93.499954, y: -24.000015}
+  m_AnchoredPosition: {x: 93.49997, y: -24.000015}
   m_SizeDelta: {x: 200, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224468811318335502
@@ -1135,7 +1136,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 93.49999, y: -24.000069}
+  m_AnchoredPosition: {x: 93.49997, y: -24.000069}
   m_SizeDelta: {x: 200, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224670758767278694
@@ -1225,7 +1226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 80.00001, y: -66}
+  m_AnchoredPosition: {x: 80, y: -66}
   m_SizeDelta: {x: 160, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224986904231659278

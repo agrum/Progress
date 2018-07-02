@@ -51,6 +51,9 @@ namespace Assets.Scripts.ViewModel
                 foreach (var almostMetric in metrics)
                 {
                     JSONObject metric = almostMetric.Value.AsObject;
+                    string category = metric["category"];
+                    string name = metric["name"];
+                    var merp = Map[metric["category"]];
                     Map[metric["category"]][metric["name"]] = metric["value"]; 
                 }
             }
