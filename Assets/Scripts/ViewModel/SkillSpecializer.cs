@@ -9,6 +9,7 @@ namespace Assets.Scripts.ViewModel
 
         private Model.Skill skill = null;
         private Model.SkillUpgrade skillUpgrade = null;
+        private Model.Json scale = null;
 
         public SkillSpecializer(Model.Skill skill_)
         {
@@ -16,6 +17,28 @@ namespace Assets.Scripts.ViewModel
 
             skill = skill_;
             skillUpgrade = App.Content.Account.ActiveChampion.Upgrades[skill];
+            scale = new Model.Json();
+            scale["scale"] = 1.0f;
+        }
+
+        public void Setup()
+        { 
+            NodeAdded(() =>
+            {
+                return new NodeEmpty(
+                    skill,
+                    scale,
+                    skill.Material,
+                    new Vector2(0, 0));
+            });
+
+            foreach (var metric in skill.MetrictList)
+            {
+                SpecializerFieldAdded(() =>
+                {
+                    return new SkillSpecializationField(skillUpgrade[metric]);
+                });
+            }
         }
 
         ~SkillSpecializer()
@@ -35,7 +58,7 @@ namespace Assets.Scripts.ViewModel
 
         public float OverallWeight()
         {
-            return skillUpgrade.Overallweight();
+            return skillUpgrade.OverallWeight();
         }
     }
 }

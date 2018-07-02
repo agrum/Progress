@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Model
 {
-	public class Skill
+	public abstract class Skill
     {
 		public enum TypeEnum
 		{
@@ -29,8 +29,8 @@ namespace Assets.Scripts.Model
 
         public IList<SkillMetric> MetrictList { get { return metricList.AsReadOnly(); } }
 
-        private List<SkillMetric> metricList = null;
-        private Dictionary<string, SkillMetric> metricMap = null;
+        private List<SkillMetric> metricList = new List<SkillMetric>();
+        private Dictionary<string, SkillMetric> metricMap = new Dictionary<string, SkillMetric>();
 
         protected Skill(JSONNode json_, TypeEnum type_)
 		{
@@ -64,7 +64,7 @@ namespace Assets.Scripts.Model
             Json["color"] = ColorUtility.ToHtmlStringRGBA(Material.color);
             Json["typeName"] = UpperCamelCaseKey;
 
-            foreach (var metricNode in Json["metric2"].AsArray)
+            foreach (var metricNode in Json["metrics2"].AsArray)
             {
                 SkillMetric metric = new SkillMetric(metricNode.Value.AsObject);
                 metricList.Add(metric);

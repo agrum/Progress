@@ -103,6 +103,7 @@ namespace Assets.Scripts.ViewModel
 					        nodeModel.Position);
                     else
                         return new NodeEmpty(
+                            null,
                             scaleModel,
                             nodeMaterial_,
                             nodeModel.Position);

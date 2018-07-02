@@ -135,6 +135,7 @@ namespace Assets.Scripts.View
 
 		override public void OnPointerExit(PointerEventData eventData)
 		{
+            Debug.Log(viewModel.IconPath());
 			animator.ResetTrigger(enterHash);
 			animator.SetTrigger(leaveHash);
 			viewModel.Hovered(false);

@@ -24,23 +24,21 @@ namespace Assets.Scripts.Model
             }
         }
 
-        public JSONObject Json { get; private set; }
+        public JSONObject Json { get; private set; } = null;
+        public SkillMetric Metric { get; private set; } = null;
 
-        private SkillMetric metric = null;
-
-        public MetricUpgrade(string category_, string name_, Skill skill_)
+        public MetricUpgrade(SkillMetric metric_, JSONObject json_)
         {
-            Json = new JSONObject();
-            Category = category_;
-            Name = name_;
-            Level = 0;
-            metric = skill_.Metric(Category, Name);
-        }
-
-        public MetricUpgrade(JSONObject json_, Skill skill_)
-        {
-            Json = json_;
-            metric = skill_.Metric(Category, Name);
+            Metric = metric_;
+            if (json_ !=null)
+                Json = json_;
+            else
+            {
+                Json = new JSONObject();
+                Category = Metric.Category;
+                Name = Metric.Name;
+                Level = 0;
+            }
         }
 
         public void Upgrade(SpecializeSign sign_)
@@ -69,20 +67,12 @@ namespace Assets.Scripts.Model
             {
                 return skill;
             }
-            private set
-            {
-                skill = value;
-            }
         }
-        public MetricUpgrade this[string category_, string name_]
+        public MetricUpgrade this[SkillMetric metric_]
         {
             get
             {
-                return metricUpgradeMap[SkillMetric.Hash(category_, name_)];
-            }
-            private set
-            {
-                metricUpgradeMap[SkillMetric.Hash(category_, name_)] = value;
+                return metricUpgradeMap[metric_];
             }
         }
         public JSONObject Json
@@ -104,23 +94,30 @@ namespace Assets.Scripts.Model
         }
 
         private Skill skill = null;
-        private Dictionary<string, MetricUpgrade> metricUpgradeMap = new Dictionary<string, MetricUpgrade>();
+        private Dictionary<SkillMetric, MetricUpgrade> metricUpgradeMap = new Dictionary<SkillMetric, MetricUpgrade>();
 
         public SkillUpgrade(Skill skill_)
         {
             skill = skill_;
+
+            foreach (var metric in Skill.MetrictList)
+                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, null));
         }
 
         public SkillUpgrade(JSONObject json_)
         {            
             var constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-            Skill = constellation.Skill(json_["skill"]);
-
-            foreach (var node in json_["upgrades"].AsArray)
+            skill = constellation.Skill(json_["skill"]);
+            System.Func<SkillMetric, JSONObject> lookUp = (SkillMetric metric_) =>
             {
-                var metricUpgrade = new MetricUpgrade(node.Value.AsObject, skill);
-                metricUpgradeMap.Add((metricUpgrade.Category + metricUpgrade.Name), metricUpgrade);
-            }
+                foreach (var node in json_["upgrades"].AsArray)
+                    if (node.Value["category"] == metric_.Category && node.Value["name"] == metric_.Name)
+                        return node.Value.AsObject;
+                return null;
+            };
+
+            foreach (var metric in Skill.MetrictList)
+                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, lookUp(metric)));
         }
 
         public bool IsValid()
@@ -137,7 +134,7 @@ namespace Assets.Scripts.Model
             return false;
         }
 
-        public float Overallweight()
+        public float OverallWeight()
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
@@ -151,10 +148,7 @@ namespace Assets.Scripts.Model
             foreach (var metricUpgrades in metricUpgradeMap)
                 cumulativeLevel += metricUpgrades.Value.Level;
 
-            if (cumulativeLevel > 0)
-                return (float)System.Math.Sqrt(1.0f + cumulativeLevel * 0.025f) - 1.0f;
-            else
-                return -((float)System.Math.Sqrt(1.0f - cumulativeLevel * 0.025f) - 1.0f);
+            return cumulativeLevel;
         }
     }
 }

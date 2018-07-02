@@ -26,3 +26,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ChampionCreator.unity
     guid: f00f001fdbed5fb40b6bf8da0ea3cfc4
+  - enabled: 1
+    path: Assets/Scenes/SpecializeOverview.unity
+    guid: 74536c8904f67d647841462483710798

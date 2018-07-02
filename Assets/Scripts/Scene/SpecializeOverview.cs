@@ -49,6 +49,7 @@ namespace Assets.Scripts.Scene
                 filteredSkillList.Add(node.Skill);
             foreach (var skill in App.Content.Account.ActiveChampion.ClassPreset.SelectedClassList)
                 filteredSkillList.Add(skill);
+            hovered.ChangedEvent += OnHoveredChanged;
 
             //view
             backButton.onClick.AddListener(() => { App.Scene.Load("Landing"); });
@@ -59,6 +60,7 @@ namespace Assets.Scripts.Scene
                 filteredSkillList,
                 hovered));
             championHeadline.Setup();
+            OnHoveredChanged();
         }
 
         void OnPresetUpdated()
@@ -72,6 +74,13 @@ namespace Assets.Scripts.Scene
                 selectedSkill = preset.SelectedKitList[0];
 
             App.Scene.Load("Specialize");
+        }
+
+        void OnHoveredChanged()
+        {
+            if (hovered.Skill != null)
+                specializer.SetContext(new ViewModel.SkillSpecializer(hovered.Skill));
+            //specializer.gameObject.SetActive(hovered.Skill != null);
         }
     }
 }

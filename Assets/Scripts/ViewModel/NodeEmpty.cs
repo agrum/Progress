@@ -9,20 +9,22 @@ namespace Assets.Scripts.ViewModel
 		public event OnVoidDelegate SkillChanged = delegate { };
 		public event OnBoolDelegate SelectionChanged = delegate { };
 		public event OnFloatDelegate ScaleChanged = delegate { };
-        
-		private Model.Json scale;
 
+        private Model.Skill skill = null;
+		private Model.Json scale;
 		private Material mat;
 		private Vector2 position;
         List<Model.Skill> selectedSkillList = null;
 
         public NodeEmpty(
+            Model.Skill skill_,
             Model.Json scale_,
             Material mat_,
             Vector2 position_)
         {
             Debug.Assert(mat_ != null);
-            
+
+            skill = skill_;
             scale = scale_;
             mat = mat_;
             position = position_;
@@ -50,11 +52,11 @@ namespace Assets.Scripts.ViewModel
         }
 
         public string IconPath()
-		{
-			return null;
-		}
+        {
+            return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
+        }
 
-		public Material Mat()
+        public Material Mat()
 		{
 			return mat;
 		}

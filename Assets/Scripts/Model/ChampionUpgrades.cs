@@ -9,12 +9,11 @@ namespace Assets.Scripts.Model
         {
             get
             {
-                var skillUpgrade = skillUpgradeMap[skill_];
-                if (skillUpgrade == null)
-                {
-                    skillUpgrade =  new SkillUpgrade(skill_);
-                    skillUpgradeMap[skill_] = skillUpgrade;
-                }
+                if (skillUpgradeMap.ContainsKey(skill_))
+                    return skillUpgradeMap[skill_];
+                
+                var skillUpgrade = new SkillUpgrade(skill_);
+                skillUpgradeMap.Add(skill_, skillUpgrade);
                 return skillUpgrade;
             }
         }
@@ -45,7 +44,6 @@ namespace Assets.Scripts.Model
                 var skillUpgrade = new SkillUpgrade(node.Value.AsObject);
                 skillUpgradeMap.Add(skillUpgrade.Skill, skillUpgrade);
             }
-
         }
     }
 }

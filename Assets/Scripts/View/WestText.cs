@@ -22,5 +22,9 @@
             }
         }
 
+        public void Format(int n, string replacmeent)
+        {
+            text = Reference.Replace("#" + n + "#", replacmeent);
+        }
     }
 }

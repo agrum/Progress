@@ -22,8 +22,8 @@ namespace Assets.Scripts.View
             minusButton.enterEvent += ShowNegativeProgress;
             plusButton.leaveEvent += HidePositiveProgress;
             minusButton.leaveEvent += HideNegativeProgress;
-            plusButton.clickEvent += () => viewModel.Buy(ViewModel.SkillSpecializationField.SpecializeSign.Positive);
-            minusButton.clickEvent += () => viewModel.Buy(ViewModel.SkillSpecializationField.SpecializeSign.Negative);
+            plusButton.clickEvent += () => viewModel.Buy(Model.MetricUpgrade.SpecializeSign.Positive);
+            minusButton.clickEvent += () => viewModel.Buy(Model.MetricUpgrade.SpecializeSign.Negative);
 
             SetupUI();
         }
@@ -35,11 +35,11 @@ namespace Assets.Scripts.View
             plusSlider.gameObject.SetActive(false);
             minusSlider.gameObject.SetActive(false);
 
-            if (viewModel.Sign() == ViewModel.SkillSpecializationField.SpecializeSign.Positive)
+            if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.Positive)
             {
                 plusSlider.gameObject.SetActive(true);
             }
-            else if (viewModel.Sign() == ViewModel.SkillSpecializationField.SpecializeSign.Negative)
+            else if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.Negative)
             {
                 minusSlider.gameObject.SetActive(true);
             }
@@ -51,26 +51,26 @@ namespace Assets.Scripts.View
         void ShowPositiveProgress()
         {
             plusSlider.gameObject.SetActive(true);
-            plusSlider.Progress = viewModel.NextSpecLevel();
+            plusSlider.Progress = viewModel.NextSpecLevel(Model.MetricUpgrade.SpecializeSign.Positive);
         }
 
         void ShowNegativeProgress()
         {
             minusSlider.gameObject.SetActive(true);
-            minusSlider.Progress = viewModel.NextSpecLevel();
+            minusSlider.Progress = viewModel.NextSpecLevel(Model.MetricUpgrade.SpecializeSign.Negative);
         }
 
         void HidePositiveProgress()
         {
             plusSlider.Progress = 0;
-            if (viewModel.Sign() == ViewModel.SkillSpecializationField.SpecializeSign.None)
+            if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.None)
                 plusSlider.gameObject.SetActive(false);
         }
 
         void HideNegativeProgress()
         {
             minusSlider.Progress = 0;
-            if (viewModel.Sign() == ViewModel.SkillSpecializationField.SpecializeSign.None)
+            if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.None)
                 minusSlider.gameObject.SetActive(false);
         }
     }

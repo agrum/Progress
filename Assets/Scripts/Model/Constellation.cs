@@ -85,13 +85,13 @@ namespace Assets.Scripts.Model
 			//create constellation nodes
 			PopulateNodes(
 				abilityArray,
-				Skill.TypeEnum.Ability);
+				Model.Skill.TypeEnum.Ability);
 			PopulateNodes(
 				Json["classes"].AsArray,
-				Skill.TypeEnum.Class);
+                Model.Skill.TypeEnum.Class);
 			PopulateNodes(
 				Json["kits"].AsArray,
-				Skill.TypeEnum.Kit);
+                Model.Skill.TypeEnum.Kit);
 
 			//connect nodes directly
 			JSONArray abilityToAbilityLinkArray = Json["abilityToAbilityLinks"].AsArray;
@@ -136,19 +136,19 @@ namespace Assets.Scripts.Model
 					
 				switch(type_)
 				{
-					case Skill.TypeEnum.Ability:
+					case Model.Skill.TypeEnum.Ability:
 						AbilityNodeList.Add(new ConstellationNode(
 							App.Content.SkillList.Ability(json["id"]),
 							AbilityNodeList.Count,
 							new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 						break;
-					case Skill.TypeEnum.Class:
+					case Model.Skill.TypeEnum.Class:
 						ClassNodeList.Add(new ConstellationNode(
 							App.Content.SkillList.Class(json["id"]),
 							ClassNodeList.Count,
 							new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 							break;
-					case Skill.TypeEnum.Kit:
+					case Model.Skill.TypeEnum.Kit:
 						KitNodeList.Add(new ConstellationNode(
 							App.Content.SkillList.Kit(json["id"]),
 							KitNodeList.Count,
