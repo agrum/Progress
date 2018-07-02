@@ -9,15 +9,30 @@ namespace Assets.Scripts.ViewModel
     {
         public event OnJsonDelegate SkillChanged = delegate { };
 
-        public Dictionary<string, string> Desc { get; private set; } = null;
-        public Dictionary<string, string> Misc { get; private set; } = null;
-        public Dictionary<string, string> Modifler { get; private set; } = null;
+        public Dictionary<string, string> Misc = new Dictionary<string, string>();
+        public Dictionary<string, string> Desc = new Dictionary<string, string>();
+        public Dictionary<string, string> Modifier = new Dictionary<string, string>();
+        public Dictionary<string, string> Projectile = new Dictionary<string, string>();
+        public Dictionary<string, string> Charge = new Dictionary<string, string>();
+        public Dictionary<string, string> Stack = new Dictionary<string, string>();
+        public Dictionary<string, string> Unit = new Dictionary<string, string>();
+        public Dictionary<string, string> Kit = new Dictionary<string, string>();
+        private Dictionary<string, Dictionary<string, string>> Map = new Dictionary<string, Dictionary<string, string>>();
         private Model.HoveredSkill hovered;
 
         public NodeTextualDetails(Model.HoveredSkill hovered_)
         {
             hovered = hovered_;
             hovered.ChangedEvent += OnHoveredChanged;
+
+            Map.Add("misc", Misc);
+            Map.Add("desc", Desc);
+            Map.Add("modifier", Modifier);
+            Map.Add("projectile", Projectile);
+            Map.Add("charge", Charge);
+            Map.Add("stack", Stack);
+            Map.Add("unit", Unit);
+            Map.Add("kit", Kit);
         }
 
         ~NodeTextualDetails()
@@ -27,7 +42,8 @@ namespace Assets.Scripts.ViewModel
 
         private void OnHoveredChanged()
         {
-            Modifler = null;
+            foreach (var map in Map)
+                map.Value.Clear();
 
             if (hovered.Skill != null)
             {
@@ -35,24 +51,7 @@ namespace Assets.Scripts.ViewModel
                 foreach (var almostMetric in metrics)
                 {
                     JSONObject metric = almostMetric.Value.AsObject;
-                    if (metric["category"] == "desc")
-                    {
-                        if (Desc == null)
-                            Desc = new Dictionary<string, string>();
-                        Desc[metric["name"]] = metric["value"];
-                    }
-                    else if (metric["category"] == "misc")
-                    {
-                        if (Misc == null)
-                            Misc = new Dictionary<string, string>();
-                        Misc[metric["name"]] = metric["value"];
-                    }
-                    else if (metric["category"] == "modifier")
-                    {
-                        if (Modifler == null)
-                            Modifler = new Dictionary<string, string>();
-                        Modifler[metric["name"]] = metric["value"];
-                    }
+                    Map[metric["category"]][metric["name"]] = metric["value"]; 
                 }
             }
 

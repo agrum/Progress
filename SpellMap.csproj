@@ -1176,6 +1176,7 @@
     <Compile Include="Assets\Scripts\Model\Terrain\TerrainManager.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Pair.cs" />
+    <Compile Include="Assets\Scripts\Model\WestString.cs" />
     <Compile Include="Assets\Scripts\Scene\ChampionCreator.cs" />
     <Compile Include="Assets\Scripts\Scene\ChampionSelection.cs" />
     <Compile Include="Assets\Scripts\Scene\Landing.cs" />

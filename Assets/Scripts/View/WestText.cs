@@ -1,8 +1,10 @@
-﻿namespace Assets.Scripts.View
+﻿using System.Collections.Generic;
+
+namespace Assets.Scripts.View
 {
     public class WestText : UnityEngine.UI.Text
     {
-        private string reference = null;
+        private WestString reference = null;
 
         protected override void Start()
         {
@@ -11,7 +13,7 @@
             reference = text;
         }
 
-        public string Reference
+        public WestString Reference
         {
             get
             {
@@ -22,11 +24,24 @@
             }
         }
 
-        public void Format(params string[] replacmeent)
+        public void Format(params string[] replacements_)
         {
-            text = Reference;
-            for (int i = 0; i < replacmeent.Length; ++i)
-                text = text.Replace("#" + i + "#", replacmeent[i]);
+            text = Reference.Format(replacements_);
+        }
+
+        public void FormatPair(string key_, string value_)
+        {
+            text = Reference.Format(key_, value_);
+        }
+
+        public void Format(ICollection<KeyValuePair<string, string>> replacements_)
+        {
+            text = Reference.Format(replacements_);
+        }
+
+        public void Format(params KeyValuePair<string, string>[] replacements_)
+        {
+            text = Reference.Format(replacements_);
         }
     }
 }
