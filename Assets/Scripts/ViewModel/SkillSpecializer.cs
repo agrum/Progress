@@ -6,17 +6,18 @@ namespace Assets.Scripts.ViewModel
     {
         public event OnElementAdded NodeAdded = delegate { };
         public event OnElementAdded SpecializerFieldAdded = delegate { };
-
-        private Model.Skill skill = null;
+        public event OnVoidDelegate SkillUpgraded = delegate { };
+        
         private Model.SkillUpgrade skillUpgrade = null;
+        private bool editable = false;
         private Model.Json scale = null;
 
-        public SkillSpecializer(Model.Skill skill_)
+        public SkillSpecializer(Model.SkillUpgrade skillUpgrade_, bool editable_)
         {
-            Debug.Assert(skill_ != null);
+            Debug.Assert(skillUpgrade_ != null);
 
-            skill = skill_;
-            skillUpgrade = App.Content.Account.ActiveChampion.Upgrades[skill];
+            skillUpgrade = skillUpgrade_;
+            editable = editable_;
             scale = new Model.Json();
             scale["scale"] = 1.0f;
         }
@@ -26,29 +27,31 @@ namespace Assets.Scripts.ViewModel
             NodeAdded(() =>
             {
                 return new NodeEmpty(
-                    skill,
+                    skillUpgrade.Skill,
                     scale,
-                    skill.Material,
+                    skillUpgrade.Skill.Material,
                     new Vector2(0, 0));
             });
 
-            foreach (var metric in skill.MetrictList)
+            foreach (var metric in skillUpgrade.Skill.MetrictList)
             {
                 SpecializerFieldAdded(() =>
                 {
-                    return new SkillSpecializationField(skillUpgrade[metric]);
+                    return new SkillSpecializationField(skillUpgrade[metric], editable);
                 });
             }
         }
 
         ~SkillSpecializer()
         {
+            NodeAdded = null;
             SpecializerFieldAdded = null;
+            SkillUpgraded = null;
         }
 
         public string Name()
         {
-            return skill.Json["name"];
+            return skillUpgrade.Skill.Json["name"];
         }
 
         public float Handicap()

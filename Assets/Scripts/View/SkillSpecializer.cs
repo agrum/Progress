@@ -10,6 +10,7 @@ namespace Assets.Scripts.View
         public Node node = null;
         public WestText handicap = null;
         public Transform fieldsContainer = null;
+        public ProgressSlider overallWeight = null;
 
         private ViewModel.SkillSpecializer viewModel = null;
         private float preferredFieldHeight = 0;
@@ -28,13 +29,22 @@ namespace Assets.Scripts.View
             viewModel = viewModel_;
             viewModel.NodeAdded += OnNodeAdded;
             viewModel.SpecializerFieldAdded += OnSpecializerFieldAdded;
+            viewModel.SkillUpgraded += OnSkillUpgraded;
 
             nodeName.text = viewModel.Name();
-            handicap.Format(0, viewModel.Handicap().ToString());
+            OnSkillUpgraded();
 
             while (fieldsContainer.childCount > 0)
                 GameObject.DestroyImmediate(fieldsContainer.GetChild(0).gameObject);
             viewModel.Setup();
+        }
+
+        private void OnDestroy()
+        {
+            viewModel.NodeAdded -= OnNodeAdded;
+            viewModel.SpecializerFieldAdded -= OnSpecializerFieldAdded;
+            viewModel.SkillUpgraded -= OnSkillUpgraded;
+            viewModel = null;
         }
 
         private void Update()
@@ -54,6 +64,12 @@ namespace Assets.Scripts.View
             preferredFieldHeight = field.GetComponent<RectTransform>().rect.height;
             field.SetContext(factory() as ViewModel.SkillSpecializationField);
             field.transform.SetParent(fieldsContainer, false);
+        }
+
+        private void OnSkillUpgraded()
+        {
+            handicap.Format(viewModel.Handicap().ToString());
+            overallWeight.Main = viewModel.OverallWeight();
         }
     }
 }

@@ -20,8 +20,8 @@ namespace Assets.Scripts.View
                 Delay(() =>
                 {
                     championName.text = App.Content.Account.ActiveChampion.Json["name"];
-                    level.Format(0, App.Content.Account.ActiveChampion.Json["level"]);
-                    gear.Format(0, App.Content.Account.ActiveChampion.Json["gear"]);
+                    level.Format(App.Content.Account.ActiveChampion.Json["level"]);
+                    gear.Format(App.Content.Account.ActiveChampion.Json["gear"]);
                 });
             });
         }

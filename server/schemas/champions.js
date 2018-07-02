@@ -47,6 +47,10 @@ module.exports = function()
 			required: true,
 			ref: 'presets',
         },
+		specPointsRemaining: {
+			type: Number,
+			required: true,
+		},
         skillUpgrades: [skillUpgrade],
 	})
 	schema.set('collection', 'champions')

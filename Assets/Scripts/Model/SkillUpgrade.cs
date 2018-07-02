@@ -61,13 +61,6 @@ namespace Assets.Scripts.Model
 
     public class SkillUpgrade
     {
-        public Skill Skill
-        {
-            get
-            {
-                return skill;
-            }
-        }
         public MetricUpgrade this[SkillMetric metric_]
         {
             get
@@ -81,7 +74,7 @@ namespace Assets.Scripts.Model
             {
                 JSONObject json = new JSONObject();
 
-                json["skill"] = skill.Uuid;
+                json["skill"] = Skill.Uuid;
                 json["upgrades"] = new JSONArray();
                 foreach (var upgrade in metricUpgradeMap)
                 {
@@ -93,12 +86,12 @@ namespace Assets.Scripts.Model
             }
         }
 
-        private Skill skill = null;
+        public Skill Skill { get; private set; } = null;
         private Dictionary<SkillMetric, MetricUpgrade> metricUpgradeMap = new Dictionary<SkillMetric, MetricUpgrade>();
 
         public SkillUpgrade(Skill skill_)
         {
-            skill = skill_;
+            Skill = skill_;
 
             foreach (var metric in Skill.MetrictList)
                 metricUpgradeMap.Add(metric, new MetricUpgrade(metric, null));
@@ -107,7 +100,7 @@ namespace Assets.Scripts.Model
         public SkillUpgrade(JSONObject json_)
         {            
             var constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-            skill = constellation.Skill(json_["skill"]);
+            Skill = constellation.Skill(json_["skill"]);
             System.Func<SkillMetric, JSONObject> lookUp = (SkillMetric metric_) =>
             {
                 foreach (var node in json_["upgrades"].AsArray)

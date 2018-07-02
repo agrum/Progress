@@ -4,6 +4,7 @@ namespace Assets.Scripts.View
 {
     public class SkillSpecializationField : MonoBehaviour
     {
+        public WestText name = null;
         public TextButton plusButton = null;
         public TextButton minusButton = null;
         public ProgressSlider plusSlider = null;
@@ -25,7 +26,15 @@ namespace Assets.Scripts.View
             plusButton.clickEvent += () => viewModel.Buy(Model.MetricUpgrade.SpecializeSign.Positive);
             minusButton.clickEvent += () => viewModel.Buy(Model.MetricUpgrade.SpecializeSign.Negative);
 
+            name.Format(viewModel.Category(), viewModel.Name());
+
             SetupUI();
+        }
+
+        void OnDestroy()
+        {
+            viewModel.SpecLevelChanged -= SetupUI;
+            viewModel = null;
         }
 
         void SetupUI()

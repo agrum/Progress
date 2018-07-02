@@ -22,9 +22,11 @@
             }
         }
 
-        public void Format(int n, string replacmeent)
+        public void Format(params string[] replacmeent)
         {
-            text = Reference.Replace("#" + n + "#", replacmeent);
+            text = Reference;
+            for (int i = 0; i < replacmeent.Length; ++i)
+                text = text.Replace("#" + i + "#", replacmeent[i]);
         }
     }
 }

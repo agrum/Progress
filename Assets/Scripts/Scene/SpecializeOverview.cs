@@ -11,6 +11,7 @@ namespace Assets.Scripts.Scene
         public View.SkillSpecializer specializer = null;
         public Button backButton = null;
         public View.ChampionHeadline championHeadline = null;
+        public View.WestText sceneTitle = null;
 
         private Model.ConstellationPreset preset = null;
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
@@ -22,6 +23,7 @@ namespace Assets.Scripts.Scene
             Debug.Assert(specializer != null);
             Debug.Assert(backButton != null);
             Debug.Assert(championHeadline != null);
+            Debug.Assert(sceneTitle != null);
 
             var loadingScreen = App.Resource.Prefab.LoadingCanvas();
                 
@@ -60,6 +62,7 @@ namespace Assets.Scripts.Scene
                 filteredSkillList,
                 hovered));
             championHeadline.Setup();
+            sceneTitle.Format(App.Content.Account.ActiveChampion.Json["specPointsRemaining"]);
             OnHoveredChanged();
         }
 
@@ -78,9 +81,9 @@ namespace Assets.Scripts.Scene
 
         void OnHoveredChanged()
         {
+            specializer.gameObject.SetActive(hovered.Skill != null);
             if (hovered.Skill != null)
-                specializer.SetContext(new ViewModel.SkillSpecializer(hovered.Skill));
-            //specializer.gameObject.SetActive(hovered.Skill != null);
+                specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[hovered.Skill], false));
         }
     }
 }

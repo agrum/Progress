@@ -117,14 +117,14 @@ namespace Assets.Scripts.View
 		{
 			isSelected = selected_;
 
-			if (!started)
+			if (!started || !animator.gameObject.activeSelf)
 				return;
-                
+            
 			animator.ResetTrigger(unselectHash);
 			animator.ResetTrigger(selectHash);
                 
 			animator.SetTrigger(isSelected ? selectHash : unselectHash);
-		}
+        }
 
 		override public void OnPointerEnter(PointerEventData eventData)
 		{
@@ -135,7 +135,6 @@ namespace Assets.Scripts.View
 
 		override public void OnPointerExit(PointerEventData eventData)
 		{
-            Debug.Log(viewModel.IconPath());
 			animator.ResetTrigger(enterHash);
 			animator.SetTrigger(leaveHash);
 			viewModel.Hovered(false);

@@ -7,17 +7,19 @@ namespace Assets.Scripts.ViewModel
         public event OnVoidDelegate SpecLevelChanged = delegate { };
         
         private Model.MetricUpgrade upgrade = null;
+        private bool editable = false;
 
-        public SkillSpecializationField(Model.MetricUpgrade upgrade_)
+        public SkillSpecializationField(Model.MetricUpgrade upgrade_, bool editable_)
         {
             Debug.Assert(upgrade_ != null);
             
             upgrade = upgrade_;
+            editable = editable_;
         }
 
         public bool Editable()
         {
-            return true;
+            return editable;
         }
 
         public Model.MetricUpgrade.SpecializeSign Sign()
@@ -28,6 +30,16 @@ namespace Assets.Scripts.ViewModel
         public float SpecLevel()
         {
             return upgrade.Level / 20.0f;
+        }
+
+        public string Category()
+        {
+            return upgrade.Category;
+        }
+
+        public string Name()
+        {
+            return upgrade.Name;
         }
 
         public float NextSpecLevel(Model.MetricUpgrade.SpecializeSign sign_)
