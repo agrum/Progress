@@ -28,6 +28,7 @@ namespace Assets.Scripts.View
 
         ViewModel.NodeTextualDetails viewModel;
 
+        private string color;
         private string colorPrefix;
         private string colorSuffix;
 
@@ -60,17 +61,29 @@ namespace Assets.Scripts.View
 			Modifier.gameObject.SetActive(active);
 			Unit.gameObject.SetActive(active);
 			Projectile.gameObject.SetActive(active);
-			Charge.gameObject.SetActive(active);
-			KitDetails.gameObject.SetActive(active);
+            Stack.gameObject.SetActive(active);
+            Charge.gameObject.SetActive(active);
+            KitDetails.gameObject.SetActive(active);
 
-			Ability.gameObject.SetActive(false);
+            Ability.gameObject.SetActive(false);
 			Class.gameObject.SetActive(false);
 			Kit.gameObject.SetActive(false);
 
 			if (!active)
 				return;
-				
-			colorPrefix = "<color=#" + skill["color"] + ">";
+
+            color = skill["color"];
+
+            Cooldown.Reference.Color = color;
+            CastTime.Reference.Color = color;
+            Modifier.Reference.Color = color;
+            Unit.Reference.Color = color;
+            Projectile.Reference.Color = color;
+            Stack.Reference.Color = color;
+            Charge.Reference.Color = color;
+            KitDetails.Reference.Color = color;
+
+            colorPrefix = "<color=#" + color + ">";
 			colorSuffix = "</color>";
 
 			Name.FormatPair("content", skill["name"]);
@@ -97,10 +110,12 @@ namespace Assets.Scripts.View
             Modifier.gameObject.SetActive(false);
             Projectile.gameObject.SetActive(false);
             Unit.gameObject.SetActive(false);
+            Stack.gameObject.SetActive(false);
             Charge.gameObject.SetActive(false);
             KitDetails.gameObject.SetActive(false);
 
             WestString description = skill["details"];
+            description.Color = color;
             Details.FormatPair("content", description.Format(viewModel.Desc));
 
             if (viewModel.Misc.ContainsKey("cooldown"))
@@ -138,17 +153,17 @@ namespace Assets.Scripts.View
 
             if (viewModel.Kit.Count > 0)
             {
-                Kit.gameObject.SetActive(true);
-                string[] lineSplit = Kit.Reference.Split('\n');
-                Kit.text = lineSplit[0];
-                Kit.text += Append(lineSplit[1], "hp", viewModel.Kit);
-                Kit.text += Append(lineSplit[2], "armor", viewModel.Kit);
-                Kit.text += Append(lineSplit[3], "shield", viewModel.Kit);
-                Kit.text += Append(lineSplit[4], "damage", viewModel.Kit);
-                Kit.text += Append(lineSplit[5], "rate", viewModel.Kit);
-                Kit.text += Append(lineSplit[6], "range", viewModel.Kit);
-                Kit.text += Append(lineSplit[7], "angle", viewModel.Kit);
-                Kit.text += Append(lineSplit[8], "speed", viewModel.Kit);
+                KitDetails.gameObject.SetActive(true);
+                string[] lineSplit = KitDetails.Reference.Split('\n');
+                KitDetails.text = lineSplit[0];
+                KitDetails.text += Append(lineSplit[1], "life", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[2], "armor", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[3], "shield", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[4], "damage", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[5], "rate", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[6], "range", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[7], "angle", viewModel.Kit);
+                KitDetails.text += Append(lineSplit[8], "speed", viewModel.Kit);
             }
 
             if (viewModel.Projectile.Count > 0)
@@ -173,7 +188,11 @@ namespace Assets.Scripts.View
         private string Append(string text_, string pattern_, Dictionary<string, string> collection_)
         {
             if (collection_.ContainsKey(pattern_))
-                return "\n" + new WestString(text_).FormatPair(pattern_, collection_[pattern_]);
+            {
+                var westText = new WestString(text_);
+                westText.Color = color;
+                return "\n" + westText.FormatPair(pattern_, collection_[pattern_]);
+            }
             return null;
         }
 	}

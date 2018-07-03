@@ -79,7 +79,7 @@ namespace Assets.Scripts.View
                 {
                     double number = (System.Convert.ToDouble(replacement_) * 100.0);
                     if (Color != null)
-                        replacement_ = colorPrefix + Color + ">" + number.ToString() + "%" + colorSuffix;
+                        replacement_ = colorPrefix + Color + ">" + number.ToString() + colorSuffix + "%";
                     else
                         replacement_ = number.ToString() + "%";
                     return text_.Replace("%" + pattern_ + "%", replacement_);

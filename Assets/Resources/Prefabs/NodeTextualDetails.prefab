@@ -516,7 +516,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "<b>Kit</b>:\n - Health: #hp#\n - Armor: #armor#\n - Shield: #shield#\n
+  m_Text: "<b>Kit</b>:\n - Health: #life#\n - Armor: #armor#\n - Shield: #shield#\n
     - Damage: #damage#\n - Rate: #rate# attacks/s\n - Range: #range# meters\n - Cone:
     #angle# degrees\n - Speed: #speed# meters/s"
 --- !u!114 &114324278939977752
