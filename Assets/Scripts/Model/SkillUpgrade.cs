@@ -39,7 +39,7 @@ namespace Assets.Scripts.Model
             Skill = skill_;
 
             foreach (var metric in Skill.MetrictList)
-                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, null));
+                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, null, OverallWeight));
         }
 
         public SkillUpgrade(JSONObject json_)
@@ -55,7 +55,7 @@ namespace Assets.Scripts.Model
             };
 
             foreach (var metric in Skill.MetrictList)
-                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, lookUp(metric)));
+                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, lookUp(metric), OverallWeight));
         }
 
         public bool IsValid()
@@ -76,15 +76,15 @@ namespace Assets.Scripts.Model
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
-                cumulativeLevel += System.Math.Abs(metricUpgrades.Value.Level);
-            return cumulativeLevel;
+                cumulativeLevel += System.Math.Abs(metricUpgrades.Value.TemporaryLevel);
+            return cumulativeLevel / 30.0f;
         }
 
         public float Handicap()
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
-                cumulativeLevel += metricUpgrades.Value.Level;
+                cumulativeLevel += metricUpgrades.Value.TemporaryLevel;
 
             return cumulativeLevel;
         }

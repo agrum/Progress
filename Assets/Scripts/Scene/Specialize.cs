@@ -10,6 +10,7 @@ namespace Assets.Scripts.Scene
         public View.SkillSpecializer specializer = null;
         public Button backButton = null;
         public View.ChampionHeadline championHeadline = null;
+        public View.TextButton applyButton = null;
 
         public static Model.Skill SelectedSkill = null;
         
@@ -21,6 +22,7 @@ namespace Assets.Scripts.Scene
             Debug.Assert(specializer != null);
             Debug.Assert(backButton != null);
             Debug.Assert(championHeadline != null);
+            Debug.Assert(applyButton != null);
             Debug.Assert(SelectedSkill != null);
 
             var loadingScreen = App.Resource.Prefab.LoadingCanvas();

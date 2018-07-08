@@ -7,6 +7,7 @@ namespace Assets.Scripts.ViewModel
         public event OnVoidDelegate LevelChanged = delegate { };
 
         private Model.MetricUpgrade metricUpgrade = null;
+        private Model.MetricUpgrade referenceMetricUpgrade = null;
         private bool editable = false;
         private bool isPreviewing = false;
 
@@ -15,6 +16,7 @@ namespace Assets.Scripts.ViewModel
             Debug.Assert(upgrade_ != null);
 
             metricUpgrade = upgrade_;
+            referenceMetricUpgrade = new Model.MetricUpgrade(metricUpgrade.Metric, metricUpgrade.Json, () => { return 0; });
             editable = editable_;
 
             metricUpgrade.LevelChanged += OnLevelChanged;
@@ -38,12 +40,22 @@ namespace Assets.Scripts.ViewModel
 
         public float Level()
         {
-            return metricUpgrade.Level / 20.0f;
+            return referenceMetricUpgrade.WeightedLevel;
         }
 
         public float TemporaryLevel()
         {
-            return metricUpgrade.TemporaryLevel / 20.0f;
+            return metricUpgrade.WeightedLevel;
+        }
+
+        public float Factor()
+        {
+            return referenceMetricUpgrade.Factor;
+        }
+
+        public float TemporaryFactor()
+        {
+            return metricUpgrade.Factor;
         }
 
         public string Category()
@@ -61,11 +73,11 @@ namespace Assets.Scripts.ViewModel
             if (enabled)
             {
                 isPreviewing = true;
-                Upgrade();
+                _Upgrade();
             }
             else if (isPreviewing)
             {
-                Downgrade();
+                _Downgrade();
                 isPreviewing = false;
             }
         }
@@ -75,16 +87,31 @@ namespace Assets.Scripts.ViewModel
             if (enabled)
             {
                 isPreviewing = true;
-                Downgrade();
+                _Downgrade();
             }
             else if (isPreviewing)
             {
-                Upgrade();
+                _Upgrade();
                 isPreviewing = false;
             }
         }
 
         public void Upgrade()
+        {
+            isPreviewing = false;
+        }
+
+        public void Downgrade()
+        {
+            isPreviewing = false;
+        }
+
+        public void Buy()
+        {
+            metricUpgrade.Save();
+        }
+
+        private void _Upgrade()
         {
             if (!editable)
                 return;
@@ -100,7 +127,7 @@ namespace Assets.Scripts.ViewModel
             }
         }
 
-        public void Downgrade()
+        private void _Downgrade()
         {
             if (!editable)
                 return;
@@ -114,11 +141,6 @@ namespace Assets.Scripts.ViewModel
                 Debug.Log(e.Message);
                 isPreviewing = false;
             }
-        }
-
-        public void Buy()
-        {
-            metricUpgrade.Save();
         }
 
         private void OnLevelChanged()

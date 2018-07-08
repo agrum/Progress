@@ -61,6 +61,14 @@ namespace Assets.Scripts.View
             minusSlider.Main = System.Math.Abs(viewModel.Level());
             plusSlider.Progress = System.Math.Abs(viewModel.TemporaryLevel());
             minusSlider.Progress = System.Math.Abs(viewModel.TemporaryLevel());
+            
+            fieldPercentage.color = viewModel.TemporaryLevel() >= 0
+                ? App.Resource.Material.AbilityMaterial.color
+                : App.Resource.Material.KitMaterial.color;
+            var temporaryFactor = viewModel.TemporaryFactor();
+            fieldPercentage.Format(
+                temporaryFactor >= 0 ? "+" : "",
+                temporaryFactor.ToString());
         }
     }
 }

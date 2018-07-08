@@ -21,10 +21,7 @@ namespace Assets.Scripts.View
             Debug.Assert(viewModel_ != null);
 
             if (viewModel != null)
-            {
-                viewModel.NodeAdded -= OnNodeAdded;
-                viewModel.SpecializerFieldAdded -= OnSpecializerFieldAdded;
-            }
+                OnDestroy();
 
             viewModel = viewModel_;
             viewModel.NodeAdded += OnNodeAdded;
@@ -41,10 +38,13 @@ namespace Assets.Scripts.View
 
         private void OnDestroy()
         {
-            viewModel.NodeAdded -= OnNodeAdded;
-            viewModel.SpecializerFieldAdded -= OnSpecializerFieldAdded;
-            viewModel.SkillUpgraded -= OnSkillUpgraded;
-            viewModel = null;
+            if (viewModel != null)
+            { 
+                viewModel.NodeAdded -= OnNodeAdded;
+                viewModel.SpecializerFieldAdded -= OnSpecializerFieldAdded;
+                viewModel.SkillUpgraded -= OnSkillUpgraded;
+                viewModel = null;
+            }
         }
 
         private void Update()
@@ -68,8 +68,9 @@ namespace Assets.Scripts.View
 
         private void OnSkillUpgraded()
         {
-            handicap.Format(viewModel.Handicap().ToString());
+            handicap.Format(viewModel.PreviewHandicap().ToString());
             overallWeight.Main = viewModel.OverallWeight();
+            overallWeight.Progress = viewModel.OverallPreviewWeight();
         }
     }
 }

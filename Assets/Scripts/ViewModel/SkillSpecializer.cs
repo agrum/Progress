@@ -9,6 +9,7 @@ namespace Assets.Scripts.ViewModel
         public event OnVoidDelegate SkillUpgraded = delegate { };
 
         private Model.SkillUpgrade skillUpgrade = null;
+        private Model.SkillUpgrade referenceSkillUpgrade = null;
         private bool editable = false;
         private Model.Json scale = null;
 
@@ -17,6 +18,7 @@ namespace Assets.Scripts.ViewModel
             Debug.Assert(skillUpgrade_ != null);
 
             skillUpgrade = skillUpgrade_;
+            referenceSkillUpgrade = new Model.SkillUpgrade(skillUpgrade.Skill);
             editable = editable_;
             scale = new Model.Json();
             scale["scale"] = 1.0f;
@@ -37,9 +39,11 @@ namespace Assets.Scripts.ViewModel
             {
                 SpecializerFieldAdded(() =>
                 {
-                    return new SkillSpecializationField(
+                    var viewModel = new SkillSpecializationField(
                         skillUpgrade[metric],
                         editable);
+                    viewModel.LevelChanged += OnMetricLevelChanged;
+                    return viewModel;
                 });
             }
         }
@@ -58,12 +62,27 @@ namespace Assets.Scripts.ViewModel
 
         public float Handicap()
         {
+            return referenceSkillUpgrade.Handicap();
+        }
+
+        public float PreviewHandicap()
+        {
             return skillUpgrade.Handicap();
         }
 
         public float OverallWeight()
         {
+            return referenceSkillUpgrade.OverallWeight();
+        }
+
+        public float OverallPreviewWeight()
+        {
             return skillUpgrade.OverallWeight();
+        }
+
+        private void OnMetricLevelChanged()
+        {
+            SkillUpgraded();
         }
     }
 }
