@@ -7,7 +7,7 @@ namespace Assets.Scripts.ViewModel
 {
     public class NodeTextualDetails
     {
-        public event OnJsonDelegate SkillChanged = delegate { };
+        public event OnVoidDelegate SkillChanged = delegate { };
 
         public Dictionary<string, string> Misc = new Dictionary<string, string>();
         public Dictionary<string, string> Desc = new Dictionary<string, string>();
@@ -17,6 +17,9 @@ namespace Assets.Scripts.ViewModel
         public Dictionary<string, string> Stack = new Dictionary<string, string>();
         public Dictionary<string, string> Unit = new Dictionary<string, string>();
         public Dictionary<string, string> Kit = new Dictionary<string, string>();
+
+        public JSONNode Skill { get; private set; } = null;
+
         private Dictionary<string, Dictionary<string, string>> Map = new Dictionary<string, Dictionary<string, string>>();
         private Model.HoveredSkill hovered;
 
@@ -33,6 +36,8 @@ namespace Assets.Scripts.ViewModel
             Map.Add("stack", Stack);
             Map.Add("unit", Unit);
             Map.Add("kit", Kit);
+
+            OnHoveredChanged();
         }
 
         ~NodeTextualDetails()
@@ -58,7 +63,8 @@ namespace Assets.Scripts.ViewModel
                 }
             }
 
-            SkillChanged(hovered.Skill != null ? hovered.Skill.Json : null);
+            Skill = hovered.Skill != null ? hovered.Skill.Json : null;
+            SkillChanged();
         }
     }
 }

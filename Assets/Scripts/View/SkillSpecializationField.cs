@@ -4,7 +4,8 @@ namespace Assets.Scripts.View
 {
     public class SkillSpecializationField : MonoBehaviour
     {
-        public WestText name = null;
+        public WestText fieldName = null;
+        public WestText fieldPercentage = null;
         public TextButton plusButton = null;
         public TextButton minusButton = null;
         public ProgressSlider plusSlider = null;
@@ -17,70 +18,49 @@ namespace Assets.Scripts.View
             Debug.Assert(viewModel_ != null);
 
             viewModel = viewModel_;
-            viewModel.SpecLevelChanged += SetupUI;
+            viewModel.LevelChanged += SetupUI;
 
-            plusButton.enterEvent += ShowPositiveProgress;
-            minusButton.enterEvent += ShowNegativeProgress;
-            plusButton.leaveEvent += HidePositiveProgress;
-            minusButton.leaveEvent += HideNegativeProgress;
-            plusButton.clickEvent += () => viewModel.Buy(Model.MetricUpgrade.SpecializeSign.Positive);
-            minusButton.clickEvent += () => viewModel.Buy(Model.MetricUpgrade.SpecializeSign.Negative);
+            plusButton.enterEvent += () => viewModel.PreviewUpgrade(true);
+            minusButton.enterEvent += () => viewModel.PreviewDowngrade(true);
+            plusButton.leaveEvent += () => viewModel.PreviewUpgrade(false);
+            minusButton.leaveEvent += () => viewModel.PreviewDowngrade(false);
+            plusButton.clickEvent += () => viewModel.Upgrade();
+            minusButton.clickEvent += () => viewModel.Downgrade();
 
-            name.Format(viewModel.Category(), viewModel.Name());
+            fieldName.Format(viewModel.Category(), viewModel.Name());
 
             SetupUI();
         }
 
         void OnDestroy()
         {
-            viewModel.SpecLevelChanged -= SetupUI;
-            viewModel = null;
+            if (viewModel != null)
+            {
+                viewModel.LevelChanged -= SetupUI;
+                viewModel = null;
+            }
         }
 
         void SetupUI()
         { 
             plusButton.gameObject.SetActive(viewModel.Editable());
             minusButton.gameObject.SetActive(viewModel.Editable());
-            plusSlider.gameObject.SetActive(false);
-            minusSlider.gameObject.SetActive(false);
+            plusSlider.gameObject.SetActive(true);
+            minusSlider.gameObject.SetActive(true);
 
             if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.Positive)
             {
-                plusSlider.gameObject.SetActive(true);
+                minusSlider.gameObject.SetActive(false);
             }
             else if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.Negative)
             {
-                minusSlider.gameObject.SetActive(true);
+                plusSlider.gameObject.SetActive(false);
             }
 
-            plusSlider.Main = viewModel.SpecLevel();
-            minusSlider.Main = viewModel.SpecLevel();
-        }
-
-        void ShowPositiveProgress()
-        {
-            plusSlider.gameObject.SetActive(true);
-            plusSlider.Progress = viewModel.NextSpecLevel(Model.MetricUpgrade.SpecializeSign.Positive);
-        }
-
-        void ShowNegativeProgress()
-        {
-            minusSlider.gameObject.SetActive(true);
-            minusSlider.Progress = viewModel.NextSpecLevel(Model.MetricUpgrade.SpecializeSign.Negative);
-        }
-
-        void HidePositiveProgress()
-        {
-            plusSlider.Progress = 0;
-            if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.None)
-                plusSlider.gameObject.SetActive(false);
-        }
-
-        void HideNegativeProgress()
-        {
-            minusSlider.Progress = 0;
-            if (viewModel.Sign() == Model.MetricUpgrade.SpecializeSign.None)
-                minusSlider.gameObject.SetActive(false);
+            plusSlider.Main = System.Math.Abs(viewModel.Level());
+            minusSlider.Main = System.Math.Abs(viewModel.Level());
+            plusSlider.Progress = System.Math.Abs(viewModel.TemporaryLevel());
+            minusSlider.Progress = System.Math.Abs(viewModel.TemporaryLevel());
         }
     }
 }

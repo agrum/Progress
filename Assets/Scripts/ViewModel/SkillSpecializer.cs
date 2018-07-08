@@ -7,7 +7,7 @@ namespace Assets.Scripts.ViewModel
         public event OnElementAdded NodeAdded = delegate { };
         public event OnElementAdded SpecializerFieldAdded = delegate { };
         public event OnVoidDelegate SkillUpgraded = delegate { };
-        
+
         private Model.SkillUpgrade skillUpgrade = null;
         private bool editable = false;
         private Model.Json scale = null;
@@ -37,7 +37,9 @@ namespace Assets.Scripts.ViewModel
             {
                 SpecializerFieldAdded(() =>
                 {
-                    return new SkillSpecializationField(skillUpgrade[metric], editable);
+                    return new SkillSpecializationField(
+                        skillUpgrade[metric],
+                        editable);
                 });
             }
         }

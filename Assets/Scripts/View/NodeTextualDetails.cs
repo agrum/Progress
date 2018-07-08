@@ -38,6 +38,7 @@ namespace Assets.Scripts.View
 
             viewModel = viewModel_;
             viewModel.SkillChanged += OnSkillChanged;
+            OnSkillChanged();
         }
 
         void OnDestroy()
@@ -49,8 +50,9 @@ namespace Assets.Scripts.View
             viewModel = null;
         }
 
-		private void OnSkillChanged(JSONNode skill)
+		private void OnSkillChanged()
 		{
+            var skill = viewModel.Skill;
 			bool active = (skill != null);
 
 			Name.gameObject.SetActive(active);

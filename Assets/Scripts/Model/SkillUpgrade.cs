@@ -4,61 +4,6 @@ using UnityEngine;
 
 namespace Assets.Scripts.Model
 {
-    public class MetricUpgrade
-    {
-        public enum SpecializeSign
-        {
-            Positive,
-            Negative,
-            None
-        }
-
-        public string Name { get { return Json["name"]; } private set { Json["name"] = value; } }
-        public string Category { get { return Json["category"]; } private set { Json["category"] = value; } }
-        public float Level { get { return Json["level"]; } private set { Json["level"] = value; } }
-        public SpecializeSign Sign
-        {
-            get
-            {
-                return Level > 0 ? SpecializeSign.Positive : Level < 0 ? SpecializeSign.Negative : SpecializeSign.None;
-            }
-        }
-
-        public JSONObject Json { get; private set; } = null;
-        public SkillMetric Metric { get; private set; } = null;
-
-        public MetricUpgrade(SkillMetric metric_, JSONObject json_)
-        {
-            Metric = metric_;
-            if (json_ !=null)
-                Json = json_;
-            else
-            {
-                Json = new JSONObject();
-                Category = Metric.Category;
-                Name = Metric.Name;
-                Level = 0;
-            }
-        }
-
-        public void Upgrade(SpecializeSign sign_)
-        {
-            if (sign_ == SpecializeSign.None)
-                return;
-
-            if (Sign != SpecializeSign.None && Sign != sign_)
-            {
-                Debug.Log("Tried upgrading a skill the wrong way");
-                return;
-            }
-
-            if (sign_ == SpecializeSign.Positive)
-                ++Level;
-            else
-                --Level;
-        }
-    }
-
     public class SkillUpgrade
     {
         public MetricUpgrade this[SkillMetric metric_]

@@ -1150,6 +1150,7 @@
     <Compile Include="Assets\Scripts\Model\HoveredNode.cs" />
     <Compile Include="Assets\Scripts\Model\Json.cs" />
     <Compile Include="Assets\Scripts\Model\Keybinding.cs" />
+    <Compile Include="Assets\Scripts\Model\MetricUpgrade.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\Nexus.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\NexusManager.cs" />
     <Compile Include="Assets\Scripts\Model\Player.cs" />
@@ -1183,8 +1184,10 @@
     <Compile Include="Assets\Scripts\Scene\Loader.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetSelection.cs" />
+    <Compile Include="Assets\Scripts\Scene\Specialize.cs" />
     <Compile Include="Assets\Scripts\Scene\SpecializeOverview.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
+    <Compile Include="Assets\Scripts\Schema\MetricUpgrade.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnCreate.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnPreview.cs" />
     <Compile Include="Assets\Scripts\View\ChampionHeadline.cs" />
@@ -1214,6 +1217,7 @@
     <Compile Include="Assets\Scripts\ViewModel\PresetColumn.cs" />
     <Compile Include="Assets\Scripts\ViewModel\SkillSpecializationField.cs" />
     <Compile Include="Assets\Scripts\ViewModel\SkillSpecializer.cs" />
+    <Compile Include="Assets\Scripts\WestException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\Canvas.shader" />

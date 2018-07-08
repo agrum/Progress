@@ -29,3 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpecializeOverview.unity
     guid: 74536c8904f67d647841462483710798
+  - enabled: 1
+    path: Assets/Scenes/Specialize.unity
+    guid: ecc6cd783e1d6f646b6a010bd794b81a

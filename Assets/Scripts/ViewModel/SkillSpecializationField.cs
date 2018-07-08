@@ -4,17 +4,26 @@ namespace Assets.Scripts.ViewModel
 {
     public class SkillSpecializationField : IBase
     {
-        public event OnVoidDelegate SpecLevelChanged = delegate { };
-        
-        private Model.MetricUpgrade upgrade = null;
+        public event OnVoidDelegate LevelChanged = delegate { };
+
+        private Model.MetricUpgrade metricUpgrade = null;
         private bool editable = false;
+        private bool isPreviewing = false;
 
         public SkillSpecializationField(Model.MetricUpgrade upgrade_, bool editable_)
         {
             Debug.Assert(upgrade_ != null);
-            
-            upgrade = upgrade_;
+
+            metricUpgrade = upgrade_;
             editable = editable_;
+
+            metricUpgrade.LevelChanged += OnLevelChanged;
+        }
+
+        ~SkillSpecializationField()
+        {
+            metricUpgrade.LevelChanged -= OnLevelChanged;
+            metricUpgrade = null;
         }
 
         public bool Editable()
@@ -24,52 +33,97 @@ namespace Assets.Scripts.ViewModel
 
         public Model.MetricUpgrade.SpecializeSign Sign()
         {
-            return upgrade.Sign;
+            return metricUpgrade.Sign;
         }
 
-        public float SpecLevel()
+        public float Level()
         {
-            return upgrade.Level / 20.0f;
+            return metricUpgrade.Level / 20.0f;
+        }
+
+        public float TemporaryLevel()
+        {
+            return metricUpgrade.TemporaryLevel / 20.0f;
         }
 
         public string Category()
         {
-            return upgrade.Category;
+            return metricUpgrade.Category;
         }
 
         public string Name()
         {
-            return upgrade.Name;
+            return metricUpgrade.Name;
         }
 
-        public float NextSpecLevel(Model.MetricUpgrade.SpecializeSign sign_)
+        public void PreviewUpgrade(bool enabled)
         {
-            if (sign_ == Model.MetricUpgrade.SpecializeSign.None)
-                return 0.0f;
-
-            if (upgrade.Sign != Model.MetricUpgrade.SpecializeSign.None && upgrade.Sign != sign_)
+            if (enabled)
             {
-                Debug.Log("Tried upgrading a skill the wrong way");
-                return 0.0f;
+                isPreviewing = true;
+                Upgrade();
             }
-
-            if ((System.Math.Abs(upgrade.Level) + 0.5f) / upgrade.Metric.UpgCost > 20.0f)
+            else if (isPreviewing)
             {
-                Debug.Log("Tried upgrading a skill too far past limit");
-                return 0.0f;
+                Downgrade();
+                isPreviewing = false;
             }
-            
-            return (System.Math.Abs(upgrade.Level) + 1.0f) / upgrade.Metric.UpgCost / 20.0f;
         }
 
-        public void Buy(Model.MetricUpgrade.SpecializeSign sign_)
+        public void PreviewDowngrade(bool enabled)
         {
-            float nextLevel = NextSpecLevel(sign_);
+            if (enabled)
+            {
+                isPreviewing = true;
+                Downgrade();
+            }
+            else if (isPreviewing)
+            {
+                Upgrade();
+                isPreviewing = false;
+            }
+        }
 
-            if (nextLevel == 0.0f)
+        public void Upgrade()
+        {
+            if (!editable)
                 return;
 
-            upgrade.Upgrade(sign_);
+            try
+            {
+                metricUpgrade.Upgrade();
+            }
+            catch (WestException e)
+            {
+                Debug.Log(e.Message);
+                isPreviewing = false;
+            }
+        }
+
+        public void Downgrade()
+        {
+            if (!editable)
+                return;
+
+            try
+            {
+                metricUpgrade.Downgrade();
+            }
+            catch (WestException e)
+            {
+                Debug.Log(e.Message);
+                isPreviewing = false;
+            }
+        }
+
+        public void Buy()
+        {
+            metricUpgrade.Save();
+        }
+
+        private void OnLevelChanged()
+        {
+            LevelChanged();
         }
     }
 }
