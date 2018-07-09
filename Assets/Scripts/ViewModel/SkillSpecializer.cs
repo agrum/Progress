@@ -11,15 +11,17 @@ namespace Assets.Scripts.ViewModel
         private Model.SkillUpgrade skillUpgrade = null;
         private Model.SkillUpgrade referenceSkillUpgrade = null;
         private bool editable = false;
+        private Model.HoveredSkill hovered = null;
         private Model.Json scale = null;
 
-        public SkillSpecializer(Model.SkillUpgrade skillUpgrade_, bool editable_)
+        public SkillSpecializer(Model.SkillUpgrade skillUpgrade_, bool editable_, Model.HoveredSkill hovered_)
         {
             Debug.Assert(skillUpgrade_ != null);
 
             skillUpgrade = skillUpgrade_;
             referenceSkillUpgrade = new Model.SkillUpgrade(skillUpgrade.Skill);
             editable = editable_;
+            hovered = hovered_;
             scale = new Model.Json();
             scale["scale"] = 1.0f;
         }
@@ -82,6 +84,7 @@ namespace Assets.Scripts.ViewModel
 
         private void OnMetricLevelChanged()
         {
+            hovered.Skill = hovered.Skill;
             SkillUpgraded();
         }
     }

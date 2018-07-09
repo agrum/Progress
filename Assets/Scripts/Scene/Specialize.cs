@@ -54,7 +54,7 @@ namespace Assets.Scripts.Scene
             //view
             backButton.onClick.AddListener(() => { App.Scene.Load("SpecializeOverview"); });
             nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
-            specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[SelectedSkill], true));
+            specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[SelectedSkill], true, hovered));
             championHeadline.Setup();
         }
     }

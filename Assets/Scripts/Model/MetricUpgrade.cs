@@ -49,6 +49,11 @@ namespace Assets.Scripts.Model
             Reset();
         }
 
+        ~MetricUpgrade()
+        {
+            LevelChanged = null;
+        }
+
         public void Upgrade()
         {
             if (startingLevel < 0 && startingLevel > TemporaryLevel)
@@ -97,7 +102,7 @@ namespace Assets.Scripts.Model
             {
                 return (Metric.UpgType > 0) ^ (TemporaryLevel < 0)
                 ? TemporaryLevel / 10.0f
-                : ((TemporaryLevel >= 0) ? 1 : -1) * (1.0f - 1.0f / (1.0f + System.Math.Abs(TemporaryLevel) / 10.0f));
+                : ((Metric.UpgType == 1) ? 1 : -1) * (1.0f - 1.0f / (1.0f + System.Math.Abs(TemporaryLevel) / 10.0f));
             }
         }
     }

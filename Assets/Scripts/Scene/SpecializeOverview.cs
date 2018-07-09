@@ -35,6 +35,11 @@ namespace Assets.Scripts.Scene
             });
         }
 
+        private void OnDestroy()
+        {
+            hovered.ChangedEvent -= OnHoveredChanged;
+        }
+
         private void Setup()
         {
             if (this == null)
@@ -83,7 +88,7 @@ namespace Assets.Scripts.Scene
         {
             specializer.gameObject.SetActive(hovered.Skill != null);
             if (hovered.Skill != null)
-                specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[hovered.Skill], false));
+                specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[hovered.Skill], false, hovered));
         }
     }
 }

@@ -52,14 +52,14 @@ namespace Assets.Scripts.ViewModel
 
             if (hovered.Skill != null)
             {
-                JSONArray metrics = hovered.Skill.Json["metrics2"].AsArray;
-                foreach (var almostMetric in metrics)
+                Model.SkillUpgrade upgrade = null;
+                if (App.Content.Account.ActiveChampion != null)
+                    upgrade = App.Content.Account.ActiveChampion.Upgrades[hovered.Skill];
+                
+                foreach (var metric in hovered.Skill.MetrictList)
                 {
-                    JSONObject metric = almostMetric.Value.AsObject;
-                    string category = metric["category"];
-                    string name = metric["name"];
-                    var merp = Map[metric["category"]];
-                    Map[metric["category"]][metric["name"]] = metric["value"]; 
+                    float factor = upgrade != null ? upgrade[metric].Factor : 0;
+                    Map[metric.Category][metric.Name] = (metric.Value * (1 + factor)).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
                 }
             }
 
