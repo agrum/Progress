@@ -79,9 +79,9 @@ namespace Assets.Scripts.View
                 {
                     double number = System.Convert.ToDouble(replacement_);
                     if (Color != null)
-                        replacement_ = colorPrefix + Color + ">" + number.ToString("P1", System.Globalization.CultureInfo.InvariantCulture) + colorSuffix + "%";
+                        replacement_ = colorPrefix + Color + ">" + number.ToString("P1", System.Globalization.CultureInfo.InvariantCulture) + colorSuffix;
                     else
-                        replacement_ = number.ToString("P1", System.Globalization.CultureInfo.InvariantCulture) + "%";
+                        replacement_ = number.ToString("P1", System.Globalization.CultureInfo.InvariantCulture);
                     return text_.Replace("%" + pattern_ + "%", replacement_);
                 }
                 catch (System.FormatException)

@@ -9,7 +9,10 @@ namespace Assets.Scripts.ViewModel
         private Model.MetricUpgrade metricUpgrade = null;
         private Model.MetricUpgrade referenceMetricUpgrade = null;
         private bool editable = false;
-        private bool isPreviewing = false;
+
+        public bool IsPreviewing { get; private set; } = false;
+        public float PrePreviewLevel { get; private set; } = 0;
+        public float PrePreviewFactor { get; private set; } = 0;
 
         public SkillSpecializationField(Model.MetricUpgrade upgrade_, bool editable_)
         {
@@ -72,13 +75,13 @@ namespace Assets.Scripts.ViewModel
         {
             if (enabled)
             {
-                isPreviewing = true;
-                _Upgrade();
+                IsPreviewing = true;
+                Upgrade();
             }
-            else if (isPreviewing)
+            else if (IsPreviewing)
             {
-                _Downgrade();
-                isPreviewing = false;
+                IsPreviewing = false;
+                Downgrade();
             }
         }
 
@@ -86,24 +89,14 @@ namespace Assets.Scripts.ViewModel
         {
             if (enabled)
             {
-                isPreviewing = true;
-                _Downgrade();
+                IsPreviewing = true;
+                Downgrade();
             }
-            else if (isPreviewing)
+            else if (IsPreviewing)
             {
-                _Upgrade();
-                isPreviewing = false;
+                IsPreviewing = false;
+                Upgrade();
             }
-        }
-
-        public void Upgrade()
-        {
-            isPreviewing = false;
-        }
-
-        public void Downgrade()
-        {
-            isPreviewing = false;
         }
 
         public void Buy()
@@ -111,35 +104,39 @@ namespace Assets.Scripts.ViewModel
             metricUpgrade.Save();
         }
 
-        private void _Upgrade()
+        public void Upgrade()
         {
             if (!editable)
                 return;
 
             try
             {
+                PrePreviewLevel = TemporaryLevel();
+                PrePreviewFactor = TemporaryFactor();
                 metricUpgrade.Upgrade();
             }
             catch (WestException e)
             {
                 Debug.Log(e.Message);
-                isPreviewing = false;
+                IsPreviewing = false;
             }
         }
 
-        private void _Downgrade()
+        public void Downgrade()
         {
             if (!editable)
                 return;
 
             try
             {
+                PrePreviewLevel = TemporaryLevel();
+                PrePreviewFactor = TemporaryFactor();
                 metricUpgrade.Downgrade();
             }
             catch (WestException e)
             {
                 Debug.Log(e.Message);
-                isPreviewing = false;
+                IsPreviewing = false;
             }
         }
 

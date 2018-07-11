@@ -6,6 +6,7 @@ namespace Assets.Scripts.View
     {
         public WestText fieldName = null;
         public WestText fieldPercentage = null;
+        public WestText fieldPercentagePrevious = null;
         public TextButton plusButton = null;
         public TextButton minusButton = null;
         public ProgressSlider plusSlider = null;
@@ -69,6 +70,18 @@ namespace Assets.Scripts.View
             fieldPercentage.Format(
                 temporaryFactor >= 0 ? "+" : "",
                 temporaryFactor.ToString());
+
+            fieldPercentagePrevious.gameObject.SetActive(viewModel.IsPreviewing);
+            if (viewModel.IsPreviewing)
+            {
+                fieldPercentagePrevious.color = viewModel.PrePreviewLevel >= 0
+                    ? App.Resource.Material.AbilityMaterial.color
+                    : App.Resource.Material.KitMaterial.color;
+                var previousFactor = viewModel.PrePreviewFactor;
+                fieldPercentagePrevious.Format(
+                    previousFactor >= 0 ? "+" : "",
+                    previousFactor.ToString());
+            }
         }
     }
 }
