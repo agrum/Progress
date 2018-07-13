@@ -7,7 +7,7 @@ namespace Assets.Scripts.ViewModel
 {
     public abstract class INodeTextualDetails
     {
-        public event OnVoidDelegate SkillChanged;
+        public event OnVoidDelegate SkillChanged = delegate { };
 
         public JSONNode Json { get; protected set; } = null;
 
@@ -23,6 +23,11 @@ namespace Assets.Scripts.ViewModel
         protected void Emit()
         {
             SkillChanged();
+        }
+
+        ~INodeTextualDetails()
+        {
+            SkillChanged = null;
         }
     }
 

@@ -46,7 +46,7 @@ namespace Assets.Scripts.ViewModel
                 
             foreach (var metric in skill.MetrictList)
             {
-                float factor = upgrade != null ? upgrade[metric].Factor() : 0;
+                float factor = upgrade != null ? specializer.Factor(upgrade[metric]) : 0;
                 Map[metric.Category][metric.Name] = (metric.Value * (1 + factor)).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             }
 
