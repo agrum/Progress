@@ -8,18 +8,19 @@ namespace Assets.Scripts.ViewModel
         public event OnElementAdded SpecializerFieldAdded = delegate { };
         public event OnVoidDelegate SkillUpgraded = delegate { };
 
+        private Model.SkillSpecializer specializer = null;
         private Model.SkillUpgrade skillUpgrade = null;
-        private Model.SkillUpgrade referenceSkillUpgrade = null;
         private bool editable = false;
         private Model.HoveredSkill hovered = null;
         private Model.Json scale = null;
 
-        public SkillSpecializer(Model.SkillUpgrade skillUpgrade_, bool editable_, Model.HoveredSkill hovered_)
+        public SkillSpecializer(Model.SkillSpecializer specializer_, Model.SkillUpgrade skillUpgrade_, bool editable_, Model.HoveredSkill hovered_)
         {
+            Debug.Assert(specializer_ != null);
             Debug.Assert(skillUpgrade_ != null);
 
+            specializer = specializer_;
             skillUpgrade = skillUpgrade_;
-            referenceSkillUpgrade = new Model.SkillUpgrade(skillUpgrade.Skill);
             editable = editable_;
             hovered = hovered_;
             scale = new Model.Json();
@@ -42,6 +43,7 @@ namespace Assets.Scripts.ViewModel
                 SpecializerFieldAdded(() =>
                 {
                     var viewModel = new SkillSpecializationField(
+                        specializer,
                         skillUpgrade[metric],
                         editable);
                     viewModel.LevelChanged += OnMetricLevelChanged;
@@ -64,22 +66,22 @@ namespace Assets.Scripts.ViewModel
 
         public float Handicap()
         {
-            return referenceSkillUpgrade.Handicap();
+            return skillUpgrade.Handicap();
         }
 
         public float PreviewHandicap()
         {
-            return skillUpgrade.Handicap();
+            return specializer.Handicap();
         }
 
         public float OverallWeight()
         {
-            return referenceSkillUpgrade.OverallWeight();
+            return skillUpgrade.OverallWeight();
         }
 
         public float OverallPreviewWeight()
         {
-            return skillUpgrade.OverallWeight();
+            return specializer.OverallWeight();
         }
 
         private void OnMetricLevelChanged()

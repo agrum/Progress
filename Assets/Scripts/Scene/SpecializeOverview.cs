@@ -88,7 +88,15 @@ namespace Assets.Scripts.Scene
         {
             specializer.gameObject.SetActive(hovered.Skill != null);
             if (hovered.Skill != null)
-                specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[hovered.Skill], false, hovered));
+            {
+                var skillUpgrade = App.Content.Account.ActiveChampion.Upgrades[hovered.Skill];
+                specializer.SetContext(
+                    new ViewModel.SkillSpecializer(
+                        new Model.SkillSpecializer(App.Content.Account.ActiveChampion, skillUpgrade), 
+                        skillUpgrade, 
+                        false, 
+                        hovered));
+            }
         }
     }
 }

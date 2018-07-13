@@ -6,28 +6,29 @@ namespace Assets.Scripts.ViewModel
     {
         public event OnVoidDelegate LevelChanged = delegate { };
 
+        private Model.SkillSpecializer specializer = null;
         private Model.MetricUpgrade metricUpgrade = null;
-        private Model.MetricUpgrade referenceMetricUpgrade = null;
         private bool editable = false;
 
         public bool IsPreviewing { get; private set; } = false;
         public float PrePreviewLevel { get; private set; } = 0;
         public float PrePreviewFactor { get; private set; } = 0;
 
-        public SkillSpecializationField(Model.MetricUpgrade upgrade_, bool editable_)
+        public SkillSpecializationField(Model.SkillSpecializer specializer_, Model.MetricUpgrade upgrade_, bool editable_)
         {
+            Debug.Assert(specializer_ != null);
             Debug.Assert(upgrade_ != null);
 
+            specializer = specializer_;
             metricUpgrade = upgrade_;
-            referenceMetricUpgrade = new Model.MetricUpgrade(metricUpgrade.Metric, metricUpgrade.Json, () => { return 0; });
             editable = editable_;
 
-            metricUpgrade.LevelChanged += OnLevelChanged;
+            specializer.SkillSpecialized += OnLevelChanged;
         }
 
         ~SkillSpecializationField()
         {
-            metricUpgrade.LevelChanged -= OnLevelChanged;
+            specializer.SkillSpecialized -= OnLevelChanged;
             metricUpgrade = null;
         }
 
@@ -38,27 +39,27 @@ namespace Assets.Scripts.ViewModel
 
         public Model.MetricUpgrade.SpecializeSign Sign()
         {
-            return metricUpgrade.Sign;
+            return specializer.Sign(metricUpgrade);
         }
 
         public float Level()
         {
-            return referenceMetricUpgrade.WeightedLevel;
+            return metricUpgrade.WeightedLevel();
         }
 
         public float TemporaryLevel()
         {
-            return metricUpgrade.WeightedLevel;
+            return specializer.WeightedLevel(metricUpgrade);
         }
 
         public float Factor()
         {
-            return referenceMetricUpgrade.Factor;
+            return metricUpgrade.Factor();
         }
 
         public float TemporaryFactor()
         {
-            return metricUpgrade.Factor;
+            return specializer.Factor(metricUpgrade);
         }
 
         public string Category()
@@ -101,7 +102,7 @@ namespace Assets.Scripts.ViewModel
 
         public void Buy()
         {
-            metricUpgrade.Save();
+            //specializer.Save(metricUpgrade);
         }
 
         public void Upgrade()
@@ -113,7 +114,7 @@ namespace Assets.Scripts.ViewModel
             {
                 PrePreviewLevel = TemporaryLevel();
                 PrePreviewFactor = TemporaryFactor();
-                metricUpgrade.Upgrade();
+                specializer.Upgrade(metricUpgrade);
             }
             catch (WestException e)
             {
@@ -131,7 +132,7 @@ namespace Assets.Scripts.ViewModel
             {
                 PrePreviewLevel = TemporaryLevel();
                 PrePreviewFactor = TemporaryFactor();
-                metricUpgrade.Downgrade();
+                specializer.Downgrade(metricUpgrade);
             }
             catch (WestException e)
             {

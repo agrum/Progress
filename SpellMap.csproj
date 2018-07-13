@@ -12,12 +12,15 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1161,6 +1164,7 @@
     <Compile Include="Assets\Scripts\Model\Resource\ResourceBehaviour.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\ResourceReserve.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
+    <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Ability.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Class.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Kit.cs" />
@@ -1187,7 +1191,7 @@
     <Compile Include="Assets\Scripts\Scene\Specialize.cs" />
     <Compile Include="Assets\Scripts\Scene\SpecializeOverview.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
-    <Compile Include="Assets\Scripts\Schema\MetricUpgrade.cs" />
+    <Compile Include="Assets\Scripts\ViewModel\NodeTextualDetailsSpecialize.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnCreate.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnPreview.cs" />
     <Compile Include="Assets\Scripts\View\ChampionHeadline.cs" />

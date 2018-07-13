@@ -26,13 +26,13 @@ namespace Assets.Scripts.View
         public WestText Stack = null;
         public WestText KitDetails = null;
 
-        ViewModel.NodeTextualDetails viewModel;
+        ViewModel.INodeTextualDetails viewModel;
 
         private string color;
         private string colorPrefix;
         private string colorSuffix;
 
-        public void SetContext(ViewModel.NodeTextualDetails viewModel_)
+        public void SetContext(ViewModel.INodeTextualDetails viewModel_)
         {
             Debug.Assert(viewModel_ != null);
 
@@ -52,7 +52,7 @@ namespace Assets.Scripts.View
 
 		private void OnSkillChanged()
 		{
-            var skill = viewModel.Skill;
+            var skill = viewModel.Json;
 			bool active = (skill != null);
 
 			Name.gameObject.SetActive(active);

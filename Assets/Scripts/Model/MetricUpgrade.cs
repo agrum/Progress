@@ -3,38 +3,25 @@ using UnityEngine;
 
 namespace Assets.Scripts.Model
 {
-    public class MetricUpgrade : Schema.MetricUpgrade
+    public class MetricUpgrade
     {
-        public delegate void OnLevelChanged();
-        public delegate float GetSkillWeight();
-        public event OnLevelChanged LevelChanged = delegate { };
-
         public enum SpecializeSign
         {
             Positive,
             Negative,
             None
         }
-        public SpecializeSign Sign
-        {
-            get
-            {
-                return TemporaryLevel > 0 ? SpecializeSign.Positive : TemporaryLevel < 0 ? SpecializeSign.Negative : SpecializeSign.None;
-            }
-        }
 
+        public string Name { get { return Json["name"]; } protected set { Json["name"] = value; } }
+        public string Category { get { return Json["category"]; } protected set { Json["category"] = value; } }
+        public float Level { get { return Json["level"]; } protected set { Json["level"] = value; } }
+
+        public JSONObject Json { get; protected set; } = null;
         public SkillMetric Metric { get; private set; } = null;
-        public float TemporaryLevel { get; private set; } = 0;
-        private GetSkillWeight getSkillWeight;
 
-        public float WeightedLevel { get { return TemporaryLevel / Metric.UpgCost / 20.0f; } }
-
-        private float startingLevel = 0;
-
-        public MetricUpgrade(SkillMetric metric_, JSONObject json_, GetSkillWeight delegate_) : base(json_)
+        public MetricUpgrade(SkillMetric metric_, JSONObject json_)
         {
             Metric = metric_;
-            getSkillWeight = delegate_;
             if (json_ != null)
                 Json = json_;
             else
@@ -44,66 +31,38 @@ namespace Assets.Scripts.Model
                 Name = Metric.Name;
                 Level = 0;
             }
-
-            Verify();
-            Reset();
         }
 
-        ~MetricUpgrade()
+        public SpecializeSign Sign()
         {
-            LevelChanged = null;
+            return Sign(Level);
         }
 
-        public void Upgrade()
+        public float WeightedLevel()
         {
-            if (startingLevel < 0 && startingLevel > TemporaryLevel)
-                throw new WestException("Tried upgrading a skill the wrong way");
-
-            if (WeightedLevel >= 1.0f)
-                throw new WestException("Tried upgrading a capped metric");
-
-            if (startingLevel >= 0 && getSkillWeight() >= 1.0f)
-                throw new WestException("Tried upgrading a capped skill");
-            
-            ++TemporaryLevel;
-            LevelChanged();
+            return WeightedLevel(Level, Metric.UpgCost);
+        }
+        
+        public float Factor()
+        {
+            return Factor(Level, Metric.UpgType);
         }
 
-        public void Downgrade()
+        public static SpecializeSign Sign(float level_)
         {
-            if (startingLevel > 0 && startingLevel < TemporaryLevel)
-                throw new WestException("Tried upgrading a skill the wrong way");
-
-            if (WeightedLevel <= -1.0f)
-                throw new WestException("Tried upgrading a capped metric");
-
-            if (startingLevel <= 0 && getSkillWeight() >= 1.0f)
-                throw new WestException("Tried upgrading a capped skill");
-
-            --TemporaryLevel;
-            LevelChanged();
+            return level_ > 0 ? SpecializeSign.Positive : level_ < 0 ? SpecializeSign.Negative : SpecializeSign.None;
         }
 
-        public void Reset()
+        public static float WeightedLevel(float level_, float upgradeCost_)
         {
-            startingLevel = Level;
-            TemporaryLevel = Level;
+            return level_ / upgradeCost_ / 20.0f;
         }
 
-        public void Save()
+        public static float Factor(float level_, int upgType_)
         {
-            Level = TemporaryLevel;
-            Reset();
-        }
-
-        public float Factor
-        {
-            get
-            {
-                return (Metric.UpgType > 0) ^ (TemporaryLevel < 0)
-                ? TemporaryLevel / 10.0f
-                : ((Metric.UpgType == 1) ? 1 : -1) * (1.0f - 1.0f / (1.0f + System.Math.Abs(TemporaryLevel) / 10.0f));
-            }
+            return (upgType_ > 0) ^ (level_ < 0)
+                   ? level_ / 10.0f
+                   : ((upgType_ == 1) ? 1 : -1) * (1.0f - 1.0f / (1.0f + System.Math.Abs(level_) / 10.0f));
         }
     }
 }

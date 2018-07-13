@@ -39,7 +39,7 @@ namespace Assets.Scripts.Model
             Skill = skill_;
 
             foreach (var metric in Skill.MetrictList)
-                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, null, OverallWeight));
+                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, null));
         }
 
         public SkillUpgrade(JSONObject json_)
@@ -55,7 +55,12 @@ namespace Assets.Scripts.Model
             };
 
             foreach (var metric in Skill.MetrictList)
-                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, lookUp(metric), OverallWeight));
+                metricUpgradeMap.Add(metric, new MetricUpgrade(metric, lookUp(metric)));
+        }
+
+        public Dictionary<SkillMetric, MetricUpgrade>.ValueCollection MetricUpgradeList()
+        {
+            return metricUpgradeMap.Values;
         }
 
         public bool IsValid()
@@ -76,7 +81,7 @@ namespace Assets.Scripts.Model
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
-                cumulativeLevel += System.Math.Abs(metricUpgrades.Value.TemporaryLevel);
+                cumulativeLevel += System.Math.Abs(metricUpgrades.Value.Level);
             return cumulativeLevel / 30.0f;
         }
 
@@ -84,9 +89,14 @@ namespace Assets.Scripts.Model
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
-                cumulativeLevel += metricUpgrades.Value.TemporaryLevel;
+                cumulativeLevel += metricUpgrades.Value.Level;
 
             return cumulativeLevel;
+        }
+
+        public static float OverallWeight(float cumulativeLevel_)
+        {
+            return cumulativeLevel_ / 30.0f;
         }
     }
 }

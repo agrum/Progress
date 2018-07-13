@@ -13,7 +13,8 @@ namespace Assets.Scripts.Scene
         public View.TextButton applyButton = null;
 
         public static Model.Skill SelectedSkill = null;
-        
+
+        private Model.SkillSpecializer model;
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
         void Start()
@@ -50,11 +51,18 @@ namespace Assets.Scripts.Scene
             foreach (var skill in App.Content.Account.ActiveChampion.ClassPreset.SelectedClassList)
                 filteredSkillList.Add(skill);
             hovered.Skill = SelectedSkill;
+            var skillUpgrade = App.Content.Account.ActiveChampion.Upgrades[SelectedSkill];
+            model = new Model.SkillSpecializer(App.Content.Account.ActiveChampion, skillUpgrade);
 
             //view
             backButton.onClick.AddListener(() => { App.Scene.Load("SpecializeOverview"); });
-            nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
-            specializer.SetContext(new ViewModel.SkillSpecializer(App.Content.Account.ActiveChampion.Upgrades[SelectedSkill], true, hovered));
+            nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetailsSpecialize(model));
+            specializer.SetContext(
+                new ViewModel.SkillSpecializer(
+                    model,
+                    skillUpgrade,
+                    true, 
+                    hovered));
             championHeadline.Setup();
         }
     }
