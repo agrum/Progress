@@ -184,7 +184,7 @@ namespace Assets.Scripts.Model
                 var localLevel = upgrade.Level;
                 if (temporaryUpgradeMap.ContainsKey(upgrade))
                     localLevel += temporaryUpgradeMap[upgrade];
-                cumulativeLevel = Math.Abs(localLevel);
+                cumulativeLevel += Math.Abs(localLevel);
             }
             return SkillUpgrade.OverallWeight(cumulativeLevel);
         }
@@ -197,7 +197,7 @@ namespace Assets.Scripts.Model
                 var localLevel = upgrade.Level;
                 if (temporaryUpgradeMap.ContainsKey(upgrade))
                     localLevel += temporaryUpgradeMap[upgrade];
-                cumulativeLevel = localLevel;
+                cumulativeLevel += localLevel;
             }
             return cumulativeLevel;
         }
