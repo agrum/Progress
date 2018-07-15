@@ -11,6 +11,9 @@ namespace Assets.Scripts.Model
         public ConstellationPreset ClassPreset { get; private set; } = null;
         public List<ConstellationPreset> PresetList { get; private set; } = new List<ConstellationPreset>();
         public ChampionUpgrades Upgrades { get; private set; } = null;
+        public string Name { get { return Json["name"]; } set { Json["name"] = value; } }
+        public string Level { get { return Json["level"]; } set { Json["level"] = value; } }
+        public int SpecializationPoints { get { return Json["specializationPoints"]; } set { Json["specializationPoints"] = value; } }
 
         public delegate void PresetDelegate(ConstellationPreset preset_);
         public event PresetDelegate PresetAdded = delegate { };

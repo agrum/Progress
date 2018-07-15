@@ -72,6 +72,12 @@ namespace Assets.Scripts.CloudContent
 			}
 		}
 
+        public void Unload()
+        {
+            loaded = false;
+            loading = false;
+        }
+
 		protected abstract void Build(OnBuilt onBuilt_);
 
 		protected List<Base> dependencyList = new List<Base>();

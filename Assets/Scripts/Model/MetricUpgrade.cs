@@ -12,11 +12,11 @@ namespace Assets.Scripts.Model
             None
         }
 
-        public string Name { get { return Json["name"]; } protected set { Json["name"] = value; } }
-        public string Category { get { return Json["category"]; } protected set { Json["category"] = value; } }
-        public float Level { get { return Json["level"]; } protected set { Json["level"] = value; } }
+        public string Name { get { return Json["name"]; } private set { Json["name"] = value; } }
+        public string Category { get { return Json["category"]; } private set { Json["category"] = value; } }
+        public float Level { get { return Json["level"]; } set { Json["level"] = value; } }
 
-        public JSONObject Json { get; protected set; } = null;
+        public JSONObject Json { get; private set; } = null;
         public SkillMetric Metric { get; private set; } = null;
 
         public MetricUpgrade(SkillMetric metric_, JSONObject json_)
@@ -30,6 +30,7 @@ namespace Assets.Scripts.Model
                 Category = Metric.Category;
                 Name = Metric.Name;
                 Level = 0;
+                Json["_id"] = Metric.Json["_id"];
             }
         }
 

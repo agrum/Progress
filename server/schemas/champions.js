@@ -3,12 +3,8 @@ let mongoose = require('mongoose');
 module.exports = function()
 {
 	let upgrade = new mongoose.Schema({
-		category: {
-			type: String,
-			required: true,
-        },
-		name: {
-			type: String,
+		metric: {
+			type: mongoose.Schema.Types.ObjectId,
 			required: true,
         },
 		level: {
@@ -47,7 +43,7 @@ module.exports = function()
 			required: true,
 			ref: 'presets',
         },
-		specPointsRemaining: {
+		specializationPoints: {
 			type: Number,
 			required: true,
 		},

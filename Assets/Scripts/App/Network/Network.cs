@@ -8,7 +8,7 @@ using BestHTTP;
 
 namespace Assets.Scripts.Model.Network
 {
-	public class Server
+    public class Server
 	{
 		static private string host = "http://127.0.0.1:3000";
 

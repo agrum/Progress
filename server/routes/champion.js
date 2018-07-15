@@ -93,4 +93,85 @@ router.delete('/:id', function(req, res, next) {
     })
 })
 
+router.post('/:id/skillUpgrade', function(req, res, next) {
+    req.app.db.models.champions
+    .findOne({ '_id' : req.params.id })
+    .then(document =>
+    {
+        let report = JSON.parse(req.body.report);
+        console.log(report)
+
+        //make sure the abs-sum of diffs is equal to points spent
+        var pointsSpentCheckSum = 0;
+        for (var i = 0; i < report.upgrades.length; ++i)
+            pointsSpentCheckSum += Math.abs(report.upgrades[i].diff)
+
+        //return if mismatch
+        if (report.pointsSpent != pointsSpentCheckSum)
+            return res.status(500).send(
+                {error: "Mismatch point spent in report"})
+
+        //return if more points than available were spent
+        if (report.pointsSpent > document.specializationPoints)
+            return res.status(500).send(
+                {error: "Try to use more points than available"})
+
+        //find skill upgrade in save (if any)
+        let skillUpgrade = {}
+        var skillUpgradeIndex = -1;
+        for (var i = 0; i < document.skillUpgrades.length; ++i)
+        {
+            if (document.skillUpgrades[i].skill == report.skill)
+            {
+                skillUpgrade = document.skillUpgrades[i]
+                skillUpgradeIndex = i;
+                break
+            }
+        }
+        if (skillUpgradeIndex == -1)
+        {
+            skillUpgrade.skill = report.skill;
+            skillUpgrade.upgrades = [];
+            document.skillUpgrades.push(skillUpgrade)
+            skillUpgrade = document.skillUpgrades[document.skillUpgrades.length - 1]
+        }
+
+        //apply upgarde
+        console.log(skillUpgrade)
+        for (var i = 0; i < report.upgrades.length; ++i)
+        {
+            var found = false;
+
+            //update if already leveled
+            for (var j = 0; j < skillUpgrade.upgrades.length; ++j)
+            {
+                if (skillUpgrade.upgrades[j]._id == report.upgrades[i]._id)
+                {
+                    skillUpgrade.upgrades[j].metric += report.upgrades[i].diff
+                    foudn = true;
+                    break
+                }
+            }
+
+            //add if new metrixc leveled
+            if (!found)
+            {
+                skillUpgrade.upgrades.push(
+                    {
+                        metric: report.upgrades[i].metric,
+                        level: report.upgrades[i].diff,
+                    })
+            }
+        }
+
+        console.log(skillUpgrade)
+        console.log(document)
+
+        //save to mongo
+        document.save()
+
+        res.send(document)
+    })
+})
+
 module.exports.router = router

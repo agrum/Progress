@@ -8,6 +8,7 @@ namespace Assets.Scripts.Scene
     {
         public View.NodeTextualDetails nodeTextualDetails = null;
         public View.SkillSpecializer specializer = null;
+        public View.WestText title = null;
         public Button backButton = null;
         public View.ChampionHeadline championHeadline = null;
         public View.TextButton applyButton = null;
@@ -53,6 +54,9 @@ namespace Assets.Scripts.Scene
             hovered.Skill = SelectedSkill;
             var skillUpgrade = App.Content.Account.ActiveChampion.Upgrades[SelectedSkill];
             model = new Model.SkillSpecializer(App.Content.Account.ActiveChampion, skillUpgrade);
+            model.SkillSpecialized += OnSkillSpecialized;
+            model.SkillSpecializationSaved += OnSkillSpecializationSaved;
+            applyButton.clickEvent += () => { model.Apply(); };
 
             //view
             backButton.onClick.AddListener(() => { App.Scene.Load("SpecializeOverview"); });
@@ -64,6 +68,25 @@ namespace Assets.Scripts.Scene
                     true, 
                     hovered));
             championHeadline.Setup();
+            OnSkillSpecialized();
+        }
+
+        void OnDestroy()
+        {
+            model.SkillSpecialized -= OnSkillSpecialized;
+            model.SkillSpecializationSaved -= OnSkillSpecializationSaved;
+            model = null;
+            hovered = null;
+        }
+
+        void OnSkillSpecialized()
+        {
+            title.Format(model.SpecializationPoints().ToString());
+        }
+
+        void OnSkillSpecializationSaved()
+        {
+            App.Scene.Load("SpecializeOverview");
         }
     }
 }

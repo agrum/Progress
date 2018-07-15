@@ -625,7 +625,7 @@ Prefab:
     - target: {fileID: 224011625494480164, guid: 67f8e8925e247a44a99765f45d804525,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -20
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224011625494480164, guid: 67f8e8925e247a44a99765f45d804525,
         type: 2}
@@ -1547,7 +1547,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.00000016391277}
+  m_AnchoredPosition: {x: 0, y: -0.000019051135}
   m_SizeDelta: {x: 0, y: 80}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1076334718
@@ -2405,6 +2405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeTextualDetails: {fileID: 585097201}
   specializer: {fileID: 523091230}
+  title: {fileID: 1913482633}
   backButton: {fileID: 1913482631}
   championHeadline: {fileID: 2005827294}
   applyButton: {fileID: 1497843028}
@@ -2670,7 +2671,7 @@ Prefab:
     - target: {fileID: 114239890227517094, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
       propertyPath: m_Text
-      value: Skill specialization
+      value: 'Skill specialization, #0# points remaining'
       objectReference: {fileID: 0}
     - target: {fileID: 224169016797466538, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
@@ -2690,7 +2691,7 @@ Prefab:
     - target: {fileID: 224169016797466538, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -37.333332
       objectReference: {fileID: 0}
     - target: {fileID: 224169016797466538, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
@@ -2700,7 +2701,7 @@ Prefab:
     - target: {fileID: 224169016797466538, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 74.666664
       objectReference: {fileID: 0}
     - target: {fileID: 224743757823406638, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
@@ -2720,7 +2721,7 @@ Prefab:
     - target: {fileID: 224743757823406638, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -373.3333
       objectReference: {fileID: 0}
     - target: {fileID: 224743757823406638, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
@@ -2730,10 +2731,27 @@ Prefab:
     - target: {fileID: 224743757823406638, guid: a2ca4cd021a7693428434471496640bc,
         type: 2}
       propertyPath: m_SizeDelta.y
+      value: 597.3333
+      objectReference: {fileID: 0}
+    - target: {fileID: 114489431409032560, guid: a2ca4cd021a7693428434471496640bc,
+        type: 2}
+      propertyPath: m_RaycastTarget
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114489431409032560, guid: a2ca4cd021a7693428434471496640bc,
+        type: 2}
+      propertyPath: m_FontData.m_BestFit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114489431409032560, guid: a2ca4cd021a7693428434471496640bc,
+        type: 2}
+      propertyPath: m_Text
+      value: H  E  X  P  L  O  R  E
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 0}
+    - {fileID: 114940387757590110, guid: a2ca4cd021a7693428434471496640bc, type: 2}
+    - {fileID: 114322163963715232, guid: a2ca4cd021a7693428434471496640bc, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a2ca4cd021a7693428434471496640bc, type: 2}
   m_IsPrefabParent: 0
 --- !u!224 &1913482630 stripped
@@ -2752,44 +2770,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224743757823406638, guid: a2ca4cd021a7693428434471496640bc,
     type: 2}
   m_PrefabInternal: {fileID: 1913482629}
---- !u!1 &1913482633 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1145729429374972, guid: a2ca4cd021a7693428434471496640bc,
+--- !u!114 &1913482633 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114239890227517094, guid: a2ca4cd021a7693428434471496640bc,
     type: 2}
   m_PrefabInternal: {fileID: 1913482629}
---- !u!114 &1913482634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1913482633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8509bf70cca87d743a3ab2c19eb3d567, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 3}
-    m_FontSize: 20
-    m_FontStyle: 0
-    m_BestFit: 0
-    m_MinSize: 2
-    m_MaxSize: 40
-    m_Alignment: 7
-    m_AlignByGeometry: 0
-    m_RichText: 1
-    m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
-    m_LineSpacing: 1
-  m_Text: Hero specialization
 --- !u!1001 &2005827293
 Prefab:
   m_ObjectHideFlags: 0
