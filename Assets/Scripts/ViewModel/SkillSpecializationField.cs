@@ -64,12 +64,12 @@ namespace Assets.Scripts.ViewModel
 
         public string Category()
         {
-            return metricUpgrade.Category;
+            return metricUpgrade.Metric.Category;
         }
 
         public string Name()
         {
-            return metricUpgrade.Name;
+            return metricUpgrade.Metric.Name;
         }
 
         public void PreviewUpgrade(bool enabled)
@@ -120,6 +120,7 @@ namespace Assets.Scripts.ViewModel
             {
                 Debug.Log(e.Message);
                 IsPreviewing = false;
+                LevelChanged();
             }
         }
 
@@ -138,6 +139,7 @@ namespace Assets.Scripts.ViewModel
             {
                 Debug.Log(e.Message);
                 IsPreviewing = false;
+                LevelChanged();
             }
         }
 

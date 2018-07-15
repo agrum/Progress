@@ -11,9 +11,7 @@ namespace Assets.Scripts.Model
             Negative,
             None
         }
-
-        public string Name { get { return Json["name"]; } private set { Json["name"] = value; } }
-        public string Category { get { return Json["category"]; } private set { Json["category"] = value; } }
+        
         public float Level { get { return Json["level"]; } set { Json["level"] = value; } }
 
         public JSONObject Json { get; private set; } = null;
@@ -27,8 +25,6 @@ namespace Assets.Scripts.Model
             else
             {
                 Json = new JSONObject();
-                Category = Metric.Category;
-                Name = Metric.Name;
                 Level = 0;
                 Json["_id"] = Metric.Json["_id"];
             }
