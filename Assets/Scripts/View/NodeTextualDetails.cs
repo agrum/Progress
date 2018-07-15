@@ -125,7 +125,7 @@ namespace Assets.Scripts.View
                 Cooldown.gameObject.SetActive(true);
                 Cooldown.FormatPair("cooldown", viewModel.Misc["cooldown"]);
             }
-            else if (viewModel.Misc.ContainsKey("castTime"))
+            if (viewModel.Misc.ContainsKey("castTime"))
             {
                 CastTime.gameObject.SetActive(true);
                 CastTime.FormatPair("castTime", viewModel.Misc["castTime"]);

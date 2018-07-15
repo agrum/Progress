@@ -57,9 +57,20 @@ namespace Assets.Scripts.Model
 
         public static float Factor(float level_, int upgType_)
         {
-            return (upgType_ > 0) ^ (level_ < 0)
-                   ? level_ / 10.0f
-                   : ((upgType_ == 1) ? 1 : -1) * (1.0f - 1.0f / (1.0f + System.Math.Abs(level_) / 10.0f));
+            if (upgType_ > 0)
+            {
+                if (level_ > 0)
+                    return level_ / 10.0f;
+                else
+                    return 1.0f / (1.0f + System.Math.Abs(level_) / 10.0f) - 1.0f;
+            }
+            else
+            {
+                if (level_ > 0)
+                    return 1.0f / (1.0f + System.Math.Abs(level_) / 10.0f) - 1.0f;
+                else
+                    return - level_ / 10.0f;
+            }
         }
     }
 }
