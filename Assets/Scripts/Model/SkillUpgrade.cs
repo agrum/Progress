@@ -49,7 +49,7 @@ namespace Assets.Scripts.Model
             System.Func<SkillMetric, JSONObject> lookUp = (SkillMetric metric_) =>
             {
                 foreach (var node in json_["upgrades"].AsArray)
-                    if (node.Value["category"] == metric_.Category && node.Value["name"] == metric_.Name)
+                    if (node.Value["metric"] == metric_.Json["_id"])
                         return node.Value.AsObject;
                 return null;
             };

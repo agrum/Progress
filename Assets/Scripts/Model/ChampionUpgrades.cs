@@ -39,7 +39,7 @@ namespace Assets.Scripts.Model
 
         public ChampionUpgrades(JSONArray json_)
         {
-            foreach (var node in json_["skillUpgrades"].AsArray)
+            foreach (var node in json_)
             {
                 var skillUpgrade = new SkillUpgrade(node.Value.AsObject);
                 skillUpgradeMap.Add(skillUpgrade.Skill, skillUpgrade);
