@@ -73,10 +73,10 @@ namespace Assets.Scripts.ViewModel
             Debug.Log("rect x: " + rect.width);
             Debug.Log("rect y: " + rect.height);
             Debug.Log("scale x: " + rect.width / ((size.x - 0.5f) * positionMultiplier.x));
-            Debug.Log("scale y: " + rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
+            Debug.Log("scale y: " + rect.height / ((size.y + 0.33f) * positionMultiplier.y));
             scaleModel["scale"] = Math.Min(
 				rect.width / ((size.x - 0.5f) * positionMultiplier.x),
-				rect.height / (numberNodes / 3.0f * (size.y + 0.5f) * positionMultiplier.y));
+				rect.height / ((size.y + 0.33f) * positionMultiplier.y));
 		}
 			
 		private void PopulateNodes(

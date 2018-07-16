@@ -96,7 +96,7 @@ namespace Assets.Scripts.Scene
 
         private void BackClicked()
         {
-            App.Scene.Load("ChampionSelection");
+            App.Scene.Load("Landing");
         }
     }
 }

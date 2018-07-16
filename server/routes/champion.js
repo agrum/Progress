@@ -94,6 +94,7 @@ router.delete('/:id', function(req, res, next) {
 })
 
 router.post('/:id/skillUpgrade', function(req, res, next) {
+    console.log(">> router.post('/:id/skillUpgrade'")
     req.app.db.models.champions
     .findOne({ '_id' : req.params.id })
     .then(document =>
@@ -137,7 +138,6 @@ router.post('/:id/skillUpgrade', function(req, res, next) {
         }
 
         //apply upgarde
-        console.log(skillUpgrade)
         for (var i = 0; i < report.upgrades.length; ++i)
         {
             var found = false;
@@ -164,12 +164,10 @@ router.post('/:id/skillUpgrade', function(req, res, next) {
             }
         }
 
-        console.log(skillUpgrade)
-        console.log(document)
-
         //save to mongo
         document.save()
 
+        console.log("<< router.post('/:id/skillUpgrade'")
         res.send(document)
     })
 })
