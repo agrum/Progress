@@ -30,12 +30,14 @@ namespace Assets.Scripts.ViewModel
 			hovered = hovered_;
 			mode = mode_;
 
-			App.Content.Account.ActiveChampion.PresetRemoved += OnPresetRemoved;
+            if (App.Content.Account.ActiveChampion == null)
+			    App.Content.Account.ActiveChampion.PresetRemoved += OnPresetRemoved;
 		}
 
 		~PresetColumn()
 		{
-			App.Content.Account.ActiveChampion.PresetRemoved -= OnPresetRemoved;
+            if (App.Content.Account.ActiveChampion == null)
+                App.Content.Account.ActiveChampion.PresetRemoved -= OnPresetRemoved;
 		}
 
 		public INodeMap CreatePreviewContext()
@@ -51,12 +53,14 @@ namespace Assets.Scripts.ViewModel
 
 		public void AddClicked()
 		{
-			App.Content.Account.ActiveChampion.AddEmptyPreset();
+            Scene.PresetEditor.Model = null;
+            App.Scene.Load("PresetEditor");
+            //App.Content.Account.ActiveChampion.AddEmptyPreset();
 		}
 
 		public void EditClicked()
 		{
-			if (!App.Content.Account.ActiveChampion.PresetList.Contains(preset))
+			if (App.Content.Account.ActiveChampion == null || !App.Content.Account.ActiveChampion.PresetList.Contains(preset))
 				return;
 
 			Scene.PresetEditor.Model = preset;
@@ -65,7 +69,7 @@ namespace Assets.Scripts.ViewModel
 
 		public void DeleteClicked()
 		{
-			App.Content.Account.ActiveChampion.RemovePreset(preset);
+			App.Content.Account.ActiveChampion?.RemovePreset(preset);
 		}
 
 		public void ProceedClicked()
@@ -75,7 +79,7 @@ namespace Assets.Scripts.ViewModel
 
 		public void SaveClicked()
 		{
-			App.Content.Account.ActiveChampion.SavePreset(preset);
+			App.Content.Account.ActiveChampion?.SavePreset(preset);
 		}
 
 		public void NameChanged(string newName)

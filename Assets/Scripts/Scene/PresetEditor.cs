@@ -18,7 +18,13 @@ namespace Assets.Scripts.Scene
 		void Start()
 		{
 			Debug.Assert(backButton != null);
-			Debug.Assert(Model != null);
+
+            if (Model == null)
+            {
+                Model = new Model.ConstellationPreset(
+                        null,
+                        new Model.PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits));
+            }
 
 			App.Content.Account.Load(() =>
 			{

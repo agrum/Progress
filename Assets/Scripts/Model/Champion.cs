@@ -32,7 +32,7 @@ namespace Assets.Scripts.Model
                 foreach (var almostJson in Json["presets"].AsArray)
                     if (almostJson.Value["constellation"] == App.Content.GameSettings.Json["constellation"])
                         PresetList.Add(new ConstellationPreset(
-                            almostJson.Value,
+                            almostJson.Value.AsObject,
                             new PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits)));
 
                 PopulateFakeClassPreset(Json["classes"].AsArray);
@@ -82,7 +82,7 @@ namespace Assets.Scripts.Model
                 (JSONNode json_) =>
                 {
                     ConstellationPreset preset = new ConstellationPreset(
-                        json_,
+                        json_.AsObject,
                         new PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits));
                     PresetList.Add(preset);
                     Json["presets"].AsArray.Add(json_);
@@ -98,18 +98,27 @@ namespace Assets.Scripts.Model
             if (!loaded)
                 return;
 
-            if (!PresetList.Contains(preset_))
+            if (preset_.Id != null && !PresetList.Contains(preset_))
                 return;
 
             JSONNode presetJson = preset_.ToJson();
-
-            var request = App.Server.Request(
-                HTTPMethods.Put,
-                "preset",
-                (JSONNode json_) =>
-                {
-                    PresetSaved(preset_);
-                });
+            HTTPRequest request;
+            if (preset_.Id == null)
+                request = App.Server.Request(
+                    HTTPMethods.Post,
+                    "champion/" + Json["_id"] + "/preset",
+                    (JSONNode json_) =>
+                    {
+                        PresetSaved(preset_);
+                    });
+            else
+                request = App.Server.Request(
+                    HTTPMethods.Put,
+                    "preset",
+                    (JSONNode json_) =>
+                    {
+                        PresetSaved(preset_);
+                    });
             request.AddField("preset", presetJson.ToString());
             request.Send();
         }

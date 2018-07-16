@@ -66,7 +66,7 @@ namespace Assets.Scripts.Scene
 
 			ArrangeUI();
 
-			App.Content.Account.ActiveChampion.PresetAdded += OnPresetAdded;
+			//App.Content.Account.ActiveChampion.PresetAdded += OnPresetAdded;
 			App.Content.Account.ActiveChampion.PresetRemoved += OnPresetRemoved;
 
 			canvas.gameObject.SetActive(true);
@@ -74,15 +74,15 @@ namespace Assets.Scripts.Scene
 
 		void OnDestroy()
 		{
-			App.Content.Account.ActiveChampion.PresetAdded -= OnPresetAdded;
+			//App.Content.Account.ActiveChampion.PresetAdded -= OnPresetAdded;
 			App.Content.Account.ActiveChampion.PresetRemoved -= OnPresetRemoved;
 		}
 
-		private void OnPresetAdded(Model.ConstellationPreset preset)
+		/*private void OnPresetAdded(Model.ConstellationPreset preset)
 		{
 			PresetEditor.Model = preset;
             App.Scene.Load("PresetEditor");
-		}
+		}*/
 
 		private void OnPresetRemoved(Model.ConstellationPreset preset)
 		{

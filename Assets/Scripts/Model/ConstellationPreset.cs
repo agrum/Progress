@@ -24,9 +24,9 @@ namespace Assets.Scripts.Model
 
 	public class ConstellationPreset
 	{
-        public string Id { get; private set; }
-		public string Name { get; set; }
-		public Constellation Constellation { get; private set; }
+        public string Id { get { return Json["_id"]; } private set { Json["_id"] = value; } }
+		public string Name { get { return Json["name"]; } set { Json["name"] = value; } }
+        public Constellation Constellation { get; private set; }
         public PresetLimits Limits { get; protected set; } = null;
 
         public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
@@ -36,19 +36,25 @@ namespace Assets.Scripts.Model
 		public delegate void OnPresetUpdateDelegate();
 		public event OnPresetUpdateDelegate PresetUpdated;
 
-        public ConstellationPreset(JSONNode json, PresetLimits limits_)
+        private JSONObject Json = null;
+
+        public ConstellationPreset(JSONObject json_, PresetLimits limits_)
 		{
-            Id = json["_id"];
-            Name = json["name"];
+            if (json_ == null)
+            {
+                json_ = new JSONObject();
+            }
+
+            Json = json_;
             Constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
             //Constellation = App.Content.ConstellationList[json["constellation"]];
             Limits = limits_;
 
-            foreach (var almostValue in json["abilities"])
+            foreach (var almostValue in Json["abilities"])
 				SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
-			foreach (var almostValue in json["classes"])
+			foreach (var almostValue in Json["classes"])
 				SelectedClassList.Add(App.Content.SkillList.Class(almostValue.Value));
-			foreach (var almostValue in json["kits"])
+			foreach (var almostValue in Json["kits"])
 				SelectedKitList.Add(App.Content.SkillList.Kit(almostValue.Value));
 		}
 
