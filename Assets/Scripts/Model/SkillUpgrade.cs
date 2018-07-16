@@ -77,21 +77,25 @@ namespace Assets.Scripts.Model
             return false;
         }
 
-        public float OverallWeight()
+        public int Level()
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
                 cumulativeLevel += System.Math.Abs(metricUpgrades.Value.Level);
-            return cumulativeLevel / 30.0f;
+            return (int) cumulativeLevel;
         }
 
-        public float Handicap()
+        public float OverallWeight()
+        {
+            return Level() / 30.0f;
+        }
+
+        public int Handicap()
         {
             float cumulativeLevel = 0;
             foreach (var metricUpgrades in metricUpgradeMap)
                 cumulativeLevel += metricUpgrades.Value.Level;
-
-            return cumulativeLevel;
+            return (int) cumulativeLevel;
         }
 
         public static float OverallWeight(float cumulativeLevel_)

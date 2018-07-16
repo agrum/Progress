@@ -64,9 +64,19 @@ namespace Assets.Scripts.ViewModel
 		public Vector2 Position()
 		{
 			return position;
-		}
+        }
 
-		public void Hovered(bool on)
+        public int Level()
+        {
+            return 0;
+        }
+
+        public int Handicap()
+        {
+            return 0;
+        }
+
+        public void Hovered(bool on)
 		{
 
 		}

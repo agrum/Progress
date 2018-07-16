@@ -108,9 +108,27 @@ namespace Assets.Scripts.ViewModel
 		public Vector2 Position()
 		{
 			return position;
-		}
+        }
 
-		public void Hovered(bool on)
+        public int Level()
+        {
+            if (App.Content.Account.ActiveChampion != null)
+            {
+                return App.Content.Account.ActiveChampion.Upgrades[skill].Level();
+            }
+            return 0;
+        }
+
+        public int Handicap()
+        {
+            if (App.Content.Account.ActiveChampion != null)
+            {
+                return App.Content.Account.ActiveChampion.Upgrades[skill].Handicap();
+            }
+            return 0;
+        }
+
+        public void Hovered(bool on)
 		{
 			if (hovered != null)
 				hovered.Skill = (on && skill != null) ? skill : null;

@@ -13,6 +13,8 @@ namespace Assets.Scripts.ViewModel
         string IconPath();
 		Material Mat();
 		Vector2 Position();
+        int Level();
+        int Handicap();
 
         void Clicked();
         void Hovered(bool on);

@@ -23,9 +23,12 @@ namespace Assets.Scripts.View
 		private Image pulse;
 		private Image fill;
 		private Image icon;
-		private Image iconWhite;
+        private Image iconWhite;
+        private Transform specialization;
+        private WestText level;
+        private WestText handicap;
 
-		protected override void Start()
+        protected override void Start()
 		{
 			started = true;
 
@@ -52,8 +55,11 @@ namespace Assets.Scripts.View
 			fill = childTranform.Find("HexagonFill").GetComponent<Image>();
 			icon = childTranform.Find("Icon").GetComponent<Image>();
 			iconWhite = childTranform.Find("White").Find("Icon").GetComponent<Image>();
+            specialization = childTranform.Find("Specialization");
+            level = specialization.Find("Level").GetComponent<WestText>();
+            handicap = specialization.Find("Handicap").GetComponent<WestText>();
 
-			positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
+            positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
 			positionMultiplier.y = 0.75f;
 
 			positionMultiplier.x = 0.5f * (float)Math.Cos(30.0f * Math.PI / 180.0f);
@@ -89,12 +95,17 @@ namespace Assets.Scripts.View
 				UnityEngine.Object prefabObject = Resources.Load(viewModel.IconPath());
 				Texture2D texture = prefabObject as Texture2D;
 				Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), 1.0f);
-                    
+                
                 pulse.gameObject.SetActive(true);
 				icon.gameObject.SetActive(true);
 				iconWhite.gameObject.SetActive(true);
 				icon.overrideSprite = sprite;
 				iconWhite.overrideSprite = sprite;
+                specialization.gameObject.SetActive(viewModel.Level() != 0);
+                level.color = viewModel.Mat().color;
+                level.Format(viewModel.Level().ToString());
+                handicap.color = viewModel.Mat().color;
+                handicap.Format(viewModel.Handicap().ToString());
                 OnSelectionChanged(true);
             }
 			else
@@ -103,7 +114,8 @@ namespace Assets.Scripts.View
 				pulse.gameObject.SetActive(false);
 				icon.gameObject.SetActive(false);
 				iconWhite.gameObject.SetActive(false);
-			}
+                specialization.gameObject.SetActive(false);
+            }
 		}
 
 		public void OnScaleChanged(float scale_)
