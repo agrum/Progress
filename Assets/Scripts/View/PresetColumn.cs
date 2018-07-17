@@ -11,8 +11,9 @@ namespace Assets.Scripts.View
 		public Button deleteButton = null;
 		public Button proceedButton = null;
 		public Button saveButton = null;
-		public Text nameText = null;
-		public InputField nameInput = null;
+        public WestText handicapText = null;
+        public Text nameText = null;
+        public InputField nameInput = null;
 
 		private ViewModel.PresetColumn viewModel;
 
@@ -21,9 +22,10 @@ namespace Assets.Scripts.View
 			Debug.Assert(viewModel_ != null);
 
 			viewModel = viewModel_;
-			viewModel.PresetDestroyed += OnPresetDestroyed;
+            viewModel.PresetDestroyed += OnPresetDestroyed;
+            viewModel.PresetUpdated += OnPresetUpdated;
 
-			presetPreview.SetContext(viewModel.CreatePreviewContext());
+            presetPreview.SetContext(viewModel.CreatePreviewContext());
 
             Delay(DelayedStart);
 		}
@@ -36,8 +38,9 @@ namespace Assets.Scripts.View
 			Debug.Assert(deleteButton != null);
 			Debug.Assert(proceedButton != null);
 			Debug.Assert(saveButton != null);
-			Debug.Assert(nameText != null);
-			Debug.Assert(nameInput != null);
+            Debug.Assert(handicapText != null);
+            Debug.Assert(nameText != null);
+            Debug.Assert(nameInput != null);
 
 			DisableAll();
                 
@@ -67,7 +70,8 @@ namespace Assets.Scripts.View
                 return;
 
             viewModel.PresetDestroyed -= OnPresetDestroyed;
-			viewModel = null;
+            viewModel.PresetUpdated -= OnPresetUpdated;
+            viewModel = null;
 		}
 
 		private void SetModeAddition()
@@ -80,10 +84,12 @@ namespace Assets.Scripts.View
 		{
 			DisableAll();
 			nameText.text = name;
+            handicapText.Format(viewModel.HandicapLevel().ToString(), viewModel.HandicapPercentage().ToString());
 			presetPreview.gameObject.SetActive(true);
 			editButton.gameObject.SetActive(true);
 			deleteButton.gameObject.SetActive(true);
-			nameText.gameObject.SetActive(true);
+            handicapText.gameObject.SetActive(true);
+            nameText.gameObject.SetActive(true);
 			proceedButton.gameObject.SetActive(true);
 		}
 
@@ -91,8 +97,10 @@ namespace Assets.Scripts.View
 		{
 			DisableAll();
 			nameInput.text = name;
-			presetPreview.gameObject.SetActive(true);
-			nameInput.gameObject.SetActive(true);
+            handicapText.Format(viewModel.HandicapLevel().ToString(), viewModel.HandicapPercentage().ToString());
+            presetPreview.gameObject.SetActive(true);
+            handicapText.gameObject.SetActive(true);
+            nameInput.gameObject.SetActive(true);
 			saveButton.gameObject.SetActive(true);
 		}
 
@@ -104,8 +112,15 @@ namespace Assets.Scripts.View
 			deleteButton.gameObject.SetActive(false);
 			proceedButton.gameObject.SetActive(false);
 			saveButton.gameObject.SetActive(false);
-			nameText.gameObject.SetActive(false);
-			nameInput.gameObject.SetActive(false);
+            handicapText.gameObject.SetActive(false);
+            nameText.gameObject.SetActive(false);
+            nameInput.gameObject.SetActive(false);
         }
-	}
+
+        private void OnPresetUpdated()
+        {
+            handicapText.Format(viewModel.HandicapLevel().ToString(), viewModel.HandicapPercentage().ToString());
+        }
+
+    }
 }

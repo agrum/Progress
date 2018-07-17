@@ -3,9 +3,13 @@
 namespace Assets.Scripts.ViewModel
 {
 	interface IPresetColumn
-	{
-		event OnVoidDelegate PresetDestroyed;
-	}
+    {
+        event OnVoidDelegate PresetDestroyed;
+        event OnVoidDelegate PresetUpdated;
+
+        int HandicapLevel();
+        float HandicapPercentage();
+    }
 
 	class PresetColumn : IPresetColumn
 	{
@@ -14,10 +18,11 @@ namespace Assets.Scripts.ViewModel
 			Addition,
 			Display,
 			Edit
-		}
-		public event OnVoidDelegate PresetDestroyed = delegate { };
-			
-		public Model.ConstellationPreset preset;
+        }
+        public event OnVoidDelegate PresetDestroyed = delegate { };
+        public event OnVoidDelegate PresetUpdated = delegate { };
+
+        public Model.ConstellationPreset preset;
         public Model.HoveredSkill hovered;
         public Model.Champion champion;
         public Mode mode;
@@ -32,17 +37,50 @@ namespace Assets.Scripts.ViewModel
             champion = App.Content.Account.ActiveChampion;
             mode = mode_;
 
+            if (preset != null)
+                preset.PresetUpdated += OnPresetUpdated;
+
             if (champion != null)
                 champion.PresetRemoved += OnPresetRemoved;
 		}
 
 		~PresetColumn()
 		{
+            if (preset != null)
+                preset.PresetUpdated -= OnPresetUpdated;
+
             if (champion != null)
                 champion.PresetRemoved -= OnPresetRemoved;
 		}
 
-		public INodeMap CreatePreviewContext()
+        public int HandicapLevel()
+        {
+            if (champion == null)
+                return 0;
+
+            int cumulativeHandicap = 0;
+            foreach (var skill in preset.SelectedAbilityList)
+                cumulativeHandicap += champion.Upgrades[skill].Handicap();
+            foreach (var skill in preset.SelectedClassList)
+                cumulativeHandicap += champion.Upgrades[skill].Handicap();
+            foreach (var skill in preset.SelectedKitList)
+                cumulativeHandicap += champion.Upgrades[skill].Handicap();
+
+            return cumulativeHandicap;
+        }
+
+        public float HandicapPercentage()
+        {
+            double handicap = HandicapLevel();
+            double transient = handicap / 40.0f;
+            if (transient >= 0)
+                transient = 1.0 / (1.0 + transient);
+            else
+                transient = 1.0 - transient;
+            return (float) System.Math.Sqrt(transient);
+        }
+
+        public INodeMap CreatePreviewContext()
 		{
             if (preset != null)
                 return new NodeMapPreset(
@@ -102,5 +140,10 @@ namespace Assets.Scripts.ViewModel
 				PresetDestroyed();
 			}
 		}
-	}
+
+        private void OnPresetUpdated()
+        {
+            PresetUpdated();
+        }
+    }
 }
