@@ -18,8 +18,9 @@ namespace Assets.Scripts.ViewModel
 		public event OnVoidDelegate PresetDestroyed = delegate { };
 			
 		public Model.ConstellationPreset preset;
-		public Model.HoveredSkill hovered;
-		public Mode mode;
+        public Model.HoveredSkill hovered;
+        public Model.Champion champion;
+        public Mode mode;
 
 		public PresetColumn(
 			Model.ConstellationPreset model_,
@@ -28,16 +29,17 @@ namespace Assets.Scripts.ViewModel
 		{
 			preset = model_;
 			hovered = hovered_;
-			mode = mode_;
+            champion = App.Content.Account.ActiveChampion;
+            mode = mode_;
 
-            if (App.Content.Account.ActiveChampion == null)
-			    App.Content.Account.ActiveChampion.PresetRemoved += OnPresetRemoved;
+            if (champion != null)
+                champion.PresetRemoved += OnPresetRemoved;
 		}
 
 		~PresetColumn()
 		{
-            if (App.Content.Account.ActiveChampion == null)
-                App.Content.Account.ActiveChampion.PresetRemoved -= OnPresetRemoved;
+            if (champion != null)
+                champion.PresetRemoved -= OnPresetRemoved;
 		}
 
 		public INodeMap CreatePreviewContext()
@@ -60,7 +62,7 @@ namespace Assets.Scripts.ViewModel
 
 		public void EditClicked()
 		{
-			if (App.Content.Account.ActiveChampion == null || !App.Content.Account.ActiveChampion.PresetList.Contains(preset))
+			if (champion == null || !champion.PresetList.Contains(preset))
 				return;
 
 			Scene.PresetEditor.Model = preset;
@@ -69,7 +71,7 @@ namespace Assets.Scripts.ViewModel
 
 		public void DeleteClicked()
 		{
-			App.Content.Account.ActiveChampion?.RemovePreset(preset);
+            champion?.RemovePreset(preset);
 		}
 
 		public void ProceedClicked()
@@ -79,7 +81,7 @@ namespace Assets.Scripts.ViewModel
 
 		public void SaveClicked()
 		{
-			App.Content.Account.ActiveChampion?.SavePreset(preset);
+            champion?.SavePreset(preset);
 		}
 
 		public void NameChanged(string newName)

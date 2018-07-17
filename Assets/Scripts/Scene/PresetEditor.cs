@@ -14,17 +14,11 @@ namespace Assets.Scripts.Scene
         static public Model.ConstellationPreset Model = null;
 
 		private Model.HoveredSkill hovered = new Model.HoveredSkill();
+        private Model.Champion champion = null;
 
 		void Start()
 		{
 			Debug.Assert(backButton != null);
-
-            if (Model == null)
-            {
-                Model = new Model.ConstellationPreset(
-                        null,
-                        new Model.PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits));
-            }
 
 			App.Content.Account.Load(() =>
 			{
@@ -38,22 +32,40 @@ namespace Assets.Scripts.Scene
 			if (this == null)
 				return;
 
-            var champion = App.Content.Account.ActiveChampion;
+            if (Model == null)
+            {
+                Model = new Model.ConstellationPreset(
+                        null,
+                        new Model.PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits));
+            }
+
+            champion = App.Content.Account.ActiveChampion;
             List<Model.Skill> filteredSkillList = new List<Model.Skill>();
             foreach (var node in Model.Constellation.AbilityNodeList)
                 filteredSkillList.Add(node.Skill);
             foreach (var node in Model.Constellation.KitNodeList)
                 filteredSkillList.Add(node.Skill);
-            foreach (var skill in champion.ClassPreset.SelectedClassList)
-                filteredSkillList.Add(skill);
+            if (champion != null)
+                foreach (var skill in champion.ClassPreset.SelectedClassList)
+                    filteredSkillList.Add(skill);
+            else
+                foreach (var node in Model.Constellation.ClassNodeList)
+                    filteredSkillList.Add(node.Skill);
 
             backButton.onClick.AddListener(BackClicked);
             nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
 			constellation.SetContext(new ViewModel.NodeMapConstellation(Model.Constellation, Model, filteredSkillList, hovered));
 			presetColumn.SetContext(new ViewModel.PresetColumn(Model, hovered, ViewModel.PresetColumn.Mode.Edit));
-				
-			App.Content.Account.ActiveChampion.PresetSaved += OnPresetSaved;
+
+            if (champion != null)
+                champion.PresetSaved += OnPresetSaved;
 		}
+
+        void OnDestroy()
+        {
+            if (champion != null)
+                champion.PresetSaved -= OnPresetSaved;
+        }
 
 		private void OnPresetSaved(Model.ConstellationPreset preset)
         {

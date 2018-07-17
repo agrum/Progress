@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.View
 {
-	class PresetColumn : MonoBehaviour
+	class PresetColumn : WestBehaviour
 	{
 		public NodeMap presetPreview = null;
         public Button addButton = null;
@@ -24,9 +24,11 @@ namespace Assets.Scripts.View
 			viewModel.PresetDestroyed += OnPresetDestroyed;
 
 			presetPreview.SetContext(viewModel.CreatePreviewContext());
+
+            Delay(DelayedStart);
 		}
 
-        private void Start()
+        private void DelayedStart()
 		{
 			Debug.Assert(presetPreview != null);
             Debug.Assert(addButton != null);
