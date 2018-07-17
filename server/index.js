@@ -1,3 +1,4 @@
+var express = require('express')
 var app = require('express')()
 var http = require('http').Server(app)
 var io = require('socket.io')(http)
@@ -53,7 +54,21 @@ app.use(passport.session())
 app.passport = passport;
 require('./passport')(app);
 
-app.use(bodyParser.urlencoded({ extended: false }))
+/*app.put('*', function(req, res, next){
+	var data = "";
+	req.on('data', function(chunk){ data += chunk})
+	req.on('end', function(){
+		req.rawBody = data;
+		console.log(req.rawBody)
+		req.body = JSON.parse(data);
+		next();
+	})
+ })*/
+app.use(express.json());
+app.put('*', function(req, res, next){
+	console.log(req.body)
+	next();
+ })
 app.use(cookieParser())
 app.all('*', require('./routes').router)
 

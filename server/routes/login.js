@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/', function (req, res, next) {
-    console.log('post login')
     if (!(req.body.email &&
         req.body.password)) {
         return res.send("Invalid request:" + req.body)

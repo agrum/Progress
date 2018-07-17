@@ -5,7 +5,6 @@ router.get('/:name', function(req, res, next) {
     req.app.db.models.gameSettings
     .findOne({'name':req.params.name})
     .then(document => {
-        console.error('gameSettings no error')
         res.send(document);
         })
     .catch(err => {

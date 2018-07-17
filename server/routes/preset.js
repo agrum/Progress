@@ -2,21 +2,14 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/', function(req, res, next) {
-    var preset = JSON.parse(req.body.preset);
     req.app.db.models.presets
-    .create(preset)
+    .create(req.body)
     .then(presetDocument => {
-        console.error('add preset success')
-        console.error(presetDocument)
         req.app.db.models.champions
         .update(
-			{ _id: req.session.west.champion },
+			{ _id: req.session.west.champion._id },
 			{ $push: { 'presets': presetDocument._id }})
         .then(championDocument => {
-            //championDocument.presets.push(presetDocument._id);
-            //championDocument.save();
-
-            console.error('add preset to champion success')
             res.send(presetDocument);
           })
         .catch(err => {
@@ -31,35 +24,28 @@ router.post('/', function(req, res, next) {
 })
 
 router.put('/', function(req, res, next) {
-    var preset = JSON.parse(req.body.preset);
     req.app.db.models.presets
     .update(
-		{ _id: preset._id},
-		{ $set: preset })
+		{ _id: req.body._id},
+		{ $set: req.body })
     .then(presetDocument => {
-        //presetDocument.set(preset);
-        //presetDocument.save();
-        console.error('update preset success')
         res.send(presetDocument);
     })
     .catch(err => {
         console.error('update preset error')
         console.error(err)
     })
-})
+}) 
 
-router.delete('/:id', function(req, res, next) {
-    console.error('remove preset')
+router.delete('/:presetId', function(req, res, next) {
     req.app.db.models.presets
-    .remove({ _id: req.params.id })
+    .remove({ _id: req.params.presetId })
     .then(presetDocument => {
-		console.error('remove preset success')
 		req.app.db.models.champions
 		.update(
-			{ _id: req.session.west.champion },  
-			{ $pull: { 'presets': { _id: req.params.id }}})
+			{ _id: req.session.west.champion._id },  
+			{ $pull: { 'presets': { _id: req.params.presetId }}})
         .then(championDocument => {
-            console.error('remove preset to champion success')
             res.send(presetDocument);
           })
         .catch(err => {

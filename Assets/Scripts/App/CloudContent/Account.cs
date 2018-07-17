@@ -63,6 +63,7 @@ namespace Assets.Scripts.CloudContent
             JSONObject championJson = new JSONObject();
             championJson["name"] = name;
             championJson["level"] = 0;
+            championJson["specializationPoints"] = 0;
             championJson["classes"] = classes;
 
             Debug.Log(championJson);
@@ -84,7 +85,8 @@ namespace Assets.Scripts.CloudContent
                         "Network error",
                         json_.ToString());
                 });
-            request.AddField("champion", championJson.ToString());
+            request.AddHeader("Content-Type", "application/json");
+            request.RawData = System.Text.Encoding.UTF8.GetBytes(championJson.ToString());
             request.Send();
         }
 

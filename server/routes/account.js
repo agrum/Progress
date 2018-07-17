@@ -9,8 +9,6 @@ router.get('/:id', function(req, res, next) {
         model: 'champions'
     })
     .then(document => {
-        console.error(document)
-        console.error('accounts success')
         res.send(document);
         })
     .catch(err => {

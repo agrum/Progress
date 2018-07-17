@@ -117,7 +117,6 @@ router.get('/', function(req, res, next) {
     req.app.db.models.constellations
     .find({})
     .then(document => {
-        console.error('constellations no error')
         res.send(document);
         })
     .catch(err => {

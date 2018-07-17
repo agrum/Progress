@@ -81,6 +81,12 @@ namespace Assets.Scripts.ViewModel
 
 		public void SaveClicked()
 		{
+            if (preset.Name == "" || preset.Name == null)
+            {
+                App.Resource.Prefab.Popup().Setup("Error", "Preset requires a name.");
+                return;
+            }
+
             champion?.SavePreset(preset);
 		}
 

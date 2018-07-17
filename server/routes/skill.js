@@ -6,7 +6,6 @@ router.get('/', function (req, res, next) {
     req.app.db.models.skills
         .find({})
         .then(document => {
-            console.error('skills no error')
             res.send(document);
         })
         .catch(err => {
@@ -62,7 +61,6 @@ router.get('/copy', function (req, res, next) {
 
     async.parallel(queries, () =>
     {
-        console.error('skills no error')
         res.send({});
     })
 })
@@ -73,14 +71,11 @@ router.get('/convert', function (req, res, next) {
         .then(documents => {
             let recur = (document, category, object) =>
             {
-                console.log("BEFORE")
-                console.log(object)
                 var objConstructor = {}.constructor
 
                 for (var key in object) {
                     if (object[key].constructor === objConstructor)
                     {
-                        console.log(key + " is object")
                         recur(document, key, object[key])
                     }
                     else
@@ -88,7 +83,6 @@ router.get('/convert', function (req, res, next) {
                         let type = 1;
                         if (key == "cooldown" || key == "castTime" || key == "subtractive" || key == "cost" || key == "fraction")
                             type = 0;
-                        console.log(key + " is value")
                         document.metrics2.push({
                             name: key,
                             category: category,
@@ -98,8 +92,6 @@ router.get('/convert', function (req, res, next) {
                         })
                     }
                 }
-                console.log("AFTER")
-                console.log(document)
             }
 
             var queries = []
@@ -116,7 +108,6 @@ router.get('/convert', function (req, res, next) {
 
             async.parallel(queries, () =>
             {
-                console.error('skills no error')
                 res.send({});
             })
         })

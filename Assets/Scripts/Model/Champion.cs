@@ -89,7 +89,8 @@ namespace Assets.Scripts.Model
 
                     PresetAdded(preset);
                 });
-            request.AddField("preset", presetJson.ToString());
+            request.AddHeader("Content-Type", "application/json");
+            request.RawData = System.Text.Encoding.UTF8.GetBytes(presetJson.ToString());
             request.Send();
         }
 
@@ -101,7 +102,7 @@ namespace Assets.Scripts.Model
             if (preset_.Id != null && !PresetList.Contains(preset_))
                 return;
 
-            JSONNode presetJson = preset_.ToJson();
+            JSONObject presetJson = preset_.ToJson();
             HTTPRequest request;
             if (preset_.Id == null)
                 request = App.Server.Request(
@@ -109,17 +110,24 @@ namespace Assets.Scripts.Model
                     "champion/" + Json["_id"] + "/preset",
                     (JSONNode json_) =>
                     {
+                        ConstellationPreset preset = new ConstellationPreset(
+                            json_.AsObject,
+                            new PresetLimits(App.Content.GameSettings.NumAbilities, App.Content.GameSettings.NumClasses, App.Content.GameSettings.NumKits));
+                        PresetList.Add(preset);
+                        Json["presets"].AsArray.Add(json_);
+
                         PresetSaved(preset_);
                     });
             else
                 request = App.Server.Request(
                     HTTPMethods.Put,
-                    "preset",
+                    "champion/" + Json["_id"] + "/preset/",
                     (JSONNode json_) =>
                     {
                         PresetSaved(preset_);
                     });
-            request.AddField("preset", presetJson.ToString());
+            request.AddHeader("Content-Type", "application/json");
+            request.RawData = System.Text.Encoding.UTF8.GetBytes(presetJson.ToString());
             request.Send();
         }
 
@@ -133,7 +141,7 @@ namespace Assets.Scripts.Model
 
             App.Server.Request(
                 HTTPMethods.Delete,
-                "preset/" + preset_.Id,
+               "champion/" + Json["_id"] + "/preset/" + preset_.Id,
                 (JSONNode json_) =>
                 {
                     PresetList.Remove(preset_);

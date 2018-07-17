@@ -172,7 +172,8 @@ namespace Assets.Scripts.Model
                     GameObject.Destroy(loadingScreen.gameObject);
                     App.Resource.Prefab.Popup().Setup("Error", "Skill upgrade failed.");
                 });
-            request.AddField("report", requestField.ToString());
+            request.AddHeader("Content-Type", "application/json");
+            request.RawData = System.Text.Encoding.UTF8.GetBytes(requestField.ToString());
             request.Send();
         }
 

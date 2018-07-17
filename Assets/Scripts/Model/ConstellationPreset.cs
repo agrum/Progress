@@ -231,12 +231,13 @@ namespace Assets.Scripts.Model
 			PresetUpdated();
 		}
 
-        public JSONNode ToJson()
+        public JSONObject ToJson()
         {
-            JSONNode json = new JSONObject();
+            JSONObject json = new JSONObject();
 
-            json["_id"] = Id;
-            json["name"] = Name;
+            if (Id != null)
+                json["_id"] = Id;
+            json["name"] = Name != null ? Name : "";
             json["constellation"] = Constellation.Json["_id"];
             json["abilities"] = new JSONArray();
             json["classes"] = new JSONArray();
@@ -247,7 +248,7 @@ namespace Assets.Scripts.Model
                 json["classes"].Add(skill.Json["_id"]);
             foreach (var skill in SelectedKitList)
                 json["kits"].Add(skill.Json["_id"]);
-
+            
             return json;
         }
 	}
