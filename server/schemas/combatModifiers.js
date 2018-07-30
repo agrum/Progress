@@ -1,8 +1,23 @@
 let mongoose = require('mongoose');
+let schemaDefs = require('./schemaDefs');
 
 module.exports = function()
 {
-	let trigger = new mongoose.Schema({
+	let stackSchema = new mongoose.Schema({
+		max: {
+			type: mongoose.Schema.Types.Mixed,
+			default: 1,
+		},
+		stackMethod: {
+			type: String,
+			deafult: schemaDefs.modifier.stackMethod.Cumulative
+		},
+		stackRefresh: {
+			type: String,
+			default: schemaDefs.modifier.stackRefresh.RefreshIfSameSourceOrStronger
+		},
+	})
+	let triggerSchema = new mongoose.Schema({
 		anyOf: {
 			type: [mongoose.Schema.Types.ObjectId],
 			required: true,
@@ -13,10 +28,6 @@ module.exports = function()
 			required: true,
 			ref: 'combatEffects',
 		},
-		stacksConsumed: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: 'numericValues',
-		},
 	})
 
 	let schema = new mongoose.Schema({
@@ -26,35 +37,28 @@ module.exports = function()
 			required: true,
 		},
 		triggers: {
-			type: [trigger],
+			type: [triggerSchema],
 			required: true,
 		},
 		duration: {
-			type: [mongoose.Schema.Types.ObjectId],
-			required: true,
-			ref: 'numericValues',
+			type: mongoose.Schema.Types.Mixed,
+			default: -1,
 		},
 		tickPeriod: { //numeric values of effects are dt / tickPeriod, dt being time now - max(last tick, creation time)
-			type: [mongoose.Schema.Types.ObjectId],
-			required: true,
-			ref: 'numericValues',
+			type: mongoose.Schema.Types.Mixed,
+			default: -1,
 		},
 		removable: {
 			type: Boolean,
 			required: false,
+			default: true,
 		},
 		stack: {
-			type: [mongoose.Schema.Types.ObjectId],
-			required: true,
-			ref: 'numericValues',
+			type: stackSchema
 		},
-		stackMethod: {
-			type: String,
-			deafult: defs.modifier.stackMethod[0]
-		},
-		stackRefresh: {
-			type: String,
-			default: defs.modifier.stackMethod[0]
+		listeningRadius: {
+			type: Number,
+			default: 0,
 		},
 	})
 	schema.pre('save', function (next) {

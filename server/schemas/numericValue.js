@@ -4,7 +4,7 @@ let schemaDefs = require('./schemaDefs');
 module.exports = function()
 {
 	let schema = new mongoose.Schema({
-		type: {
+		idName: {
 			type: String,
 			required: true,
 		},
@@ -12,17 +12,15 @@ module.exports = function()
 			type: Number,
 			required: true,
 		},
-		method: {
-			type: String,
-			required: true,
-		},
 		canUpgrade: {
 			type: Boolean,
 			required: true,
-			default: false,
+			default: true,
 		},
 		upgradeType: {
 			type: String,
+			enum: schemaDefs.numericValue.upgradeTypes,
+			default: defs.numericValue.upgradeTypes.Inc,
 		},
 		upgradeCost: {
 			type: Number,

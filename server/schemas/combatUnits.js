@@ -2,20 +2,15 @@ let mongoose = require('mongoose');
 
 module.exports = function()
 {
-	let schema = new mongoose.Schema({
-		idName: String,
-        direction: {
+	let physicsSchema = new mongoose.Schema({
+		type: {
+			type: String,
+			enum: ["Balistic", "Homing"],
+			default: "Balistic"
+		},
+		direction: {
 			type: String,
 			required: true,
-		},
-		shape: {
-			type: String,
-			required: true,
-		},
-		size: {
-			type: [mongoose.Schema.Types.ObjectId],
-			required: true,
-			ref: 'numericValues',
 		},
 		speed: {
 			type: [mongoose.Schema.Types.ObjectId],
@@ -27,6 +22,38 @@ module.exports = function()
 			required: true,
 			ref: 'numericValues',
 		},
+		collideWith: {
+			type: [String],
+			required: true,
+		},
+		updateDirection: {
+			type: Boolean,
+			required: true,
+		},
+		angularSpeed: {
+			type: [mongoose.Schema.Types.ObjectId],
+			ref: 'numericValues',
+		},
+		pivotX: {
+			type: [mongoose.Schema.Types.ObjectId],
+			ref: 'numericValues',
+		},
+		pivotY: {
+			type: [mongoose.Schema.Types.ObjectId],
+			ref: 'numericValues',
+		},
+	})
+	let schema = new mongoose.Schema({
+		idName: String,
+		shape: {
+			type: String,
+			required: true,
+		},
+		size: {
+			type: [mongoose.Schema.Types.ObjectId],
+			required: true,
+			ref: 'numericValues',
+		},
 		modifiers: {
 			type: [mongoose.Schema.Types.ObjectId],
 			required: true,
@@ -34,10 +61,6 @@ module.exports = function()
 		},
 		collideWith: {
 			type: [String],
-			required: true,
-		},
-		updateDirection: {
-			type: Boolean,
 			required: true,
 		},
 		parentDependent: {
@@ -60,18 +83,9 @@ module.exports = function()
 			type: [mongoose.Schema.Types.ObjectId],
 			ref: 'numericValues',
 		},
-		angularSpeed: {
-			type: [mongoose.Schema.Types.ObjectId],
-			ref: 'numericValues',
-		},
-		pivotX: {
-			type: [mongoose.Schema.Types.ObjectId],
-			ref: 'numericValues',
-		},
-		pivotY: {
-			type: [mongoose.Schema.Types.ObjectId],
-			ref: 'numericValues',
-		},
+		physics: {
+			type: physicsSchema
+		}
 	})
 	schema.pre('save', function (next) {
 		if (schemaDefs.projectile.shape.indexOf(this.direction) == -1){

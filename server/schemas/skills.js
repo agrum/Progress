@@ -17,6 +17,11 @@ module.exports = function()
 		details: String,
         metrics: mongoose.Schema.Types.Mixed,
         metrics2: [ metricSchema ],
+        modifiers: {
+			type: [mongoose.Schema.Types.ObjectId],
+			required: true,
+			ref: 'combatModifiers',
+        },
 	})
 	schema.set('collection', 'skills')
 

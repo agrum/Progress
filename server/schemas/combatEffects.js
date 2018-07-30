@@ -1,10 +1,10 @@
 let mongoose = require('mongoose');
+let schemaDefs = require('./schemaDefs');
 
 module.exports = function()
 {
-	let schema = new mongoose.Schema({
-		idName: String,
-		action: {
+	let action = new mongoose.Schema({
+		name: {
 			type: String,
 			required: true,
 		},
@@ -13,7 +13,14 @@ module.exports = function()
 			type: [mongoose.Schema.Types.ObjectId],
 			refPath: 'referenceKind',
 		},
-		target: String,
+	})
+	let schema = new mongoose.Schema({
+		idName: String,
+		targets: String,
+		actions: {
+			type: [action],
+			required: true,
+		},
 	})
 	schema.pre('save', function (next) {
 		if (schemaDefs.actions.indexOf(this.action) == -1){
