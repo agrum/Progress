@@ -22,9 +22,9 @@ namespace Assets.Scripts.Model
 		public string LowerCaseKey { get; private set; } = "";
 		public string UpperCamelCaseKey { get; private set; } = "";
 
-        public SkillMetric Metric(string category_, string name_)
+        public SkillMetric Metric(string idName_)
         {
-            return metricMap[SkillMetric.Hash(category_, name_)];
+            return metricMap[idName_];
         }
 
         public IList<SkillMetric> MetrictList { get { return metricList.AsReadOnly(); } }
@@ -68,7 +68,7 @@ namespace Assets.Scripts.Model
             {
                 SkillMetric metric = new SkillMetric(metricNode.Value.AsObject);
                 metricList.Add(metric);
-                metricMap.Add(SkillMetric.Hash(metric.Category, metric.Name), metric);
+                metricMap.Add(metric.IdName, metric);
             }
         }
 	}

@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.Model
 {
-    public class ScheduledModifierTick
-    {
-        public float Time { get; private set; }
-        public Modifier Modifier { get; private set; }
-
-        public ScheduledModifierTick(float time_, Modifier modifier_)
-        {
-            Time = time_;
-            Modifier = modifier_;
-        }
-    }
-
     public class Unit
     {
+        public Vector3 Position { get; private set; }
+
         List<Modifier> ModifierList = new List<Modifier>();
-        List<ScheduledModifierTick> ScheduledModifierTickList = new List<ScheduledModifierTick>();
+
+        UnitTicker ticker = new UnitTicker();
+
+        static public void BuildReferencePath(string[] stringPath, int index_, ref List<object> referencePath)
+        {
+            string node = stringPath[index_];
+
+        }
+
+        public float Reference(List<object> referencePath_, int index_)
+        {
+            return 0;
+        }
 
         public void ApplyModifier(Modifier modifier_)
         {
             ModifierList.Add(modifier_);
 
-            if (modifier_.TickPeriod > 0)
-            {
-
-            }
+            ticker.ListensTo(modifier_);
         }
 
         public void RemoveModifier(Modifier sourceModifier_, string idName_)
@@ -50,58 +50,13 @@ namespace Assets.Scripts.Model
 
         void Tick(float time_)
         {
-            int processedCount = 0;
-            SortedList<float, Modifier> nextScheduledModifierTickList = new SortedList<float, Modifier>();
-
             //tick throught all attached modifiers and kill the expired ones
             foreach (var modifier in ModifierList)
                 if (modifier.ExpirationTime <= time_)
                     modifier.Kill();
 
-            //tick throught the scheduled operations
-            foreach (var scheduledModifierTick in ScheduledModifierTickList)
-            {
-                if (!scheduledModifierTick.Modifier.ToDestroy)
-                {
-                    if (scheduledModifierTick.Time <= time_)
-                    {
-                        //call tick with the precisie dt (not the desired period, can't guarantee it
-                        //HERE, TICK IS HERE
-                        float tickTime = scheduledModifierTick.Time;
-                        while (tickTime <= time_)
-                        {
-                            scheduledModifierTick.Modifier.Tick();
-                            tickTime += scheduledModifierTick.Modifier.TickPeriod;
-                        }
-                        //HERE, TICK IS HERE
-
-                        //schedule next tick from current time
-                        if (scheduledModifierTick.Modifier.Ticks)
-                            nextScheduledModifierTickList.Add(
-                                tickTime,
-                                scheduledModifierTick.Modifier);
-                    }
-                    else
-                        break;
-                }
-                ++processedCount;
-            }
-
-            //remove dead modifiers
-            while (processedCount > 0)
-                ScheduledModifierTickList.RemoveAt(--processedCount);
-
-            //add new schedules
-            int destinationIndex = 0;
-            foreach (var nextScheduledModifierTick in nextScheduledModifierTickList)
-            {
-                while (destinationIndex < ScheduledModifierTickList.Count 
-                    && ScheduledModifierTickList[destinationIndex].Time < nextScheduledModifierTick.Key)
-                    ++destinationIndex;
-
-                ScheduledModifierTickList.Insert(destinationIndex, new ScheduledModifierTick(nextScheduledModifierTick.Key, nextScheduledModifierTick.Value));
-                ++destinationIndex;
-            }
+            //tick through ticker modifiers
+            ticker.Tick(time_);
         }
     }
 }

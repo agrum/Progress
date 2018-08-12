@@ -7,6 +7,7 @@ var ability = {
 			name: "Cooldown",
 			category: "misc",
 			value: 12,
+			valueType: "Add",
 			upgType: 0,
 			upgCost: 1,
 		},
@@ -15,6 +16,7 @@ var ability = {
 			name: "Travel and knock back distance",
 			category: "desc",
 			value: 4,
+			valueType: "Add",
 			upgType: 1,
 			upgCost: 1,
 		},
@@ -23,6 +25,7 @@ var ability = {
 			name: "On hit damage",
 			category: "desc",
 			value: -50,
+			valueType: "Add",
 			upgType: 1,
 			upgCost: 1,
 		},
@@ -31,7 +34,8 @@ var ability = {
 			name: "On knock back collide",
 			category: "desc",
 			value: 0.1,
-			reference: "ParentUnit.MaxLife",
+			valueType: "Mult",
+			reference: "Unit.MaxLife",
 			upgType: 1,
 			upgCost: 1,
 		},
@@ -48,8 +52,8 @@ var ability = {
 					{
 						event: schemaDefs.trigger.InputSkillUp,
 						conditions: [
-							"Self.Unit.IsAlive == True",
-							"Self.Stack > 0",
+							"Unit.IsAlive == True",
+							"Stack > 0",
 						]
 					}
 				],
@@ -77,7 +81,7 @@ var ability = {
 							{
 								action: "ApplyModifier",
 								params: {
-									target: "ParentUnit",
+									target: "Unit",
 									modifier: {
 										idName: "Knock_PunchPhase",
 										removable: false,
@@ -111,7 +115,7 @@ var ability = {
 																params: {
 																	overrideMoveInput: true,
 																	physics: {
-																		direction: "ParentUnit",
+																		direction: "Unit",
 																		speed: 10,
 																		distance: "SkillMetric.KnockDistance",
 																		collideWith: [
@@ -142,7 +146,7 @@ var ability = {
 																			],
 																			effects: [
 																				{
-																					targets: "ParentUnit",
+																					targets: "Unit",
 																					actions: [
 																						{
 																							action: "AffectUnitMetric",

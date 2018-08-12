@@ -7,22 +7,26 @@ namespace Assets.Scripts.Model
 {
     public class SkillMetric
     {
-        public string Name { get { return Json["name"]; } private set { Json["name"] = value; } }
-        public string Category { get { return Json["category"]; } private set { Json["category"] = value; } }
-        public float Value { get { return Json["value"]; } private set { Json["value"] = value; } }
-        public int UpgType { get { return Json["upgType"]; } private set { Json["upgType"] = value; } }
-        public float UpgCost { get { return Json["upgCost"]; } private set { Json["upgCost"] = value; } }
+        public enum EValueType
+        {
+            Add,
+            Mult
+        }
+
+        public string IdName { get { return Json["idName"]; } }
+        public string Name { get { return Json["name"]; } }
+        public string Category { get { return Json["category"]; } }
+        public float Value { get { return Json["value"]; } }
+        public EValueType ValueType { get { return Json["value"] == "Add" ? EValueType.Add : EValueType.Mult; } }
+        public string[] Reference { get { return Json["reference"].Value.ToString().Split('.'); } }
+        public int UpgType { get { return Json["upgType"]; } }
+        public float UpgCost { get { return Json["upgCost"]; } }
 
         public JSONObject Json { get; private set; }
 
         public SkillMetric(JSONObject json_)
         {
             Json = json_;
-        }
-
-        static public string Hash(string category_, string name_)
-        {
-            return category_ + "_" + name_;
         }
     }
 }
