@@ -10,45 +10,31 @@ namespace Assets.Scripts.Model
 {
     public class Modifier
     {
-        enum EAlignment
+        public enum EAlignment
         {
             Good,
             Neutral,
             Bad,
         }
 
-        enum ENode
-        {
-            Parent,
-            Trigger,
-            Unit,
-            Removable,
-            Alignment,
-            AmountStack,
-            MaxStack,
-            DetectionRadius,
-            Duration,
-            DurationLeft,
-            TickPeriod
-        }
-
         public bool ToDestroy { get; private set; } = false;
 
-        Modifier ParentModifier;
-        Trigger CurrentTrigger;
-        Unit AttachedUnit;
+        public Modifier ParentModifier { get; private set; }
+        public Trigger CurrentTrigger { get; private set; }
+        public Unit AttachedUnit { get; private set; }
 
         public Skill SourceSkill { get; private set; }
         public Modifier SourceModifier { get; private set; }
         public string IdName { get; private set; }
-        bool Removable;
-        EAlignment Alignment;
-        int MaxStack;
+        public bool Removable { get; private set; }
+        public EAlignment Alignment { get; private set; }
+        public int AmountStack { get; private set; } = 0;
+        public int MaxStack { get; private set; }
         public float DetectionRadius { get; private set; } = -1;
-        float Duration = -1;
-        public float ExpirationTime { get; private set; }
+        public float Duration { get; private set; } = -1;
+        public float DurationLeft { get; private set; }
         public float TickPeriod { get; private set; }
-        public bool Ticks { get; private set; } = true;
+        public bool IsTicking { get; private set; } = true;
 
         private List<IModifierOperator> OperatorList = new List<IModifierOperator>();
         private List<Trigger> TriggerList = new List<Trigger>();
@@ -60,31 +46,57 @@ namespace Assets.Scripts.Model
             AttachedUnit = attachedUnit_;
 
             if (TickPeriod > 0)
-                Ticks = true;
+                IsTicking = true;
             AttachedUnit.ApplyModifier(this);
         }
 
-        static public void BuildReferencePath(string[] stringPath, int index_, ref List<object> referencePath)
+        public object Route(System.Collections.IEnumerator enumerator_)
         {
-            string node = stringPath[index_];
+            return App.Route.Modifier.Reference(this, enumerator_);
+        }
+
+        static public void BuildReferencePath(System.Collections.IEnumerator stringEnumerator, ref List<NumericValueSkill.ReferencePath> referencePath)
+        {
+            var node = stringEnumerator.Current as string;
+            var hasNext = stringEnumerator.MoveNext();
             if (node.Equals("Parent"))
             {
-                referencePath.Add(ENode.Parent);
-                BuildReferencePath(stringPath, ++index_, ref referencePath);
+                ReferencePathDictionary.Add(ENode.Parent, ReferenceParent);
+                BuildReferencePath(stringEnumerator, ref referencePath);
             }
             else if (node.Equals("Trigger"))
             {
-                referencePath.Add(ENode.Trigger);
-                Trigger.BuildReferencePath(stringPath, ++index_, ref referencePath);
+                referencePath.Add(ReferenceTrigger);
+                Trigger.BuildReferencePath(stringEnumerator, ref referencePath);
             }
             else if (node.Equals("Unit"))
             {
-                referencePath.Add(ENode.Unit);
-                Unit.BuildReferencePath(stringPath, ++index_, ref referencePath);
+                referencePath.Add(ReferenceUnit);
+                Unit.BuildReferencePath(stringEnumerator, ref referencePath);
             }
+            else if (node.Equals("Removable"))
+                referencePath.Add(ENode.Removable);
+            else if (node.Equals("Alignment"))
+                referencePath.Add(ENode.Alignment);
+            else if (node.Equals("AmountStack"))
+                referencePath.Add(ENode.AmountStack);
+            else if (node.Equals("MaxStack"))
+                referencePath.Add(ENode.MaxStack);
+            else if (node.Equals("DetectionRadius"))
+                referencePath.Add(ENode.DetectionRadius);
+            else if (node.Equals("Duration"))
+                referencePath.Add(ENode.Duration);
+            else if (node.Equals("DurationLeft"))
+                referencePath.Add(ENode.DurationLeft);
+            else if (node.Equals("TickPeriod"))
+                referencePath.Add(ENode.TickPeriod);
+            else if (node.Equals("IsTicking"))
+                referencePath.Add(ENode.IsTicking);
+            else
+                throw new Exception();
         }
 
-        public float Reference(List<object> referencePath_, int index_)
+        public object Reference(List<object> referencePath_, int index_)
         {
             ENode? node = referencePath_[index_] as ENode?;
             if (node == null)
@@ -95,6 +107,15 @@ namespace Assets.Scripts.Model
                 case ENode.Parent: return ParentModifier.Reference(referencePath_, ++index_);
                 case ENode.Trigger: return CurrentTrigger.Reference(referencePath_, ++index_);
                 case ENode.Unit: return AttachedUnit.Reference(referencePath_, ++index_);
+                case ENode.Removable: return Removable;
+                case ENode.Alignment: return Alignment;
+                case ENode.AmountStack: return AmountStack;
+                case ENode.MaxStack: return MaxStack;
+                case ENode.DetectionRadius: return DetectionRadius;
+                case ENode.Duration: return Duration;
+                case ENode.DurationLeft: return DurationLeft;
+                case ENode.TickPeriod: return TickPeriod;
+                case ENode.IsTicking: return IsTicking;
             }
 
             throw new Exception();
@@ -121,7 +142,7 @@ namespace Assets.Scripts.Model
         public void ProcessTriggers()
         {
             foreach (var trigger in TriggerList)
-                Trigger(trigger);
+                ProcessTrigger(trigger);
         }
 
         public void Tick()

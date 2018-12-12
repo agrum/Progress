@@ -1133,6 +1133,10 @@
     <Compile Include="Assets\Scripts\App\Resource\AppResource.cs" />
     <Compile Include="Assets\Scripts\App\Resource\Material.cs" />
     <Compile Include="Assets\Scripts\App\Resource\Prefab.cs" />
+    <Compile Include="Assets\Scripts\App\Route\Generic.cs" />
+    <Compile Include="Assets\Scripts\App\Route\Trigger.cs" />
+    <Compile Include="Assets\Scripts\App\Route\Modifier.cs" />
+    <Compile Include="Assets\Scripts\App\Route\Unit.cs" />
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\LivingController.cs" />
     <Compile Include="Assets\Scripts\FieldOfView\Controller.cs" />
@@ -1175,10 +1179,14 @@
     <Compile Include="Assets\Scripts\Model\Skill\Ability.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Class.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Kit.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\EffectUnitAttribute.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\SkillMetric.cs" />
     <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Trigger.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\TriggerType.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
     <Compile Include="Assets\Scripts\Model\Team\Team.cs" />
@@ -1187,6 +1195,7 @@
     <Compile Include="Assets\Scripts\Model\Terrain\Edge.cs" />
     <Compile Include="Assets\Scripts\Model\Terrain\Path.cs" />
     <Compile Include="Assets\Scripts\Model\Terrain\TerrainManager.cs" />
+    <Compile Include="Assets\Scripts\Model\UnitAttribute\UnitAttribute.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Expirable.cs" />
     <Compile Include="Assets\Scripts\Model\Utils\Pair.cs" />
     <Compile Include="Assets\Scripts\Model\WestString.cs" />

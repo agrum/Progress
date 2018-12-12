@@ -1,74 +1,82 @@
-let schemaDefs = require('..schemas/schemaDefs');
+let action = require('..schemas/defs/action');
+let alignment = require('..schemas/defs/alignment');
+let attribute = require('..schemas/defs/attribute');
+let compare = require('..schemas/defs/compare');
+let extract = require('..schemas/defs/extract');
+let integration = require('..schemas/defs/integration');
+let modifierAttribute = require('..schemas/defs/modifierAttribute');
+let numericUpgradeType = require('..schemas/defs/numericUpgradeType');
+let projectile = require('..schemas/defs/projectile');
+let stack = require('..schemas/defs/stack');
+let subject = require('..schemas/defs/subject');
+let trigger = require('..schemas/defs/trigger');
+let unitCondition = require('..schemas/defs/unitCondition');
+
+let modBuilder = require('..schemas/helper/modifierBuilder');
 
 var ability = {
 	metrics2:[
-		{
-			idName: "Cooldown",
-			name: "Cooldown",
-			category: "misc",
-			value: 12,
-			valueType: "Add",
-			upgType: 0,
-			upgCost: 1,
-		},
-		{
-			idName: "KnockDistance",
-			name: "Travel and knock back distance",
-			category: "desc",
-			value: 4,
-			valueType: "Add",
-			upgType: 1,
-			upgCost: 1,
-		},
-		{
-			idName: "OnHitDamage",
-			name: "On hit damage",
-			category: "desc",
-			value: -50,
-			valueType: "Add",
-			upgType: 1,
-			upgCost: 1,
-		},
-		{
-			idName: "OnKnockBackDamage",
-			name: "On knock back collide",
-			category: "desc",
-			value: 0.1,
-			valueType: "Mult",
-			reference: "Unit.MaxLife",
-			upgType: 1,
-			upgCost: 1,
-		},
+		modBuilder.Numeric(
+			"Cooldown", 
+			"Cooldown", 
+			numeric.category.Misc, 
+			12, 
+			integration.Add, 
+			numeric.upgradeType.Redu, 
+			1),
+		modBuilder.Numeric(
+			"KnockDistance", 
+			"Travel and knock back distance", 
+			numeric.category.Desc, 
+			4, 
+			integration.Add, 
+			numeric.upgradeType.Redu, 
+			1),
+		modBuilder.Numeric(
+			"OnHitDamage", 
+			"On hit damage", 
+			numeric.category.Desc, 
+			-50, 
+			integration.Add, 
+			integration.Add, 
+			1),
+		modBuilder.Numeric(
+			"OnKnockBackDamage", 
+			"On knock back collide", 
+			numeric.category.Desc, 
+			modBuilder.AttributeReference(0.1, subject.Target, extract.Max, attribute.Health),
+			integration.Mult, 
+			numeric.upgradeType.Inc, 
+			1),
 	],
 	modifier: {
 		idName: "Knock_Skill",
 		removable: false,
-		alignment: "Neutral",
-		maxStack: 1,
-		tickPeriod: "SkillMetric.Cooldown",
+		alignment: alignment.Neutral,
+		stacking: modBuilder.Stack(stack.method.One, stack.refresh.No, 1, stack.Permanent),
+		tickPeriod: "Cooldown",
 		triggers: [
-			{//skill trigger
-				anyOf: [
-					{
-						event: schemaDefs.trigger.InputSkillUp,
-						conditions: [
-							"Unit.IsAlive == True",
-							"Stack > 0",
-						]
-					}
+			modBuilder.TriggeredEffect(//skill trigger
+				[
+					modBuilder.Trigger(
+						trigger.InputSkillUp,
+						[
+							modBuilder.Condition(modifierAttribute.Stack, compare.Greater, 0),
+							modBuilder.Condition(modBuilder.AttributeReference(1, subject.Self, attribute.Health, extract.Current), compare.GreaterOrEqual, 0),
+						])
 				],
-				effects: [
+				[
 					{
-						targets: "ParentUnit",
+						targets: subject.Self,
 						actions: [
 							{
 								action: "ApplyPhysics",
 								params: {
 									overrideMoveInput: true,
 									physics: {
-										direction: "ParentUnit",
+										direction: subject.Self,
 										speed: 10,
-										distance: "SkillMetric.KnockDistance",
+										distance: "KnockDistance",
 										collideWith: [
 											"All"
 										],
@@ -81,11 +89,11 @@ var ability = {
 							{
 								action: "ApplyModifier",
 								params: {
-									target: "Unit",
+									target: subject.Self,
 									modifier: {
 										idName: "Knock_PunchPhase",
 										removable: false,
-										alignment: "Neutral",
+										alignment: alignment.Neutral,
 										triggers: [
 											{
 												anyOf: [
@@ -106,7 +114,7 @@ var ability = {
 																params: {
 																	metric: "Life",
 																	amount: "SkillMetric.OnHitDamage",
-																	method: "Add",
+																	method: defs.Add,
 																	temporary: false,
 																}
 															},
@@ -153,7 +161,7 @@ var ability = {
 																							params: {
 																								metric: "Life",
 																								amount: "SkillMetric.OnKnockBackDamage",
-																								method: "Add",
+																								method: defs.Add,
 																								temporary: false,
 																							},
 																						},
@@ -189,7 +197,7 @@ var ability = {
 								params: {
 									metric: "Stack",
 									amount: -1,
-									method: "Add",
+									method: defs.Add,
 									temproary: false,
 								},
 							},
@@ -218,7 +226,7 @@ var ability = {
 								params: {
 									metric: "Stack",
 									amount: 1,
-									method: "Add",
+									method: defs.Add,
 									temproary: false,
 								},
 							},

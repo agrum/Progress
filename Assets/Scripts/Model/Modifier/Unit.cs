@@ -15,9 +15,9 @@ namespace Assets.Scripts.Model
 
         UnitTicker ticker = new UnitTicker();
 
-        static public void BuildReferencePath(string[] stringPath, int index_, ref List<object> referencePath)
+        static public void BuildReferencePath(System.Collections.IEnumerator stringEnumerator, ref List<NumericValueSkill.ReferencePath> referencePat)
         {
-            string node = stringPath[index_];
+            var node = stringEnumerator.Current as string;
 
         }
 

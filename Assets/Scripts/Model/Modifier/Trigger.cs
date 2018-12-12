@@ -24,14 +24,15 @@ namespace Assets.Scripts.Model
             Unit = unit_;
         }
 
-        static public void BuildReferencePath(string[] stringPath, int index_, ref List<object> referencePath)
+        static public void BuildReferencePath(System.Collections.IEnumerator stringEnumerator, ref List<NumericValueSkill.ReferencePath> referencePat)
         {
-            string node = stringPath[index_];
-            
+            var node = stringEnumerator.Current as string;
+
         }
 
         public float Reference(List<object> referencePath_, int index_)
         {
             return 0;
         }
+    }
 }
