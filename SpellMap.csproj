@@ -1186,6 +1186,7 @@
     <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Trigger.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\TriggerCondition.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\TriggerType.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
