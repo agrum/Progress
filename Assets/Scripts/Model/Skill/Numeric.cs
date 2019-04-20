@@ -10,25 +10,6 @@ namespace Assets.Scripts.Model.Skill
 {
     public class Numeric
     {
-        enum ESubject
-        {
-            Source,
-            Target,
-            Trigger,
-            Parent
-        }
-
-        enum EExtract
-        {
-            Current,
-            Ratio,
-            Percentage,
-            Max,
-            Missing,
-            MissingRatio,
-            MissingPercentage
-        }
-
         public enum EReferenceType
         {
             UnitGauge,
@@ -40,7 +21,7 @@ namespace Assets.Scripts.Model.Skill
 
         public interface IReference
         {
-            float Get();
+            double Get(TriggerInfo triggerInfo_);
             EReferenceType ReferenceType();
             JSONNode ToJson();
         }
@@ -50,15 +31,20 @@ namespace Assets.Scripts.Model.Skill
             ESubject Subject;
             UnitGauge.EType Type;
             UnitGauge.EExtract Extract;
+            EEquation Equation;
 
             public ReferenceUnitGauge(JSONNode jNode_)
             {
                 Subject = (ESubject)jNode_["subject"].AsInt;
                 Type = (UnitGauge.EType)jNode_["type"].AsInt;
                 Extract = (UnitGauge.EExtract)jNode_["extract"].AsInt;
+                Equation = (EEquation)jNode_["equation"].AsInt;
             }
 
-            public float Get() { return 0; }
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return Equation.Compute(Subject.GetContainer(triggerInfo_).UnitGauges[Type].Get(Extract));
+            }
 
             public EReferenceType ReferenceType() { return EReferenceType.UnitGauge; }
 
@@ -68,6 +54,7 @@ namespace Assets.Scripts.Model.Skill
                 jObject["subject"] = (int)Subject;
                 jObject["type"] = (int)Type;
                 jObject["extract"] = (int)Extract;
+                jObject["equation"] = (int)Equation;
                 return jObject;
             }
         }
@@ -76,14 +63,19 @@ namespace Assets.Scripts.Model.Skill
         {
             ESubject Subject;
             UnitStat.EType Type;
+            EEquation Equation;
 
             public ReferenceUnitStat(JSONNode jNode_)
             {
                 Subject = (ESubject)jNode_["subject"].AsInt;
                 Type = (UnitStat.EType)jNode_["type"].AsInt;
+                Equation = (EEquation)jNode_["equation"].AsInt;
             }
 
-            public float Get() { return 0; }
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return Equation.Compute(Subject.GetContainer(triggerInfo_).UnitStats[Type].Value);
+            }
 
             public EReferenceType ReferenceType() { return EReferenceType.UnitStat; }
 
@@ -92,6 +84,7 @@ namespace Assets.Scripts.Model.Skill
                 JSONObject jObject = new JSONObject();
                 jObject["subject"] = (int)Subject;
                 jObject["type"] = (int)Type;
+                jObject["equation"] = (int)Equation;
                 return jObject;
             }
         }
@@ -100,14 +93,22 @@ namespace Assets.Scripts.Model.Skill
         {
             Numeric NumericA;
             Numeric NumericB;
+            EEquation Equation;
 
             public ReferencRandomRange(JSONNode jNode_)
             {
                 NumericA = new Numeric(jNode_["numericA"]);
                 NumericB = new Numeric(jNode_["numericB"]);
+                Equation = (EEquation)jNode_["equation"].AsInt;
             }
 
-            public float Get() { return 0; }
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                double a = NumericA.Get(triggerInfo_);
+                double b = NumericB.Get(triggerInfo_);
+                double rnd = (double) new Random().NextDouble();
+                return Equation.Compute(a + (b - a) * rnd);
+            }
 
             public EReferenceType ReferenceType() { return EReferenceType.RandomRange; }
 
@@ -116,6 +117,7 @@ namespace Assets.Scripts.Model.Skill
                 JSONObject jObject = new JSONObject();
                 jObject["numericA"] = NumericA;
                 jObject["numericA"] = NumericB;
+                jObject["equation"] = (int)Equation;
                 return jObject;
             }
         }
@@ -124,14 +126,19 @@ namespace Assets.Scripts.Model.Skill
         {
             ESubject Subject;
             uint Modifier;
+            EEquation Equation;
 
             public ReferencModifier(JSONNode jNode_)
             {
                 Subject = (ESubject)jNode_["subject"].AsInt;
                 Modifier = (uint)jNode_["modifier"].AsInt;
+                Equation = (EEquation)jNode_["equation"].AsInt;
             }
 
-            public float Get() { return 0; }
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return Equation.Compute(1.0);
+            }
 
             public EReferenceType ReferenceType() { return EReferenceType.Modifier; }
 
@@ -140,42 +147,45 @@ namespace Assets.Scripts.Model.Skill
                 JSONObject jObject = new JSONObject();
                 jObject["subject"] = (int)Subject;
                 jObject["modifier"] = (int)Modifier;
+                jObject["equation"] = (int)Equation;
                 return jObject;
             }
         }
 
         public class ReferencInput : IReference
         {
-            public ReferencInput()
-            {
-
-            }
+            EEquation Equation;
 
             public ReferencInput(JSONNode jNode_)
             {
-
+                Equation = (EEquation)jNode_["equation"].AsInt;
             }
 
-            public float Get() { return 0; }
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return Equation.Compute(triggerInfo_.Input);
+            }
 
             public EReferenceType ReferenceType() { return EReferenceType.Input; }
 
             public JSONNode ToJson()
             {
-                return 1;
+                JSONObject jObject = new JSONObject();
+                jObject["equation"] = (int)Equation;
+                return jObject;
             }
         }
 
-        float Base;
+        double Base;
         IReference Reference;
 
-        Numeric(float base_)
+        Numeric(double base_)
         {
             Base = base_;
             Reference = null;
         }
 
-        Numeric(float base_, IReference reference_)
+        Numeric(double base_, IReference reference_)
         {
             Base = base_;
             Reference = reference_;
@@ -224,6 +234,11 @@ namespace Assets.Scripts.Model.Skill
                 jObject["reference"] = numeric_.Reference.ToJson();
                 return jObject;
             }
+        }
+
+        public double Get(TriggerInfo triggerInfo_)
+        {
+            return 0;
         }
     }
 }

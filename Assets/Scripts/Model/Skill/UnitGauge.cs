@@ -24,5 +24,31 @@ namespace Assets.Scripts.Model.Skill
             MissingRatio,
             MissingPercentage
         }
+
+        private float Value = 0;
+        private float Additive = 0;
+        private float AdditiveMultiplier = 0;
+        private float Multiplier = 1;
+
+        public float Get(EExtract extract_)
+        {
+            switch (extract_)
+            {
+                case EExtract.Current: return Value;
+                case EExtract.Ratio: return Value / GetMax();
+                case EExtract.Percentage: return Value / GetMax() * 100.0f;
+                case EExtract.Max: return GetMax();
+                case EExtract.Missing: return GetMax() - Value;
+                case EExtract.MissingRatio: return 1.0f - Value / GetMax();
+                case EExtract.MissingPercentage: return (1.0f - Value / GetMax()) * 100.0f;
+            }
+
+            return 0.0f;
+        }
+
+        float GetMax()
+        {
+            return Additive * (1 + AdditiveMultiplier) * Multiplier;
+        }
     }
 }

@@ -29,13 +29,8 @@ namespace Assets.Scripts.Model.Skill
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
         private float Zeroes = 0;
-        private float Computed = 0;
-
-        public float Get()
-        {
-            return Computed;
-        }
-
+        public float Value { get; private set; } = 0;
+        
         public void Input(float value_, EInputType type_)
         {
             switch (type_)
@@ -54,7 +49,7 @@ namespace Assets.Scripts.Model.Skill
                     break;
             }
 
-            Computed = Additive * (1.0f + AdditiveMultiplier) * Multiplier * (Zeroes > 0 ? 0 : 1);
+            Value = Additive * (1.0f + AdditiveMultiplier) * Multiplier * (Zeroes > 0 ? 0 : 1);
         }
     }
 }

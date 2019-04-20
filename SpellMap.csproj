@@ -1165,6 +1165,9 @@
     <Compile Include="Assets\Scripts\Model\Modifier\NumericValue.cs" />
     <Compile Include="Assets\Scripts\Model\Modifier\Trigger.cs" />
     <Compile Include="Assets\Scripts\Model\Modifier\Unit.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Container.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Equation.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\TriggerInfo.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\UnitGauge.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\UnitStat.cs" />

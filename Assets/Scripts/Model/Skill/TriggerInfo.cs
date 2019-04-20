@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Model.Skill
 {
-    class TriggerInfo
+    public class TriggerInfo
     {
+        public Container Target;
+        public Container Source;
+        public Container Trigger;
+        public float Dt;
+        public float Input;
     }
 }
