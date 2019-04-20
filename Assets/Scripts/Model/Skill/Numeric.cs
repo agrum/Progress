@@ -29,41 +29,179 @@ namespace Assets.Scripts.Model.Skill
             MissingPercentage
         }
 
+        public enum EReferenceType
+        {
+            UnitGauge,
+            UnitStat,
+            RandomRange,
+            Modifier,
+            Input,
+        }
+
+        public interface IReference
+        {
+            float Get();
+            EReferenceType ReferenceType();
+            JSONNode ToJson();
+        }
+
+        public class ReferenceUnitGauge : IReference
+        {
+            ESubject Subject;
+            UnitGauge.EType Type;
+            UnitGauge.EExtract Extract;
+
+            public ReferenceUnitGauge(JSONNode jNode_)
+            {
+                Subject = (ESubject)jNode_["subject"].AsInt;
+                Type = (UnitGauge.EType)jNode_["type"].AsInt;
+                Extract = (UnitGauge.EExtract)jNode_["extract"].AsInt;
+            }
+
+            public float Get() { return 0; }
+
+            public EReferenceType ReferenceType() { return EReferenceType.UnitGauge; }
+
+            public JSONNode ToJson()
+            {
+                JSONObject jObject = new JSONObject();
+                jObject["subject"] = (int)Subject;
+                jObject["type"] = (int)Type;
+                jObject["extract"] = (int)Extract;
+                return jObject;
+            }
+        }
+
+        public class ReferenceUnitStat : IReference
+        {
+            ESubject Subject;
+            UnitStat.EType Type;
+
+            public ReferenceUnitStat(JSONNode jNode_)
+            {
+                Subject = (ESubject)jNode_["subject"].AsInt;
+                Type = (UnitStat.EType)jNode_["type"].AsInt;
+            }
+
+            public float Get() { return 0; }
+
+            public EReferenceType ReferenceType() { return EReferenceType.UnitStat; }
+
+            public JSONNode ToJson()
+            {
+                JSONObject jObject = new JSONObject();
+                jObject["subject"] = (int)Subject;
+                jObject["type"] = (int)Type;
+                return jObject;
+            }
+        }
+
+        public class ReferencRandomRange : IReference
+        {
+            Numeric NumericA;
+            Numeric NumericB;
+
+            public ReferencRandomRange(JSONNode jNode_)
+            {
+                NumericA = new Numeric(jNode_["numericA"]);
+                NumericB = new Numeric(jNode_["numericB"]);
+            }
+
+            public float Get() { return 0; }
+
+            public EReferenceType ReferenceType() { return EReferenceType.RandomRange; }
+
+            public JSONNode ToJson()
+            {
+                JSONObject jObject = new JSONObject();
+                jObject["numericA"] = NumericA;
+                jObject["numericA"] = NumericB;
+                return jObject;
+            }
+        }
+
+        public class ReferencModifier : IReference
+        {
+            ESubject Subject;
+            uint Modifier;
+
+            public ReferencModifier(JSONNode jNode_)
+            {
+                Subject = (ESubject)jNode_["subject"].AsInt;
+                Modifier = (uint)jNode_["modifier"].AsInt;
+            }
+
+            public float Get() { return 0; }
+
+            public EReferenceType ReferenceType() { return EReferenceType.Modifier; }
+
+            public JSONNode ToJson()
+            {
+                JSONObject jObject = new JSONObject();
+                jObject["subject"] = (int)Subject;
+                jObject["modifier"] = (int)Modifier;
+                return jObject;
+            }
+        }
+
+        public class ReferencInput : IReference
+        {
+            public ReferencInput()
+            {
+
+            }
+
+            public ReferencInput(JSONNode jNode_)
+            {
+
+            }
+
+            public float Get() { return 0; }
+
+            public EReferenceType ReferenceType() { return EReferenceType.Input; }
+
+            public JSONNode ToJson()
+            {
+                return 1;
+            }
+        }
+
         float Base;
-        bool HasReference;
-        ESubject Subject;
-        EExtract Extract;
-        EUnitAttribute UnitAttribute;
+        IReference Reference;
 
         Numeric(float base_)
         {
             Base = base_;
-            HasReference = false;
+            Reference = null;
         }
 
-        Numeric(float base_, ESubject subject_, EExtract extract_, EUnitAttribute unitAttribute_)
+        Numeric(float base_, IReference reference_)
         {
             Base = base_;
-            HasReference = true;
-            Subject = subject_;
-            Extract = extract_;
-            UnitAttribute = unitAttribute_;
+            Reference = reference_;
         }
 
         Numeric(JSONNode jNode_)
         {
             if (jNode_.IsNumber)
             {
-                Base = jNode_["base"];
-                HasReference = false;
+                Base = jNode_;
+                Reference = null;
             }
             else
             {
                 Base = jNode_["base"];
-                HasReference = true;
-                Subject = (ESubject) jNode_["subject"].AsInt;
-                Extract = (EExtract) jNode_["extract"].AsInt;
-                UnitAttribute = (EUnitAttribute) jNode_["unitAttribute"].AsInt;
+                if (!jNode_["referenceType"].IsNull)
+                {
+                    switch ((EReferenceType)jNode_["referenceType"].AsInt)
+                    {
+                        case EReferenceType.Input: Reference = new ReferencInput(jNode_["reference"]); break;
+                        case EReferenceType.Modifier: Reference = new ReferencModifier(jNode_["reference"]); break;
+                        case EReferenceType.RandomRange: Reference = new ReferencRandomRange(jNode_["reference"]); break;
+                        case EReferenceType.UnitGauge: Reference = new ReferenceUnitGauge(jNode_["reference"]); break;
+                        case EReferenceType.UnitStat: Reference = new ReferenceUnitStat(jNode_["reference"]); break;
+                    }
+                }
             }
         }
 
@@ -74,7 +212,7 @@ namespace Assets.Scripts.Model.Skill
 
         public static implicit operator JSONNode(Numeric numeric_)
         {
-            if (!numeric_.HasReference)
+            if (numeric_.Reference == null)
             {
                 return numeric_.Base;
             }
@@ -82,9 +220,8 @@ namespace Assets.Scripts.Model.Skill
             { 
                 JSONObject jObject = new JSONObject();
                 jObject["base"] = numeric_.Base;
-                jObject["subject"] = (int) numeric_.Subject;
-                jObject["extract"] = (int)numeric_.Extract;
-                jObject["unitAttribute"] = (int) numeric_.UnitAttribute;
+                jObject["referenceType"] = (int) numeric_.Reference.ReferenceType();
+                jObject["reference"] = numeric_.Reference.ToJson();
                 return jObject;
             }
         }
