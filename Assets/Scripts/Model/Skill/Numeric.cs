@@ -43,7 +43,7 @@ namespace Assets.Scripts.Model.Skill
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                return Equation.Compute(Subject.GetContainer(triggerInfo_).UnitGauges[Type].Get(Extract));
+                return Equation.Compute(Subject.GetContainer(triggerInfo_).GetUnitGauge(Type).Get(Extract));
             }
 
             public EReferenceType ReferenceType() { return EReferenceType.UnitGauge; }
@@ -74,7 +74,7 @@ namespace Assets.Scripts.Model.Skill
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                return Equation.Compute(Subject.GetContainer(triggerInfo_).UnitStats[Type].Value);
+                return Equation.Compute(Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value);
             }
 
             public EReferenceType ReferenceType() { return EReferenceType.UnitStat; }

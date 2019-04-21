@@ -25,10 +25,16 @@ namespace Assets.Scripts.Model.Skill
             MissingPercentage
         }
 
+        public EType Type { get; private set; }
         private float Value = 0;
         private float Additive = 0;
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
+
+        public UnitGauge(EType type_)
+        {
+            Type = type_;
+        }
 
         public float Get(EExtract extract_)
         {

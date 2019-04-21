@@ -25,12 +25,18 @@ namespace Assets.Scripts.Model.Skill
             Multiplier,
         }
 
+        public EType Type { get; private set; }
         private float Additive = 0;
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
         private float Zeroes = 0;
         public float Value { get; private set; } = 0;
-        
+
+        public UnitStat(EType type_)
+        {
+            Type = type_;
+        }
+
         public void Input(float value_, EInputType type_)
         {
             switch (type_)
