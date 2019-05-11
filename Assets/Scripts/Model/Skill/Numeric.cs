@@ -150,6 +150,11 @@ namespace Assets.Scripts.Model.Skill
             return new List<string>(literal_.Split(' '));
         }
 
+        public static implicit operator Numeric(JSONNode jNode_)
+        {
+            return jNode_.ToString();
+        }
+
         public static implicit operator JSONNode(Numeric numeric_)
         {
             return numeric_.literal;

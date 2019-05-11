@@ -7,7 +7,7 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill
 {
-    public class TriggerCondition
+    public class Condition
     {
         public Numeric Left { get; private set; }
         public Numeric Right { get; private set; }
@@ -22,26 +22,29 @@ namespace Assets.Scripts.Model.Skill
             GreaterThan
         }
 
-        public static implicit operator TriggerCondition(JSONArray jArray_)
+        public static implicit operator Condition(JSONArray jArray_)
         {
-            TriggerCondition triggerCondition = new TriggerCondition();
+            Condition triggerCondition = new Condition();
             if (jArray_.Count != 3)
             {
                 throw new Exception();
             }
             triggerCondition.Left = jArray_[0];
-            triggerCondition.Rule = (ERule) jArray_[1].AsInt;
-            triggerCondition.Left = jArray_[2];
+            ERule rule;
+            if (!Enum.TryParse(jArray_[1].ToString(), true, out rule))
+                throw new NotSupportedException();
+            triggerCondition.Rule = rule;
+            triggerCondition.Right = jArray_[2];
 
             return triggerCondition;
         }
 
-        public static implicit operator JSONArray(TriggerCondition triggerCondition_)
+        public static implicit operator JSONArray(Condition triggerCondition_)
         {
             JSONArray jArray = new JSONArray();
 
             jArray.Add(triggerCondition_.Left);
-            jArray.Add((int) triggerCondition_.Rule);
+            jArray.Add(triggerCondition_.Rule.ToString("G"));
             jArray.Add(triggerCondition_.Right);
 
             return jArray;

@@ -1166,6 +1166,7 @@
     <Compile Include="Assets\Scripts\Model\Modifier\Trigger.cs" />
     <Compile Include="Assets\Scripts\Model\Modifier\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Container.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\NumericBuilder.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
@@ -1193,9 +1194,9 @@
     <Compile Include="Assets\Scripts\Model\Skill\SkillMetric.cs" />
     <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\ModfiierEffect.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Condition.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Trigger.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\TriggerCondition.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\TriggerType.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
     <Compile Include="Assets\Scripts\Model\Team\Team.cs" />
