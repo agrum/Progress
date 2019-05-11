@@ -21,6 +21,7 @@ namespace Assets.Scripts.Model.Skill
             NoRefresh,
             IndependentStack,
             FullRefresh,
+            Cumulative,
             Permanent,
         }
 
@@ -91,6 +92,7 @@ namespace Assets.Scripts.Model.Skill
                     Stacks.Add(new Tuple<double, uint>(Duration + Lifetime, delta_));
                     break;
                 case ERefreshPolicy.FullRefresh:
+                case ERefreshPolicy.Cumulative:
                     if (Amount == 0)
                         Stacks.Add(new Tuple<double, uint>(Duration + Lifetime, delta_));
                     else
@@ -108,6 +110,15 @@ namespace Assets.Scripts.Model.Skill
                 return;
             }
             
+            if (RefreshPolicy == ERefreshPolicy.Cumulative)
+            {
+                var amount = Amount - delta_;
+                Amount = 0;
+                Stacks.Clear();
+                Add(amount);
+                return;
+            }
+
             Amount -= delta_;
             while (delta_ > 0)
             {
@@ -127,9 +138,24 @@ namespace Assets.Scripts.Model.Skill
 
         public void Update(double dt_)
         {
+            if (RefreshPolicy == ERefreshPolicy.Instant || RefreshPolicy == ERefreshPolicy.Permanent)
+                    return;
+
             Lifetime += dt_;
             if (Amount == 0)
                 return;
+
+            if (RefreshPolicy == ERefreshPolicy.Cumulative && Amount > 0)
+            {
+                uint amount = (uint) Convert.ToInt32(0.49 + (Stacks[0].Item1 - Lifetime) / Duration);
+                if (amount != Stacks[0].Item2)
+                { 
+                    Amount = 0;
+                    Stacks.Clear();
+                    Add(amount);
+                }
+                return;
+            }
 
             while (Stacks.Count > 0 && Stacks[0].Item1 <= Lifetime)
                 Stacks.RemoveAt(0);
