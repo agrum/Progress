@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
-using Assets.Scripts.Model.UnitAttribute;
 
 namespace Assets.Scripts.Model.Skill
-{
+{ 
     public class Numeric
     {
+        private string literal;
+
         public enum EReferenceType
         {
+            Value,
             UnitGauge,
             UnitStat,
             RandomRange,
@@ -22,8 +24,21 @@ namespace Assets.Scripts.Model.Skill
         public interface IReference
         {
             double Get(TriggerInfo triggerInfo_);
-            EReferenceType ReferenceType();
-            JSONNode ToJson();
+        }
+
+        public class ReferenceValue : IReference
+        {
+            private double value;
+
+            public ReferenceValue(List<string> fields)
+            {
+                value = Convert.ToDouble(fields[1]);
+            }
+
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return value;
+            }
         }
 
         public class ReferenceUnitGauge : IReference
@@ -31,31 +46,17 @@ namespace Assets.Scripts.Model.Skill
             ESubject Subject;
             UnitGauge.EType Type;
             UnitGauge.EExtract Extract;
-            EEquation Equation;
 
-            public ReferenceUnitGauge(JSONNode jNode_)
+            public ReferenceUnitGauge(List<string> fields)
             {
-                Subject = (ESubject)jNode_["subject"].AsInt;
-                Type = (UnitGauge.EType)jNode_["type"].AsInt;
-                Extract = (UnitGauge.EExtract)jNode_["extract"].AsInt;
-                Equation = (EEquation)jNode_["equation"].AsInt;
+                Enum.TryParse(fields[1], true, out Subject);
+                Enum.TryParse(fields[2], true, out Type);
+                Enum.TryParse(fields[3], true, out Extract);
             }
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                return Equation.Compute(Subject.GetContainer(triggerInfo_).GetUnitGauge(Type).Get(Extract));
-            }
-
-            public EReferenceType ReferenceType() { return EReferenceType.UnitGauge; }
-
-            public JSONNode ToJson()
-            {
-                JSONObject jObject = new JSONObject();
-                jObject["subject"] = (int)Subject;
-                jObject["type"] = (int)Type;
-                jObject["extract"] = (int)Extract;
-                jObject["equation"] = (int)Equation;
-                return jObject;
+                return Subject.GetContainer(triggerInfo_).GetUnitGauge(Type).Get(Extract);
             }
         }
 
@@ -63,62 +64,34 @@ namespace Assets.Scripts.Model.Skill
         {
             ESubject Subject;
             UnitStat.EType Type;
-            EEquation Equation;
 
-            public ReferenceUnitStat(JSONNode jNode_)
+            public ReferenceUnitStat(List<string> fields)
             {
-                Subject = (ESubject)jNode_["subject"].AsInt;
-                Type = (UnitStat.EType)jNode_["type"].AsInt;
-                Equation = (EEquation)jNode_["equation"].AsInt;
+                Enum.TryParse(fields[1], true, out Subject);
+                Enum.TryParse(fields[2], true, out Type);
             }
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                return Equation.Compute(Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value);
-            }
-
-            public EReferenceType ReferenceType() { return EReferenceType.UnitStat; }
-
-            public JSONNode ToJson()
-            {
-                JSONObject jObject = new JSONObject();
-                jObject["subject"] = (int)Subject;
-                jObject["type"] = (int)Type;
-                jObject["equation"] = (int)Equation;
-                return jObject;
+                return Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value;
             }
         }
 
         public class ReferencRandomRange : IReference
         {
-            Numeric NumericA;
-            Numeric NumericB;
-            EEquation Equation;
+            double A;
+            double B;
 
-            public ReferencRandomRange(JSONNode jNode_)
+            public ReferencRandomRange(List<string> fields)
             {
-                NumericA = new Numeric(jNode_["numericA"]);
-                NumericB = new Numeric(jNode_["numericB"]);
-                Equation = (EEquation)jNode_["equation"].AsInt;
+                A = Convert.ToDouble(fields[2]);
+                B = Convert.ToDouble(fields[3]);
             }
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                double a = NumericA.Get(triggerInfo_);
-                double b = NumericB.Get(triggerInfo_);
-                double rnd = (double) new Random().NextDouble();
-                return Equation.Compute(a + (b - a) * rnd);
-            }
-
-            public EReferenceType ReferenceType() { return EReferenceType.RandomRange; }
-
-            public JSONNode ToJson()
-            {
-                JSONObject jObject = new JSONObject();
-                jObject["numericA"] = NumericA;
-                jObject["numericA"] = NumericB;
-                jObject["equation"] = (int)Equation;
-                return jObject;
+                double rnd = (double)new Random().NextDouble();
+                return A + (B - A) * rnd;
             }
         }
 
@@ -126,119 +99,170 @@ namespace Assets.Scripts.Model.Skill
         {
             ESubject Subject;
             uint Modifier;
-            EEquation Equation;
+            Modifier.EExtract Extract;
 
-            public ReferencModifier(JSONNode jNode_)
+            public ReferencModifier(List<string> fields)
             {
-                Subject = (ESubject)jNode_["subject"].AsInt;
-                Modifier = (uint)jNode_["modifier"].AsInt;
-                Equation = (EEquation)jNode_["equation"].AsInt;
+                Enum.TryParse(fields[1], true, out Subject);
+                Modifier = Convert.ToUInt32(fields[3]);
+                Enum.TryParse(fields[3], true, out Extract);
             }
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                return Equation.Compute(1.0);
-            }
-
-            public EReferenceType ReferenceType() { return EReferenceType.Modifier; }
-
-            public JSONNode ToJson()
-            {
-                JSONObject jObject = new JSONObject();
-                jObject["subject"] = (int)Subject;
-                jObject["modifier"] = (int)Modifier;
-                jObject["equation"] = (int)Equation;
-                return jObject;
+                return 1.0;
             }
         }
 
         public class ReferencInput : IReference
         {
-            EEquation Equation;
-
-            public ReferencInput(JSONNode jNode_)
+            public ReferencInput(List<string> fields)
             {
-                Equation = (EEquation)jNode_["equation"].AsInt;
+
             }
 
             public double Get(TriggerInfo triggerInfo_)
             {
-                return Equation.Compute(triggerInfo_.Input);
-            }
-
-            public EReferenceType ReferenceType() { return EReferenceType.Input; }
-
-            public JSONNode ToJson()
-            {
-                JSONObject jObject = new JSONObject();
-                jObject["equation"] = (int)Equation;
-                return jObject;
+                return triggerInfo_.Input;
             }
         }
 
-        double Base;
-        IReference Reference;
-
-        Numeric(double base_)
+        public static implicit operator Numeric(List<string> fields_)
         {
-            Base = base_;
-            Reference = null;
-        }
+            if (fields_.Count() % 2 != 1)
+                throw new InvalidOperationException();
 
-        Numeric(double base_, IReference reference_)
-        {
-            Base = base_;
-            Reference = reference_;
-        }
+            while (fields_.First() == "(" && fields_.Last() == ")")
+                fields_ = fields_.GetRange(1, fields_.Count() - 2);
 
-        Numeric(JSONNode jNode_)
-        {
-            if (jNode_.IsNumber)
-            {
-                Base = jNode_;
-                Reference = null;
-            }
+            Numeric numeric;
+            if (fields_.Count() == 1)
+                numeric = new NumericValue(fields_.First());
             else
-            {
-                Base = jNode_["base"];
-                if (!jNode_["referenceType"].IsNull)
-                {
-                    switch ((EReferenceType)jNode_["referenceType"].AsInt)
-                    {
-                        case EReferenceType.Input: Reference = new ReferencInput(jNode_["reference"]); break;
-                        case EReferenceType.Modifier: Reference = new ReferencModifier(jNode_["reference"]); break;
-                        case EReferenceType.RandomRange: Reference = new ReferencRandomRange(jNode_["reference"]); break;
-                        case EReferenceType.UnitGauge: Reference = new ReferenceUnitGauge(jNode_["reference"]); break;
-                        case EReferenceType.UnitStat: Reference = new ReferenceUnitStat(jNode_["reference"]); break;
-                    }
-                }
-            }
+                numeric = new NumericEquation(fields_);
+            numeric.literal = string.Join(" ", fields_);
+
+            return numeric;
         }
 
-        public static implicit operator Numeric(JSONNode jNode_)
+        public static implicit operator Numeric(string literal_)
         {
-            return jNode_;
+            return new List<string>(literal_.Split(' '));
         }
 
         public static implicit operator JSONNode(Numeric numeric_)
         {
-            if (numeric_.Reference == null)
+            return numeric_.literal;
+        }
+
+        public virtual double Get(TriggerInfo triggerInfo_) { return 0.0; }
+    }
+
+    public class NumericValue : Numeric
+    {
+        IReference reference;
+
+        public NumericValue(string referenceString_)
+        {
+            var fields = new List<string>(referenceString_.Split('|'));
+            EReferenceType referenceType;
+            if (!Enum.TryParse(fields[0], true, out referenceType))
             {
-                return numeric_.Base;
+                throw new InvalidOperationException();
             }
-            else
-            { 
-                JSONObject jObject = new JSONObject();
-                jObject["base"] = numeric_.Base;
-                jObject["referenceType"] = (int) numeric_.Reference.ReferenceType();
-                jObject["reference"] = numeric_.Reference.ToJson();
-                return jObject;
+
+            switch (referenceType)
+            {
+                case EReferenceType.Value:
+                    reference = new ReferenceValue(fields);
+                    break;
+                case EReferenceType.UnitGauge:
+                    reference = new ReferenceUnitGauge(fields);
+                    break;
+                case EReferenceType.UnitStat:
+                    reference = new ReferenceUnitStat(fields);
+                    break;
+                case EReferenceType.RandomRange:
+                    reference = new ReferencRandomRange(fields);
+                    break;
+                case EReferenceType.Modifier:
+                    reference = new ReferencModifier(fields);
+                    break;
+                case EReferenceType.Input:
+                    reference = new ReferencInput(fields);
+                    break;
             }
         }
 
-        public double Get(TriggerInfo triggerInfo_)
+        override public double Get(TriggerInfo triggerInfo_)
         {
-            return 0;
+            return reference.Get(triggerInfo_);
+        }
+    }
+
+    public class NumericEquation : Numeric
+    {
+        enum EOperator
+        {
+            Add,
+            Sub,
+            Mul,
+            Div,
+        }
+
+        private EOperator ope;
+        private Numeric left;
+        private Numeric right;
+
+        public NumericEquation(List<string> fields)
+        {
+            bool strongOperatorFound = false;
+            int operatorPosition = fields.Count();
+            int parenthesisScopeCount = 0;
+
+            for (int i = fields.Count() - 1; i >= 0; --i)
+            {
+                if (fields[i] == ")")
+                    ++parenthesisScopeCount;
+                else if (fields[i] == "(")
+                    --parenthesisScopeCount;
+                else if (parenthesisScopeCount == 0)
+                {
+                    if (fields[i] == "+" || fields[i] == "-")
+                    {
+                        operatorPosition = i;
+                        break;
+                    }
+                    if (!strongOperatorFound && (fields[i] == "*" || fields[i] == "/"))
+                    {
+                        strongOperatorFound = true;
+                        operatorPosition = i;
+                    }
+                }
+            }
+            left = fields.GetRange(0, operatorPosition);
+            right = fields.GetRange(operatorPosition + 1, fields.Count() - 1 - operatorPosition);
+            if (fields[operatorPosition] == "+")
+                ope = EOperator.Add;
+            else if (fields[operatorPosition] == "-")
+                ope = EOperator.Sub;
+            else if (fields[operatorPosition] == "*")
+                ope = EOperator.Mul;
+            else if (fields[operatorPosition] == "/")
+                ope = EOperator.Div;
+        }
+
+        override public double Get(TriggerInfo triggerInfo_)
+        {
+            switch (ope)
+            {
+                case EOperator.Add: return left.Get(triggerInfo_) + right.Get(triggerInfo_);
+                case EOperator.Sub: return left.Get(triggerInfo_) - right.Get(triggerInfo_);
+                case EOperator.Mul: return left.Get(triggerInfo_) * right.Get(triggerInfo_);
+                case EOperator.Div: return left.Get(triggerInfo_) / right.Get(triggerInfo_);
+            }
+
+            throw new InvalidOperationException();
         }
     }
 }

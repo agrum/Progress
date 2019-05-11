@@ -8,5 +8,10 @@ namespace Assets.Scripts.Model.Skill
 {
     public class Modifier
     {
+        public enum EExtract
+        {
+            Stack,
+            Duration,
+        }
     }
 }

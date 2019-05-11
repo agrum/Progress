@@ -1166,8 +1166,9 @@
     <Compile Include="Assets\Scripts\Model\Modifier\Trigger.cs" />
     <Compile Include="Assets\Scripts\Model\Modifier\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Container.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Equation.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\NumericBuilder.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\StackBehaviour.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\TriggerInfo.cs" />
@@ -1187,7 +1188,6 @@
     <Compile Include="Assets\Scripts\Model\Skill\Ability.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Class.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Kit.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\EffectUnitAttribute.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\SkillMetric.cs" />
