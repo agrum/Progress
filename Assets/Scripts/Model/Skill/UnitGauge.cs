@@ -14,6 +14,13 @@ namespace Assets.Scripts.Model.Skill
             Energy,
         }
 
+        public enum EInputType
+        {
+            Additive,
+            AdditiveMultiplier,
+            Multiplier,
+        }
+
         public enum EExtract
         {
             Current,

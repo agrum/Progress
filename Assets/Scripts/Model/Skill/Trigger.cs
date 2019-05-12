@@ -32,16 +32,21 @@ namespace Assets.Scripts.Model.Skill
             Custom
         }
 
-        public EType Type { get; protected set; }
+        public abstract EType Type();
 
         protected abstract JSONObject ToJson();
 
         public static implicit operator Trigger(JSONNode jNode_)
         {
-            switch ((EType)jNode_["type"].AsInt)
+            EType type;
+            if (!Enum.TryParse(jNode_["type"], true, out type))
             {
-                case EType.Begin: return new TriggerBegin(jNode_);
-                case EType.End: return new TriggerEnd(jNode_);
+                throw new InvalidOperationException();
+            }
+            switch (type)
+            {
+                case EType.Begin: return new TriggerBegin();
+                case EType.End: return new TriggerEnd();
                 case EType.EnteredRadius: return new TriggerEnteredRadius(jNode_);
                 case EType.HitDealt: return new TriggerOtherAttributeImpacted(jNode_);
                 case EType.HitReceived: return new TriggerSelfAttributeImpacted(jNode_);
@@ -62,16 +67,20 @@ namespace Assets.Scripts.Model.Skill
         public static implicit operator JSONNode(Trigger triggerType_)
         {
             JSONObject jObject = triggerType_.ToJson();
-            jObject["type"] = (int)triggerType_.Type;
+            jObject["type"] = triggerType_.Type().ToString("G");
             return jObject;
         }
     }
 
     public class TriggerInputSkillDown : Trigger
     {
-        public TriggerInputSkillDown(JSONNode jNode_)
+        public TriggerInputSkillDown()
         {
-            Type = EType.InputSkillDown;
+        }
+
+        public override EType Type()
+        {
+            return EType.InputSkillDown;
         }
 
         protected override JSONObject ToJson()
@@ -83,9 +92,13 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerInputSkillUp : Trigger
     {
-        public TriggerInputSkillUp(JSONNode jNode_)
+        public TriggerInputSkillUp()
         {
-            Type = EType.InputSkillUp;
+        }
+
+        public override EType Type()
+        {
+            return EType.InputSkillUp;
         }
 
         protected override JSONObject ToJson()
@@ -97,12 +110,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerInputMove : Trigger
     {
-        public double Distance { get; private set; }
+        public SkillMetricReference Distance { get; private set; }
+
+        public TriggerInputMove(SkillMetricReference reference_)
+        {
+            Distance = reference_;
+        }
 
         public TriggerInputMove(JSONNode jNode_)
         {
-            Type = EType.InputMove;
-            Distance = jNode_["distance"].AsDouble;
+            Distance = jNode_["distance"];
+        }
+
+        public override EType Type()
+        {
+            return EType.InputMove;
         }
 
         protected override JSONObject ToJson()
@@ -115,9 +137,13 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerBegin : Trigger
     {
-        public TriggerBegin(JSONNode jNode_)
+        public TriggerBegin()
         {
-            Type = EType.Begin;
+        }
+
+        public override EType Type()
+        {
+            return EType.Begin;
         }
 
         protected override JSONObject ToJson()
@@ -129,12 +155,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerTick : Trigger
     {
-        public double Period { get; private set; }
+        public SkillMetricReference Period { get; private set; }
+
+        public TriggerTick(SkillMetricReference reference_)
+        {
+            Period = reference_;
+        }
 
         public TriggerTick(JSONNode jNode_)
         {
-            Type = EType.Tick;
             Period = jNode_["period"];
+        }
+
+        public override EType Type()
+        {
+            return EType.Tick;
         }
 
         protected override JSONObject ToJson()
@@ -147,9 +182,13 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerEnd : Trigger
     {
-        public TriggerEnd(JSONNode jNode_)
+        public TriggerEnd()
         {
-            Type = EType.End;
+        }
+
+        public override EType Type()
+        {
+            return EType.End;
         }
 
         protected override JSONObject ToJson()
@@ -161,12 +200,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerStackAdded : Trigger
     {
-        public double Threshold { get; private set; }
+        public SkillMetricReference Threshold { get; private set; }
+
+        public TriggerStackAdded(SkillMetricReference reference_)
+        {
+            Threshold = reference_;
+        }
 
         public TriggerStackAdded(JSONNode jNode_)
         {
-            Type = EType.StackAdded;
-            Threshold = jNode_["threshold"].AsDouble;
+            Threshold = jNode_["threshold"];
+        }
+
+        public override EType Type()
+        {
+            return EType.StackAdded;
         }
 
         protected override JSONObject ToJson()
@@ -179,12 +227,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerStackRemoved : Trigger
     {
-        public double Threshold { get; private set; }
+        public SkillMetricReference Threshold { get; private set; }
+
+        public TriggerStackRemoved(SkillMetricReference reference_)
+        {
+            Threshold = reference_;
+        }
 
         public TriggerStackRemoved(JSONNode jNode_)
         {
-            Type = EType.StackRemoved;
-            Threshold = jNode_["threshold"].AsDouble;
+            Threshold = jNode_["threshold"];
+        }
+
+        public override EType Type()
+        {
+            return EType.StackRemoved;
         }
 
         protected override JSONObject ToJson()
@@ -197,12 +254,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerStackChanged : Trigger
     {
-        public double Threshold { get; private set; }
+        public SkillMetricReference Threshold { get; private set; }
+
+        public TriggerStackChanged(SkillMetricReference reference_)
+        {
+            Threshold = reference_;
+        }
 
         public TriggerStackChanged(JSONNode jNode_)
         {
-            Type = EType.StackChanged;
-            Threshold = jNode_["threshold"].AsDouble;
+            Threshold = jNode_["threshold"];
+        }
+
+        public override EType Type()
+        {
+            return EType.StackChanged;
         }
 
         protected override JSONObject ToJson()
@@ -215,12 +281,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerUnitCreated : Trigger
     {
-        public String Id { get; private set; }
+        public string Id { get; private set; }
+
+        public TriggerUnitCreated(string id_)
+        {
+            Id = id_;
+        }
 
         public TriggerUnitCreated(JSONNode jNode_)
         {
-            Type = EType.UnitCreated;
             Id = jNode_["id"];
+        }
+
+        public override EType Type()
+        {
+            return EType.UnitCreated;
         }
 
         protected override JSONObject ToJson()
@@ -233,12 +308,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerUnitDestroyed : Trigger
     {
-        public String Id { get; private set; }
+        public string Id { get; private set; }
+
+        public TriggerUnitDestroyed(string id_)
+        {
+            Id = id_;
+        }
 
         public TriggerUnitDestroyed(JSONNode jNode_)
         {
-            Type = EType.UnitDestroyed;
             Id = jNode_["id"];
+        }
+
+        public override EType Type()
+        {
+            return EType.UnitDestroyed;
         }
 
         protected override JSONObject ToJson()
@@ -251,12 +335,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerModifierApplied : Trigger
     {
-        public String Id { get; private set; }
+        public string Id { get; private set; }
+
+        public TriggerModifierApplied(string id_)
+        {
+            Id = id_;
+        }
 
         public TriggerModifierApplied(JSONNode jNode_)
         {
-            Type = EType.ModifierApplied;
             Id = jNode_["id"];
+        }
+
+        public override EType Type()
+        {
+            return EType.ModifierApplied;
         }
 
         protected override JSONObject ToJson()
@@ -269,12 +362,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerModifierRemoved : Trigger
     {
-        public String Id { get; private set; }
+        public string Id { get; private set; }
+
+        public TriggerModifierRemoved(string id_)
+        {
+            Id = id_;
+        }
 
         public TriggerModifierRemoved(JSONNode jNode_)
         {
-            Type = EType.ModifierRemoved;
             Id = jNode_["id"];
+        }
+
+        public override EType Type()
+        {
+            return EType.ModifierRemoved;
         }
 
         protected override JSONObject ToJson()
@@ -287,12 +389,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerEnteredRadius : Trigger
     {
-        public double Radius { get; private set; }
+        public SkillMetricReference Radius { get; private set; }
+
+        public TriggerEnteredRadius(SkillMetricReference reference_)
+        {
+            Radius = reference_;
+        }
 
         public TriggerEnteredRadius(JSONNode jNode_)
         {
-            Type = EType.EnteredRadius;
-            Radius = jNode_["radius"].AsDouble;
+            Radius = jNode_["radius"];
+        }
+
+        public override EType Type()
+        {
+            return EType.EnteredRadius;
         }
 
         protected override JSONObject ToJson()
@@ -305,12 +416,21 @@ namespace Assets.Scripts.Model.Skill
 
     public class TriggerLeftRadius : Trigger
     {
-        public double Radius { get; private set; }
+        public SkillMetricReference Radius { get; private set; }
+
+        public TriggerLeftRadius(SkillMetricReference reference_)
+        {
+            Radius = reference_;
+        }
 
         public TriggerLeftRadius(JSONNode jNode_)
         {
-            Type = EType.LeftRadius;
-            Radius = jNode_["radius"].AsDouble;
+            Radius = jNode_["radius"];
+        }
+
+        public override EType Type()
+        {
+            return EType.LeftRadius;
         }
 
         protected override JSONObject ToJson()
@@ -325,10 +445,19 @@ namespace Assets.Scripts.Model.Skill
     {
         public EUnitAttribute Attribute { get; private set; }
 
+        public TriggerOtherAttributeImpacted(EUnitAttribute attribute_)
+        {
+            Attribute = attribute_;
+        }
+
         public TriggerOtherAttributeImpacted(JSONNode jNode_)
         {
-            Type = EType.HitDealt;
             Attribute = (EUnitAttribute)jNode_["attribute"].AsInt;
+        }
+
+        public override EType Type()
+        {
+            return EType.HitDealt;
         }
 
         protected override JSONObject ToJson()
@@ -343,10 +472,19 @@ namespace Assets.Scripts.Model.Skill
     {
         public EUnitAttribute Attribute { get; private set; }
 
+        public TriggerSelfAttributeImpacted(EUnitAttribute attribute_)
+        {
+            Attribute = attribute_;
+        }
+
         public TriggerSelfAttributeImpacted(JSONNode jNode_)
         {
-            Type = EType.HitDealt;
             Attribute = (EUnitAttribute)jNode_["attribute"].AsInt;
+        }
+
+        public override EType Type()
+        {
+            return EType.HitReceived;
         }
 
         protected override JSONObject ToJson()

@@ -9,8 +9,8 @@ namespace Assets.Scripts.Model.Skill
 {
     public class Condition
     {
-        public Numeric Left { get; private set; }
-        public Numeric Right { get; private set; }
+        public SkillMetricReference Left { get; private set; }
+        public SkillMetricReference Right { get; private set; }
         public ERule Rule { get; private set; }
 
         public enum ERule
@@ -22,21 +22,22 @@ namespace Assets.Scripts.Model.Skill
             GreaterThan
         }
 
+        public Condition(SkillMetricReference left_, ERule rule_, SkillMetricReference right_)
+        {
+            Left = left_;
+            Rule = rule_;
+            Right = right_;
+        }
+
         public static implicit operator Condition(JSONArray jArray_)
         {
-            Condition triggerCondition = new Condition();
             if (jArray_.Count != 3)
-            {
                 throw new Exception();
-            }
-            triggerCondition.Left = jArray_[0];
             ERule rule;
             if (!Enum.TryParse(jArray_[1].ToString(), true, out rule))
                 throw new NotSupportedException();
-            triggerCondition.Rule = rule;
-            triggerCondition.Right = jArray_[2];
 
-            return triggerCondition;
+            return new Condition(jArray_[0], rule, jArray_[2]);
         }
 
         public static implicit operator JSONArray(Condition triggerCondition_)
