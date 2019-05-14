@@ -14,14 +14,13 @@ namespace Assets.Scripts.Model.Skill.Effect
         public SkillMetricReference Reference { get; private set; }
 
         public UnitStat(
-            string id_,
             string name_,
             Skill.UnitStat.EType stat_,
             Skill.UnitStat.EInputType inputType_,
             SkillMetricReference reference_,
-            ESubject from_,
-            ESubject to_)
-            : base(id_, name_, from_, to_)
+            ESubject from_ = ESubject.Trigger,
+            ESubject to_ = ESubject.Target)
+            : base(name_, from_, to_)
         {
             Stat = stat_;
             InputType = inputType_;
@@ -30,16 +29,11 @@ namespace Assets.Scripts.Model.Skill.Effect
 
         public UnitStat(
             JSONNode jNode_)
-            : base(jNode_["nameId"], jNode_["name"], (ESubject)Enum.Parse(typeof(ESubject), jNode_["from"]), (ESubject)Enum.Parse(typeof(ESubject), jNode_["to"]))
+            : base(jNode_["name"], (ESubject)Enum.Parse(typeof(ESubject), jNode_["from"]), (ESubject)Enum.Parse(typeof(ESubject), jNode_["to"]))
         {
             Reference = jNode_["reference"];
             Stat = (Skill.UnitStat.EType)Enum.Parse(typeof(Skill.UnitStat.EType), jNode_["stat"]);
             InputType = (Skill.UnitStat.EInputType)Enum.Parse(typeof(Skill.UnitStat.EInputType), jNode_["input"]);
-        }
-
-        public override EType Type()
-        {
-            return EType.UnitGauge;
         }
 
         public override JSONObject ToJson()

@@ -1167,6 +1167,7 @@
     <Compile Include="Assets\Scripts\Model\Modifier\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Container.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Base.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\UnitGauge.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\NumericBuilder.cs" />

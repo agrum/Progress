@@ -9,30 +9,19 @@ namespace Assets.Scripts.Model.Skill.Effect
 {
     public class Base
     {
-        public enum EType
-        {
-            UnitStat,
-            UnitGauge,
-        }
-
-        public string Id { get; private set; }
+        public int Hash { get; private set; }
         public string Name { get; private set; }
         public ESubject From { get; private set; }
         public ESubject To { get; private set; }
-
-        virtual public EType Type()
-        {
-            return EType.UnitStat;
-        }
 
         virtual public JSONObject ToJson()
         {
             return null;
         }
 
-        protected Base(string id_, string name_, ESubject from_, ESubject to_)
+        protected Base(string name_, ESubject from_, ESubject to_)
         {
-            Id = id_;
+            Hash = (GetType().Name + "." + name_).GetHashCode();
             Name = name_;
             From = from_;
             To = to_;
@@ -40,15 +29,11 @@ namespace Assets.Scripts.Model.Skill.Effect
 
         public static implicit operator Base(JSONNode jNode_)
         {
-            EType type;
-            if (!Enum.TryParse(jNode_["effect"], true, out type))
+            switch (jNode_["type"].ToString())
             {
-                throw new InvalidOperationException();
-            }
-            switch (type)
-            {
-                case EType.UnitStat: return new UnitStat(jNode_);
-                case EType.UnitGauge: return new EffectUnitGauge(jNode_);
+                case "UnitStat": return new UnitStat(jNode_);
+                case "UnitGauge": return new UnitGauge(jNode_);
+                case "Modifier": return new Modifier(jNode_);
                 default: return null;
             }
         }
@@ -56,11 +41,11 @@ namespace Assets.Scripts.Model.Skill.Effect
         public static implicit operator JSONNode(Base object_)
         {
             JSONObject jObject = object_.ToJson();
-            jObject["nameId"] = object_.Id;
+            jObject["type"] = object_.GetType().Name;
+            jObject["hash"] = object_.Hash;
             jObject["name"] = object_.Name;
-            jObject["effect"] = object_.Type().ToString("G");
-            jObject["from"] = object_.Id;
-            jObject["to"] = object_.Name;
+            jObject["from"] = object_.From.ToString("G");
+            jObject["to"] = object_.To.ToString("G");
             return jObject;
         }
     }

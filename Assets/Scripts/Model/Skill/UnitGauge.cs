@@ -38,11 +38,6 @@ namespace Assets.Scripts.Model.Skill
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
 
-        public UnitGauge(EType type_)
-        {
-            Type = type_;
-        }
-
         public float Get(EExtract extract_)
         {
             switch (extract_)
