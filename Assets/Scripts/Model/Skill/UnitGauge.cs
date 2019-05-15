@@ -8,12 +8,6 @@ namespace Assets.Scripts.Model.Skill
 {
     public class UnitGauge
     {
-        public enum EType
-        {
-            Health,
-            Energy,
-        }
-
         public enum EInputType
         {
             Additive,
@@ -32,11 +26,16 @@ namespace Assets.Scripts.Model.Skill
             MissingPercentage
         }
 
-        public EType Type { get; private set; }
+        public NamedHash Type { get; private set; }
         private float Value = 0;
         private float Additive = 0;
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
+
+        public UnitGauge(NamedHash type_)
+        {
+            Type = type_;
+        }
 
         public float Get(EExtract extract_)
         {

@@ -29,7 +29,7 @@ namespace Assets.Scripts.Model.Skill.Effect
 
         public UnitStat(
             JSONNode jNode_)
-            : base(jNode_["name"], (ESubject)Enum.Parse(typeof(ESubject), jNode_["from"]), (ESubject)Enum.Parse(typeof(ESubject), jNode_["to"]))
+            : base(jNode_)
         {
             Reference = jNode_["reference"];
             Stat = (Skill.UnitStat.EType)Enum.Parse(typeof(Skill.UnitStat.EType), jNode_["stat"]);

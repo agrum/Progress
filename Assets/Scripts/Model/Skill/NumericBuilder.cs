@@ -112,22 +112,22 @@ namespace Assets.Scripts.Model.Skill
             return FieldAdded();
         }
 
-        public NumericBuilder Gauge(ESubject subject_, UnitGauge.EType type_, UnitGauge.EExtract extract_)
+        public NumericBuilder Gauge(ESubject subject_, string type_, UnitGauge.EExtract extract_)
         {
             equationString += 
                 " " + Numeric.EReferenceType.UnitGauge.ToString("G") + 
                 "|" + subject_.ToString("G") +
-                "|" + type_.ToString("G") + 
+                "|" + type_ + 
                 "|" + extract_.ToString("G");
             return FieldAdded();
         }
 
-        public NumericBuilder Stat(ESubject subject_, UnitStat.EType type_)
+        public NumericBuilder Stat(ESubject subject_, string type_)
         {
             equationString += 
                 " " + Numeric.EReferenceType.UnitStat.ToString("G") + 
                 "|" + subject_.ToString("G") + 
-                "|" + type_.ToString("G");
+                "|" + type_;
             return FieldAdded();
         }
 

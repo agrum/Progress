@@ -8,16 +8,6 @@ namespace Assets.Scripts.Model.Skill
 {
     public class UnitStat
     {
-        public enum EType
-        {
-            CriticalProbability,
-            Haste,
-            Armor,
-            Speed,
-            HealthRegeneration,
-            StaminaRegeneration,
-        }
-
         public enum EInputType
         {
             Additive,
@@ -25,14 +15,14 @@ namespace Assets.Scripts.Model.Skill
             Multiplier,
         }
 
-        public EType Type { get; private set; }
+        public NamedHash Type { get; private set; }
         private float Additive = 0;
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
         private float Zeroes = 0;
         public float Value { get; private set; } = 0;
 
-        public UnitStat(EType type_)
+        public UnitStat(NamedHash type_)
         {
             Type = type_;
         }

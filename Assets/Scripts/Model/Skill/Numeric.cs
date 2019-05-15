@@ -44,13 +44,15 @@ namespace Assets.Scripts.Model.Skill
         public class ReferenceUnitGauge : IReference
         {
             ESubject Subject;
-            UnitGauge.EType Type;
+            int Type;
+            string TypeString;
             UnitGauge.EExtract Extract;
 
             public ReferenceUnitGauge(List<string> fields)
             {
                 Enum.TryParse(fields[1], true, out Subject);
-                Enum.TryParse(fields[2], true, out Type);
+                TypeString = fields[2];
+                Type = TypeString.GetHashCode();
                 Enum.TryParse(fields[3], true, out Extract);
             }
 
@@ -63,12 +65,14 @@ namespace Assets.Scripts.Model.Skill
         public class ReferenceUnitStat : IReference
         {
             ESubject Subject;
-            UnitStat.EType Type;
+            int Type;
+            string TypeString;
 
             public ReferenceUnitStat(List<string> fields)
             {
                 Enum.TryParse(fields[1], true, out Subject);
-                Enum.TryParse(fields[2], true, out Type);
+                TypeString = fields[2];
+                Type = TypeString.GetHashCode();
             }
 
             public double Get(TriggerInfo triggerInfo_)

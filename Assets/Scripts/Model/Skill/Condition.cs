@@ -29,18 +29,21 @@ namespace Assets.Scripts.Model.Skill
             Right = right_;
         }
 
-        public static implicit operator Condition(JSONArray jArray_)
+        public static implicit operator Condition(JSONNode jNode)
         {
-            if (jArray_.Count != 3)
+            if (!jNode.IsArray)
+                throw new Exception();
+            var jArray = jNode.AsArray;
+            if (jArray.Count != 3)
                 throw new Exception();
             ERule rule;
-            if (!Enum.TryParse(jArray_[1].ToString(), true, out rule))
+            if (!Enum.TryParse(jArray[1].ToString(), true, out rule))
                 throw new NotSupportedException();
 
-            return new Condition(jArray_[0], rule, jArray_[2]);
+            return new Condition(jArray[0], rule, jArray[2]);
         }
 
-        public static implicit operator JSONArray(Condition triggerCondition_)
+        public static implicit operator JSONNode(Condition triggerCondition_)
         {
             JSONArray jArray = new JSONArray();
 

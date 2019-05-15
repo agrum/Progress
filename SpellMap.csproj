@@ -1153,6 +1153,7 @@
     <Compile Include="Assets\Scripts\Model\ConstellationNodeLink.cs" />
     <Compile Include="Assets\Scripts\Model\ConstellationPreset.cs" />
     <Compile Include="Assets\Scripts\Model\Cooldown.cs" />
+    <Compile Include="Assets\Scripts\Model\NamedHash.cs" />
     <Compile Include="Assets\Scripts\Model\Hit.cs" />
     <Compile Include="Assets\Scripts\Model\HoveredNode.cs" />
     <Compile Include="Assets\Scripts\Model\Json.cs" />
@@ -1167,6 +1168,7 @@
     <Compile Include="Assets\Scripts\Model\Modifier\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Container.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Base.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Converter.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\UnitGauge.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />

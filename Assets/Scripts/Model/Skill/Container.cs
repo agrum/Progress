@@ -10,7 +10,7 @@ namespace Assets.Scripts.Model.Skill
     {
         public Container Parent { get; private set; }
 
-        public UnitStat GetUnitStat(UnitStat.EType type_)
+        public UnitStat GetUnitStat(NamedHash type_)
         {
             UnitStat rtn;
             if (!_UnitStats.TryGetValue(type_, out rtn))
@@ -21,7 +21,7 @@ namespace Assets.Scripts.Model.Skill
             return rtn;
         }
 
-        public UnitGauge GetUnitGauge(UnitGauge.EType type_)
+        public UnitGauge GetUnitGauge(NamedHash type_)
         {
             UnitGauge rtn;
             if (!_UnitGauges.TryGetValue(type_, out rtn))
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Model.Skill
             return rtn;
         }
 
-        public SortedList<UnitStat.EType, UnitStat> _UnitStats;
-        public SortedList<UnitGauge.EType, UnitGauge> _UnitGauges;
+        public SortedList<NamedHash, UnitStat> _UnitStats = new SortedList<NamedHash, UnitStat>(new NamedHash.TypeComparer());
+        public SortedList<NamedHash, UnitGauge> _UnitGauges = new SortedList<NamedHash, UnitGauge>(new NamedHash.TypeComparer());
     }
 }
