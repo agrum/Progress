@@ -9,6 +9,19 @@ namespace Assets.Scripts.Model.Skill.Effect
 {
     public class Base
     {
+        public enum EDirection
+        {
+            SourceAim,
+            TargetAim,
+            TriggerAim,
+            SourceToTarget,
+            SourceToTrigger,
+            TargetToSource,
+            TargetToTrigger,
+            TriggerToSource,
+            TriggerToTarget,
+        }
+
         public NamedHash NamedHash { get; private set; }
         public ESubject From { get; private set; }
         public ESubject To { get; private set; }
@@ -36,10 +49,12 @@ namespace Assets.Scripts.Model.Skill.Effect
         {
             switch (jNode_["Type"].ToString())
             {
-                case "UnitStat": return new UnitStat(jNode_);
-                case "UnitGauge": return new UnitGauge(jNode_);
-                case "Modifier": return new Modifier(jNode_);
+                case "Area": return new UnitStat(jNode_);
                 case "Converter": return new Modifier(jNode_);
+                case "Modifier": return new Modifier(jNode_);
+                case "Physics": return new Modifier(jNode_);
+                case "UnitGauge": return new UnitGauge(jNode_);
+                case "UnitStat": return new UnitGauge(jNode_);
                 default: return null;
             }
         }

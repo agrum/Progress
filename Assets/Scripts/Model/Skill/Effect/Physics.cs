@@ -9,19 +9,6 @@ namespace Assets.Scripts.Model.Skill.Effect
 {
     public class Physics : Base
     {
-        public enum EDirection
-        {
-            SourceAim,
-            TargetAim,
-            TriggerAim,
-            SourceToTarget,
-            SourceToTrigger,
-            TargetToSource,
-            TargetToTrigger,
-            TriggerToSource,
-            TriggerToTarget,
-        }
-
         public enum ETravelType
         {
             DurationBased,

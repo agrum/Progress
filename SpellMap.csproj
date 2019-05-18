@@ -1167,6 +1167,7 @@
     <Compile Include="Assets\Scripts\Model\Modifier\Trigger.cs" />
     <Compile Include="Assets\Scripts\Model\Modifier\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Container.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Area.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Converter.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Modifier.cs" />

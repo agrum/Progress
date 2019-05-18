@@ -94,6 +94,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             JSONArray outputs = new JSONArray();
             foreach (var output in Outputs)
                 outputs.Add(output);
+            jObject["Outputs"] = outputs;
             return jObject;
         }
     }
