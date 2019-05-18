@@ -39,9 +39,9 @@ namespace Assets.Scripts.Model.Skill.Effect
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["stat"] = Stat.ToString("G");
-            jObject["inputType"] = InputType.ToString("G");
-            jObject["reference"] = Reference;
+            jObject["Stat"] = Stat.ToString("G");
+            jObject["InputType"] = InputType.ToString("G");
+            jObject["Reference"] = Reference;
             return jObject;
         }
     }

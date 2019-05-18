@@ -63,10 +63,10 @@ namespace Assets.Scripts.Model.Skill.Effect
         {
             JSONObject jObject = new JSONObject();
             jObject["Gauge"] = Gauge;
-            jObject["target"] = Target.ToString("G");
-            jObject["category"] = Category.ToString("G");
-            jObject["inputType"] = InputType.ToString("G");
-            jObject["reference"] = Reference;
+            jObject["Target"] = Target.ToString("G");
+            jObject["Category"] = Category.ToString("G");
+            jObject["InputType"] = InputType.ToString("G");
+            jObject["Reference"] = Reference;
             return jObject;
         }
     }
