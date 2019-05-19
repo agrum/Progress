@@ -1177,7 +1177,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\NumericBuilder.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\StackBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\TriggerInfo.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\UnitGauge.cs" />
@@ -1201,7 +1201,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\SkillMetric.cs" />
     <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\ModfiierBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\ModifierBehaviour.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Condition.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Trigger.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />

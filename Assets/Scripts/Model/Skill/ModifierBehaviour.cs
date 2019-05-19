@@ -7,26 +7,26 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill
 {
-    public class ModfiierBehaviour
+    public class ModifierBehaviour
     {
         public Trigger Trigger { get; private set; }
         public List<Condition> Conditions { get; private set; } = new List<Condition>();
         public List<Effect.Base> Effects { get; private set; } = new List<Effect.Base>();
 
-        public static implicit operator ModfiierBehaviour(JSONObject jObject_)
+        public static implicit operator ModifierBehaviour(JSONNode jNode_)
         {
-            ModfiierBehaviour behaviour = new ModfiierBehaviour();
+            ModifierBehaviour behaviour = new ModifierBehaviour();
 
-            behaviour.Trigger = jObject_["Trigger"];
-            foreach (var condition in jObject_["Conditions"].AsArray)
+            behaviour.Trigger = jNode_["Trigger"];
+            foreach (var condition in jNode_["Conditions"].AsArray)
                 behaviour.Conditions.Add(condition.Value.AsArray);
-            foreach (var effect in jObject_["Effects"].AsArray)
+            foreach (var effect in jNode_["Effects"].AsArray)
                 behaviour.Effects.Add(effect.Value);
 
             return behaviour;
         }
 
-        public static implicit operator JSONNode(ModfiierBehaviour behaviour_)
+        public static implicit operator JSONNode(ModifierBehaviour behaviour_)
         {
             JSONObject jObject = new JSONObject();
 

@@ -9,6 +9,25 @@ namespace Assets.Scripts.Model.Skill.Effect
 {
     public class Base
     {
+        public struct Id
+        {
+            public NamedHash NamedHash { get; private set; }
+            public ESubject From { get; private set; }
+            public ESubject To { get; private set; }
+
+            public Id(string namedHash_, ESubject from_ = ESubject.Trigger, ESubject to_ = ESubject.Target)
+            {
+                NamedHash = namedHash_;
+                From = from_;
+                To = to_;
+            }
+
+            public static implicit operator Id(string nameHash_)
+            {
+                return nameHash_;
+            }
+        }
+
         public enum EDirection
         {
             SourceAim,
@@ -36,6 +55,13 @@ namespace Assets.Scripts.Model.Skill.Effect
             NamedHash = jNode_["Name"];
             From = (ESubject)Enum.Parse(typeof(ESubject), jNode_["From"]);
             To = (ESubject)Enum.Parse(typeof(ESubject), jNode_["To"]);
+        }
+
+        protected Base(Id id_)
+        {
+            NamedHash = id_.NamedHash;
+            From = id_.From;
+            To = id_.To;
         }
 
         protected Base(string namedHash_, ESubject from_, ESubject to_)

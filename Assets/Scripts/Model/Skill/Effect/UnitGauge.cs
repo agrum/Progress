@@ -31,15 +31,13 @@ namespace Assets.Scripts.Model.Skill.Effect
         public SkillMetricReference Reference { get; private set; }
 
         public UnitGauge(
-            string name_,
+            Id id_,
             Skill.UnitGauge.EType gauge_,
             ETarget target_,
             ECategory category_,
             Skill.UnitGauge.EInputType inputType_,
-            SkillMetricReference reference_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+            SkillMetricReference reference_)
+            : base(id_)
         {
             Gauge = gauge_;
             Target = target_;

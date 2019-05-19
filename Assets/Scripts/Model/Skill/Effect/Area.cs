@@ -23,23 +23,21 @@ namespace Assets.Scripts.Model.Skill.Effect
         public List<Base> Effects { get; private set; } = new List<Base>();
 
         public Area(
-            string name_,
+            Id id_,
             EShape shape_,
             SkillMetricReference length_,
             SkillMetricReference width_,
             SkillMetricReference offset_,
             SkillMetricReference affectMaxCount_,
-            List<Base> effects_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+             params Base[] effects_)
+            : base(id_)
         {
             Shape = shape_;
             Length = length_;
             Width = width_;
             Offset = offset_;
             AffectMaxCount = affectMaxCount_;
-            Effects = effects_;
+            Effects = new List<Base>(effects_);
         }
 
         public Area(JSONNode jNode_)

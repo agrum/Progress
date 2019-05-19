@@ -23,16 +23,14 @@ namespace Assets.Scripts.Model.Skill.Effect
         public SkillMetricReference TravelParameter;
 
         public Physics(
-            string name_,
+            Id id_,
             EDirection baseDirection,
             SkillMetricReference addedDirection_,
             bool normalized_,
             SkillMetricReference magnitude_,
             ETravelType travelType_,
-            SkillMetricReference travelParameter_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+            SkillMetricReference travelParameter_)
+            : base(id_)
         {
             BaseDirection = baseDirection;
             AddedDirection = addedDirection_;

@@ -55,23 +55,21 @@ namespace Assets.Scripts.Model.Skill.Effect
         public List<Output> Outputs { get; private set; } = new List<Output>();
 
         public Converter(
-            string name_,
+            Id id_,
             ESubject as_,
             UnitGauge.ECategory categorymask_,
             Condition condition_,
             int order_,
             SkillMetricReference input_,
-            List<Output> outputs_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+            params Output[] outputs_)
+            : base(id_)
         {
             As = as_;
             CategoryMask = categorymask_;
             Condition = condition_;
             Order = order_;
             Input = input_;
-            Outputs = outputs_;
+            Outputs = new List<Output>(outputs_);
         }
 
         public Converter(JSONNode jNode_)

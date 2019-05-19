@@ -7,7 +7,7 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill
 {
-    class StackBehaviour
+    public class Stacker
     {
         public enum EStackPolicy
         {
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Model.Skill
         private double Lifetime = 0;
         private List<Tuple<double, uint>> Stacks = new List<Tuple<double, uint>>();
 
-        public StackBehaviour()
+        public Stacker()
         {
             StackPolicy = EStackPolicy.Linear;
             RefreshPolicy = ERefreshPolicy.Instant;
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Model.Skill
             Duration = 0.0;
         }
 
-        public StackBehaviour(EStackPolicy stackPolicy_, ERefreshPolicy refreshPolicy_, uint maxStack_, double duration_ = 0.0)
+        public Stacker(EStackPolicy stackPolicy_, ERefreshPolicy refreshPolicy_, uint maxStack_, double duration_ = 0.0)
         {
             StackPolicy = stackPolicy_;
             RefreshPolicy = refreshPolicy_;
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Model.Skill
                 Duration = 0;
         }
 
-        public StackBehaviour(JSONNode jNode_)
+        public Stacker(JSONNode jNode_)
         {
             StackPolicy = (EStackPolicy)jNode_["stackPolicy"].AsInt;
             RefreshPolicy = (ERefreshPolicy)jNode_["refreshPolicy"].AsInt;
@@ -59,12 +59,12 @@ namespace Assets.Scripts.Model.Skill
             Duration = jNode_["duration"].AsDouble;
         }
 
-        public static implicit operator StackBehaviour(JSONNode jNode_)
+        public static implicit operator Stacker(JSONNode jNode_)
         {
             return jNode_;
         }
 
-        public static implicit operator JSONNode(StackBehaviour numeric_)
+        public static implicit operator JSONNode(Stacker numeric_)
         {
             JSONObject jObject = new JSONObject();
             jObject["stackPolicy"] = (int)numeric_.StackPolicy;

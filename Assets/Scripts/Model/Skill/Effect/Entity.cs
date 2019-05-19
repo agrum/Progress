@@ -12,13 +12,11 @@ namespace Assets.Scripts.Model.Skill.Effect
         public List<Base> Effects { get; private set; } = new List<Base>();
 
         public Entity(
-            string name_,
-            List<Base> effects_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+            Id id_,
+            params Base[] effects_)
+            : base(id_)
         {
-            Effects = effects_;
+            Effects = new List<Base>(effects_);
         }
 
         public Entity(JSONNode jNode_)

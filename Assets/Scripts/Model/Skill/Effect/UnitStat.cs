@@ -14,13 +14,11 @@ namespace Assets.Scripts.Model.Skill.Effect
         public SkillMetricReference Reference { get; private set; }
 
         public UnitStat(
-            string name_,
+            Id id_,
             Skill.UnitStat.EType stat_,
             Skill.UnitStat.EInputType inputType_,
-            SkillMetricReference reference_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+            SkillMetricReference reference_)
+            : base(id_)
         {
             Stat = stat_;
             InputType = inputType_;

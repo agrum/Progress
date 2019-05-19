@@ -21,13 +21,11 @@ namespace Assets.Scripts.Model.Skill.Effect
         public NamedHash ModifierName { get; private set; }
 
         public Modifier(
-            string name_,
+            Id id_,
             EAction action_,
             SkillMetricReference amount_,
-            string modifierName_,
-            ESubject from_ = ESubject.Trigger,
-            ESubject to_ = ESubject.Target)
-            : base(name_, from_, to_)
+            string modifierName_)
+            : base(id_)
         {
             Action = action_;
             Amount = amount_;
