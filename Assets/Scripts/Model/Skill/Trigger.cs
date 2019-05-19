@@ -10,56 +10,27 @@ namespace Assets.Scripts.Model.Skill
 {
     public abstract class Trigger
     {
-        public enum EType
-        {
-            InputSkillDown,
-            InputSkillUp,
-            InputMove,
-            Begin,
-            Tick,
-            End,
-            StackAdded,
-            StackRemoved,
-            StackChanged,
-            UnitCreated,
-            UnitDestroyed,
-            ModifierApplied,
-            ModifierRemoved,
-            EnteredRadius,
-            LeftRadius,
-            HitDealt,
-            HitReceived,
-            Custom
-        }
-
-        public abstract EType Type();
-
         protected abstract JSONObject ToJson();
 
         public static implicit operator Trigger(JSONNode jNode_)
         {
-            EType type;
-            if (!Enum.TryParse(jNode_["type"], true, out type))
+            switch (jNode_["Type"].ToString())
             {
-                throw new InvalidOperationException();
-            }
-            switch (type)
-            {
-                case EType.Begin: return new TriggerBegin();
-                case EType.End: return new TriggerEnd();
-                case EType.EnteredRadius: return new TriggerEnteredRadius(jNode_);
-                case EType.HitDealt: return new TriggerOtherAttributeImpacted(jNode_);
-                case EType.HitReceived: return new TriggerSelfAttributeImpacted(jNode_);
-                case EType.InputMove: return new TriggerInputMove(jNode_);
-                case EType.LeftRadius: return new TriggerLeftRadius(jNode_);
-                case EType.ModifierApplied: return new TriggerModifierApplied(jNode_);
-                case EType.ModifierRemoved: return new TriggerModifierRemoved(jNode_);
-                case EType.StackAdded: return new TriggerStackAdded(jNode_);
-                case EType.StackChanged: return new TriggerStackChanged(jNode_);
-                case EType.StackRemoved: return new TriggerStackRemoved(jNode_);
-                case EType.Tick: return new TriggerTick(jNode_);
-                case EType.UnitCreated: return new TriggerUnitCreated(jNode_);
-                case EType.UnitDestroyed: return new TriggerUnitDestroyed(jNode_);
+                case "TriggerBegin": return new TriggerBegin();
+                case "TriggerEnd": return new TriggerEnd();
+                case "TriggerEnteredRadius": return new TriggerEnteredRadius(jNode_);
+                case "TriggerLeftRadius": return new TriggerLeftRadius(jNode_);
+                case "TriggerAttributeOutgoing": return new TriggerAttributeOutgoing(jNode_);
+                case "TriggerAttributeIncoming": return new TriggerAttributeIncoming(jNode_);
+                case "TriggerInputMove": return new TriggerInputMove(jNode_);
+                case "TriggerModifierApplied": return new TriggerModifierApplied(jNode_);
+                case "TriggerModifierRemoved": return new TriggerModifierRemoved(jNode_);
+                case "TriggerStackAdded": return new TriggerStackAdded(jNode_);
+                case "TriggerStackChanged": return new TriggerStackChanged(jNode_);
+                case "TriggerStackRemoved": return new TriggerStackRemoved(jNode_);
+                case "TriggerTick": return new TriggerTick(jNode_);
+                case "TriggerUnitCreated": return new TriggerUnitCreated(jNode_);
+                case "TriggerUnitDestroyed": return new TriggerUnitDestroyed(jNode_);
                 default: return null;
             }
         }
@@ -67,7 +38,7 @@ namespace Assets.Scripts.Model.Skill
         public static implicit operator JSONNode(Trigger triggerType_)
         {
             JSONObject jObject = triggerType_.ToJson();
-            jObject["type"] = triggerType_.Type().ToString("G");
+            jObject["Type"] = triggerType_.GetType().ToString();
             return jObject;
         }
     }
@@ -76,11 +47,6 @@ namespace Assets.Scripts.Model.Skill
     {
         public TriggerInputSkillDown()
         {
-        }
-
-        public override EType Type()
-        {
-            return EType.InputSkillDown;
         }
 
         protected override JSONObject ToJson()
@@ -94,11 +60,6 @@ namespace Assets.Scripts.Model.Skill
     {
         public TriggerInputSkillUp()
         {
-        }
-
-        public override EType Type()
-        {
-            return EType.InputSkillUp;
         }
 
         protected override JSONObject ToJson()
@@ -122,11 +83,6 @@ namespace Assets.Scripts.Model.Skill
             Distance = jNode_["distance"];
         }
 
-        public override EType Type()
-        {
-            return EType.InputMove;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -139,11 +95,6 @@ namespace Assets.Scripts.Model.Skill
     {
         public TriggerBegin()
         {
-        }
-
-        public override EType Type()
-        {
-            return EType.Begin;
         }
 
         protected override JSONObject ToJson()
@@ -167,11 +118,6 @@ namespace Assets.Scripts.Model.Skill
             Period = jNode_["period"];
         }
 
-        public override EType Type()
-        {
-            return EType.Tick;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -184,11 +130,6 @@ namespace Assets.Scripts.Model.Skill
     {
         public TriggerEnd()
         {
-        }
-
-        public override EType Type()
-        {
-            return EType.End;
         }
 
         protected override JSONObject ToJson()
@@ -210,11 +151,6 @@ namespace Assets.Scripts.Model.Skill
         public TriggerStackAdded(JSONNode jNode_)
         {
             Threshold = jNode_["threshold"];
-        }
-
-        public override EType Type()
-        {
-            return EType.StackAdded;
         }
 
         protected override JSONObject ToJson()
@@ -239,11 +175,6 @@ namespace Assets.Scripts.Model.Skill
             Threshold = jNode_["threshold"];
         }
 
-        public override EType Type()
-        {
-            return EType.StackRemoved;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -264,11 +195,6 @@ namespace Assets.Scripts.Model.Skill
         public TriggerStackChanged(JSONNode jNode_)
         {
             Threshold = jNode_["threshold"];
-        }
-
-        public override EType Type()
-        {
-            return EType.StackChanged;
         }
 
         protected override JSONObject ToJson()
@@ -293,11 +219,6 @@ namespace Assets.Scripts.Model.Skill
             Id = jNode_["id"];
         }
 
-        public override EType Type()
-        {
-            return EType.UnitCreated;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -318,11 +239,6 @@ namespace Assets.Scripts.Model.Skill
         public TriggerUnitDestroyed(JSONNode jNode_)
         {
             Id = jNode_["id"];
-        }
-
-        public override EType Type()
-        {
-            return EType.UnitDestroyed;
         }
 
         protected override JSONObject ToJson()
@@ -347,11 +263,6 @@ namespace Assets.Scripts.Model.Skill
             Id = jNode_["id"];
         }
 
-        public override EType Type()
-        {
-            return EType.ModifierApplied;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -372,11 +283,6 @@ namespace Assets.Scripts.Model.Skill
         public TriggerModifierRemoved(JSONNode jNode_)
         {
             Id = jNode_["id"];
-        }
-
-        public override EType Type()
-        {
-            return EType.ModifierRemoved;
         }
 
         protected override JSONObject ToJson()
@@ -401,11 +307,6 @@ namespace Assets.Scripts.Model.Skill
             Radius = jNode_["radius"];
         }
 
-        public override EType Type()
-        {
-            return EType.EnteredRadius;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -428,11 +329,6 @@ namespace Assets.Scripts.Model.Skill
             Radius = jNode_["radius"];
         }
 
-        public override EType Type()
-        {
-            return EType.LeftRadius;
-        }
-
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
@@ -441,23 +337,18 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerOtherAttributeImpacted : Trigger
+    public class TriggerAttributeOutgoing : Trigger
     {
         public EUnitAttribute Attribute { get; private set; }
 
-        public TriggerOtherAttributeImpacted(EUnitAttribute attribute_)
+        public TriggerAttributeOutgoing(EUnitAttribute attribute_)
         {
             Attribute = attribute_;
         }
 
-        public TriggerOtherAttributeImpacted(JSONNode jNode_)
+        public TriggerAttributeOutgoing(JSONNode jNode_)
         {
             Attribute = (EUnitAttribute)jNode_["attribute"].AsInt;
-        }
-
-        public override EType Type()
-        {
-            return EType.HitDealt;
         }
 
         protected override JSONObject ToJson()
@@ -468,23 +359,18 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerSelfAttributeImpacted : Trigger
+    public class TriggerAttributeIncoming : Trigger
     {
         public EUnitAttribute Attribute { get; private set; }
 
-        public TriggerSelfAttributeImpacted(EUnitAttribute attribute_)
+        public TriggerAttributeIncoming(EUnitAttribute attribute_)
         {
             Attribute = attribute_;
         }
 
-        public TriggerSelfAttributeImpacted(JSONNode jNode_)
+        public TriggerAttributeIncoming(JSONNode jNode_)
         {
             Attribute = (EUnitAttribute)jNode_["attribute"].AsInt;
-        }
-
-        public override EType Type()
-        {
-            return EType.HitReceived;
         }
 
         protected override JSONObject ToJson()

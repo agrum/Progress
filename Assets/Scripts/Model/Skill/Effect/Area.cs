@@ -20,7 +20,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public SkillMetricReference Width { get; private set; }
         public SkillMetricReference Offset { get; private set; }
         public SkillMetricReference AffectMaxCount { get; private set; }
-        public List<Base> Effects { get; private set; }
+        public List<Base> Effects { get; private set; } = new List<Base>();
 
         public Area(
             string name_,

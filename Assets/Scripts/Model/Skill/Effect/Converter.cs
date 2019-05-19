@@ -52,7 +52,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public Condition Condition { get; private set; }
         public int Order { get; private set; }
         public SkillMetricReference Input { get; private set; }
-        public List<Output> Outputs { get; private set; }
+        public List<Output> Outputs { get; private set; } = new List<Output>();
 
         public Converter(
             string name_,
