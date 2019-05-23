@@ -18,25 +18,13 @@ namespace Assets.Scripts.Model.Skill
         public Stacker Stacker { get; private set; }
         public List<ModifierBehaviour> Behaviours { get; private set; } = new List<ModifierBehaviour>();
 
-        public Modifier(ModifierBehaviour behaviour_)
-            : this(new Stacker(), new List<ModifierBehaviour>() { behaviour_ })
-        {
-
-        }
-
-        public Modifier(Stacker stacker_, ModifierBehaviour behaviour_)
-            : this(stacker_, new List<ModifierBehaviour>() { behaviour_ })
-        {
-
-        }
-
-        public Modifier(List<ModifierBehaviour> behaviours_)
+        public Modifier(params ModifierBehaviour[] behaviours_)
             : this(new Stacker(), behaviours_)
         {
 
         }
 
-        public Modifier(Stacker stacker_, List<ModifierBehaviour> behaviours_)
+        public Modifier(Stacker stacker_, params ModifierBehaviour[] behaviours_)
         {
             Stacker = stacker_;
             Behaviours = new List<ModifierBehaviour>(behaviours_);

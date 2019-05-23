@@ -7,11 +7,11 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill.Effect
 {
-    public class Entity : Base
+    public class Unit : Base
     {
         public List<Base> Effects { get; private set; } = new List<Base>();
 
-        public Entity(
+        public Unit(
             Id id_,
             params Base[] effects_)
             : base(id_)
@@ -19,7 +19,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             Effects = new List<Base>(effects_);
         }
 
-        public Entity(JSONNode jNode_)
+        public Unit(JSONNode jNode_)
             : base(jNode_)
         {
             foreach (var effect in jNode_["Effects"].AsArray)
@@ -34,16 +34,6 @@ namespace Assets.Scripts.Model.Skill.Effect
                 effects.Add(effect);
             jObject["Effects"] = effects;
             return jObject;
-        }
-
-        public static Entity Projectile(
-            string name_,
-            SkillMetricReference radius_,
-            Physics.ETravelType travelType_,
-            SkillMetricReference travelParameter_,
-            List<Base> hitEffects_)
-        {
-            return null;
         }
     }
 }

@@ -13,11 +13,22 @@ namespace Assets.Scripts.Model.Skill
         public List<Condition> Conditions { get; private set; } = new List<Condition>();
         public List<Effect.Base> Effects { get; private set; } = new List<Effect.Base>();
 
+        public ModifierBehaviour(Trigger trigger_)
+        {
+            Trigger = trigger_;
+        }
+
+        public ModifierBehaviour(Trigger trigger_, Condition[] conditions_, Effect.Base[] effects_)
+        {
+            Trigger = trigger_;
+            Conditions = new List<Condition>(conditions_);
+            Effects = new List<Effect.Base>(effects_);
+        }
+
         public static implicit operator ModifierBehaviour(JSONNode jNode_)
         {
-            ModifierBehaviour behaviour = new ModifierBehaviour();
-
-            behaviour.Trigger = jNode_["Trigger"];
+            ModifierBehaviour behaviour = new ModifierBehaviour(jNode_["Trigger"]);
+            
             foreach (var condition in jNode_["Conditions"].AsArray)
                 behaviour.Conditions.Add(condition.Value.AsArray);
             foreach (var effect in jNode_["Effects"].AsArray)
