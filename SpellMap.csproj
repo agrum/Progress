@@ -1170,6 +1170,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Area.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Converter.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Delay.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Physics.cs" />
@@ -1179,7 +1180,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\Input\Medium\Cast.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Medium\Channel.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Medium\Instant.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Input\Charge.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Input\Activation\Charge.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Control\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Control\Beam.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Control\Cone.cs" />
@@ -1187,8 +1188,8 @@
     <Compile Include="Assets\Scripts\Model\Skill\Input\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Control\None.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Input\Control\Target.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Input\Press.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Input\Release.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Input\Activation\Press.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Input\Activation\Release.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\NumericBuilder.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
