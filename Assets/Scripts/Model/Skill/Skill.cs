@@ -3,7 +3,7 @@ using SimpleJSON;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.Model
+namespace Assets.Scripts.Model.Skill
 {
 	public abstract class Skill
     {
@@ -72,5 +72,12 @@ namespace Assets.Scripts.Model
             }
         }
 	}
+
+    public class Skill2
+    {
+        public List<Numeric> Numerics { get; private set; } = new List<Numeric>();
+        public List<Modifier> Modifiers { get; private set; } = new List<Modifier>();
+
+    }
 }
 
