@@ -9,16 +9,16 @@ namespace Assets.Scripts.Model.Skill
 {
     public class ModifierBehaviour
     {
-        public Trigger Trigger { get; private set; }
+        public Trigger.Base Trigger { get; private set; }
         public List<Condition> Conditions { get; private set; } = new List<Condition>();
         public List<Effect.Base> Effects { get; private set; } = new List<Effect.Base>();
 
-        public ModifierBehaviour(Trigger trigger_)
+        public ModifierBehaviour(Trigger.Base trigger_)
         {
             Trigger = trigger_;
         }
 
-        public ModifierBehaviour(Trigger trigger_, Condition[] conditions_, Effect.Base[] effects_)
+        public ModifierBehaviour(Trigger.Base trigger_, Condition[] conditions_, Effect.Base[] effects_)
         {
             Trigger = trigger_;
             Conditions = new List<Condition>(conditions_);

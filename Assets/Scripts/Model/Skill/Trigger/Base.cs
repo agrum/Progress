@@ -6,46 +6,49 @@ using System.Threading.Tasks;
 using SimpleJSON;
 using Assets.Scripts.Model.UnitAttribute;
 
-namespace Assets.Scripts.Model.Skill
+namespace Assets.Scripts.Model.Skill.Trigger
 {
-    public abstract class Trigger
+    public abstract class Base
     {
         protected abstract JSONObject ToJson();
 
-        public static implicit operator Trigger(JSONNode jNode_)
+        public static implicit operator Base(JSONNode jNode_)
         {
             switch (jNode_["Type"].ToString())
             {
-                case "TriggerBegin": return new TriggerBegin();
-                case "TriggerEnd": return new TriggerEnd();
-                case "TriggerEnteredRadius": return new TriggerEnteredRadius(jNode_);
-                case "TriggerLeftRadius": return new TriggerLeftRadius(jNode_);
-                case "TriggerAttributeOutgoing": return new TriggerAttributeOutgoing(jNode_);
-                case "TriggerAttributeIncoming": return new TriggerAttributeIncoming(jNode_);
-                case "TriggerInputMove": return new TriggerInputMove(jNode_);
-                case "TriggerModifierApplied": return new TriggerModifierApplied(jNode_);
-                case "TriggerModifierRemoved": return new TriggerModifierRemoved(jNode_);
-                case "TriggerStackAdded": return new TriggerStackAdded(jNode_);
-                case "TriggerStackChanged": return new TriggerStackChanged(jNode_);
-                case "TriggerStackRemoved": return new TriggerStackRemoved(jNode_);
-                case "TriggerTick": return new TriggerTick(jNode_);
-                case "TriggerUnitCreated": return new TriggerUnitCreated(jNode_);
-                case "TriggerUnitDestroyed": return new TriggerUnitDestroyed(jNode_);
+                case "TriggerBegin": return new Begin();
+                case "TriggerEnd": return new End();
+                case "TriggerEnteredRadius": return new EnteredRadius(jNode_);
+                case "TriggerLeftRadius": return new LeftRadius(jNode_);
+                case "TriggerAttributeOutgoing": return new AttributeOutgoing(jNode_);
+                case "TriggerAttributeIncoming": return new AttributeIncoming(jNode_);
+                case "TriggerInputMove": return new InputMove(jNode_);
+                case "TriggerModifierApplied": return new ModifierApplied(jNode_);
+                case "TriggerModifierRemoved": return new ModifierRemoved(jNode_);
+                case "TriggerStackAdded": return new StackAdded(jNode_);
+                case "TriggerStackChanged": return new StackChanged(jNode_);
+                case "TriggerStackRemoved": return new StackRemoved(jNode_);
+                case "TriggerTick": return new Tick(jNode_);
+                case "TriggerUnitCreated": return new UnitCreated(jNode_);
+                case "TriggerUnitDestroyed": return new UnitDestroyed(jNode_);
                 default: return null;
             }
         }
 
-        public static implicit operator JSONNode(Trigger triggerType_)
+        public static implicit operator JSONNode(Base triggerType_)
         {
             JSONObject jObject = triggerType_.ToJson();
             jObject["Type"] = triggerType_.GetType().ToString();
             return jObject;
         }
     }
+}
 
-    public class TriggerInputSkillDown : Trigger
+namespace Assets.Scripts.Model.Skill.Trigger
+{
+    public class InputSkillDown : Base
     {
-        public TriggerInputSkillDown()
+        public InputSkillDown()
         {
         }
 
@@ -56,9 +59,9 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerInputSkillUp : Trigger
+    public class InputSkillUp : Base
     {
-        public TriggerInputSkillUp()
+        public InputSkillUp()
         {
         }
 
@@ -69,16 +72,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerInputMove : Trigger
+    public class InputMove : Base
     {
         public SkillMetricReference Distance { get; private set; }
 
-        public TriggerInputMove(SkillMetricReference reference_)
+        public InputMove(SkillMetricReference reference_)
         {
             Distance = reference_;
         }
 
-        public TriggerInputMove(JSONNode jNode_)
+        public InputMove(JSONNode jNode_)
         {
             Distance = jNode_["distance"];
         }
@@ -91,9 +94,9 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerBegin : Trigger
+    public class Begin : Base
     {
-        public TriggerBegin()
+        public Begin()
         {
         }
 
@@ -104,16 +107,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerTick : Trigger
+    public class Tick : Base
     {
         public SkillMetricReference Period { get; private set; }
 
-        public TriggerTick(SkillMetricReference reference_)
+        public Tick(SkillMetricReference reference_)
         {
             Period = reference_;
         }
 
-        public TriggerTick(JSONNode jNode_)
+        public Tick(JSONNode jNode_)
         {
             Period = jNode_["period"];
         }
@@ -126,9 +129,9 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerEnd : Trigger
+    public class End : Base
     {
-        public TriggerEnd()
+        public End()
         {
         }
 
@@ -139,16 +142,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerStackAdded : Trigger
+    public class StackAdded : Base
     {
         public SkillMetricReference Threshold { get; private set; }
 
-        public TriggerStackAdded(SkillMetricReference reference_)
+        public StackAdded(SkillMetricReference reference_)
         {
             Threshold = reference_;
         }
 
-        public TriggerStackAdded(JSONNode jNode_)
+        public StackAdded(JSONNode jNode_)
         {
             Threshold = jNode_["threshold"];
         }
@@ -161,16 +164,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerStackRemoved : Trigger
+    public class StackRemoved : Base
     {
         public SkillMetricReference Threshold { get; private set; }
 
-        public TriggerStackRemoved(SkillMetricReference reference_)
+        public StackRemoved(SkillMetricReference reference_)
         {
             Threshold = reference_;
         }
 
-        public TriggerStackRemoved(JSONNode jNode_)
+        public StackRemoved(JSONNode jNode_)
         {
             Threshold = jNode_["threshold"];
         }
@@ -183,16 +186,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerStackChanged : Trigger
+    public class StackChanged : Base
     {
         public SkillMetricReference Threshold { get; private set; }
 
-        public TriggerStackChanged(SkillMetricReference reference_)
+        public StackChanged(SkillMetricReference reference_)
         {
             Threshold = reference_;
         }
 
-        public TriggerStackChanged(JSONNode jNode_)
+        public StackChanged(JSONNode jNode_)
         {
             Threshold = jNode_["threshold"];
         }
@@ -205,16 +208,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerUnitCreated : Trigger
+    public class UnitCreated : Base
     {
         public string Id { get; private set; }
 
-        public TriggerUnitCreated(string id_)
+        public UnitCreated(string id_)
         {
             Id = id_;
         }
 
-        public TriggerUnitCreated(JSONNode jNode_)
+        public UnitCreated(JSONNode jNode_)
         {
             Id = jNode_["id"];
         }
@@ -227,16 +230,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerUnitDestroyed : Trigger
+    public class UnitDestroyed : Base
     {
         public string Id { get; private set; }
 
-        public TriggerUnitDestroyed(string id_)
+        public UnitDestroyed(string id_)
         {
             Id = id_;
         }
 
-        public TriggerUnitDestroyed(JSONNode jNode_)
+        public UnitDestroyed(JSONNode jNode_)
         {
             Id = jNode_["id"];
         }
@@ -249,16 +252,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerModifierApplied : Trigger
+    public class ModifierApplied : Base
     {
         public string Id { get; private set; }
 
-        public TriggerModifierApplied(string id_)
+        public ModifierApplied(string id_)
         {
             Id = id_;
         }
 
-        public TriggerModifierApplied(JSONNode jNode_)
+        public ModifierApplied(JSONNode jNode_)
         {
             Id = jNode_["id"];
         }
@@ -271,16 +274,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerModifierRemoved : Trigger
+    public class ModifierRemoved : Base
     {
         public string Id { get; private set; }
 
-        public TriggerModifierRemoved(string id_)
+        public ModifierRemoved(string id_)
         {
             Id = id_;
         }
 
-        public TriggerModifierRemoved(JSONNode jNode_)
+        public ModifierRemoved(JSONNode jNode_)
         {
             Id = jNode_["id"];
         }
@@ -293,16 +296,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerEnteredRadius : Trigger
+    public class EnteredRadius : Base
     {
         public SkillMetricReference Radius { get; private set; }
 
-        public TriggerEnteredRadius(SkillMetricReference reference_)
+        public EnteredRadius(SkillMetricReference reference_)
         {
             Radius = reference_;
         }
 
-        public TriggerEnteredRadius(JSONNode jNode_)
+        public EnteredRadius(JSONNode jNode_)
         {
             Radius = jNode_["radius"];
         }
@@ -315,16 +318,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerLeftRadius : Trigger
+    public class LeftRadius : Base
     {
         public SkillMetricReference Radius { get; private set; }
 
-        public TriggerLeftRadius(SkillMetricReference reference_)
+        public LeftRadius(SkillMetricReference reference_)
         {
             Radius = reference_;
         }
 
-        public TriggerLeftRadius(JSONNode jNode_)
+        public LeftRadius(JSONNode jNode_)
         {
             Radius = jNode_["radius"];
         }
@@ -337,16 +340,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerAttributeOutgoing : Trigger
+    public class AttributeOutgoing : Base
     {
         public EUnitAttribute Attribute { get; private set; }
 
-        public TriggerAttributeOutgoing(EUnitAttribute attribute_)
+        public AttributeOutgoing(EUnitAttribute attribute_)
         {
             Attribute = attribute_;
         }
 
-        public TriggerAttributeOutgoing(JSONNode jNode_)
+        public AttributeOutgoing(JSONNode jNode_)
         {
             Attribute = (EUnitAttribute)jNode_["attribute"].AsInt;
         }
@@ -359,16 +362,16 @@ namespace Assets.Scripts.Model.Skill
         }
     }
 
-    public class TriggerAttributeIncoming : Trigger
+    public class AttributeIncoming : Base
     {
         public EUnitAttribute Attribute { get; private set; }
 
-        public TriggerAttributeIncoming(EUnitAttribute attribute_)
+        public AttributeIncoming(EUnitAttribute attribute_)
         {
             Attribute = attribute_;
         }
 
-        public TriggerAttributeIncoming(JSONNode jNode_)
+        public AttributeIncoming(JSONNode jNode_)
         {
             Attribute = (EUnitAttribute)jNode_["attribute"].AsInt;
         }

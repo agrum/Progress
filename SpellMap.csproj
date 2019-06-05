@@ -1222,7 +1222,7 @@
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\ModifierBehaviour.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Condition.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Trigger.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Trigger\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\Speed.cs" />
     <Compile Include="Assets\Scripts\Model\Speed\SpeedModifier.cs" />
     <Compile Include="Assets\Scripts\Model\Team\Team.cs" />
