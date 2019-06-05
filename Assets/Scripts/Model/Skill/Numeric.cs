@@ -19,6 +19,7 @@ namespace Assets.Scripts.Model.Skill
             RandomRange,
             Modifier,
             Input,
+            Cooldown,
         }
 
         public interface IReference
@@ -44,15 +45,13 @@ namespace Assets.Scripts.Model.Skill
         public class ReferenceUnitGauge : IReference
         {
             ESubject Subject;
-            int Type;
-            string TypeString;
+            NamedHash Type;
             UnitGauge.EExtract Extract;
 
             public ReferenceUnitGauge(List<string> fields)
             {
                 Enum.TryParse(fields[1], true, out Subject);
-                TypeString = fields[2];
-                Type = TypeString.GetHashCode();
+                Type = fields[2];
                 Enum.TryParse(fields[3], true, out Extract);
             }
 
@@ -65,14 +64,12 @@ namespace Assets.Scripts.Model.Skill
         public class ReferenceUnitStat : IReference
         {
             ESubject Subject;
-            int Type;
-            string TypeString;
+            NamedHash Type;
 
             public ReferenceUnitStat(List<string> fields)
             {
                 Enum.TryParse(fields[1], true, out Subject);
-                TypeString = fields[2];
-                Type = TypeString.GetHashCode();
+                Type = fields[2];
             }
 
             public double Get(TriggerInfo triggerInfo_)
@@ -128,6 +125,23 @@ namespace Assets.Scripts.Model.Skill
             public double Get(TriggerInfo triggerInfo_)
             {
                 return triggerInfo_.Input;
+            }
+        }
+
+        public class ReferenceCooldown : IReference
+        {
+            ESubject Subject;
+            NamedHash Type;
+
+            public ReferenceCooldown(List<string> fields)
+            {
+                Enum.TryParse(fields[1], true, out Subject);
+                Type = fields[2];
+            }
+
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value;
             }
         }
 

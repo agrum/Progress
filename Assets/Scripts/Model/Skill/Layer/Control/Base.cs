@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input.Control
+namespace Assets.Scripts.Model.Skill.Layer.Control
 {
     public abstract class Base
     {

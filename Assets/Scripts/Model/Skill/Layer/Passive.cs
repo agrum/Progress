@@ -5,15 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input.Medium
+namespace Assets.Scripts.Model.Skill.Layer
 {
-    public class Instant : Base
+    public class Passive : Base
     {
-        public Instant()
+        public Passive(
+            Visual visual_)
+            : base(visual_)
         {
         }
 
-        public Instant(JSONNode jNode_)
+        public Passive(JSONNode jNode_)
+            : base(jNode_)
         {
         }
 

@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input.Activation
+namespace Assets.Scripts.Model.Skill.Layer.Medium
 {
-    public class Release : Base
+    public class Instant : Base
     {
-        public Release()
+        public Instant()
         {
         }
 
-        public Release(JSONNode jNode_)
+        public Instant(JSONNode jNode_)
         {
         }
 

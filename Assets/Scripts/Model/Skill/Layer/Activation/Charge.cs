@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input.Activation
+namespace Assets.Scripts.Model.Skill.Layer.Activation
 {
     class Charge : Base
     {

@@ -5,19 +5,30 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input.Medium
+namespace Assets.Scripts.Model.Skill.Layer
 {
     public abstract class Base
     {
+        public Visual Visual { get; private set; }
+
+        protected Base(Visual visual_)
+        {
+            Visual = visual_;
+        }
+
+        protected Base(JSONNode jNode_)
+        {
+            Visual = jNode_["Visual"];
+        }
+
         abstract public JSONObject ToJson();
 
         public static implicit operator Base(JSONNode jNode_)
         {
             switch (jNode_["Type"].ToString())
             {
-                case "Cast": return new Cast(jNode_);
-                case "Channel": return new Channel(jNode_);
-                case "Instant": return new Instant(jNode_);
+                case "Active": return new Active(jNode_);
+                case "Passive": return new Passive(jNode_);
                 default: return null;
             }
         }
@@ -26,6 +37,7 @@ namespace Assets.Scripts.Model.Skill.Input.Medium
         {
             JSONObject jObject = object_.ToJson();
             jObject["Type"] = object_.GetType().Name;
+            jObject["Visual"] = object_.Visual;
             return jObject;
         }
     }

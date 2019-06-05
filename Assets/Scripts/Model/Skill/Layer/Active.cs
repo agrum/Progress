@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input
+namespace Assets.Scripts.Model.Skill.Layer
 {
-    public abstract class Base
+    public class Active : Base
     {
         public Activation.Base Activation { get; private set; }
         public Control.Base Control { get; private set; }
@@ -15,12 +15,14 @@ namespace Assets.Scripts.Model.Skill.Input
         public Medium.Base Medium { get; private set; }
         public List<Effect.Base> Effects { get; private set; } = new List<Effect.Base>();
 
-        public Base(
+        public Active(
+            Visual visual_,
             Activation.Base activation_,
             Control.Base control_,
             Condition condition_,
             Medium.Base medium_,
             Effect.Base[] effects_)
+            : base(visual_)
         {
             Activation = activation_;
             Control = control_;
@@ -29,7 +31,8 @@ namespace Assets.Scripts.Model.Skill.Input
             Effects = new List<Effect.Base>(effects_);
         }
 
-        public Base(JSONNode jNode_)
+        public Active(JSONNode jNode_)
+            : base(jNode_)
         {
             Activation = jNode_["Activation"];
             Control = jNode_["Control"];
@@ -39,20 +42,15 @@ namespace Assets.Scripts.Model.Skill.Input
                 Effects.Add(effect.Value);
         }
 
-        public static implicit operator Base(JSONNode jNode)
-        {
-            return jNode;
-        }
-
-        public static implicit operator JSONNode(Base object_)
+        public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Activation"] = object_.Activation;
-            jObject["Control"] = object_.Control;
-            jObject["Condition"] = object_.Condition;
-            jObject["Medium"] = object_.Medium;
+            jObject["Activation"] = Activation;
+            jObject["Control"] = Control;
+            jObject["Condition"] = Condition;
+            jObject["Medium"] = Medium;
             var effects = new JSONArray();
-            foreach (var effect in object_.Effects)
+            foreach (var effect in Effects)
                 effects.AsArray.Add(effect);
             jObject["Effects"] = effects;
             return jObject;

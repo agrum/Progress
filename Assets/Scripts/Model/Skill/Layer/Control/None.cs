@@ -5,30 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using SimpleJSON;
 
-namespace Assets.Scripts.Model.Skill.Input.Control
+namespace Assets.Scripts.Model.Skill.Layer.Control
 {
-    public class Cone : Base
+    public class None : Base
     {
         public SkillMetricReference Radius { get; private set; }
-        public SkillMetricReference Degrees { get; private set; }
 
-        public Cone(SkillMetricReference radius_, SkillMetricReference degrees_)
+        public None(SkillMetricReference radius_)
         {
-            Radius = length_;
-            Degrees = degrees_;
+            Radius = radius_;
         }
 
-        public Cone(JSONNode jNode_)
+        public None(JSONNode jNode_)
         {
             Radius = jNode_["Radius"];
-            Degrees = jNode_["Degrees"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
             jObject["Radius"] = Radius;
-            jObject["Degrees"] = Degrees;
             return jObject;
         }
     }
