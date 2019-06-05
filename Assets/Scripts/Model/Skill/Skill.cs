@@ -75,9 +75,53 @@ namespace Assets.Scripts.Model.Skill
 
     public class Skill2
     {
+        public NamedHash Name { get; private set; }
         public List<Numeric> Numerics { get; private set; } = new List<Numeric>();
-        public List<Modifier> Modifiers { get; private set; } = new List<Modifier>();
+        public List<ModifierBehaviour> Passives { get; private set; } = new List<ModifierBehaviour>();
+        public List<Layer.Base> Layers { get; private set; } = new List<Layer.Base>();
 
-    }
-}
+        public Skill2(NamedHash name_, List<Numeric> numerics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
+        {
+            Name = name_;
+            Numerics = numerics_;
+            Passives = passives_;
+            Layers = layers_;
+        }
+
+        public Skill2(JSONNode jNode_)
+        {
+            Name = jNode_["Name"];
+
+            foreach (var condition in jNode_["Numerics"].AsArray)
+                Numerics.Add(condition.Value.AsArray);
+            foreach (var effect in jNode_["Passives"].AsArray)
+                Passives.Add(effect.Value);
+            foreach (var effect in jNode_["Layers"].AsArray)
+                Layers.Add(effect.Value);
+        }
+
+        public static implicit operator Skill2(JSONNode jNode_)
+        {
+            return jNode_;
+        }
+
+        public static implicit operator JSONNode(Skill2 skill_)
+        {
+            JSONObject jObject = new JSONObject();
+
+            jObject["Name"] = skill_.Name;
+            var conditions = new JSONArray();
+            foreach (var condition in skill_.Numerics)
+                conditions.Add(condition);
+            jObject["Numerics"] = conditions;
+            var effects = new JSONArray();
+            foreach (var effect in skill_.Passives)
+                effects.Add(effect);
+            jObject["Passives"] = conditions;
+            foreach (var effect in skill_.Layers)
+                effects.Add(effect);
+            jObject["Layers"] = conditions;
+
+            return jObject;
+        }
 
