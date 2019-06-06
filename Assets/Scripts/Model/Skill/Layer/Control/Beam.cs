@@ -9,10 +9,10 @@ namespace Assets.Scripts.Model.Skill.Layer.Control
 {
     public class Beam : Base
     {
-        public SkillMetricReference Length { get; private set; }
-        public SkillMetricReference Width { get; private set; }
+        public MetricReference Length { get; private set; }
+        public MetricReference Width { get; private set; }
 
-        public Beam(SkillMetricReference length_, SkillMetricReference width_)
+        public Beam(MetricReference length_, MetricReference width_)
         {
             Length = length_;
             Width = width_;

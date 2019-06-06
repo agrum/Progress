@@ -1197,7 +1197,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\NumericBuilder.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Numeric.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\SkillMetricReference.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\MetricReference.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\TriggerInfo.cs" />
@@ -1217,7 +1217,7 @@
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\UnitStat.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\SkillMetric.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Metric.cs" />
     <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\ModifierBehaviour.cs" />

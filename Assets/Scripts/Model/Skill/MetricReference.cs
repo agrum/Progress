@@ -7,18 +7,18 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill
 {
-    public class SkillMetricReference
+    public class MetricReference
     {
-        string NumericId;
-        Numeric Numeric;
+        NamedHash Name;
+        Metric Metric;
         double Value;
 
-        public SkillMetricReference(JSONNode jNode_)
+        public MetricReference(JSONNode jNode_)
         {
             if (jNode_.IsString)
             {
-                NumericId = jNode_;
-                Numeric = jNode_; //TODO, fetch numeric from skill metric id name
+                Name = jNode_;
+                Metric = Skill.Reference.GetMetric(Name);
             }
             else if (jNode_.IsNumber)
                 Value = jNode_;
@@ -26,25 +26,25 @@ namespace Assets.Scripts.Model.Skill
                 throw new NotSupportedException();
         }
 
-        public static implicit operator SkillMetricReference(JSONNode jNode_)
+        public static implicit operator MetricReference(JSONNode jNode_)
         {
             return jNode_;
         }
 
-        public static implicit operator SkillMetricReference(string numericId_)
+        public static implicit operator MetricReference(NamedHash name_)
         {
-            return numericId_;
+            return name_;
         }
 
-        public static implicit operator SkillMetricReference(double value)
+        public static implicit operator MetricReference(double value)
         {
             return value;
         }
 
-        public static implicit operator JSONNode(SkillMetricReference object_)
+        public static implicit operator JSONNode(MetricReference object_)
         {
-            if (object_.NumericId.Length > 0)
-                return object_.NumericId;
+            if (object_.Name != null)
+                return object_.Name;
             else
                 return object_.Value;
         }
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Model.Skill
         {
             if (Numeric == null)
             {
-                if (NumericId.Length > 0)
+                if (Name != null)
                     Numeric = null;  //TODO
                 else
                     Numeric = Value.ToString();

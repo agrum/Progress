@@ -9,9 +9,9 @@ namespace Assets.Scripts.Model.Skill.Layer.Medium
 {
     public class Cast : Base
     {
-        public SkillMetricReference Duration { get; private set; }
+        public MetricReference Duration { get; private set; }
 
-        public Cast(SkillMetricReference duration_)
+        public Cast(MetricReference duration_)
         {
             Duration = duration_;
         }

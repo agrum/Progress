@@ -9,15 +9,15 @@ namespace Assets.Scripts.Model.Skill.Layer
 {
     public class Visual
     {
-        public SkillMetricReference Middle { get; private set; }
-        public SkillMetricReference TopRight { get; private set; }
+        public MetricReference Middle { get; private set; }
+        public MetricReference TopRight { get; private set; }
 
-        public Visual(SkillMetricReference middle_)
+        public Visual(MetricReference middle_)
         {
             Middle = middle_;
         }
 
-        public Visual(SkillMetricReference middle_, SkillMetricReference topRight_)
+        public Visual(MetricReference middle_, MetricReference topRight_)
         {
             Middle = middle_;
             TopRight = topRight_;

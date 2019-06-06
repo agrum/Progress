@@ -19,9 +19,9 @@ namespace Assets.Scripts.Model.Skill.Layer.Control
         }
 
         public ETargetType TargetType { get; private set; }
-        public SkillMetricReference Radius { get; private set; }
+        public MetricReference Radius { get; private set; }
 
-        public Target(ETargetType targetType_, SkillMetricReference radius_)
+        public Target(ETargetType targetType_, MetricReference radius_)
         {
             TargetType = targetType_;
             Radius = radius_;

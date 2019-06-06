@@ -9,12 +9,12 @@ namespace Assets.Scripts.Model.Skill.Effect
 {
     public class Delay : Base
     {
-        public SkillMetricReference Duration { get; private set; }
+        public MetricReference Duration { get; private set; }
         public Base Effect { get; private set; }
 
         public Delay(
             Id id_,
-            SkillMetricReference duration_,
+            MetricReference duration_,
             Base effect_)
             : base(id_)
         {

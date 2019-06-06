@@ -10,7 +10,7 @@ namespace Assets.Scripts.Model.Skill
     public class Cooldown
     {
         public NamedHash Type { get; private set; }
-        public SkillMetricReference Duration { get; private set; }
+        public MetricReference Duration { get; private set; }
 
         public Cooldown(NamedHash type_)
         {

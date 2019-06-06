@@ -9,12 +9,12 @@ namespace Assets.Scripts.Model.Skill.Layer.Control
 {
     public class Cone : Base
     {
-        public SkillMetricReference Radius { get; private set; }
-        public SkillMetricReference Degrees { get; private set; }
+        public MetricReference Radius { get; private set; }
+        public MetricReference Degrees { get; private set; }
 
-        public Cone(SkillMetricReference radius_, SkillMetricReference degrees_)
+        public Cone(MetricReference radius_, MetricReference degrees_)
         {
-            Radius = length_;
+            Radius = radius_;
             Degrees = degrees_;
         }
 

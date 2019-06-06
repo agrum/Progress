@@ -9,9 +9,9 @@ namespace Assets.Scripts.Model.Skill.Layer.Control
 {
     public class None : Base
     {
-        public SkillMetricReference Radius { get; private set; }
+        public MetricReference Radius { get; private set; }
 
-        public None(SkillMetricReference radius_)
+        public None(MetricReference radius_)
         {
             Radius = radius_;
         }

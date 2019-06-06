@@ -17,8 +17,8 @@ namespace Assets.Scripts.Model
             }
         }
 
-        string String;
-        int Value;
+        public string String { get; private set; }
+        public int Value { get; private set; }
 
         public NamedHash(string string_)
         {

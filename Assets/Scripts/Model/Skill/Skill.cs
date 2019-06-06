@@ -5,123 +5,68 @@ using UnityEngine;
 
 namespace Assets.Scripts.Model.Skill
 {
-	public abstract class Skill
+    public class Skill
     {
-		public enum TypeEnum
-		{
-			Ability,
-			Kit,
-			Class,
-			None,
-		}
+        public static Skill Reference;
 
-		public TypeEnum Type { get; private set; } = TypeEnum.None;
-		public JSONNode Json { get; private set; } = null;
-        public Material Material { get; private set; } = null;
-        public string Uuid { get; private set; } = "";
-		public string LowerCaseKey { get; private set; } = "";
-		public string UpperCamelCaseKey { get; private set; } = "";
-
-        public SkillMetric Metric(string idName_)
-        {
-            return metricMap[idName_];
-        }
-
-        public IList<SkillMetric> MetrictList { get { return metricList.AsReadOnly(); } }
-
-        private List<SkillMetric> metricList = new List<SkillMetric>();
-        private Dictionary<string, SkillMetric> metricMap = new Dictionary<string, SkillMetric>();
-
-        protected Skill(JSONNode json_, TypeEnum type_)
-		{
-			Type = type_;
-			Json = json_;
-			Uuid = json_["_id"];
-				
-			switch (Type)
-			{
-				case TypeEnum.Ability:
-                    Material = App.Resource.Material.AbilityMaterial;
-                    LowerCaseKey = "abilities";
-					UpperCamelCaseKey = "Abilities";
-
-                    break;
-				case TypeEnum.Class:
-                    Material = App.Resource.Material.ClassMaterial;
-                    LowerCaseKey = "classes";
-					UpperCamelCaseKey = "Classes";
-                    break;
-				case TypeEnum.Kit:
-                    Material = App.Resource.Material.KitMaterial;
-                    LowerCaseKey = "kits";
-					UpperCamelCaseKey = "Kits";
-                    break;
-				default:
-					throw new Exception();
-
-			}
-
-            Json["color"] = ColorUtility.ToHtmlStringRGBA(Material.color);
-            Json["typeName"] = UpperCamelCaseKey;
-
-            foreach (var metricNode in Json["metrics2"].AsArray)
-            {
-                SkillMetric metric = new SkillMetric(metricNode.Value.AsObject);
-                metricList.Add(metric);
-                metricMap.Add(metric.IdName, metric);
-            }
-        }
-	}
-
-    public class Skill2
-    {
         public NamedHash Name { get; private set; }
-        public List<Numeric> Numerics { get; private set; } = new List<Numeric>();
+        public List<Metric> Metrics { get; private set; } = new List<Metric>();
         public List<ModifierBehaviour> Passives { get; private set; } = new List<ModifierBehaviour>();
         public List<Layer.Base> Layers { get; private set; } = new List<Layer.Base>();
 
-        public Skill2(NamedHash name_, List<Numeric> numerics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
+        public Skill(NamedHash name_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
         {
+            Reference = this;
+
             Name = name_;
-            Numerics = numerics_;
+            Metrics = metrics_;
             Passives = passives_;
             Layers = layers_;
+
+            Reference = null;
         }
 
-        public Skill2(JSONNode jNode_)
+        public Skill(JSONNode jNode_)
         {
             Name = jNode_["Name"];
 
-            foreach (var condition in jNode_["Numerics"].AsArray)
-                Numerics.Add(condition.Value.AsArray);
+            foreach (var condition in jNode_["Metrics"].AsArray)
+                Metrics.Add(condition.Value.AsArray);
             foreach (var effect in jNode_["Passives"].AsArray)
                 Passives.Add(effect.Value);
             foreach (var effect in jNode_["Layers"].AsArray)
                 Layers.Add(effect.Value);
         }
 
-        public static implicit operator Skill2(JSONNode jNode_)
+        public static implicit operator Skill(JSONNode jNode_)
         {
             return jNode_;
         }
 
-        public static implicit operator JSONNode(Skill2 skill_)
+        public static implicit operator JSONNode(Skill skill_)
         {
             JSONObject jObject = new JSONObject();
 
             jObject["Name"] = skill_.Name;
             var conditions = new JSONArray();
-            foreach (var condition in skill_.Numerics)
-                conditions.Add(condition);
-            jObject["Numerics"] = conditions;
+            foreach (var entry in skill_.Metrics)
+                conditions.Add(entry);
+            jObject["Metrics"] = conditions;
             var effects = new JSONArray();
-            foreach (var effect in skill_.Passives)
-                effects.Add(effect);
+            foreach (var entry in skill_.Passives)
+                effects.Add(entry);
             jObject["Passives"] = conditions;
-            foreach (var effect in skill_.Layers)
-                effects.Add(effect);
+            foreach (var entry in skill_.Layers)
+                effects.Add(entry);
             jObject["Layers"] = conditions;
 
             return jObject;
         }
+
+        public Metric GetMetric(NamedHash name_)
+        {
+           return Metrics.Find(x => x.Name == name_);
+        }
+    }
+}
 

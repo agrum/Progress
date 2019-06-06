@@ -17,13 +17,13 @@ namespace Assets.Scripts.Model.Skill.Effect
         }
 
         public EAction Action { get; private set; }
-        public SkillMetricReference Amount { get; private set; }
+        public MetricReference Amount { get; private set; }
         public NamedHash ModifierName { get; private set; }
 
         public Modifier(
             Id id_,
             EAction action_,
-            SkillMetricReference amount_,
+            MetricReference amount_,
             string modifierName_)
             : base(id_)
         {

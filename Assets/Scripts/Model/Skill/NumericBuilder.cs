@@ -141,10 +141,19 @@ namespace Assets.Scripts.Model.Skill
             return FieldAdded();
         }
 
-        public NumericBuilder Input(ESubject subject_, uint modifier_, Modifier.EExtract extract_)
+        public NumericBuilder Input()
         {
-            equationString += 
+            equationString +=
                 " " + Numeric.EReferenceType.Input.ToString("G");
+            return FieldAdded();
+        }
+
+        public NumericBuilder Cooldown(ESubject subject_, string name_)
+        {
+            equationString +=
+                " " + Numeric.EReferenceType.Input.ToString("G") +
+                "|" + subject_.ToString("G") +
+                "|" + name_;
             return FieldAdded();
         }
     }

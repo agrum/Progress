@@ -28,7 +28,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public ETarget Target { get; private set; }
         public ECategory Category { get; private set; }
         public Skill.UnitGauge.EInputType InputType { get; private set; }
-        public SkillMetricReference Reference { get; private set; }
+        public MetricReference Reference { get; private set; }
 
         public UnitGauge(
             Id id_,
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             ETarget target_,
             ECategory category_,
             Skill.UnitGauge.EInputType inputType_,
-            SkillMetricReference reference_)
+            MetricReference reference_)
             : base(id_)
         {
             Gauge = gauge_;

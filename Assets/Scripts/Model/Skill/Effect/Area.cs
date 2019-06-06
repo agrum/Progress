@@ -16,19 +16,19 @@ namespace Assets.Scripts.Model.Skill.Effect
         }
 
         public EShape Shape { get; private set; }
-        public SkillMetricReference Length { get; private set; }
-        public SkillMetricReference Width { get; private set; }
-        public SkillMetricReference Offset { get; private set; }
-        public SkillMetricReference AffectMaxCount { get; private set; }
+        public MetricReference Length { get; private set; }
+        public MetricReference Width { get; private set; }
+        public MetricReference Offset { get; private set; }
+        public MetricReference AffectMaxCount { get; private set; }
         public List<Base> Effects { get; private set; } = new List<Base>();
 
         public Area(
             Id id_,
             EShape shape_,
-            SkillMetricReference length_,
-            SkillMetricReference width_,
-            SkillMetricReference offset_,
-            SkillMetricReference affectMaxCount_,
+            MetricReference length_,
+            MetricReference width_,
+            MetricReference offset_,
+            MetricReference affectMaxCount_,
              params Base[] effects_)
             : base(id_)
         {

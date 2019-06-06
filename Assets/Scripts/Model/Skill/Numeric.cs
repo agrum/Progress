@@ -20,6 +20,7 @@ namespace Assets.Scripts.Model.Skill
             Modifier,
             Input,
             Cooldown,
+            Metric,
         }
 
         public interface IReference
@@ -142,6 +143,21 @@ namespace Assets.Scripts.Model.Skill
             public double Get(TriggerInfo triggerInfo_)
             {
                 return Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value;
+            }
+        }
+
+        public class ReferenceMetric : IReference
+        {
+            Metric Metric;
+
+            public ReferenceMetric(List<string> fields)
+            {
+                Metric = Skill.Reference.Metrics.Find(x => x.Name.String == fields[1]);
+            }
+
+            public double Get(TriggerInfo triggerInfo_)
+            {
+                return 1.0;
             }
         }
 

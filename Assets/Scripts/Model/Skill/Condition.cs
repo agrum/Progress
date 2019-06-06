@@ -9,8 +9,8 @@ namespace Assets.Scripts.Model.Skill
 {
     public class Condition
     {
-        public SkillMetricReference Left { get; private set; }
-        public SkillMetricReference Right { get; private set; }
+        public MetricReference Left { get; private set; }
+        public MetricReference Right { get; private set; }
         public ERule Rule { get; private set; }
 
         public enum ERule
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Model.Skill
             GreaterThan
         }
 
-        public Condition(SkillMetricReference left_, ERule rule_, SkillMetricReference right_)
+        public Condition(MetricReference left_, ERule rule_, MetricReference right_)
         {
             Left = left_;
             Rule = rule_;

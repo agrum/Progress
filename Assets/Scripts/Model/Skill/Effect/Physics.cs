@@ -16,20 +16,20 @@ namespace Assets.Scripts.Model.Skill.Effect
         }
 
         public EDirection BaseDirection;
-        public SkillMetricReference AddedDirection;
+        public MetricReference AddedDirection;
         public bool Normalized;
-        public SkillMetricReference Magnitude;
+        public MetricReference Magnitude;
         public ETravelType TravelType;
-        public SkillMetricReference TravelParameter;
+        public MetricReference TravelParameter;
 
         public Physics(
             Id id_,
             EDirection baseDirection,
-            SkillMetricReference addedDirection_,
+            MetricReference addedDirection_,
             bool normalized_,
-            SkillMetricReference magnitude_,
+            MetricReference magnitude_,
             ETravelType travelType_,
-            SkillMetricReference travelParameter_)
+            MetricReference travelParameter_)
             : base(id_)
         {
             BaseDirection = baseDirection;

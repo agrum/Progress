@@ -15,7 +15,7 @@ namespace Assets.Scripts.Model.Skill
         }
 
         public ETrigger Trigger { get; private set; }
-        public SkillMetricReference HoldMaxDuration { get; private set; }
+        public MetricReference HoldMaxDuration { get; private set; }
         public bool CastOnHoldExpire { get; private set; }
         public InputVisual.Base Visual { get; private set; }
         public Condition Condition { get; private set; }
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Model.Skill
 
         public Input(
             ETrigger trigger_,
-            SkillMetricReference holdMaxDuration_,
+            MetricReference holdMaxDuration_,
             bool castOnHoldExpire_,
             )
         {

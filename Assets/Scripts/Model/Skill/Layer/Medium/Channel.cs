@@ -9,9 +9,9 @@ namespace Assets.Scripts.Model.Skill.Layer.Medium
 {
     public class Channel : Base
     {
-        public SkillMetricReference Duration { get; private set; }
+        public MetricReference Duration { get; private set; }
 
-        public Channel(SkillMetricReference duration_)
+        public Channel(MetricReference duration_)
         {
             Duration = duration_;
         }

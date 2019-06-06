@@ -74,9 +74,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class InputMove : Base
     {
-        public SkillMetricReference Distance { get; private set; }
+        public MetricReference Distance { get; private set; }
 
-        public InputMove(SkillMetricReference reference_)
+        public InputMove(MetricReference reference_)
         {
             Distance = reference_;
         }
@@ -109,9 +109,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class Tick : Base
     {
-        public SkillMetricReference Period { get; private set; }
+        public MetricReference Period { get; private set; }
 
-        public Tick(SkillMetricReference reference_)
+        public Tick(MetricReference reference_)
         {
             Period = reference_;
         }
@@ -144,9 +144,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class StackAdded : Base
     {
-        public SkillMetricReference Threshold { get; private set; }
+        public MetricReference Threshold { get; private set; }
 
-        public StackAdded(SkillMetricReference reference_)
+        public StackAdded(MetricReference reference_)
         {
             Threshold = reference_;
         }
@@ -166,9 +166,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class StackRemoved : Base
     {
-        public SkillMetricReference Threshold { get; private set; }
+        public MetricReference Threshold { get; private set; }
 
-        public StackRemoved(SkillMetricReference reference_)
+        public StackRemoved(MetricReference reference_)
         {
             Threshold = reference_;
         }
@@ -188,9 +188,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class StackChanged : Base
     {
-        public SkillMetricReference Threshold { get; private set; }
+        public MetricReference Threshold { get; private set; }
 
-        public StackChanged(SkillMetricReference reference_)
+        public StackChanged(MetricReference reference_)
         {
             Threshold = reference_;
         }
@@ -298,9 +298,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class EnteredRadius : Base
     {
-        public SkillMetricReference Radius { get; private set; }
+        public MetricReference Radius { get; private set; }
 
-        public EnteredRadius(SkillMetricReference reference_)
+        public EnteredRadius(MetricReference reference_)
         {
             Radius = reference_;
         }
@@ -320,9 +320,9 @@ namespace Assets.Scripts.Model.Skill.Trigger
 
     public class LeftRadius : Base
     {
-        public SkillMetricReference Radius { get; private set; }
+        public MetricReference Radius { get; private set; }
 
-        public LeftRadius(SkillMetricReference reference_)
+        public LeftRadius(MetricReference reference_)
         {
             Radius = reference_;
         }

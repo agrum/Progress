@@ -11,13 +11,13 @@ namespace Assets.Scripts.Model.Skill.Effect
     {
         public class Output
         {
-            public SkillMetricReference Numeric { get; private set; }
+            public MetricReference Numeric { get; private set; }
             public ESubject Subject { get; private set; }
             public UnitGauge.ECategory Category { get; private set; }
             public NamedHash Gauge { get; private set; }
 
             public Output(
-                SkillMetricReference numeric_,
+                MetricReference numeric_,
                 ESubject subject_,
                 UnitGauge.ECategory category_,
                 NamedHash gauge_)
@@ -51,7 +51,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public UnitGauge.ECategory CategoryMask { get; private set; }
         public Condition Condition { get; private set; }
         public int Order { get; private set; }
-        public SkillMetricReference Input { get; private set; }
+        public MetricReference Input { get; private set; }
         public List<Output> Outputs { get; private set; } = new List<Output>();
 
         public Converter(
@@ -60,7 +60,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             UnitGauge.ECategory categorymask_,
             Condition condition_,
             int order_,
-            SkillMetricReference input_,
+            MetricReference input_,
             params Output[] outputs_)
             : base(id_)
         {

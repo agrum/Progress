@@ -11,13 +11,13 @@ namespace Assets.Scripts.Model.Skill.Effect
     {
         public Skill.UnitStat.EType Stat { get; private set; }
         public Skill.UnitStat.EInputType InputType { get; private set; }
-        public SkillMetricReference Reference { get; private set; }
+        public MetricReference Reference { get; private set; }
 
         public UnitStat(
             Id id_,
             Skill.UnitStat.EType stat_,
             Skill.UnitStat.EInputType inputType_,
-            SkillMetricReference reference_)
+            MetricReference reference_)
             : base(id_)
         {
             Stat = stat_;

@@ -9,10 +9,10 @@ namespace Assets.Scripts.Model.Skill.Layer.Control
 {
     public class Drop : Base
     {
-        public SkillMetricReference Range { get; private set; }
-        public SkillMetricReference Radius { get; private set; }
+        public MetricReference Range { get; private set; }
+        public MetricReference Radius { get; private set; }
 
-        public Drop(SkillMetricReference range_, SkillMetricReference radius_)
+        public Drop(MetricReference range_, MetricReference radius_)
         {
             Range = range_;
             Radius = radius_;

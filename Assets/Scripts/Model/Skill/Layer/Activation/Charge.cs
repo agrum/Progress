@@ -9,12 +9,12 @@ namespace Assets.Scripts.Model.Skill.Layer.Activation
 {
     class Charge : Base
     {
-        public SkillMetricReference MaxChargeDuration { get; private set; }
-        public SkillMetricReference MaxHoldDuration { get; private set; }
+        public MetricReference MaxChargeDuration { get; private set; }
+        public MetricReference MaxHoldDuration { get; private set; }
 
         public Charge(
-            SkillMetricReference maxChargeDuration_,
-            SkillMetricReference maxHoldDuration_)
+            MetricReference maxChargeDuration_,
+            MetricReference maxHoldDuration_)
         {
             MaxChargeDuration = maxChargeDuration_;
             MaxHoldDuration = maxHoldDuration_;
