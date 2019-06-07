@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Model.Skill
+namespace Assets.Scripts.Model.Skill.Unit
 {
-    public class UnitStat
+    public class Stat
     {
         public enum EInputType
         {
@@ -22,7 +22,7 @@ namespace Assets.Scripts.Model.Skill
         private float Zeroes = 0;
         public float Value { get; private set; } = 0;
 
-        public UnitStat(NamedHash type_)
+        public Stat(NamedHash type_)
         {
             Type = type_;
         }

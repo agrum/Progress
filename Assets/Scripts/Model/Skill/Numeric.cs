@@ -47,7 +47,7 @@ namespace Assets.Scripts.Model.Skill
         {
             ESubject Subject;
             NamedHash Type;
-            UnitGauge.EExtract Extract;
+            Unit.Gauge.EExtract Extract;
 
             public ReferenceUnitGauge(List<string> fields)
             {
@@ -143,21 +143,6 @@ namespace Assets.Scripts.Model.Skill
             public double Get(TriggerInfo triggerInfo_)
             {
                 return Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value;
-            }
-        }
-
-        public class ReferenceMetric : IReference
-        {
-            Metric Metric;
-
-            public ReferenceMetric(List<string> fields)
-            {
-                Metric = Skill.Reference.Metrics.Find(x => x.Name.String == fields[1]);
-            }
-
-            public double Get(TriggerInfo triggerInfo_)
-            {
-                return 1.0;
             }
         }
 

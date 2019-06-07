@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Model.Skill
+namespace Assets.Scripts.Model.Skill.Unit
 {
-    public class UnitGauge
+    public class Gauge
     {
         public enum EInputType
         {
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Model.Skill
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
 
-        public UnitGauge(NamedHash type_)
+        public Gauge(NamedHash type_)
         {
             Type = type_;
         }

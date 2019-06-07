@@ -11,13 +11,13 @@ namespace Assets.Scripts.Model.Skill.Effect
     {
         public struct Id
         {
-            public NamedHash NamedHash { get; private set; }
+            public NamedHash Name { get; private set; }
             public ESubject From { get; private set; }
             public ESubject To { get; private set; }
 
-            public Id(string namedHash_, ESubject from_ = ESubject.Trigger, ESubject to_ = ESubject.Target)
+            public Id(string name_, ESubject from_ = ESubject.Trigger, ESubject to_ = ESubject.Target)
             {
-                NamedHash = namedHash_;
+                Name = name_;
                 From = from_;
                 To = to_;
             }
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             TriggerToTarget,
         }
 
-        public NamedHash NamedHash { get; private set; }
+        public NamedHash Name { get; private set; }
         public ESubject From { get; private set; }
         public ESubject To { get; private set; }
 
@@ -52,21 +52,21 @@ namespace Assets.Scripts.Model.Skill.Effect
 
         protected Base(JSONNode jNode_)
         {
-            NamedHash = jNode_["Name"];
+            Name = jNode_["Name"];
             From = (ESubject)Enum.Parse(typeof(ESubject), jNode_["From"]);
             To = (ESubject)Enum.Parse(typeof(ESubject), jNode_["To"]);
         }
 
         protected Base(Id id_)
         {
-            NamedHash = id_.NamedHash;
+            Name = id_.Name;
             From = id_.From;
             To = id_.To;
         }
 
-        protected Base(string namedHash_, ESubject from_, ESubject to_)
+        protected Base(string name_, ESubject from_, ESubject to_)
         {
-            NamedHash = namedHash_;
+            Name = name_;
             From = from_;
             To = to_;
         }
@@ -75,12 +75,13 @@ namespace Assets.Scripts.Model.Skill.Effect
         {
             switch (jNode_["Type"].ToString())
             {
-                case "Area": return new UnitStat(jNode_);
-                case "Converter": return new Modifier(jNode_);
+                case "Area": return new Area(jNode_);
+                case "Converter": return new Converter(jNode_);
                 case "Modifier": return new Modifier(jNode_);
-                case "Physics": return new Modifier(jNode_);
-                case "UnitGauge": return new UnitGauge(jNode_);
-                case "UnitStat": return new UnitGauge(jNode_);
+                case "Physics": return new Physics(jNode_);
+                case "Gauge": return new Gauge(jNode_);
+                case "Stat": return new Stat(jNode_);
+                case "Cooldown": return new Cooldown(jNode_);
                 default: return null;
             }
         }
@@ -89,7 +90,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         {
             JSONObject jObject = object_.ToJson();
             jObject["Type"] = object_.GetType().Name;
-            jObject["NamedHash"] = object_.NamedHash;
+            jObject["Name"] = object_.Name;
             jObject["From"] = object_.From.ToString("G");
             jObject["To"] = object_.To.ToString("G");
             return jObject;

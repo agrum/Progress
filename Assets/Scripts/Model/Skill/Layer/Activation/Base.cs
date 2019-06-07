@@ -15,9 +15,9 @@ namespace Assets.Scripts.Model.Skill.Layer.Activation
         {
             switch (jNode_["Type"].ToString())
             {
-                case "Beam": return new Beam(jNode_);
-                case "Cone": return new Cone(jNode_);
-                case "Drop": return new Cone(jNode_);
+                case "Charge": return new Charge(jNode_);
+                case "Press": return new Press(jNode_);
+                case "Release": return new Release(jNode_);
                 default: return null;
             }
         }

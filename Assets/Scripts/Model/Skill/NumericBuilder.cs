@@ -112,7 +112,7 @@ namespace Assets.Scripts.Model.Skill
             return FieldAdded();
         }
 
-        public NumericBuilder Gauge(ESubject subject_, string type_, UnitGauge.EExtract extract_)
+        public NumericBuilder Gauge(ESubject subject_, string type_, Unit.Gauge.EExtract extract_)
         {
             equationString += 
                 " " + Numeric.EReferenceType.UnitGauge.ToString("G") + 

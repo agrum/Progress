@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Model.Skill
+namespace Assets.Scripts.Model.Skill.Unit
 {
-    public class UnitCooldown
+    public class Cooldown
     {
         public NamedHash Type { get; private set; }
 
-        public UnitCooldown(NamedHash type_)
+        public Cooldown(NamedHash type_)
         {
             Type = type_;
         }

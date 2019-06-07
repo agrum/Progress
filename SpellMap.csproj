@@ -1172,11 +1172,11 @@
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Converter.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Delay.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Unit.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Physics.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Effect\UnitGauge.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Input.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Gauge.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Layer\Activation\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Layer\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Layer\Medium\Cast.cs" />
@@ -1201,9 +1201,9 @@
     <Compile Include="Assets\Scripts\Model\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\TriggerInfo.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\UnitCooldown.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\UnitGauge.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\UnitStat.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Unit\Cooldown.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Unit\Gauge.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Unit\Stat.cs" />
     <Compile Include="Assets\Scripts\Model\Modifier\UnitTicker.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\Nexus.cs" />
     <Compile Include="Assets\Scripts\Model\Nexus\NexusManager.cs" />
@@ -1216,7 +1216,7 @@
     <Compile Include="Assets\Scripts\Model\Resource\ResourceReserve.cs" />
     <Compile Include="Assets\Scripts\Model\Resource\Shield.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Skill.cs" />
-    <Compile Include="Assets\Scripts\Model\Skill\Effect\UnitStat.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Effect\Stat.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Metric.cs" />
     <Compile Include="Assets\Scripts\Model\SkillSpecializer.cs" />
     <Compile Include="Assets\Scripts\Model\SkillUpgrade.cs" />

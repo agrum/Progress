@@ -7,7 +7,7 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill.Effect
 {
-    public class UnitGauge : Base
+    public class Gauge : Base
     {
         public enum ETarget
         {
@@ -24,43 +24,43 @@ namespace Assets.Scripts.Model.Skill.Effect
             True = 8,
         }
         
-        public NamedHash Gauge { get; private set; }
+        public NamedHash Hash { get; private set; }
         public ETarget Target { get; private set; }
         public ECategory Category { get; private set; }
-        public Skill.UnitGauge.EInputType InputType { get; private set; }
+        public Model.Skill.Unit.Gauge.EInputType InputType { get; private set; }
         public MetricReference Reference { get; private set; }
 
-        public UnitGauge(
+        public Gauge(
             Id id_,
-            Skill.UnitGauge.EType gauge_,
+            NamedHash hash_,
             ETarget target_,
             ECategory category_,
-            Skill.UnitGauge.EInputType inputType_,
+            Model.Skill.Unit.Gauge.EInputType inputType_,
             MetricReference reference_)
             : base(id_)
         {
-            Gauge = gauge_;
+            Hash = hash_;
             Target = target_;
             Category = category_;
             InputType = inputType_;
             Reference = reference_;
         }
 
-        public UnitGauge(
+        public Gauge(
             JSONNode jNode_)
             : base(jNode_)
         {
-            Gauge = jNode_["Gauge"];
-            Target = (ETarget)Enum.Parse(typeof(ETarget), jNode_["target"]);
-            Category = (ECategory)Enum.Parse(typeof(ECategory), jNode_["category"]);
-            InputType = (Skill.UnitGauge.EInputType)Enum.Parse(typeof(Skill.UnitGauge.EInputType), jNode_["input"]);
-            Reference = jNode_["reference"];
+            Hash = jNode_["Hash"];
+            Target = (ETarget)Enum.Parse(typeof(ETarget), jNode_["Target"]);
+            Category = (ECategory)Enum.Parse(typeof(ECategory), jNode_["Category"]);
+            InputType = (Model.Skill.Unit.Gauge.EInputType)Enum.Parse(typeof(Model.Skill.Unit.Gauge.EInputType), jNode_["InputType"]);
+            Reference = jNode_["Reference"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Gauge"] = Gauge;
+            jObject["Hash"] = Hash;
             jObject["Target"] = Target.ToString("G");
             jObject["Category"] = Category.ToString("G");
             jObject["InputType"] = InputType.ToString("G");

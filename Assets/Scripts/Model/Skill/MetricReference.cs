@@ -51,15 +51,9 @@ namespace Assets.Scripts.Model.Skill
 
         public double Get(TriggerInfo triggerInfo_)
         {
-            if (Numeric == null)
-            {
-                if (Name != null)
-                    Numeric = null;  //TODO
-                else
-                    Numeric = Value.ToString();
-            }
-
-            return Numeric.Get(triggerInfo_);
+            if (Metric != null)
+                return Metric.Numeric.Get(triggerInfo_);
+            return Value;
         }
     }
 }

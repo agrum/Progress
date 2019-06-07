@@ -10,41 +10,41 @@ namespace Assets.Scripts.Model.Skill
     {
         public Container Parent { get; private set; }
 
-        public UnitStat GetUnitStat(NamedHash type_)
+        public Unit.Stat GetUnitStat(NamedHash type_)
         {
-            UnitStat rtn;
+            Unit.Stat rtn;
             if (!_UnitStats.TryGetValue(type_, out rtn))
             {
-                rtn = new UnitStat(type_);
+                rtn = new Unit.Stat(type_);
                 _UnitStats.Add(type_, rtn);
             }
             return rtn;
         }
 
-        public UnitGauge GetUnitGauge(NamedHash type_)
+        public Unit.Gauge GetUnitGauge(NamedHash type_)
         {
-            UnitGauge rtn;
+            Unit.Gauge rtn;
             if (!_UnitGauges.TryGetValue(type_, out rtn))
             {
-                rtn = new UnitGauge(type_);
+                rtn = new Unit.Gauge(type_);
                 _UnitGauges.Add(type_, rtn);
             }
             return rtn;
         }
 
-        public UnitCooldown GetCooldown(NamedHash type_)
+        public Unit.Cooldown GetCooldown(NamedHash type_)
         {
-            UnitCooldown rtn;
+            Unit.Cooldown rtn;
             if (!_Cooldowns.TryGetValue(type_, out rtn))
             {
-                rtn = new UnitCooldown(type_);
+                rtn = new Unit.Cooldown(type_);
                 _Cooldowns.Add(type_, rtn);
             }
             return rtn;
         }
 
-        public SortedList<NamedHash, UnitStat> _UnitStats = new SortedList<NamedHash, UnitStat>(new NamedHash.TypeComparer());
-        public SortedList<NamedHash, UnitGauge> _UnitGauges = new SortedList<NamedHash, UnitGauge>(new NamedHash.TypeComparer());
-        public SortedList<NamedHash, UnitCooldown> _Cooldowns = new SortedList<NamedHash, UnitCooldown>(new NamedHash.TypeComparer());
+        public SortedList<NamedHash, Unit.Stat> _UnitStats = new SortedList<NamedHash, Unit.Stat>(new NamedHash.TypeComparer());
+        public SortedList<NamedHash, Unit.Gauge> _UnitGauges = new SortedList<NamedHash, Unit.Gauge>(new NamedHash.TypeComparer());
+        public SortedList<NamedHash, Unit.Cooldown> _Cooldowns = new SortedList<NamedHash, Unit.Cooldown>(new NamedHash.TypeComparer());
     }
 }

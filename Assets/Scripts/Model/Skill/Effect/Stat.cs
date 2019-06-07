@@ -7,37 +7,37 @@ using SimpleJSON;
 
 namespace Assets.Scripts.Model.Skill.Effect
 {
-    public class UnitStat : Base
+    public class Stat : Base
     {
-        public Skill.UnitStat.EType Stat { get; private set; }
-        public Skill.UnitStat.EInputType InputType { get; private set; }
+        public NamedHash Hash { get; private set; }
+        public Model.Skill.Unit.Stat.EInputType InputType { get; private set; }
         public MetricReference Reference { get; private set; }
 
-        public UnitStat(
+        public Stat(
             Id id_,
-            Skill.UnitStat.EType stat_,
-            Skill.UnitStat.EInputType inputType_,
+            NamedHash hash_,
+            Model.Skill.Unit.Stat.EInputType inputType_,
             MetricReference reference_)
             : base(id_)
         {
-            Stat = stat_;
+            Hash = hash_;
             InputType = inputType_;
             Reference = reference_;
         }
 
-        public UnitStat(
+        public Stat(
             JSONNode jNode_)
             : base(jNode_)
         {
-            Reference = jNode_["reference"];
-            Stat = (Skill.UnitStat.EType)Enum.Parse(typeof(Skill.UnitStat.EType), jNode_["stat"]);
-            InputType = (Skill.UnitStat.EInputType)Enum.Parse(typeof(Skill.UnitStat.EInputType), jNode_["input"]);
+            Hash = jNode_["Hash"];
+            InputType = (Model.Skill.Unit.Stat.EInputType)Enum.Parse(typeof(Model.Skill.Unit.Stat.EInputType), jNode_["InputType"]);
+            Reference = jNode_["Reference"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Stat"] = Stat.ToString("G");
+            jObject["Hash"] = Hash;
             jObject["InputType"] = InputType.ToString("G");
             jObject["Reference"] = Reference;
             return jObject;
