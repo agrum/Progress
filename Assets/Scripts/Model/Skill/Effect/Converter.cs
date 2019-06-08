@@ -31,8 +31,8 @@ namespace Assets.Scripts.Model.Skill.Effect
             public Output(JSONNode jNode_)
             {
                 Numeric = jNode_["Numeric"];
-                Subject = (ESubject)Enum.Parse(typeof(ESubject), jNode_["Subject"]);
-                Category = (Gauge.ECategory)Enum.Parse(typeof(Gauge.ECategory), jNode_["Category"]);
+                Subject = Serializer.ReadEnum<ESubject>(jNode_["Subject"]);
+                Category = Serializer.ReadEnum<Gauge.ECategory>(jNode_["Category"]);
                 Gauge = jNode_["Gauge"];
             }
 
@@ -40,8 +40,8 @@ namespace Assets.Scripts.Model.Skill.Effect
             {
                 JSONObject jObject = new JSONObject();
                 jObject["Numeric"] = object_.Numeric;
-                jObject["Subject"] = object_.Subject.ToString("G");
-                jObject["Category"] = object_.Category.ToString("G");
+                jObject["Subject"] = object_.Subject;
+                jObject["Category"] = object_.Category;
                 jObject["Gauge"] = object_.Gauge;
                 return jObject;
             }
@@ -75,8 +75,8 @@ namespace Assets.Scripts.Model.Skill.Effect
         public Converter(JSONNode jNode_)
             : base(jNode_)
         {
-            As = (ESubject)Enum.Parse(typeof(ESubject), jNode_["As"]);
-            CategoryMask = (Gauge.ECategory)Enum.Parse(typeof(Gauge.ECategory), jNode_["CategoryMask"]);
+            As = Serializer.ReadEnum<ESubject>(jNode_["As"]);
+            CategoryMask = Serializer.ReadEnum<Gauge.ECategory>(jNode_["CategoryMask"]);
             Condition = jNode_["Condition"];
             Order = jNode_["Order"].AsInt;
             Input = jNode_["input"];
@@ -85,7 +85,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["CategoryMask"] = CategoryMask.ToString("G");
+            jObject["CategoryMask"] = CategoryMask;
             jObject["Condition"] = Condition;
             jObject["Order"] = Order;
             jObject["Input"] = Input;

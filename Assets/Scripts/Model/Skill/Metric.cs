@@ -9,19 +9,19 @@ namespace Assets.Scripts.Model.Skill
     {
         public class UpgradeType
         {
-            public enum EType
+            public enum ESign
             {
                 Increase,
                 Decrease,
             }
 
-            public EType Type { get; private set; }
+            public ESign Sign { get; private set; }
             public int MaxUpgradeCount { get; private set; }
             public double Factor { get; private set; }
 
             public UpgradeType(JSONObject jNode_)
             {
-                Type = (EType)Enum.Parse(typeof(EType), jNode_["Type"]);
+                Sign = Serializer.ReadEnum<ESign>(jNode_["Sign"]);
                 MaxUpgradeCount = jNode_["MaxUpgradeCount"];
                 Factor = jNode_["Factor"];
             }
@@ -34,7 +34,7 @@ namespace Assets.Scripts.Model.Skill
             public static implicit operator JSONNode(UpgradeType object_)
             {
                 JSONObject jObject = new JSONObject();
-                jObject["Type"] = object_.Type.ToString("G");
+                jObject["Sign"] = Serializer.WriteEnum(object_.Sign);
                 jObject["MaxUpgradeCount"] = object_.MaxUpgradeCount;
                 jObject["Factor"] = object_.Factor;
                 return jObject;
@@ -66,7 +66,7 @@ namespace Assets.Scripts.Model.Skill
         public Metric(JSONObject jNode_)
         {
             Name = jNode_["Name"];
-            Visual = (EVisual)Enum.Parse(typeof(EVisual), jNode_["Visual"]);
+            Visual = Serializer.ReadEnum<EVisual>(jNode_["Visual"]);
             Numeric = jNode_["Numeric"];
             if (!jNode_["Upgrade"].IsNull)
                 Upgrade = jNode_["Upgrade"];
@@ -81,7 +81,7 @@ namespace Assets.Scripts.Model.Skill
         {
             JSONObject jObject = new JSONObject();
             jObject["Name"] = numeric_.Name;
-            jObject["Visual"] = numeric_.Visual.ToString("G");
+            jObject["Visual"] = numeric_.Visual;
             jObject["Numeric"] = numeric_.Numeric;
             if (numeric_.Upgrade != null)
                 jObject["Upgrade"] = numeric_.Upgrade;

@@ -44,22 +44,22 @@ namespace Assets.Scripts.Model.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            BaseDirection = (EDirection)Enum.Parse(typeof(EDirection), jNode_["BaseDirection"]);
+            BaseDirection = Serializer.ReadEnum<EDirection>(jNode_["BaseDirection"]);
             AddedDirection = jNode_["AddedDirection"];
             Normalized = jNode_["Normalized"].AsBool;
             Magnitude = jNode_["Magnitude"];
-            TravelType = (ETravelType)Enum.Parse(typeof(ETravelType), jNode_["TravelType"]);
+            TravelType = Serializer.ReadEnum<ETravelType>(jNode_["TravelType"]);
             TravelParameter = jNode_["TravelParameter"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["BaseDirection"] = BaseDirection.ToString("G");
+            jObject["BaseDirection"] = BaseDirection;
             jObject["AddedDirection"] = AddedDirection;
             jObject["Normalized"] = Normalized;
             jObject["Magnitude"] = Magnitude;
-            jObject["TravelType"] = TravelType.ToString("G");
+            jObject["TravelType"] = TravelType;
             jObject["TravelParameter"] = TravelParameter;
             return jObject;
         }

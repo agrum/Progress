@@ -51,9 +51,9 @@ namespace Assets.Scripts.Model.Skill.Effect
             : base(jNode_)
         {
             Hash = jNode_["Hash"];
-            Target = (ETarget)Enum.Parse(typeof(ETarget), jNode_["Target"]);
-            Category = (ECategory)Enum.Parse(typeof(ECategory), jNode_["Category"]);
-            InputType = (Model.Skill.Unit.Gauge.EInputType)Enum.Parse(typeof(Model.Skill.Unit.Gauge.EInputType), jNode_["InputType"]);
+            Target = Serializer.ReadEnum<ETarget>(jNode_["Target"]);
+            Category = Serializer.ReadEnum<ECategory>(jNode_["Category"]);
+            InputType = Serializer.ReadEnum<Model.Skill.Unit.Gauge.EInputType>(jNode_["Target"]);
             Reference = jNode_["Reference"];
         }
 
@@ -61,9 +61,9 @@ namespace Assets.Scripts.Model.Skill.Effect
         {
             JSONObject jObject = new JSONObject();
             jObject["Hash"] = Hash;
-            jObject["Target"] = Target.ToString("G");
-            jObject["Category"] = Category.ToString("G");
-            jObject["InputType"] = InputType.ToString("G");
+            jObject["Target"] = Target;
+            jObject["Category"] = Category;
+            jObject["InputType"] = InputType;
             jObject["Reference"] = Reference;
             return jObject;
         }

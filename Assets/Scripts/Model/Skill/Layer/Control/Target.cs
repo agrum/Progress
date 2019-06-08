@@ -29,14 +29,14 @@ namespace Assets.Scripts.Model.Skill.Layer.Control
 
         public Target(JSONNode jNode_)
         {
-            TargetType = (ETargetType)Enum.Parse(typeof(ETargetType), jNode_["TargetType"]);
+            TargetType = Serializer.ReadEnum<ETargetType>(jNode_["TargetType"]);
             Radius = jNode_["Radius"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["TargetType"] = TargetType.ToString("G");
+            jObject["TargetType"] = TargetType;
             jObject["Radius"] = Radius;
             return jObject;
         }

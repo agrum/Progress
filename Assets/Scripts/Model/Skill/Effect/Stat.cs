@@ -30,7 +30,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             : base(jNode_)
         {
             Hash = jNode_["Hash"];
-            InputType = (Model.Skill.Unit.Stat.EInputType)Enum.Parse(typeof(Model.Skill.Unit.Stat.EInputType), jNode_["InputType"]);
+            InputType = Serializer.ReadEnum<Model.Skill.Unit.Stat.EInputType>(jNode_["InputType"]);
             Reference = jNode_["Reference"];
         }
 
@@ -38,7 +38,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         {
             JSONObject jObject = new JSONObject();
             jObject["Hash"] = Hash;
-            jObject["InputType"] = InputType.ToString("G");
+            jObject["InputType"] = InputType;
             jObject["Reference"] = Reference;
             return jObject;
         }

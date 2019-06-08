@@ -36,7 +36,7 @@ namespace Assets.Scripts.Model.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            Action = (EAction)Enum.Parse(typeof(EAction), jNode_["Action"]);
+            Action = Serializer.ReadEnum<EAction>(jNode_["Action"]);
             Amount = jNode_["Amount"];
             ModifierName = jNode_["ModifierName"];
         }
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Action"] = Action.ToString("G");
+            jObject["Action"] = Action;
             jObject["Amount"] = Amount;
             jObject["ModifierName"] = ModifierName;
             return jObject;

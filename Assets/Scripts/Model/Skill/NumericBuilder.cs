@@ -98,7 +98,7 @@ namespace Assets.Scripts.Model.Skill
         public NumericBuilder Value(double value_)
         {
             equationString +=
-                " " + Numeric.EReferenceType.Value.ToString("G") +
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.Value) +
                 "|" + value_.ToString();
             return FieldAdded();
         }
@@ -106,7 +106,7 @@ namespace Assets.Scripts.Model.Skill
         public NumericBuilder Random(double min_, double max_)
         {
             equationString +=
-                " " + Numeric.EReferenceType.RandomRange.ToString("G") +
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.RandomRange) +
                 "|" + min_.ToString() +
                 "|" + max_.ToString();
             return FieldAdded();
@@ -115,7 +115,7 @@ namespace Assets.Scripts.Model.Skill
         public NumericBuilder Gauge(ESubject subject_, string type_, Unit.Gauge.EExtract extract_)
         {
             equationString += 
-                " " + Numeric.EReferenceType.UnitGauge.ToString("G") + 
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.UnitGauge) + 
                 "|" + subject_.ToString("G") +
                 "|" + type_ + 
                 "|" + extract_.ToString("G");
@@ -125,7 +125,7 @@ namespace Assets.Scripts.Model.Skill
         public NumericBuilder Stat(ESubject subject_, string type_)
         {
             equationString += 
-                " " + Numeric.EReferenceType.UnitStat.ToString("G") + 
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.UnitStat) + 
                 "|" + subject_.ToString("G") + 
                 "|" + type_;
             return FieldAdded();
@@ -134,7 +134,7 @@ namespace Assets.Scripts.Model.Skill
         public NumericBuilder Modifier(ESubject subject_, uint modifier_, Modifier.EExtract extract_)
         {
             equationString += 
-                " " + Numeric.EReferenceType.Modifier.ToString("G") +
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.Modifier) +
                 "|" + subject_.ToString("G") + 
                 "|" + modifier_.ToString() + 
                 "|" + extract_.ToString("G");
@@ -144,14 +144,14 @@ namespace Assets.Scripts.Model.Skill
         public NumericBuilder Input()
         {
             equationString +=
-                " " + Numeric.EReferenceType.Input.ToString("G");
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.Input);
             return FieldAdded();
         }
 
         public NumericBuilder Cooldown(ESubject subject_, string name_)
         {
             equationString +=
-                " " + Numeric.EReferenceType.Input.ToString("G") +
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.Input) +
                 "|" + subject_.ToString("G") +
                 "|" + name_;
             return FieldAdded();

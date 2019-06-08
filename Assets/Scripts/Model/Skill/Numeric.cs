@@ -51,9 +51,9 @@ namespace Assets.Scripts.Model.Skill
 
             public ReferenceUnitGauge(List<string> fields)
             {
-                Enum.TryParse(fields[1], true, out Subject);
+                Subject = Serializer.ReadEnum<ESubject>(fields[1]);
                 Type = fields[2];
-                Enum.TryParse(fields[3], true, out Extract);
+                Extract = Serializer.ReadEnum<Unit.Gauge.EExtract>(fields[3]);
             }
 
             public double Get(TriggerInfo triggerInfo_)
@@ -69,7 +69,7 @@ namespace Assets.Scripts.Model.Skill
 
             public ReferenceUnitStat(List<string> fields)
             {
-                Enum.TryParse(fields[1], true, out Subject);
+                Subject = Serializer.ReadEnum<ESubject>(fields[1]);
                 Type = fields[2];
             }
 
@@ -105,9 +105,9 @@ namespace Assets.Scripts.Model.Skill
 
             public ReferencModifier(List<string> fields)
             {
-                Enum.TryParse(fields[1], true, out Subject);
+                Subject = Serializer.ReadEnum<ESubject>(fields[1]);
                 Modifier = Convert.ToUInt32(fields[3]);
-                Enum.TryParse(fields[3], true, out Extract);
+                Extract = Serializer.ReadEnum<Modifier.EExtract>(fields[3]);
             }
 
             public double Get(TriggerInfo triggerInfo_)
@@ -136,7 +136,7 @@ namespace Assets.Scripts.Model.Skill
 
             public ReferenceCooldown(List<string> fields)
             {
-                Enum.TryParse(fields[1], true, out Subject);
+                Subject = Serializer.ReadEnum<ESubject>(fields[1]);
                 Type = fields[2];
             }
 
@@ -189,11 +189,7 @@ namespace Assets.Scripts.Model.Skill
         public NumericValue(string referenceString_)
         {
             var fields = new List<string>(referenceString_.Split('|'));
-            EReferenceType referenceType;
-            if (!Enum.TryParse(fields[0], true, out referenceType))
-            {
-                throw new InvalidOperationException();
-            }
+            EReferenceType referenceType = Serializer.ReadEnum<EReferenceType>(fields[0]);
 
             switch (referenceType)
             {

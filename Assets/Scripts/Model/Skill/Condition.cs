@@ -36,9 +36,7 @@ namespace Assets.Scripts.Model.Skill
             var jArray = jNode.AsArray;
             if (jArray.Count != 3)
                 throw new Exception();
-            ERule rule;
-            if (!Enum.TryParse(jArray[1].ToString(), true, out rule))
-                throw new NotSupportedException();
+            ERule rule = Serializer.ReadEnum<ERule>(jArray[1]);
 
             return new Condition(jArray[0], rule, jArray[2]);
         }
@@ -48,7 +46,7 @@ namespace Assets.Scripts.Model.Skill
             JSONArray jArray = new JSONArray();
 
             jArray.Add(triggerCondition_.Left);
-            jArray.Add(triggerCondition_.Rule.ToString("G"));
+            jArray.Add(Serializer.WriteEnum(triggerCondition_.Rule));
             jArray.Add(triggerCondition_.Right);
 
             return jArray;

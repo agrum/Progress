@@ -53,8 +53,8 @@ namespace Assets.Scripts.Model.Skill.Effect
         protected Base(JSONNode jNode_)
         {
             Name = jNode_["Name"];
-            From = (ESubject)Enum.Parse(typeof(ESubject), jNode_["From"]);
-            To = (ESubject)Enum.Parse(typeof(ESubject), jNode_["To"]);
+            From = Serializer.ReadEnum<ESubject>(jNode_["From"]);
+            To = Serializer.ReadEnum<ESubject>(jNode_["To"]);
         }
 
         protected Base(Id id_)
@@ -91,8 +91,8 @@ namespace Assets.Scripts.Model.Skill.Effect
             JSONObject jObject = object_.ToJson();
             jObject["Type"] = object_.GetType().Name;
             jObject["Name"] = object_.Name;
-            jObject["From"] = object_.From.ToString("G");
-            jObject["To"] = object_.To.ToString("G");
+            jObject["From"] = object_.From;
+            jObject["To"] = object_.To;
             return jObject;
         }
     }

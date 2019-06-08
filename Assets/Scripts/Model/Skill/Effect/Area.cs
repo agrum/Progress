@@ -43,7 +43,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public Area(JSONNode jNode_)
             : base(jNode_)
         {
-            Shape = (EShape)Enum.Parse(typeof(EShape), jNode_["Shape"]);
+            Shape = Serializer.ReadEnum<EShape>(jNode_["Shape"]);
             Length = jNode_["Length"];
             Width = jNode_["Width"];
             Offset = jNode_["Offset"];
@@ -55,7 +55,7 @@ namespace Assets.Scripts.Model.Skill.Effect
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Shape"] = Shape.ToString("G");
+            jObject["Shape"] = Shape;
             jObject["Length"] = Length;
             jObject["Width"] = Width;
             jObject["Offset"] = Offset;

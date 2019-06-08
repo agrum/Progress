@@ -1177,6 +1177,7 @@
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Modifier.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Physics.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Effect\Gauge.cs" />
+    <Compile Include="Assets\Scripts\Model\Skill\Serializer.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Layer\Activation\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Layer\Base.cs" />
     <Compile Include="Assets\Scripts\Model\Skill\Layer\Medium\Cast.cs" />
