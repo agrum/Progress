@@ -44,23 +44,23 @@ namespace Assets.Scripts.Data.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            BaseDirection = Serializer.ReadEnum<EDirection>(jNode_["BaseDirection"]);
-            AddedDirection = jNode_["AddedDirection"];
-            Normalized = jNode_["Normalized"].AsBool;
-            Magnitude = jNode_["Magnitude"];
-            TravelType = Serializer.ReadEnum<ETravelType>(jNode_["TravelType"]);
-            TravelParameter = jNode_["TravelParameter"];
+            BaseDirection = Serializer.ReadEnum<EDirection>(jNode_["baseDirection"]);
+            AddedDirection = jNode_["addedDirection"];
+            Normalized = jNode_["normalized"].AsBool;
+            Magnitude = jNode_["magnitude"];
+            TravelType = Serializer.ReadEnum<ETravelType>(jNode_["travelType"]);
+            TravelParameter = jNode_["travelParameter"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["BaseDirection"] = BaseDirection;
-            jObject["AddedDirection"] = AddedDirection;
-            jObject["Normalized"] = Normalized;
-            jObject["Magnitude"] = Magnitude;
-            jObject["TravelType"] = TravelType;
-            jObject["TravelParameter"] = TravelParameter;
+            jObject["baseDirection"] = BaseDirection;
+            jObject["addedDirection"] = AddedDirection;
+            jObject["normalized"] = Normalized;
+            jObject["magnitude"] = Magnitude;
+            jObject["travelType"] = TravelType;
+            jObject["travelParameter"] = TravelParameter;
             return jObject;
         }
     }

@@ -26,7 +26,7 @@ namespace Assets.Scripts.Model
             JSONObject jObject = new JSONObject();
 
             jObject["_id"] = object_.Metric.Name;
-            jObject["Level"] = object_.Level;
+            jObject["level"] = object_.Level;
 
             return jObject;
         }

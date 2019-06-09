@@ -22,15 +22,15 @@ namespace Assets.Scripts.Data.Skill.Layer.Activation
 
         public Charge(JSONNode jNode_)
         {
-            MaxChargeDuration = jNode_["MaxChargeDuration"];
-            MaxHoldDuration = jNode_["MaxHoldDuration"];
+            MaxChargeDuration = jNode_["maxChargeDuration"];
+            MaxHoldDuration = jNode_["maxHoldDuration"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["MaxHoldDuration"] = MaxChargeDuration;
-            jObject["MaxChargeDuration"] = MaxHoldDuration;
+            jObject["maxHoldDuration"] = MaxChargeDuration;
+            jObject["maxChargeDuration"] = MaxHoldDuration;
             return jObject;
         }
     }

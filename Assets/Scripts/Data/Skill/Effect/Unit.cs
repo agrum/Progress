@@ -22,7 +22,7 @@ namespace Assets.Scripts.Data.Skill.Effect
         public Unit(JSONNode jNode_)
             : base(jNode_)
         {
-            foreach (var effect in jNode_["Effects"].AsArray)
+            foreach (var effect in jNode_["effects"].AsArray)
                 Effects.Add(effect.Value);
         }
 
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Data.Skill.Effect
             JSONArray effects = new JSONArray();
             foreach (var effect in Effects)
                 effects.Add(effect);
-            jObject["Effects"] = effects;
+            jObject["effects"] = effects;
             return jObject;
         }
     }

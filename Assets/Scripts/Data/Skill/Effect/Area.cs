@@ -43,27 +43,27 @@ namespace Assets.Scripts.Data.Skill.Effect
         public Area(JSONNode jNode_)
             : base(jNode_)
         {
-            Shape = Serializer.ReadEnum<EShape>(jNode_["Shape"]);
-            Length = jNode_["Length"];
-            Width = jNode_["Width"];
-            Offset = jNode_["Offset"];
-            AffectMaxCount = jNode_["AffectMaxCount"];
-            foreach (var effect in jNode_["Effects"].AsArray)
+            Shape = Serializer.ReadEnum<EShape>(jNode_["shape"]);
+            Length = jNode_["length"];
+            Width = jNode_["width"];
+            Offset = jNode_["offset"];
+            AffectMaxCount = jNode_["affectMaxCount"];
+            foreach (var effect in jNode_["effects"].AsArray)
                 Effects.Add(effect.Value);
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Shape"] = Shape;
-            jObject["Length"] = Length;
-            jObject["Width"] = Width;
-            jObject["Offset"] = Offset;
-            jObject["AffectMaxCount"] = AffectMaxCount;
+            jObject["shape"] = Shape;
+            jObject["length"] = Length;
+            jObject["width"] = Width;
+            jObject["offset"] = Offset;
+            jObject["affectMaxCount"] = AffectMaxCount;
             JSONArray effects = new JSONArray();
             foreach (var effect in Effects)
                 effects.Add(effect);
-            jObject["Effects"] = effects;
+            jObject["effects"] = effects;
             return jObject;
         }
     }

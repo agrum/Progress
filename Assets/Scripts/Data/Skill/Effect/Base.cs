@@ -52,9 +52,9 @@ namespace Assets.Scripts.Data.Skill.Effect
 
         protected Base(JSONNode jNode_)
         {
-            Name = jNode_["Name"];
-            From = Serializer.ReadEnum<ESubject>(jNode_["From"]);
-            To = Serializer.ReadEnum<ESubject>(jNode_["To"]);
+            Name = jNode_["name"];
+            From = Serializer.ReadEnum<ESubject>(jNode_["from"]);
+            To = Serializer.ReadEnum<ESubject>(jNode_["to"]);
         }
 
         protected Base(Id id_)
@@ -73,7 +73,7 @@ namespace Assets.Scripts.Data.Skill.Effect
 
         public static implicit operator Base(JSONNode jNode_)
         {
-            switch (jNode_["Type"].ToString())
+            switch (jNode_["type"].ToString())
             {
                 case "Area": return new Area(jNode_);
                 case "Converter": return new Converter(jNode_);
@@ -89,10 +89,10 @@ namespace Assets.Scripts.Data.Skill.Effect
         public static implicit operator JSONNode(Base object_)
         {
             JSONObject jObject = object_.ToJson();
-            jObject["Type"] = object_.GetType().Name;
-            jObject["Name"] = object_.Name;
-            jObject["From"] = object_.From;
-            jObject["To"] = object_.To;
+            jObject["type"] = object_.GetType().Name;
+            jObject["name"] = object_.Name;
+            jObject["from"] = object_.From;
+            jObject["to"] = object_.To;
             return jObject;
         }
     }

@@ -26,15 +26,15 @@ namespace Assets.Scripts.Data.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            Duration = jNode_["Duration"];
-            Effect = jNode_["Effect"];
+            Duration = jNode_["duration"];
+            Effect = jNode_["effect"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Duration"] = Duration;
-            jObject["Effect"] = Effect;
+            jObject["duration"] = Duration;
+            jObject["effect"] = Effect;
             return jObject;
         }
     }

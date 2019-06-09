@@ -32,19 +32,19 @@ namespace Assets.Scripts.Data.Skill
 
         public Modifier(JSONNode jNode_)
         {
-            Stacker = jNode_["Stacker"];
-            foreach (var behaviour in jNode_["Behaviours"].AsArray)
+            Stacker = jNode_["stacker"];
+            foreach (var behaviour in jNode_["behaviours"].AsArray)
                 Behaviours.Add(behaviour.Value);
         }
 
         public static implicit operator JSONNode(Modifier modifier_)
         {
             JSONObject jObject = new JSONObject();
-            jObject["Stacker"] = modifier_.Stacker;
+            jObject["stacker"] = modifier_.Stacker;
             JSONArray behaviours = new JSONArray();
             foreach (var behaviour in modifier_.Behaviours)
                 behaviours.Add(behaviour);
-            jObject["Behaviours"] = behaviours;
+            jObject["behaviours"] = behaviours;
             return jObject;
         }
     }

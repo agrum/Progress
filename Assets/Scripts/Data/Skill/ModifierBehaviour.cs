@@ -27,11 +27,11 @@ namespace Assets.Scripts.Data.Skill
 
         public static implicit operator ModifierBehaviour(JSONNode jNode_)
         {
-            ModifierBehaviour behaviour = new ModifierBehaviour(jNode_["Trigger"]);
+            ModifierBehaviour behaviour = new ModifierBehaviour(jNode_["trigger"]);
             
-            foreach (var condition in jNode_["Conditions"].AsArray)
+            foreach (var condition in jNode_["conditions"].AsArray)
                 behaviour.Conditions.Add(condition.Value.AsArray);
-            foreach (var effect in jNode_["Effects"].AsArray)
+            foreach (var effect in jNode_["effects"].AsArray)
                 behaviour.Effects.Add(effect.Value);
 
             return behaviour;
@@ -41,15 +41,15 @@ namespace Assets.Scripts.Data.Skill
         {
             JSONObject jObject = new JSONObject();
 
-            jObject["Trigger"] = behaviour_.Trigger;
+            jObject["trigger"] = behaviour_.Trigger;
             var conditions = new JSONArray();
             foreach (var condition in behaviour_.Conditions)
                 conditions.Add(condition);
-            jObject["Conditions"] = conditions;
+            jObject["conditions"] = conditions;
             var effects = new JSONArray();
             foreach (var effect in behaviour_.Effects)
                 effects.Add(effect);
-            jObject["Effects"] = conditions;
+            jObject["effects"] = conditions;
 
             return jObject;
         }

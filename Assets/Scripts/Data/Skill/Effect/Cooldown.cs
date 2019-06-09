@@ -26,15 +26,15 @@ namespace Assets.Scripts.Data.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            Hash = jNode_["Hash"];
-            Reference = jNode_["Reference"];
+            Hash = jNode_["hash"];
+            Reference = jNode_["reference"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Hash"] = Hash;
-            jObject["Reference"] = Reference;
+            jObject["hash"] = Hash;
+            jObject["reference"] = Reference;
             return jObject;
         }
     }

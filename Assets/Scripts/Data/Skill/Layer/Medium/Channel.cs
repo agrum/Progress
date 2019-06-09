@@ -19,15 +19,15 @@ namespace Assets.Scripts.Data.Skill.Layer.Medium
 
         public Channel(JSONNode jNode_)
         {
-            Duration = jNode_["Duration"];
-            Tick = jNode_["Tick"];
+            Duration = jNode_["duration"];
+            Tick = jNode_["tick"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Duration"] = Duration;
-            jObject["Tick"] = Tick;
+            jObject["duration"] = Duration;
+            jObject["tick"] = Tick;
             return jObject;
         }
     }

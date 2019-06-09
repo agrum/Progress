@@ -20,15 +20,15 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
 
         public Drop(JSONNode jNode_)
         {
-            Range = jNode_["Range"];
-            Radius = jNode_["Radius"];
+            Range = jNode_["range"];
+            Radius = jNode_["radius"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Range"] = Range;
-            jObject["Radius"] = Radius;
+            jObject["range"] = Range;
+            jObject["radius"] = Radius;
             return jObject;
         }
     }

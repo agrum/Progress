@@ -20,15 +20,15 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
 
         public Cone(JSONNode jNode_)
         {
-            Radius = jNode_["Radius"];
-            Degrees = jNode_["Degrees"];
+            Radius = jNode_["radius"];
+            Degrees = jNode_["degrees"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Radius"] = Radius;
-            jObject["Degrees"] = Degrees;
+            jObject["radius"] = Radius;
+            jObject["degrees"] = Degrees;
             return jObject;
         }
     }

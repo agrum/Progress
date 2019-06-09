@@ -28,7 +28,7 @@ namespace Assets.Scripts.Model
                 if (upgrade.Value.Level != 0)
                     ugprades.Add(upgrade.Value);
             }
-            json["Upgrades"] = ugprades;
+            json["upgrades"] = ugprades;
 
             return json;
         }
@@ -43,11 +43,11 @@ namespace Assets.Scripts.Model
 
         public SkillUpgrade(JSONObject json_)
         {            
-            var constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["Constellation"]];
-            Skill = constellation.Skill(json_["Skill"]);
+            var constellation = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
+            Skill = constellation.Skill(json_["skill"]);
             System.Func<Data.Skill.Metric, JSONObject> lookUp = (Data.Skill.Metric metric_) =>
             {
-                foreach (var node in json_["Upgrades"].AsArray)
+                foreach (var node in json_["upgrades"].AsArray)
                     if (node.Value["_id"] == metric_.Name)
                         return node.Value.AsObject;
                 return null;

@@ -40,9 +40,9 @@ namespace Assets.Scripts.Data.Skill
 
             public UpgradeType(JSONObject jNode_)
             {
-                Sign = Serializer.ReadEnum<ESign>(jNode_["Sign"]);
-                MaxUpgradeCount = jNode_["MaxUpgradeCount"];
-                Factor = jNode_["Factor"];
+                Sign = Serializer.ReadEnum<ESign>(jNode_["sign"]);
+                MaxUpgradeCount = jNode_["maxUpgradeCount"];
+                Factor = jNode_["factor"];
             }
 
             public static implicit operator UpgradeType(JSONNode jNode_)
@@ -53,9 +53,9 @@ namespace Assets.Scripts.Data.Skill
             public static implicit operator JSONNode(UpgradeType object_)
             {
                 JSONObject jObject = new JSONObject();
-                jObject["Sign"] = Serializer.WriteEnum(object_.Sign);
-                jObject["MaxUpgradeCount"] = object_.MaxUpgradeCount;
-                jObject["Factor"] = object_.Factor;
+                jObject["sign"] = Serializer.WriteEnum(object_.Sign);
+                jObject["maxUpgradeCount"] = object_.MaxUpgradeCount;
+                jObject["factor"] = object_.Factor;
                 return jObject;
             }
         }
@@ -78,11 +78,11 @@ namespace Assets.Scripts.Data.Skill
         public Metric(JSONObject jNode_)
         {
             _Id = new Guid(jNode_["_id"]);
-            Name = jNode_["Name"];
-            Category = Serializer.ReadEnum<ECategory>(jNode_["Category"]);
-            Numeric = jNode_["Numeric"];
-            if (!jNode_["Upgrade"].IsNull)
-                Upgrade = jNode_["Upgrade"];
+            Name = jNode_["name"];
+            Category = Serializer.ReadEnum<ECategory>(jNode_["category"]);
+            Numeric = jNode_["numeric"];
+            if (!jNode_["upgrade"].IsNull)
+                Upgrade = jNode_["upgrade"];
         }
 
         public static implicit operator Metric(JSONNode jNode_)
@@ -94,11 +94,11 @@ namespace Assets.Scripts.Data.Skill
         {
             JSONObject jObject = new JSONObject();
             jObject["_id"] = object_._Id.ToString();
-            jObject["Name"] = object_.Name;
-            jObject["Category"] = Serializer.WriteEnum(object_.Category);
-            jObject["Numeric"] = object_.Numeric;
+            jObject["name"] = object_.Name;
+            jObject["category"] = Serializer.WriteEnum(object_.Category);
+            jObject["numeric"] = object_.Numeric;
             if (object_.Upgrade != null)
-                jObject["Upgrade"] = object_.Upgrade;
+                jObject["upgrade"] = object_.Upgrade;
             return jObject;
         }
     }

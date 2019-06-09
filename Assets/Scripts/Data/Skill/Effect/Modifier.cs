@@ -36,17 +36,17 @@ namespace Assets.Scripts.Data.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            Action = Serializer.ReadEnum<EAction>(jNode_["Action"]);
-            Amount = jNode_["Amount"];
-            ModifierName = jNode_["ModifierName"];
+            Action = Serializer.ReadEnum<EAction>(jNode_["action"]);
+            Amount = jNode_["amount"];
+            ModifierName = jNode_["modifierName"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Action"] = Action;
-            jObject["Amount"] = Amount;
-            jObject["ModifierName"] = ModifierName;
+            jObject["action"] = Action;
+            jObject["amount"] = Amount;
+            jObject["modifierName"] = ModifierName;
             return jObject;
         }
     }

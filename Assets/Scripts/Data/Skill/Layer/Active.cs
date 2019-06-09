@@ -34,25 +34,25 @@ namespace Assets.Scripts.Data.Skill.Layer
         public Active(JSONNode jNode_)
             : base(jNode_)
         {
-            Activation = jNode_["Activation"];
-            Control = jNode_["Control"];
-            Condition = jNode_["Condition"];
-            Medium = jNode_["Medium"];
-            foreach (var effect in jNode_["Effects"].AsArray)
+            Activation = jNode_["activation"];
+            Control = jNode_["control"];
+            Condition = jNode_["condition"];
+            Medium = jNode_["medium"];
+            foreach (var effect in jNode_["effects"].AsArray)
                 Effects.Add(effect.Value);
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Activation"] = Activation;
-            jObject["Control"] = Control;
-            jObject["Condition"] = Condition;
-            jObject["Medium"] = Medium;
+            jObject["activation"] = Activation;
+            jObject["control"] = Control;
+            jObject["condition"] = Condition;
+            jObject["medium"] = Medium;
             var effects = new JSONArray();
             foreach (var effect in Effects)
                 effects.AsArray.Add(effect);
-            jObject["Effects"] = effects;
+            jObject["effects"] = effects;
             return jObject;
         }
     }

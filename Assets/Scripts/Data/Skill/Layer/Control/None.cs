@@ -18,13 +18,13 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
 
         public None(JSONNode jNode_)
         {
-            Radius = jNode_["Radius"];
+            Radius = jNode_["radius"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Radius"] = Radius;
+            jObject["radius"] = Radius;
             return jObject;
         }
     }

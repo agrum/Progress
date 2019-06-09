@@ -25,8 +25,8 @@ namespace Assets.Scripts.Data.Skill.Layer
 
         public Visual(JSONObject jNode_)
         {
-            Middle = jNode_["Middle"];
-            TopRight = jNode_["TopRight"];
+            Middle = jNode_["middle"];
+            TopRight = jNode_["topRight"];
         }
 
         public static implicit operator Visual(JSONNode jNode_)
@@ -37,8 +37,8 @@ namespace Assets.Scripts.Data.Skill.Layer
         public static implicit operator JSONNode(Visual object_)
         {
             JSONObject jObject = new JSONObject();
-            jObject["Middle"] = object_.Middle;
-            jObject["TopRight"] = object_.TopRight;
+            jObject["middle"] = object_.Middle;
+            jObject["topRight"] = object_.TopRight;
             return jObject;
         }
     }

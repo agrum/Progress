@@ -23,11 +23,11 @@ namespace Assets.Scripts.CloudContent
 
                 foreach (var almostJson in Json)
                 {
-                    if (almostJson.Value["Type"] == "Ability")
+                    if (almostJson.Value["type"] == "Ability")
                         Abilities.Add(almostJson.Value["_id"], new Data.Skill.Skill(almostJson.Value));
-                    else if (almostJson.Value["Type"] == "Class")
+                    else if (almostJson.Value["type"] == "Class")
                         Classes.Add(almostJson.Value["_id"], new Data.Skill.Skill(almostJson.Value));
-                    else if (almostJson.Value["Type"] == "Kit")
+                    else if (almostJson.Value["type"] == "Kit")
                         Kits.Add(almostJson.Value["_id"], new Data.Skill.Skill(almostJson.Value));
                 }
 

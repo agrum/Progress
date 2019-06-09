@@ -13,7 +13,7 @@ namespace Assets.Scripts.Data.Skill.Trigger
 
         public static implicit operator Base(JSONNode jNode_)
         {
-            switch (jNode_["Type"].ToString())
+            switch (jNode_["type"].ToString())
             {
                 case "Begin": return new Begin();
                 case "End": return new End();
@@ -36,7 +36,7 @@ namespace Assets.Scripts.Data.Skill.Trigger
         public static implicit operator JSONNode(Base triggerType_)
         {
             JSONObject jObject = triggerType_.ToJson();
-            jObject["Type"] = triggerType_.GetType().ToString();
+            jObject["type"] = triggerType_.GetType().ToString();
             return jObject;
         }
     }
@@ -349,13 +349,13 @@ namespace Assets.Scripts.Data.Skill.Trigger
 
         public GaugeOutput(JSONNode jNode_)
         {
-            Stat = jNode_["Stat"];
+            Stat = jNode_["stat"];
         }
 
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
-            jObject["Stat"] = Stat;
+            jObject["stat"] = Stat;
             return jObject;
         }
     }
@@ -389,17 +389,17 @@ namespace Assets.Scripts.Data.Skill.Trigger
 
         public UnitChange(JSONNode jNode_)
         {
-            Direction = Serializer.ReadEnum<EDirection>(jNode_["Direction"]);
-            StatType = Serializer.ReadEnum<EStatType>(jNode_["StatType"]);
-            Name = jNode_["Name"];
+            Direction = Serializer.ReadEnum<EDirection>(jNode_["direction"]);
+            StatType = Serializer.ReadEnum<EStatType>(jNode_["statType"]);
+            Name = jNode_["name"];
         }
 
         protected override JSONObject ToJson()
         {
             var jObject = new JSONObject();
-            jObject["Stat"] = Direction;
-            jObject["Stat"] = StatType;
-            jObject["Stat"] = Name;
+            jObject["stat"] = Direction;
+            jObject["stat"] = StatType;
+            jObject["stat"] = Name;
             return jObject;
         }
     }

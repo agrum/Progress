@@ -18,13 +18,13 @@ namespace Assets.Scripts.Data.Skill.Layer.Medium
 
         public Cast(JSONObject jObject_)
         {
-            Duration = jObject_["Duration"];
+            Duration = jObject_["duration"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Duration"] = Duration;
+            jObject["duration"] = Duration;
             return jObject;
         }
     }

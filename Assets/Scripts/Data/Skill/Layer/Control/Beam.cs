@@ -20,15 +20,15 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
 
         public Beam(JSONNode jNode_)
         {
-            Length = jNode_["Length"];
-            Width = jNode_["Width"];
+            Length = jNode_["length"];
+            Width = jNode_["width"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Length"] = Length;
-            jObject["Width"] = Width;
+            jObject["length"] = Length;
+            jObject["width"] = Width;
             return jObject;
         }
     }

@@ -19,7 +19,7 @@ namespace Assets.Scripts.Data.Skill
 
         public Cooldown(JSONNode jNode_)
         {
-            Duration = jNode_["Duration"];
+            Duration = jNode_["duration"];
         }
 
         public static implicit operator Cooldown(JSONNode jNode_)
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Data.Skill
         public static implicit operator JSONNode(Cooldown cooldown_)
         {
             JSONObject jObject = new JSONObject();
-            jObject["Duration"] = cooldown_.Duration;
+            jObject["duration"] = cooldown_.Duration;
             return jObject;
         }
     }

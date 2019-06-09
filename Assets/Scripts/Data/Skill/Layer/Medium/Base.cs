@@ -13,7 +13,7 @@ namespace Assets.Scripts.Data.Skill.Layer.Medium
 
         public static implicit operator Base(JSONNode jNode_)
         {
-            switch (jNode_["Type"].ToString())
+            switch (jNode_["type"].ToString())
             {
                 case "Cast": return new Cast(jNode_);
                 case "Channel": return new Channel(jNode_);
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Data.Skill.Layer.Medium
         public static implicit operator JSONNode(Base object_)
         {
             JSONObject jObject = object_.ToJson();
-            jObject["Type"] = object_.GetType().Name;
+            jObject["type"] = object_.GetType().Name;
             return jObject;
         }
     }

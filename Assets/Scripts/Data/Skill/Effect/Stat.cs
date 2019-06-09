@@ -29,17 +29,17 @@ namespace Assets.Scripts.Data.Skill.Effect
             JSONNode jNode_)
             : base(jNode_)
         {
-            Hash = jNode_["Hash"];
-            Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["Category"]);
-            Reference = jNode_["Reference"];
+            Hash = jNode_["hash"];
+            Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["category"]);
+            Reference = jNode_["reference"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["Hash"] = Hash;
-            jObject["Category"] = Category;
-            jObject["Reference"] = Reference;
+            jObject["hash"] = Hash;
+            jObject["category"] = Category;
+            jObject["reference"] = Reference;
             return jObject;
         }
     }

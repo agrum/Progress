@@ -29,15 +29,15 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
 
         public Target(JSONNode jNode_)
         {
-            TargetType = Serializer.ReadEnum<ETargetType>(jNode_["TargetType"]);
-            Radius = jNode_["Radius"];
+            TargetType = Serializer.ReadEnum<ETargetType>(jNode_["targetType"]);
+            Radius = jNode_["radius"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["TargetType"] = TargetType;
-            jObject["Radius"] = Radius;
+            jObject["targetType"] = TargetType;
+            jObject["radius"] = Radius;
             return jObject;
         }
     }

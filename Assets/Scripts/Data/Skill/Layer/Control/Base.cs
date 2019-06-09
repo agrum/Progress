@@ -13,7 +13,7 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
 
         public static implicit operator Base(JSONNode jNode_)
         {
-            switch (jNode_["Type"].ToString())
+            switch (jNode_["type"].ToString())
             {
                 case "Beam": return new Beam(jNode_);
                 case "Cone": return new Cone(jNode_);
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Data.Skill.Layer.Control
         public static implicit operator JSONNode(Base object_)
         {
             JSONObject jObject = object_.ToJson();
-            jObject["Type"] = object_.GetType().Name;
+            jObject["type"] = object_.GetType().Name;
             return jObject;
         }
     }

@@ -30,19 +30,19 @@ namespace Assets.Scripts.Data.Skill.Effect
 
             public Output(JSONNode jNode_)
             {
-                Numeric = jNode_["Numeric"];
-                Subject = Serializer.ReadEnum<ESubject>(jNode_["Subject"]);
-                Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["Category"]);
-                Gauge = jNode_["Gauge"];
+                Numeric = jNode_["numeric"];
+                Subject = Serializer.ReadEnum<ESubject>(jNode_["subject"]);
+                Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["category"]);
+                Gauge = jNode_["gauge"];
             }
 
             public static implicit operator JSONNode(Output object_)
             {
                 JSONObject jObject = new JSONObject();
-                jObject["Numeric"] = object_.Numeric;
-                jObject["Subject"] = object_.Subject;
-                jObject["Category"] = object_.Category;
-                jObject["Gauge"] = object_.Gauge;
+                jObject["numeric"] = object_.Numeric;
+                jObject["subject"] = object_.Subject;
+                jObject["category"] = object_.Category;
+                jObject["gauge"] = object_.Gauge;
                 return jObject;
             }
         }
@@ -75,24 +75,24 @@ namespace Assets.Scripts.Data.Skill.Effect
         public Converter(JSONNode jNode_)
             : base(jNode_)
         {
-            As = Serializer.ReadEnum<ESubject>(jNode_["As"]);
-            CategoryMask = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["CategoryMask"]);
-            Condition = jNode_["Condition"];
-            Order = jNode_["Order"].AsInt;
+            As = Serializer.ReadEnum<ESubject>(jNode_["as"]);
+            CategoryMask = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["categoryMask"]);
+            Condition = jNode_["condition"];
+            Order = jNode_["order"].AsInt;
             Input = jNode_["input"];
         }
 
         public override JSONObject ToJson()
         {
             JSONObject jObject = new JSONObject();
-            jObject["CategoryMask"] = CategoryMask;
-            jObject["Condition"] = Condition;
-            jObject["Order"] = Order;
-            jObject["Input"] = Input;
+            jObject["categoryMask"] = CategoryMask;
+            jObject["condition"] = Condition;
+            jObject["order"] = Order;
+            jObject["input"] = Input;
             JSONArray outputs = new JSONArray();
             foreach (var output in Outputs)
                 outputs.Add(output);
-            jObject["Outputs"] = outputs;
+            jObject["outputs"] = outputs;
             return jObject;
         }
     }

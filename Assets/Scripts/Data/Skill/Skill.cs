@@ -56,14 +56,14 @@ namespace Assets.Scripts.Data.Skill
         public Skill(JSONNode jNode_)
         {
             _Id = new Guid(jNode_["_id"]);
-            Category = Serializer.ReadEnum< ECategory>(jNode_["Category"]);
-            Name = jNode_["Name"];
+            Category = Serializer.ReadEnum< ECategory>(jNode_["category"]);
+            Name = jNode_["name"];
 
-            foreach (var condition in jNode_["Metrics"].AsArray)
+            foreach (var condition in jNode_["metrics"].AsArray)
                 Metrics.Add(condition.Value.AsArray);
-            foreach (var effect in jNode_["Passives"].AsArray)
+            foreach (var effect in jNode_["passives"].AsArray)
                 Passives.Add(effect.Value);
-            foreach (var effect in jNode_["Layers"].AsArray)
+            foreach (var effect in jNode_["layers"].AsArray)
                 Layers.Add(effect.Value);
         }
 
@@ -77,19 +77,19 @@ namespace Assets.Scripts.Data.Skill
             JSONObject jObject = new JSONObject();
 
             jObject["_id"] = skill_._Id.ToString();
-            jObject["Category"] = skill_.Category;
-            jObject["Name"] = skill_.Name;
+            jObject["category"] = skill_.Category;
+            jObject["name"] = skill_.Name;
             var conditions = new JSONArray();
             foreach (var entry in skill_.Metrics)
                 conditions.Add(entry);
-            jObject["Metrics"] = conditions;
+            jObject["metrics"] = conditions;
             var effects = new JSONArray();
             foreach (var entry in skill_.Passives)
                 effects.Add(entry);
-            jObject["Passives"] = conditions;
+            jObject["passives"] = conditions;
             foreach (var entry in skill_.Layers)
                 effects.Add(entry);
-            jObject["Layers"] = conditions;
+            jObject["layers"] = conditions;
 
             return jObject;
         }
