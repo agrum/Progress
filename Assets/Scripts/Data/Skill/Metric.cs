@@ -11,13 +11,20 @@ namespace Assets.Scripts.Data.Skill
         {
             public enum ESign
             {
-                Increase,
-                Decrease,
+                Multiply,
+                Divide,
             }
 
             public ESign Sign { get; private set; }
             public int MaxUpgradeCount { get; private set; }
             public double Factor { get; private set; }
+
+            public UpgradeType(ESign sign_, int maxUpgradeCount_, double factor_)
+            {
+                Sign = sign_;
+                MaxUpgradeCount = maxUpgradeCount_;
+                Factor = factor_;
+            }
 
             public UpgradeType(JSONObject jNode_)
             {
@@ -41,24 +48,15 @@ namespace Assets.Scripts.Data.Skill
             }
         }
 
-        public enum EVisual
-        {
-            Additive,
-            AdditiveMultiplier,
-            Multiplier,
-        }
-
         public NamedHash Name { get; private set; }
-        public EVisual Visual { get; private set; }
         public Numeric Numeric { get; private set; }
         public UpgradeType Upgrade { get; private set; }
 
         public JSONObject Json { get; private set; }
 
-        public Metric(NamedHash name_, EVisual visual_, Numeric numeric_, UpgradeType upgrade_ = null)
+        public Metric(NamedHash name_, Numeric numeric_, UpgradeType upgrade_ = null)
         {
             Name = name_;
-            Visual = visual_;
             Numeric = numeric_;
             Upgrade = upgrade_;
         }
@@ -66,7 +64,6 @@ namespace Assets.Scripts.Data.Skill
         public Metric(JSONObject jNode_)
         {
             Name = jNode_["Name"];
-            Visual = Serializer.ReadEnum<EVisual>(jNode_["Visual"]);
             Numeric = jNode_["Numeric"];
             if (!jNode_["Upgrade"].IsNull)
                 Upgrade = jNode_["Upgrade"];
@@ -81,7 +78,6 @@ namespace Assets.Scripts.Data.Skill
         {
             JSONObject jObject = new JSONObject();
             jObject["Name"] = numeric_.Name;
-            jObject["Visual"] = numeric_.Visual;
             jObject["Numeric"] = numeric_.Numeric;
             if (numeric_.Upgrade != null)
                 jObject["Upgrade"] = numeric_.Upgrade;

@@ -29,7 +29,7 @@ namespace Assets.Scripts.Data.Skill.Effect
             MetricReference width_,
             MetricReference offset_,
             MetricReference affectMaxCount_,
-             params Base[] effects_)
+            params Base[] effects_)
             : base(id_)
         {
             Shape = shape_;

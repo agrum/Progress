@@ -36,6 +36,11 @@ namespace Assets.Scripts.Data.Skill
             return name_;
         }
 
+        public static implicit operator MetricReference(string name_)
+        {
+            return name_;
+        }
+
         public static implicit operator MetricReference(double value)
         {
             return value;

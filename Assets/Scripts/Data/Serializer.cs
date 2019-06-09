@@ -32,7 +32,7 @@ namespace SimpleJSON
     {
         public static implicit operator JSONNode(Enum enum_)
         {
-            return Assets.Scripts.Data.Skill.Serializer.WriteEnum(enum_);
+            return Assets.Scripts.Data.Serializer.WriteEnum(enum_);
         }
     }
 }

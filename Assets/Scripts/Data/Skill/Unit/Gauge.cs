@@ -25,5 +25,11 @@ namespace Assets.Scripts.Data.Skill.Unit
             MissingRatio,
             MissingPercentage
         }
+
+        public enum EStandard
+        {
+            Health,
+            Stamina,
+        }
     }
 }

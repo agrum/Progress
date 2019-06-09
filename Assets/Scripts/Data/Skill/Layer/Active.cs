@@ -21,7 +21,7 @@ namespace Assets.Scripts.Data.Skill.Layer
             Control.Base control_,
             Condition condition_,
             Medium.Base medium_,
-            Effect.Base[] effects_)
+            params Effect.Base[] effects_)
             : base(visual_)
         {
             Activation = activation_;

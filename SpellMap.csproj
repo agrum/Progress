@@ -1137,6 +1137,7 @@
     <Compile Include="Assets\Scripts\App\Route\Trigger.cs" />
     <Compile Include="Assets\Scripts\App\Route\Modifier.cs" />
     <Compile Include="Assets\Scripts\App\Route\Unit.cs" />
+    <Compile Include="Assets\Scripts\Asset\Skill\LaserBeam.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
     <Compile Include="Assets\Scripts\Controller\LivingController.cs" />

@@ -10,18 +10,18 @@ namespace Assets.Scripts.Data.Skill.Effect
     public class Stat : Base
     {
         public NamedHash Hash { get; private set; }
-        public Model.Skill.Unit.Stat.EInputType InputType { get; private set; }
+        public Data.Skill.Unit.Stat.ECategory Category { get; private set; }
         public MetricReference Reference { get; private set; }
 
         public Stat(
             Id id_,
             NamedHash hash_,
-            Model.Skill.Unit.Stat.EInputType inputType_,
+            Data.Skill.Unit.Stat.ECategory category_,
             MetricReference reference_)
             : base(id_)
         {
             Hash = hash_;
-            InputType = inputType_;
+            Category = category_;
             Reference = reference_;
         }
 
@@ -30,7 +30,7 @@ namespace Assets.Scripts.Data.Skill.Effect
             : base(jNode_)
         {
             Hash = jNode_["Hash"];
-            InputType = Serializer.ReadEnum<Model.Skill.Unit.Stat.EInputType>(jNode_["InputType"]);
+            Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["Category"]);
             Reference = jNode_["Reference"];
         }
 
@@ -38,7 +38,7 @@ namespace Assets.Scripts.Data.Skill.Effect
         {
             JSONObject jObject = new JSONObject();
             jObject["Hash"] = Hash;
-            jObject["InputType"] = InputType;
+            jObject["Category"] = Category;
             jObject["Reference"] = Reference;
             return jObject;
         }

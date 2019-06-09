@@ -23,7 +23,7 @@ namespace Assets.Scripts.Data.Skill.Layer
             TopRight = topRight_;
         }
 
-        public Visual(JSONNode jNode_)
+        public Visual(JSONObject jNode_)
         {
             Middle = jNode_["Middle"];
             TopRight = jNode_["TopRight"];

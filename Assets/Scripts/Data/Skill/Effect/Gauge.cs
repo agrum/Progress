@@ -11,31 +11,23 @@ namespace Assets.Scripts.Data.Skill.Effect
     {
         public enum ETarget
         {
-            Value,
             Capacity,
-        }
-
-        public enum ECategory
-        {
-            None = 0,
-            Physical = 1,
-            Magical = 2,
-            Heal = 4,
-            True = 8,
+            CapacityAndProportionalValue,
+            CapacityAndValue
         }
         
         public NamedHash Hash { get; private set; }
         public ETarget Target { get; private set; }
-        public ECategory Category { get; private set; }
-        public Model.Skill.Unit.Gauge.EInputType InputType { get; private set; }
+        public Data.Skill.Unit.Stat.ECategory Category { get; private set; }
+        public Data.Skill.Unit.Gauge.EInputType InputType { get; private set; }
         public MetricReference Reference { get; private set; }
 
         public Gauge(
             Id id_,
             NamedHash hash_,
             ETarget target_,
-            ECategory category_,
-            Model.Skill.Unit.Gauge.EInputType inputType_,
+            Data.Skill.Unit.Stat.ECategory category_,
+            Data.Skill.Unit.Gauge.EInputType inputType_,
             MetricReference reference_)
             : base(id_)
         {
@@ -52,8 +44,8 @@ namespace Assets.Scripts.Data.Skill.Effect
         {
             Hash = jNode_["Hash"];
             Target = Serializer.ReadEnum<ETarget>(jNode_["Target"]);
-            Category = Serializer.ReadEnum<ECategory>(jNode_["Category"]);
-            InputType = Serializer.ReadEnum<Model.Skill.Unit.Gauge.EInputType>(jNode_["Target"]);
+            Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["Category"]);
+            InputType = Serializer.ReadEnum<Data.Skill.Unit.Gauge.EInputType>(jNode_["Target"]);
             Reference = jNode_["Reference"];
         }
 

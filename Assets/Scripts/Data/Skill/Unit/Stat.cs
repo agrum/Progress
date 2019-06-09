@@ -8,11 +8,23 @@ namespace Assets.Scripts.Data.Skill.Unit
 {
     public class Stat
     {
-        public enum EInputType
+        public enum ECategory
         {
-            Additive,
-            AdditiveMultiplier,
-            Multiplier,
+            None = 0,
+            Physical = 1,
+            Magical = 2,
+            Heal = 4,
+            True = 8,
         }
+
+        public enum EStandard
+        {
+            Power,
+            Defense,
+            MovementSpeed,
+            Haste,
+            CriticalProbability,
+            CriticalMultiplier,
+        } 
     }
 }

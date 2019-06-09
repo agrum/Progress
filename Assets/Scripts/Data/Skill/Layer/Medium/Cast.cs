@@ -16,9 +16,9 @@ namespace Assets.Scripts.Data.Skill.Layer.Medium
             Duration = duration_;
         }
 
-        public Cast(JSONNode jNode_)
+        public Cast(JSONObject jObject_)
         {
-            Duration = jNode_["Duration"];
+            Duration = jObject_["Duration"];
         }
 
         public override JSONObject ToJson()
