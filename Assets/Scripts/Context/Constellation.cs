@@ -14,7 +14,7 @@ namespace Assets.Scripts.Model
 		public List<ConstellationNode> KitNodeList { get; private set; } = new List<ConstellationNode>();
 		private Vector2 halfSize = new Vector2(0, 0);
 
-		public ConstellationNode AbilityNode(Skill skill)
+		public ConstellationNode AbilityNode(Data.Skill.Skill skill)
 		{
 			foreach (var abilityNode in AbilityNodeList)
 				if (abilityNode.Skill == skill)
@@ -23,7 +23,7 @@ namespace Assets.Scripts.Model
 			return null;
 		}
 
-		public ConstellationNode ClassNode(Skill skill)
+		public ConstellationNode ClassNode(Data.Skill.Skill skill)
 		{
 			foreach (var classNode in ClassNodeList)
 				if (classNode.Skill == skill)
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Model
 			return null;
 		}
 
-		public ConstellationNode KitNode(Skill skill)
+		public ConstellationNode KitNode(Data.Skill.Skill skill)
 		{
 			foreach (var kitNode in KitNodeList)
 				if (kitNode.Skill == skill)
@@ -41,16 +41,16 @@ namespace Assets.Scripts.Model
 			return null;
         }
 
-        public Skill Skill(string uuid)
+        public Data.Skill.Skill Skill(string uuid)
         {
             foreach (var node in AbilityNodeList)
-                if (node.Skill.Uuid == uuid)
+                if (node.Skill._Id.ToString() == uuid)
                     return node.Skill;
             foreach (var node in ClassNodeList)
-                if (node.Skill.Uuid == uuid)
+                if (node.Skill._Id.ToString() == uuid)
                     return node.Skill;
             foreach (var node in KitNodeList)
-                if (node.Skill.Uuid == uuid)
+                if (node.Skill._Id.ToString() == uuid)
                     return node.Skill;
             return null;
         }
@@ -85,13 +85,13 @@ namespace Assets.Scripts.Model
 			//create constellation nodes
 			PopulateNodes(
 				abilityArray,
-				Model.Skill.TypeEnum.Ability);
+                Data.Skill.Skill.ECategory.Ability);
 			PopulateNodes(
 				Json["classes"].AsArray,
-                Model.Skill.TypeEnum.Class);
+                Data.Skill.Skill.ECategory.Class);
 			PopulateNodes(
 				Json["kits"].AsArray,
-                Model.Skill.TypeEnum.Kit);
+                Data.Skill.Skill.ECategory.Kit);
 
 			//connect nodes directly
 			JSONArray abilityToAbilityLinkArray = Json["abilityToAbilityLinks"].AsArray;
@@ -128,30 +128,30 @@ namespace Assets.Scripts.Model
 			}
 		}
 
-		private void PopulateNodes(JSONArray array_, Skill.TypeEnum type_)
+		private void PopulateNodes(JSONArray array_, Data.Skill.Skill.ECategory category_)
 		{
 			foreach (var almostNode in array_)
 			{
 				JSONNode json = almostNode.Value;
 					
-				switch(type_)
+				switch(category_)
 				{
-					case Model.Skill.TypeEnum.Ability:
+					case Data.Skill.Skill.ECategory.Ability:
 						AbilityNodeList.Add(new ConstellationNode(
-							App.Content.SkillList.Ability(json["id"]),
+							App.Content.SkillList.Abilities[json["id"]],
 							AbilityNodeList.Count,
 							new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 						break;
-					case Model.Skill.TypeEnum.Class:
+                    case Data.Skill.Skill.ECategory.Class:
 						ClassNodeList.Add(new ConstellationNode(
-							App.Content.SkillList.Class(json["id"]),
-							ClassNodeList.Count,
+                            App.Content.SkillList.Classes[json["id"]],
+                            ClassNodeList.Count,
 							new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 							break;
-					case Model.Skill.TypeEnum.Kit:
+					case Data.Skill.Skill.ECategory.Kit:
 						KitNodeList.Add(new ConstellationNode(
-							App.Content.SkillList.Kit(json["id"]),
-							KitNodeList.Count,
+                            App.Content.SkillList.Kits[json["id"]],
+                            KitNodeList.Count,
 							new Vector2(json["position"]["x"].AsFloat, json["position"]["y"].AsFloat)));
 							break;
 					default: throw new Exception("PopulateNodes() with not type");

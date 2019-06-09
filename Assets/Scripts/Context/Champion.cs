@@ -102,7 +102,7 @@ namespace Assets.Scripts.Model
             if (preset_.Id != null && !PresetList.Contains(preset_))
                 return;
 
-            JSONObject presetJson = preset_.ToJson();
+            JSONObject presetJson = preset_;
             HTTPRequest request;
             if (preset_.Id == null)
                 request = App.Server.Request(

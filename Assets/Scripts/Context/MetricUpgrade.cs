@@ -12,22 +12,23 @@ namespace Assets.Scripts.Model
             None
         }
         
-        public float Level { get { return Json["level"]; } set { Json["level"] = value; } }
+        public Data.Skill.Metric Metric { get; private set; } = null;
+        public int Level { get; private set; } = 0;
 
-        public JSONObject Json { get; private set; } = null;
-        public SkillMetric Metric { get; private set; } = null;
-
-        public MetricUpgrade(SkillMetric metric_, JSONObject json_)
+        public MetricUpgrade(Data.Skill.Metric metric_, int level_)
         {
             Metric = metric_;
-            if (json_ != null)
-                Json = json_;
-            else
-            {
-                Json = new JSONObject();
-                Level = 0;
-                Json["_id"] = Metric.Json["_id"];
-            }
+            Level = level_;
+        }
+
+        public static implicit operator JSONNode(MetricUpgrade object_)
+        {
+            JSONObject jObject = new JSONObject();
+
+            jObject["_id"] = object_.Metric.Name;
+            jObject["Level"] = object_.Level;
+
+            return jObject;
         }
 
         public SpecializeSign Sign()
@@ -35,42 +36,37 @@ namespace Assets.Scripts.Model
             return Sign(Level);
         }
 
-        public float WeightedLevel()
+        public double WeightedLevel()
         {
-            return WeightedLevel(Level, Metric.UpgCost);
+            return WeightedLevel(Level, 1.0);
         }
         
-        public float Factor()
+        public double Factor()
         {
-            return Factor(Level, Metric.UpgType);
+            return Factor(Level, Metric.Upgrade);
         }
 
-        public static SpecializeSign Sign(float level_)
+        public static SpecializeSign Sign(double level_)
         {
             return level_ > 0 ? SpecializeSign.Positive : level_ < 0 ? SpecializeSign.Negative : SpecializeSign.None;
         }
 
-        public static float WeightedLevel(float level_, float upgradeCost_)
+        public static double WeightedLevel(double level_, double upgradeCost_)
         {
             return level_ / upgradeCost_ / 20.0f;
         }
 
-        public static float Factor(float level_, int upgType_)
+        public static double Factor(double level_, Data.Skill.Metric.UpgradeType upgradeType_)
         {
-            if (upgType_ > 0)
+            if (upgradeType_.Sign == Data.Skill.Metric.UpgradeType.ESign.Negative)
             {
-                if (level_ > 0)
-                    return level_ / 10.0f;
-                else
-                    return 1.0f / (1.0f + System.Math.Abs(level_) / 10.0f) - 1.0f;
+                level_ *= -1;
             }
+
+            if (level_ > 0)
+                return 1.0 + level_ * upgradeType_.Factor;
             else
-            {
-                if (level_ > 0)
-                    return 1.0f / (1.0f + System.Math.Abs(level_) / 10.0f) - 1.0f;
-                else
-                    return - level_ / 10.0f;
-            }
+                return 1.0f / (1.0f + System.Math.Abs(level_) * upgradeType_.Factor);
         }
     }
 }

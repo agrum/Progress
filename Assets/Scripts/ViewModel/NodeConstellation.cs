@@ -10,17 +10,17 @@ namespace Assets.Scripts.ViewModel
 		public event OnBoolDelegate SelectionChanged = delegate { };
 		public event OnFloatDelegate ScaleChanged = delegate { };
 
-		private Model.Skill skill;
+		private Data.Skill.Skill skill;
 		private Model.ConstellationPreset preset;
 		private Model.HoveredSkill hovered;
 		private Model.Json scale;
 
 		private Material mat;
 		private Vector2 position;
-        List<Model.Skill> selectedSkillList = null;
+        List<Data.Skill.Skill> selectedSkillList = null;
 
         public NodeConstellation(
-            Model.Skill skill_,
+            Data.Skill.Skill skill_,
             Model.ConstellationPreset preset_,
             Model.HoveredSkill hovered_,
             Model.Json scale_,
@@ -39,15 +39,15 @@ namespace Assets.Scripts.ViewModel
             mat = mat_;
             position = position_;
 
-            switch (skill.Type)
+            switch (skill.Category)
             {
-                case Model.Skill.TypeEnum.Ability:
+                case Data.Skill.Skill.ECategory.Ability:
                     selectedSkillList = preset.SelectedAbilityList;
                     break;
-                case Model.Skill.TypeEnum.Class:
+                case Data.Skill.Skill.ECategory.Class:
                     selectedSkillList = preset.SelectedClassList;
                     break;
-                case Model.Skill.TypeEnum.Kit:
+                case Data.Skill.Skill.ECategory.Kit:
                     selectedSkillList = preset.SelectedKitList;
                     break;
             }
@@ -83,7 +83,7 @@ namespace Assets.Scripts.ViewModel
 
         public string IconPath()
 		{
-			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
+			return skill == null ? null : "Icons/" + skill._Id.ToString() + "/" + skill.Name;
 		}
 
 		public Material Mat()

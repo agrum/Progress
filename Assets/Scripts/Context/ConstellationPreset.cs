@@ -29,9 +29,9 @@ namespace Assets.Scripts.Model
         public Constellation Constellation { get; private set; }
         public PresetLimits Limits { get; protected set; } = null;
 
-        public List<Skill> SelectedAbilityList { get; private set; } = new List<Skill>();
-		public List<Skill> SelectedClassList { get; private set; } = new List<Skill>();
-		public List<Skill> SelectedKitList { get; private set; } = new List<Skill>();
+        public List<Data.Skill.Skill> SelectedAbilityList { get; private set; } = new List<Data.Skill.Skill>();
+		public List<Data.Skill.Skill> SelectedClassList { get; private set; } = new List<Data.Skill.Skill>();
+		public List<Data.Skill.Skill> SelectedKitList { get; private set; } = new List<Data.Skill.Skill>();
 
 		public delegate void OnPresetUpdateDelegate();
 		public event OnPresetUpdateDelegate PresetUpdated;
@@ -51,16 +51,16 @@ namespace Assets.Scripts.Model
             Limits = limits_;
 
             foreach (var almostValue in Json["abilities"])
-				SelectedAbilityList.Add(App.Content.SkillList.Ability(almostValue.Value));
+				SelectedAbilityList.Add(App.Content.SkillList.Abilities[almostValue.Value]);
 			foreach (var almostValue in Json["classes"])
-				SelectedClassList.Add(App.Content.SkillList.Class(almostValue.Value));
+				SelectedClassList.Add(App.Content.SkillList.Classes[almostValue.Value]);
 			foreach (var almostValue in Json["kits"])
-				SelectedKitList.Add(App.Content.SkillList.Kit(almostValue.Value));
+				SelectedKitList.Add(App.Content.SkillList.Kits[almostValue.Value]);
 		}
 
-		public void Add(Skill skill)
+		public void Add(Data.Skill.Skill skill)
 		{
-			List<Skill> SelectedIndexList;
+			List<Data.Skill.Skill> SelectedIndexList;
 			int limit;
 
 			if (skill == null)
@@ -69,17 +69,17 @@ namespace Assets.Scripts.Model
 				throw new Exception();
 			}
 
-			switch (skill.Type)
+			switch (skill.Category)
 			{
-				case Skill.TypeEnum.Ability:
+				case Data.Skill.Skill.ECategory.Ability:
 					SelectedIndexList = SelectedAbilityList;
 					limit = Limits.Ability;
 					break;
-				case Skill.TypeEnum.Class:
+				case Data.Skill.Skill.ECategory.Class:
 					SelectedIndexList = SelectedClassList;
 					limit = Limits.Class;
 					break;
-				case Skill.TypeEnum.Kit:
+				case Data.Skill.Skill.ECategory.Kit:
 					SelectedIndexList = SelectedKitList;
                     limit = Limits.Kit; //App.Content.GameSettings.NumKits;
 					break;
@@ -98,9 +98,9 @@ namespace Assets.Scripts.Model
 			PresetUpdated();
 		}
 
-		public void Remove(Skill skill)
+		public void Remove(Data.Skill.Skill skill)
 		{
-			List<Skill> SelectedList;
+			List<Data.Skill.Skill> SelectedList;
 			int limit;
 
 			if (skill == null)
@@ -109,17 +109,17 @@ namespace Assets.Scripts.Model
 				throw new Exception();
 			}
 
-			switch (skill.Type)
+			switch (skill.Category)
 			{
-				case Skill.TypeEnum.Ability:
+				case Data.Skill.Skill.ECategory.Ability:
 					SelectedList = SelectedAbilityList;
 					limit = App.Content.GameSettings.NumAbilities;
 					break;
-				case Skill.TypeEnum.Class:
+				case Data.Skill.Skill.ECategory.Class:
 					SelectedList = SelectedClassList;
 					limit = App.Content.GameSettings.NumClasses;
 					break;
-				case Skill.TypeEnum.Kit:
+				case Data.Skill.Skill.ECategory.Kit:
 					SelectedList = SelectedKitList;
 					limit = App.Content.GameSettings.NumKits;
 					break;
@@ -190,9 +190,9 @@ namespace Assets.Scripts.Model
 			PresetUpdated();
 		}
 
-		public bool Has(Skill skill)
+		public bool Has(Data.Skill.Skill skill)
 		{
-			List<Skill> SelectedList;
+			List<Data.Skill.Skill> SelectedList;
 			int limit;
 
 			if (skill == null)
@@ -201,17 +201,17 @@ namespace Assets.Scripts.Model
 				throw new Exception();
 			}
 
-			switch (skill.Type)
+			switch (skill.Category)
 			{
-				case Skill.TypeEnum.Ability:
+				case Data.Skill.Skill.ECategory.Ability:
 					SelectedList = SelectedAbilityList;
 					limit = App.Content.GameSettings.NumAbilities;
 					break;
-				case Skill.TypeEnum.Class:
+				case Data.Skill.Skill.ECategory.Class:
 					SelectedList = SelectedClassList;
 					limit = App.Content.GameSettings.NumClasses;
 					break;
-				case Skill.TypeEnum.Kit:
+				case Data.Skill.Skill.ECategory.Kit:
 					SelectedList = SelectedKitList;
 					limit = App.Content.GameSettings.NumKits;
 					break;
@@ -231,23 +231,23 @@ namespace Assets.Scripts.Model
 			PresetUpdated();
 		}
 
-        public JSONObject ToJson()
+        public static implicit operator JSONObject(ConstellationPreset object_)
         {
             JSONObject json = new JSONObject();
 
-            if (Id != null)
-                json["_id"] = Id;
-            json["name"] = Name != null ? Name : "";
-            json["constellation"] = Constellation.Json["_id"];
+            if (object_.Id != null)
+                json["_id"] = object_.Id;
+            json["name"] = object_?.Name ?? "";
+            json["constellation"] = object_.Constellation.Json["_id"];
             json["abilities"] = new JSONArray();
             json["classes"] = new JSONArray();
             json["kits"] = new JSONArray();
-            foreach (var skill in SelectedAbilityList)
-                json["abilities"].Add(skill.Json["_id"]);
-            foreach (var skill in SelectedClassList)
-                json["classes"].Add(skill.Json["_id"]);
-            foreach (var skill in SelectedKitList)
-                json["kits"].Add(skill.Json["_id"]);
+            foreach (var skill in object_.SelectedAbilityList)
+                json["abilities"].Add(skill._Id.ToString());
+            foreach (var skill in object_.SelectedClassList)
+                json["classes"].Add(skill._Id.ToString());
+            foreach (var skill in object_.SelectedKitList)
+                json["kits"].Add(skill._Id.ToString());
             
             return json;
         }

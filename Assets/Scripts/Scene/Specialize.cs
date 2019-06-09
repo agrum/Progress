@@ -13,7 +13,7 @@ namespace Assets.Scripts.Scene
         public View.ChampionHeadline championHeadline = null;
         public View.TextButton applyButton = null;
 
-        public static Model.Skill SelectedSkill = null;
+        public static Data.Skill.Skill SelectedSkill = null;
 
         private Model.SkillSpecializer model;
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
@@ -44,7 +44,7 @@ namespace Assets.Scripts.Scene
 
             //model
             var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-            List<Model.Skill> filteredSkillList = new List<Model.Skill>();
+            List<Data.Skill.Skill> filteredSkillList = new List<Data.Skill.Skill>();
             foreach (var node in constellationModel.AbilityNodeList)
                 filteredSkillList.Add(node.Skill);
             foreach (var node in constellationModel.KitNodeList)

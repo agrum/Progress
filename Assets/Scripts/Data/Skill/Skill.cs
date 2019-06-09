@@ -7,17 +7,30 @@ namespace Assets.Scripts.Data.Skill
 {
     public class Skill
     {
+        public enum ECategory
+        {
+            Ability,
+            Class,
+            Kit,
+        }
+
         public static Skill Reference;
 
+        public Guid _Id { get; private set; }
+        public ECategory Category { get; private set; }
         public NamedHash Name { get; private set; }
+        public string Description { get; private set; }
+        public string Details { get; private set; }
         public List<Metric> Metrics { get; private set; } = new List<Metric>();
         public List<ModifierBehaviour> Passives { get; private set; } = new List<ModifierBehaviour>();
         public List<Layer.Base> Layers { get; private set; } = new List<Layer.Base>();
 
-        public Skill(NamedHash name_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
+        public Skill(ECategory category_, NamedHash name_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
         {
             Reference = this;
 
+            _Id = Guid.NewGuid();
+            Category = category_;
             Name = name_;
             Metrics = metrics_;
             Passives = passives_;
@@ -28,6 +41,8 @@ namespace Assets.Scripts.Data.Skill
 
         public Skill(JSONNode jNode_)
         {
+            _Id = new Guid(jNode_["_id"]);
+            Category = Serializer.ReadEnum< ECategory>(jNode_["Category"]);
             Name = jNode_["Name"];
 
             foreach (var condition in jNode_["Metrics"].AsArray)
@@ -47,6 +62,8 @@ namespace Assets.Scripts.Data.Skill
         {
             JSONObject jObject = new JSONObject();
 
+            jObject["_id"] = skill_._Id.ToString();
+            jObject["Category"] = skill_.Category;
             jObject["Name"] = skill_.Name;
             var conditions = new JSONArray();
             foreach (var entry in skill_.Metrics)

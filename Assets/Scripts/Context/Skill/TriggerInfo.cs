@@ -117,12 +117,5 @@ namespace Assets.Scripts.Context.Skill
         public Container Trigger;
         public float Dt;
         public float Input;
-
-        double Get(Data.Skill.MetricReference metric_)
-        {
-            if (metric_.Metric != null)
-                return metric_.Metric.Numeric.Get(triggerInfo_);
-            return metric_.Value;
-        }
     }
 }

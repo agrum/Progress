@@ -19,7 +19,7 @@ namespace Assets.Scripts.Model
         private Dictionary<MetricUpgrade, int> temporaryUpgradeMap = new Dictionary<MetricUpgrade, int>();
         private int pointsSpent = 0;
 
-        public Skill Skill()
+        public Data.Skill.Skill Skill()
         {
             return skillUpgrade.Skill;
         }
@@ -48,24 +48,24 @@ namespace Assets.Scripts.Model
             return MetricUpgrade.Sign(upgrade_.Level);
         }
 
-        public float Level(MetricUpgrade upgrade_)
+        public double Level(MetricUpgrade upgrade_)
         {
             if (temporaryUpgradeMap.ContainsKey(upgrade_))
                 return temporaryUpgradeMap[upgrade_] + upgrade_.Level;
             return upgrade_.Level;
         }
 
-        public float WeightedLevel(MetricUpgrade upgrade_)
+        public double WeightedLevel(MetricUpgrade upgrade_)
         {
             if (temporaryUpgradeMap.ContainsKey(upgrade_))
-                return MetricUpgrade.WeightedLevel(temporaryUpgradeMap[upgrade_] + upgrade_.Level, upgrade_.Metric.UpgCost);
+                return MetricUpgrade.WeightedLevel(temporaryUpgradeMap[upgrade_] + upgrade_.Level, 1);
             return upgrade_.WeightedLevel();
         }
 
-        public float Factor(MetricUpgrade upgrade_)
+        public double Factor(MetricUpgrade upgrade_)
         {
             if (temporaryUpgradeMap.ContainsKey(upgrade_))
-                return MetricUpgrade.Factor(temporaryUpgradeMap[upgrade_] + upgrade_.Level, upgrade_.Metric.UpgType);
+                return MetricUpgrade.Factor(temporaryUpgradeMap[upgrade_] + upgrade_.Level, upgrade_.Metric.Upgrade);
             return upgrade_.Factor();
         }
 
@@ -81,7 +81,7 @@ namespace Assets.Scripts.Model
             if (metricUpgrade.Level < 0 && temporaryUpgrade == 0)
                 throw new WestException("Tried upgrading a skill the wrong way");
 
-            if (MetricUpgrade.WeightedLevel(temporaryLevel, upgrade_.Metric.UpgCost) >= 1.0f)
+            if (MetricUpgrade.WeightedLevel(temporaryLevel, 1) >= 1.0f)
                 throw new WestException("Tried upgrading a capped metric");
 
             if (metricUpgrade.Level >= 0 && OverallWeight() >= 1.0f)
@@ -107,7 +107,7 @@ namespace Assets.Scripts.Model
             if (metricUpgrade.Level > 0 && temporaryUpgrade == 0)
                 throw new WestException("Tried upgrading a skill the wrong way");
 
-            if (MetricUpgrade.WeightedLevel(temporaryLevel, upgrade_.Metric.UpgCost) <= -1.0f)
+            if (MetricUpgrade.WeightedLevel(temporaryLevel, 1) <= -1.0f)
                 throw new WestException("Tried upgrading a capped metric");
 
             if (metricUpgrade.Level <= 0 && OverallWeight() >= 1.0f)
@@ -147,12 +147,12 @@ namespace Assets.Scripts.Model
                     continue;
 
                 JSONObject upgrade = new JSONObject();
-                upgrade["metric"] = upgradePair.Key.Json["_id"];
+                upgrade["metric"] = upgradePair.Key.Metric._Id.ToString();
                 upgrade["diff"] = upgradePair.Value;
                 upgradeArray.Add(upgrade);
             }
             requestField["upgrades"] = upgradeArray;
-            requestField["skill"] = Skill().Json["_id"];
+            requestField["skill"] = Skill()._Id.ToString();
             requestField["pointsSpent"] = pointsSpent;
 
             var loadingScreen = App.Resource.Prefab.LoadingCanvas();
@@ -177,9 +177,9 @@ namespace Assets.Scripts.Model
             request.Send();
         }
 
-        public float OverallWeight()
+        public double OverallWeight()
         {
-            float cumulativeLevel = 0;
+            double cumulativeLevel = 0;
             foreach (var upgrade in skillUpgrade.MetricUpgradeList())
             {
                 var localLevel = upgrade.Level;
@@ -190,9 +190,9 @@ namespace Assets.Scripts.Model
             return SkillUpgrade.OverallWeight(cumulativeLevel);
         }
 
-        public float Handicap()
+        public double Handicap()
         {
-            float cumulativeLevel = 0;
+            double cumulativeLevel = 0;
             foreach (var upgrade in skillUpgrade.MetricUpgradeList())
             {
                 var localLevel = upgrade.Level;

@@ -38,7 +38,7 @@ namespace Assets.Scripts.Asset.Skill
                 .CloseP()
                 .Validate(),
                 new Data.Skill.Metric.UpgradeType(
-                    Data.Skill.Metric.UpgradeType.ESign.Multiply,
+                    Data.Skill.Metric.UpgradeType.ESign.Positive,
                     6,
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Asset.Skill
                 .Stat(Data.Skill.ESubject.Source, Data.Skill.Unit.Stat.EStandard.Haste.ToString())
                 .Validate(),
                 new Data.Skill.Metric.UpgradeType(
-                    Data.Skill.Metric.UpgradeType.ESign.Divide,
+                    Data.Skill.Metric.UpgradeType.ESign.Negative,
                     6,
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Asset.Skill
                 .Value(20)
                 .Validate(),
                 new Data.Skill.Metric.UpgradeType(
-                    Data.Skill.Metric.UpgradeType.ESign.Multiply,
+                    Data.Skill.Metric.UpgradeType.ESign.Positive,
                     6,
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
@@ -67,7 +67,7 @@ namespace Assets.Scripts.Asset.Skill
                 .Value(2)
                 .Validate(),
                 new Data.Skill.Metric.UpgradeType(
-                    Data.Skill.Metric.UpgradeType.ESign.Multiply,
+                    Data.Skill.Metric.UpgradeType.ESign.Positive,
                     6,
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
@@ -78,7 +78,7 @@ namespace Assets.Scripts.Asset.Skill
                 .Stat(Data.Skill.ESubject.Source, Data.Skill.Unit.Stat.EStandard.Haste.ToString())
                 .Validate(),
                 new Data.Skill.Metric.UpgradeType(
-                    Data.Skill.Metric.UpgradeType.ESign.Divide,
+                    Data.Skill.Metric.UpgradeType.ESign.Negative,
                     6,
                     1.1)));
 
@@ -106,6 +106,14 @@ namespace Assets.Scripts.Asset.Skill
                         Data.Skill.Unit.Stat.ECategory.Magical,
                         Damage
                         ))));
+
+            //BUILD
+            Dta = new Data.Skill.Skill(
+                Data.Skill.Skill.ECategory.Ability,
+                name,
+                metrics,
+                passives,
+                layers);
         }
     }
 }

@@ -9,23 +9,23 @@ namespace Assets.Scripts.ViewModel
 		public event OnBoolDelegate SelectionChanged = delegate { };
 		public event OnFloatDelegate ScaleChanged = delegate { };
 
-		private Model.Skill skill = null;
+		private Data.Skill.Skill skill = null;
 		private Model.ConstellationPreset preset;
 		private Model.HoveredSkill hovered;
 		private Model.Json scale;
-		private Model.Skill.TypeEnum type;
+		private Data.Skill.Skill.ECategory category;
 		private int index;
 
 		private bool canEdit;
 		private Material mat;
 		private Vector2 position;
-        List<Model.Skill> selectedSkillList = null;
+        List<Data.Skill.Skill> selectedSkillList = null;
 
         public NodePreset(
 			Model.ConstellationPreset preset_,
 			Model.HoveredSkill hovered_,
 			Model.Json scale_,
-			Model.Skill.TypeEnum type_,
+            Data.Skill.Skill.ECategory category_,
 			int index_,
 			bool canEdit_, 
 			Material mat_, 
@@ -37,21 +37,21 @@ namespace Assets.Scripts.ViewModel
 			preset = preset_;
 			hovered = hovered_;
 			scale = scale_;
-			type = type_;
+			category = category_;
 			index = index_;
 			canEdit = canEdit_;
 			mat = mat_;
 			position = position_;
             
-            switch (type)
+            switch (category_)
             {
-                case Model.Skill.TypeEnum.Ability:
+                case Data.Skill.Skill.ECategory.Ability:
                     selectedSkillList = preset.SelectedAbilityList;
                     break;
-                case Model.Skill.TypeEnum.Class:
+                case Data.Skill.Skill.ECategory.Class:
                     selectedSkillList = preset.SelectedClassList;
                     break;
-                case Model.Skill.TypeEnum.Kit:
+                case Data.Skill.Skill.ECategory.Kit:
                     selectedSkillList = preset.SelectedKitList;
                     break;
             }
@@ -74,7 +74,7 @@ namespace Assets.Scripts.ViewModel
 
 		public void OnPresetUpdated()
 		{
-			Model.Skill newSkill = null;
+            Data.Skill.Skill newSkill = null;
 			if (selectedSkillList.Count > index)
 				newSkill = selectedSkillList[index];
             
@@ -97,7 +97,7 @@ namespace Assets.Scripts.ViewModel
 
         public string IconPath()
 		{
-			return skill == null ? null : "Icons/" + skill.UpperCamelCaseKey + "/" + skill.Json["name"];
+			return skill == null ? null : "Icons/" + skill._Id.ToString() + "/" + skill.Name;
 		}
 
 		public Material Mat()

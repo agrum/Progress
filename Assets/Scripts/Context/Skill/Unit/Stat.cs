@@ -20,25 +20,9 @@ namespace Assets.Scripts.Context.Skill.Unit
             Type = type_;
         }
 
-        public void Input(float value_, Data.Skill.Unit.Stat.EInputType type_)
+        public void Input(float value_, Data.Skill.Unit.Stat.ECategory category_)
         {
-            switch (type_)
-            {
-                case Data.Skill.Unit.Stat.EInputType.Additive:
-                    Additive += value_; break;
-                case Data.Skill.Unit.Stat.EInputType.AdditiveMultiplier:
-                    AdditiveMultiplier += value_; break;
-                case Data.Skill.Unit.Stat.EInputType.Multiplier:
-                    if (value_ == 0)
-                        ++Zeroes;
-                    else if (float.IsInfinity(value_))
-                        --Zeroes;
-                    else 
-                        Multiplier += value_;
-                    break;
-            }
 
-            Value = Additive * (1.0f + AdditiveMultiplier) * Multiplier * (Zeroes > 0 ? 0 : 1);
         }
     }
 }

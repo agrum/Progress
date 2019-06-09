@@ -13,9 +13,9 @@ namespace Assets.Scripts.ViewModel
 		private Model.HoveredSkill hovered = null;
 		private Model.Json scaleModel = new Model.Json();
 
-        private List<Model.Skill> filteredAbilityList = new List<Model.Skill>();
-        private List<Model.Skill> filteredClassList = new List<Model.Skill>();
-        private List<Model.Skill> filteredKitList = new List<Model.Skill>();
+        private List<Data.Skill.Skill> filteredAbilityList = new List<Data.Skill.Skill>();
+        private List<Data.Skill.Skill> filteredClassList = new List<Data.Skill.Skill>();
+        private List<Data.Skill.Skill> filteredKitList = new List<Data.Skill.Skill>();
 
         private Material abilityMaterial = null;
 		private Material classMaterial = null;
@@ -24,7 +24,7 @@ namespace Assets.Scripts.ViewModel
         public NodeMapConstellation(
             Model.Constellation model_,
             Model.ConstellationPreset preset_,
-            List<Model.Skill> filtererSkills_,
+            List<Data.Skill.Skill> filtererSkills_,
             Model.HoveredSkill hovered_)
         {
             Debug.Assert(model_ != null);
@@ -42,15 +42,15 @@ namespace Assets.Scripts.ViewModel
 
             foreach (var skill in filtererSkills_)
             {
-                switch (skill.Type)
+                switch (skill.Category)
                 {
-                    case Model.Skill.TypeEnum.Ability:
+                    case Data.Skill.Skill.ECategory.Ability:
                         filteredAbilityList.Add(skill);
                         break;
-                    case Model.Skill.TypeEnum.Class:
+                    case Data.Skill.Skill.ECategory.Class:
                         filteredClassList.Add(skill);
                         break;
-                    case Model.Skill.TypeEnum.Kit:
+                    case Data.Skill.Skill.ECategory.Kit:
                         filteredKitList.Add(skill);
                         break;
                     default:
@@ -86,7 +86,7 @@ namespace Assets.Scripts.ViewModel
 
 		void PopulateNodes(
             List<Model.ConstellationNode> nodeModelList_,
-            List<Model.Skill> filteredSkillList_,
+            List<Data.Skill.Skill> filteredSkillList_,
             Material nodeMaterial_)
 		{
 			foreach (var nodeModel in nodeModelList_)

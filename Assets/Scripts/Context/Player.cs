@@ -14,15 +14,14 @@ namespace West
 			Channeling
 		}
 
-		public Ability abilityQ;
-		public Ability abilityW;
-		public Ability abilityE;
-		public Ability abilityR;
+		//public Data.Skill.Skill abilityQ;
+		//public Data.Skill.Skill abilityW;
+		//public Data.Skill.Skill abilityE;
+		//public Data.Skill.Skill abilityR;
 		public float speedBase;
 		public Keybinding keybinding;
 		public float hitBoxRadius;
-
-		internal Speed speed = new Speed();
+        
 		internal float crouch = 0.0f;
 		internal float facingDirection = 0.0f;
 		internal float walkingDirection = 0.0f;
@@ -32,7 +31,7 @@ namespace West
 		private Vector3 destination;
 		private Vector3 direction;
 		private float sqrMaxSpeed;
-		private Ability activeAbility = null;
+		//private Data.Skill.Skill activeAbility = null;
 		private Terrain terrain;
 		[HideInInspector]
 		public Rigidbody2D rigbody2D;
@@ -82,19 +81,19 @@ namespace West
 
 		public float GetSpeed()
 		{
-			return speedBase * speed.amount;
+            return speedBase;// * speed.amount;
 		}
 
 		void Start()
 		{
-			abilityQ.keybind = keybinding.q;
-			abilityW.keybind = keybinding.w;
-			abilityE.keybind = keybinding.e;
-			abilityR.keybind = keybinding.q;
-			abilityQ.player = this;
-			abilityW.player = this;
-			abilityE.player = this;
-			abilityR.player = this;
+			//abilityQ.keybind = keybinding.q;
+			//abilityW.keybind = keybinding.w;
+			//abilityE.keybind = keybinding.e;
+			//abilityR.keybind = keybinding.q;
+			//abilityQ.player = this;
+			//abilityW.player = this;
+			//abilityE.player = this;
+			//abilityR.player = this;
 
 			state = AbilityState.None;
 
@@ -137,25 +136,25 @@ namespace West
 
 		void TakeKeyboardInput()
 		{
-			Ability newActiveAbility = null;
-			if (Input.GetKeyDown(keybinding.q))
-				newActiveAbility = abilityQ;
-			else if (Input.GetKeyDown(keybinding.w))
-				newActiveAbility = abilityW;
-			else if (Input.GetKeyDown(keybinding.e))
-				newActiveAbility = abilityE;
-			else if (Input.GetKeyDown(keybinding.r))
-				newActiveAbility = abilityR;
+			//Ability newActiveAbility = null;
+			//if (Input.GetKeyDown(keybinding.q))
+			//	newActiveAbility = abilityQ;
+			//else if (Input.GetKeyDown(keybinding.w))
+			//	newActiveAbility = abilityW;
+			//else if (Input.GetKeyDown(keybinding.e))
+			//	newActiveAbility = abilityE;
+			//else if (Input.GetKeyDown(keybinding.r))
+			//	newActiveAbility = abilityR;
 
-			if (state == AbilityState.None)
-				activeAbility = null;
-			if (newActiveAbility && newActiveAbility.CanActivate() && state != AbilityState.Casting)
-			{
-				if (activeAbility && activeAbility != newActiveAbility && state != AbilityState.Aiming)
-					activeAbility.Cancel();
-				activeAbility = newActiveAbility;
-				activeAbility.Activate();
-			}
+			//if (state == AbilityState.None)
+			//	activeAbility = null;
+			//if (newActiveAbility && newActiveAbility.CanActivate() && state != AbilityState.Casting)
+			//{
+			//	if (activeAbility && activeAbility != newActiveAbility && state != AbilityState.Aiming)
+			//		activeAbility.Cancel();
+			//	activeAbility = newActiveAbility;
+			//	activeAbility.Activate();
+			//}
 		}
 	}
 }

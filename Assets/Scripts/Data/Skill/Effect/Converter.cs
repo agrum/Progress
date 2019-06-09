@@ -13,13 +13,13 @@ namespace Assets.Scripts.Data.Skill.Effect
         {
             public MetricReference Numeric { get; private set; }
             public ESubject Subject { get; private set; }
-            public Gauge.ECategory Category { get; private set; }
+            public Data.Skill.Unit.Stat.ECategory Category { get; private set; }
             public NamedHash Gauge { get; private set; }
 
             public Output(
                 MetricReference numeric_,
                 ESubject subject_,
-                Gauge.ECategory category_,
+                Data.Skill.Unit.Stat.ECategory category_,
                 NamedHash gauge_)
             {
                 Numeric = numeric_;
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Data.Skill.Effect
             {
                 Numeric = jNode_["Numeric"];
                 Subject = Serializer.ReadEnum<ESubject>(jNode_["Subject"]);
-                Category = Serializer.ReadEnum<Gauge.ECategory>(jNode_["Category"]);
+                Category = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["Category"]);
                 Gauge = jNode_["Gauge"];
             }
 
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Data.Skill.Effect
         }
 
         public ESubject As { get; private set; }
-        public Gauge.ECategory CategoryMask { get; private set; }
+        public Data.Skill.Unit.Stat.ECategory CategoryMask { get; private set; }
         public Condition Condition { get; private set; }
         public int Order { get; private set; }
         public MetricReference Input { get; private set; }
@@ -57,7 +57,7 @@ namespace Assets.Scripts.Data.Skill.Effect
         public Converter(
             Id id_,
             ESubject as_,
-            Gauge.ECategory categorymask_,
+            Data.Skill.Unit.Stat.ECategory categorymask_,
             Condition condition_,
             int order_,
             MetricReference input_,
@@ -76,7 +76,7 @@ namespace Assets.Scripts.Data.Skill.Effect
             : base(jNode_)
         {
             As = Serializer.ReadEnum<ESubject>(jNode_["As"]);
-            CategoryMask = Serializer.ReadEnum<Gauge.ECategory>(jNode_["CategoryMask"]);
+            CategoryMask = Serializer.ReadEnum<Data.Skill.Unit.Stat.ECategory>(jNode_["CategoryMask"]);
             Condition = jNode_["Condition"];
             Order = jNode_["Order"].AsInt;
             Input = jNode_["input"];

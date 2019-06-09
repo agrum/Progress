@@ -11,8 +11,8 @@ namespace Assets.Scripts.Data.Skill
         {
             public enum ESign
             {
-                Multiply,
-                Divide,
+                Positive,
+                Negative,
             }
 
             public ESign Sign { get; private set; }
@@ -48,14 +48,14 @@ namespace Assets.Scripts.Data.Skill
             }
         }
 
+        public Guid _Id { get; private set; }
         public NamedHash Name { get; private set; }
         public Numeric Numeric { get; private set; }
         public UpgradeType Upgrade { get; private set; }
 
-        public JSONObject Json { get; private set; }
-
         public Metric(NamedHash name_, Numeric numeric_, UpgradeType upgrade_ = null)
         {
+            _Id = Guid.NewGuid();
             Name = name_;
             Numeric = numeric_;
             Upgrade = upgrade_;
@@ -63,6 +63,7 @@ namespace Assets.Scripts.Data.Skill
 
         public Metric(JSONObject jNode_)
         {
+            _Id = new Guid(jNode_["_id"]);
             Name = jNode_["Name"];
             Numeric = jNode_["Numeric"];
             if (!jNode_["Upgrade"].IsNull)
@@ -77,6 +78,7 @@ namespace Assets.Scripts.Data.Skill
         public static implicit operator JSONNode(Metric numeric_)
         {
             JSONObject jObject = new JSONObject();
+            jObject["_id"] = numeric_._Id.ToString();
             jObject["Name"] = numeric_.Name;
             jObject["Numeric"] = numeric_.Numeric;
             if (numeric_.Upgrade != null)

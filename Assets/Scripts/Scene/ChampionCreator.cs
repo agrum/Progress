@@ -31,7 +31,7 @@ namespace Assets.Scripts.Scene
                 return;
 
             var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-            List<Model.Skill> filteredSkillList = new List<Model.Skill>();
+            List<Data.Skill.Skill> filteredSkillList = new List<Data.Skill.Skill>();
             foreach (var node in constellationModel.ClassNodeList)
                 filteredSkillList.Add(node.Skill);
 

@@ -1133,14 +1133,9 @@
     <Compile Include="Assets\Scripts\App\Resource\AppResource.cs" />
     <Compile Include="Assets\Scripts\App\Resource\Material.cs" />
     <Compile Include="Assets\Scripts\App\Resource\Prefab.cs" />
-    <Compile Include="Assets\Scripts\App\Route\Generic.cs" />
-    <Compile Include="Assets\Scripts\App\Route\Trigger.cs" />
-    <Compile Include="Assets\Scripts\App\Route\Modifier.cs" />
-    <Compile Include="Assets\Scripts\App\Route\Unit.cs" />
     <Compile Include="Assets\Scripts\Asset\Skill\LaserBeam.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Controller\CameraController.cs" />
-    <Compile Include="Assets\Scripts\Controller\LivingController.cs" />
     <Compile Include="Assets\Scripts\Data\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Data\Skill\Unit\Gauge.cs" />
     <Compile Include="Assets\Scripts\Data\Skill\Unit\Stat.cs" />
@@ -1155,7 +1150,6 @@
     <Compile Include="Assets\Scripts\Context\ConstellationPreset.cs" />
     <Compile Include="Assets\Scripts\Context\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Data\NamedHash.cs" />
-    <Compile Include="Assets\Scripts\Context\Hit.cs" />
     <Compile Include="Assets\Scripts\Context\HoveredNode.cs" />
     <Compile Include="Assets\Scripts\Context\Json.cs" />
     <Compile Include="Assets\Scripts\Context\Keybinding.cs" />

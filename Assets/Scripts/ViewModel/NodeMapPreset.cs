@@ -47,17 +47,17 @@ namespace Assets.Scripts.ViewModel
 			PopulateNodes(
 				model.Limits.Ability,
 				model.SelectedAbilityList,
-				Model.Skill.TypeEnum.Ability,
+                Data.Skill.Skill.ECategory.Ability,
 				abilityMaterial);
 			PopulateNodes(
                 model.Limits.Kit,
 				model.SelectedKitList,
-				Model.Skill.TypeEnum.Kit,
+                Data.Skill.Skill.ECategory.Kit,
 				kitMaterial);
 			PopulateNodes(
                 model.Limits.Class,
 				model.SelectedClassList,
-				Model.Skill.TypeEnum.Class,
+                Data.Skill.Skill.ECategory.Class,
 				classMaterial);
 		}
 
@@ -81,8 +81,8 @@ namespace Assets.Scripts.ViewModel
 			
 		private void PopulateNodes(
 			int amountNode_,
-			List<Model.Skill> selectedSkillList_, 
-			Model.Skill.TypeEnum type_,
+			List<Data.Skill.Skill> selectedSkillList_,
+            Data.Skill.Skill.ECategory category_,
 			Material nodeMaterial_)
 		{
 			for (int i = 0; i < amountNode_; ++i)
@@ -97,7 +97,7 @@ namespace Assets.Scripts.ViewModel
 						model,
 						hoveredModel,
 						scaleModel,
-						type_,
+                        category_,
 						i,
 						canEdit,
 						nodeMaterial_,

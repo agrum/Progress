@@ -10,7 +10,7 @@ namespace Assets.Scripts.Model
 {
 	public class ConstellationNode
 	{
-		public Skill Skill { get; private set; } = null;
+		public Data.Skill.Skill Skill { get; private set; } = null;
 		public int Index { get; private set; } = -1;
 		public Vector2 Position { get; private set; } = new Vector2Int(0, 0);
 		public List<ConstellationNode> KitsNodeList { get; set; } = new List<ConstellationNode>();
@@ -19,7 +19,7 @@ namespace Assets.Scripts.Model
 		public List<List<ConstellationNodeLink>> abilityNodeLinkListList { get; set; } = new List<List<ConstellationNodeLink>>();
 		public List<ConstellationNodeLink> abilityNodeLinkList { get; set; } = new List<ConstellationNodeLink>();
 
-		public ConstellationNode(Skill skill_, int index_, Vector2 position_)
+		public ConstellationNode(Data.Skill.Skill skill_, int index_, Vector2 position_)
 		{
 			Skill = skill_;
 			Index = index_;

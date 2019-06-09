@@ -5,7 +5,7 @@ namespace Assets.Scripts.Model
 {
     public class ChampionUpgrades
     {
-        public SkillUpgrade this[Skill skill_]
+        public SkillUpgrade this[Data.Skill.Skill skill_]
         {
             get
             {
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Model
                 {
                     if (skillUpgrade.Value.IsValid())
                     {
-                        json.Add(skillUpgrade.Value.Json);
+                        json.Add(skillUpgrade.Value);
                     }
                 }
 
@@ -35,7 +35,7 @@ namespace Assets.Scripts.Model
             }
         }
 
-        private Dictionary<Skill, SkillUpgrade> skillUpgradeMap = new Dictionary<Skill, SkillUpgrade>();
+        private Dictionary<Data.Skill.Skill, SkillUpgrade> skillUpgradeMap = new Dictionary<Data.Skill.Skill, SkillUpgrade>();
 
         public ChampionUpgrades(JSONArray json_)
         {

@@ -11,9 +11,9 @@ namespace Assets.Scripts.Model
 		public delegate void OnChanged();
 		public event OnChanged ChangedEvent = delegate { };
 
-		private Skill skill = null;
+		private Data.Skill.Skill skill = null;
 
-		public Skill Skill
+		public Data.Skill.Skill Skill
 		{
 			get
 			{
