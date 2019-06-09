@@ -26,13 +26,15 @@ namespace Assets.Scripts.Data.Skill
         public List<Layer.Base> Layers { get; private set; } = new List<Layer.Base>();
         public Material Material { get; private set; }
 
-        public Skill(ECategory category_, NamedHash name_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
+        public Skill(ECategory category_, NamedHash name_, string description_, string details_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
         {
             Reference = this;
 
             _Id = Guid.NewGuid();
             Category = category_;
             Name = name_;
+            Description = description_;
+            Details = details_;
             Metrics = metrics_;
             Passives = passives_;
             Layers = layers_;
@@ -58,6 +60,8 @@ namespace Assets.Scripts.Data.Skill
             _Id = new Guid(jNode_["_id"]);
             Category = Serializer.ReadEnum< ECategory>(jNode_["category"]);
             Name = jNode_["name"];
+            Description = jNode_["description"];
+            Details = jNode_["details"];
 
             foreach (var condition in jNode_["metrics"].AsArray)
                 Metrics.Add(condition.Value.AsArray);
@@ -79,6 +83,8 @@ namespace Assets.Scripts.Data.Skill
             jObject["_id"] = skill_._Id.ToString();
             jObject["category"] = skill_.Category;
             jObject["name"] = skill_.Name;
+            jObject["description"] = skill_.Description;
+            jObject["details"] = skill_.Details;
             var conditions = new JSONArray();
             foreach (var entry in skill_.Metrics)
                 conditions.Add(entry);

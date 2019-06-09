@@ -2,12 +2,17 @@ let mongoose = require('mongoose');
 
 module.exports = function()
 {
+    let metricUpgradeSchema = new mongoose.Schema({
+        sign: mongoose.Schema.Types.Mixed,
+        maxUpgradeCount: Number,
+        factor: Number,
+    });
+
     let metricSchema = new mongoose.Schema({
         name: String,
-        category: String,
-        value: Number,
-        upgType: Number,
-        upgCost: Number,
+        category: mongoose.Schema.Types.Mixed,
+        numeric: mongoose.Schema.Types.Mixed,
+        ugprade: metricUpgradeSchema,
     });
 
 	let schema = new mongoose.Schema({
@@ -15,13 +20,10 @@ module.exports = function()
 		name: String,
 		description: String,
 		details: String,
-        metrics: mongoose.Schema.Types.Mixed,
-        metrics2: [ metricSchema ],
-        modifiers: {
-			type: [mongoose.Schema.Types.ObjectId],
-			required: true,
-			ref: 'combatModifiers',
-        },
+		category: mongoose.Schema.Types.Mixed,
+        metrics: [ metricSchema ],
+        passives: [ mongoose.Schema.Types.Mixed ],
+        layers: [ mongoose.Schema.Types.Mixed ],
 	})
 	schema.set('collection', 'skills')
 

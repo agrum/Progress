@@ -14,6 +14,8 @@ namespace Assets.Scripts.Asset.Skill
         {
             //NAMES
             Data.NamedHash name = new Data.NamedHash(GetType().ToString());
+            string description = "Fire a wave that damages all enemies in its path.";
+            string details = "Throw a projectile that deals #damage# damage to all enemy untis in its path.";
             string Damage = "Damage";
             string Cooldown = "Cooldown";
             string Range = "Range";
@@ -116,6 +118,8 @@ namespace Assets.Scripts.Asset.Skill
             Dta = new Data.Skill.Skill(
                 Data.Skill.Skill.ECategory.Ability,
                 name,
+                description,
+                details,
                 metrics,
                 passives,
                 layers);
