@@ -40,7 +40,7 @@ namespace Assets.Scripts.Scene
             }
 
             champion = App.Content.Account.ActiveChampion;
-            List<Model.Skill> filteredSkillList = new List<Model.Skill>();
+            List<Data.Skill.Skill> filteredSkillList = new List<Data.Skill.Skill>();
             foreach (var node in Model.Constellation.AbilityNodeList)
                 filteredSkillList.Add(node.Skill);
             foreach (var node in Model.Constellation.KitNodeList)

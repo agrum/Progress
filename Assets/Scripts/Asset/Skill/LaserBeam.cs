@@ -24,6 +24,7 @@ namespace Assets.Scripts.Asset.Skill
             List<Data.Skill.Metric> metrics = new List<Data.Skill.Metric>();
             metrics.Add(new Data.Skill.Metric(
                 Damage,
+                Data.Skill.Metric.ECategory.Misc,
                 new Data.Skill.NumericBuilder()
                 .OpenP()
                 .Value(-400)
@@ -43,6 +44,7 @@ namespace Assets.Scripts.Asset.Skill
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
                 Cooldown,
+                Data.Skill.Metric.ECategory.Misc,
                 new Data.Skill.NumericBuilder()
                 .Value(24)
                 .Div()
@@ -54,6 +56,7 @@ namespace Assets.Scripts.Asset.Skill
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
                 Range,
+                Data.Skill.Metric.ECategory.Misc,
                 new Data.Skill.NumericBuilder()
                 .Value(20)
                 .Validate(),
@@ -63,6 +66,7 @@ namespace Assets.Scripts.Asset.Skill
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
                 Width,
+                Data.Skill.Metric.ECategory.Misc,
                 new Data.Skill.NumericBuilder()
                 .Value(2)
                 .Validate(),
@@ -72,6 +76,7 @@ namespace Assets.Scripts.Asset.Skill
                     1.1)));
             metrics.Add(new Data.Skill.Metric(
                 CastTime,
+                Data.Skill.Metric.ECategory.Misc,
                 new Data.Skill.NumericBuilder()
                 .Value(1.5)
                 .Div()

@@ -49,7 +49,7 @@ namespace Assets.Scripts.Scene
             preset = new Model.ConstellationPreset(new SimpleJSON.JSONObject(), new Model.PresetLimits(1, 1, 1));
             preset.PresetUpdated += OnPresetUpdated;
             var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
-            List<Model.Skill> filteredSkillList = new List<Model.Skill>();
+            List<Data.Skill.Skill> filteredSkillList = new List<Data.Skill.Skill>();
             foreach (var node in constellationModel.AbilityNodeList)
                 filteredSkillList.Add(node.Skill);
             foreach (var node in constellationModel.KitNodeList)

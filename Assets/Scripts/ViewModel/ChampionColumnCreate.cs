@@ -47,7 +47,7 @@ namespace Assets.Scripts.ViewModel
 
             JSONArray classes = new JSONArray();
             foreach (var skill in preset.SelectedClassList)
-                classes.Add(skill.Json["_id"]);
+                classes.Add(skill._Id.ToString());
 
             App.Content.Account.AddChampion(name, classes);
         }

@@ -11,8 +11,8 @@ namespace Assets.Scripts.ViewModel
         private bool editable = false;
 
         public bool IsPreviewing { get; private set; } = false;
-        public float PrePreviewLevel { get; private set; } = 0;
-        public float PrePreviewFactor { get; private set; } = 0;
+        public double PrePreviewLevel { get; private set; } = 0;
+        public double PrePreviewFactor { get; private set; } = 0;
 
         public SkillSpecializationField(Model.SkillSpecializer specializer_, Model.MetricUpgrade upgrade_, bool editable_)
         {
@@ -42,32 +42,32 @@ namespace Assets.Scripts.ViewModel
             return specializer.Sign(metricUpgrade);
         }
 
-        public float Level()
+        public double Level()
         {
             return metricUpgrade.WeightedLevel();
         }
 
-        public float TemporaryLevel()
+        public double TemporaryLevel()
         {
             return specializer.WeightedLevel(metricUpgrade);
         }
 
-        public float Factor()
+        public double Factor()
         {
             return metricUpgrade.Factor();
         }
 
-        public float TemporaryFactor()
+        public double TemporaryFactor()
         {
             return specializer.Factor(metricUpgrade);
         }
 
-        public string Category()
+        public Data.Skill.Metric.ECategory Category()
         {
             return metricUpgrade.Metric.Category;
         }
 
-        public string Name()
+        public Data.NamedHash Name()
         {
             return metricUpgrade.Metric.Name;
         }

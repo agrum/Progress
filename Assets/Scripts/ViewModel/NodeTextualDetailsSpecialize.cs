@@ -7,7 +7,7 @@ namespace Assets.Scripts.ViewModel
 {
     public class NodeTextualDetailsSpecialize : INodeTextualDetails
     {
-        private Dictionary<string, Dictionary<string, string>> Map = new Dictionary<string, Dictionary<string, string>>();
+        private Dictionary<Data.Skill.Metric.ECategory, Dictionary<string, string>> Map = new Dictionary<Data.Skill.Metric.ECategory, Dictionary<string, string>>();
         private Model.SkillSpecializer specializer;
 
         public NodeTextualDetailsSpecialize(Model.SkillSpecializer specializer_)
@@ -17,14 +17,14 @@ namespace Assets.Scripts.ViewModel
             specializer = specializer_;
             specializer.SkillSpecialized += OnHoveredChanged;
 
-            Map.Add("misc", Misc);
-            Map.Add("desc", Desc);
-            Map.Add("modifier", Modifier);
-            Map.Add("projectile", Projectile);
-            Map.Add("charge", Charge);
-            Map.Add("stack", Stack);
-            Map.Add("unit", Unit);
-            Map.Add("kit", Kit);
+            Map.Add(Data.Skill.Metric.ECategory.Misc, Misc);
+            Map.Add(Data.Skill.Metric.ECategory.Desc, Desc);
+            Map.Add(Data.Skill.Metric.ECategory.Modifier, Modifier);
+            Map.Add(Data.Skill.Metric.ECategory.Projectile, Projectile);
+            Map.Add(Data.Skill.Metric.ECategory.Charge, Charge);
+            Map.Add(Data.Skill.Metric.ECategory.Stack, Stack);
+            Map.Add(Data.Skill.Metric.ECategory.Unit, Unit);
+            Map.Add(Data.Skill.Metric.ECategory.Kit, Kit);
 
             OnHoveredChanged();
         }
@@ -44,13 +44,13 @@ namespace Assets.Scripts.ViewModel
             if (App.Content.Account.ActiveChampion != null)
                 upgrade = App.Content.Account.ActiveChampion.Upgrades[skill];
                 
-            foreach (var metric in skill.MetrictList)
+            foreach (var metric in skill.Metrics)
             {
-                float factor = upgrade != null ? specializer.Factor(upgrade[metric]) : 0;
-                Map[metric.Category][metric.Name] = (metric.Value * (1 + factor)).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                double factor = upgrade != null ? specializer.Factor(upgrade[metric]) : 0;
+                Map[metric.Category][metric.Name.String] = (1.0 * factor).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             }
 
-            Json = skill != null ? skill.Json : null;
+            Json = skill != null ? skill : null;
             Emit();
         }
     }

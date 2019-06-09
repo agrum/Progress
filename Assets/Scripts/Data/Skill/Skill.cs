@@ -24,6 +24,7 @@ namespace Assets.Scripts.Data.Skill
         public List<Metric> Metrics { get; private set; } = new List<Metric>();
         public List<ModifierBehaviour> Passives { get; private set; } = new List<ModifierBehaviour>();
         public List<Layer.Base> Layers { get; private set; } = new List<Layer.Base>();
+        public Material Material { get; private set; }
 
         public Skill(ECategory category_, NamedHash name_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
         {
@@ -35,6 +36,19 @@ namespace Assets.Scripts.Data.Skill
             Metrics = metrics_;
             Passives = passives_;
             Layers = layers_;
+
+            switch (Category)
+            {
+                case ECategory.Ability:
+                    Material = App.Resource.Material.AbilityMaterial;
+                    break;
+                case ECategory.Class:
+                    Material = App.Resource.Material.ClassMaterial;
+                    break;
+                case ECategory.Kit:
+                    Material = App.Resource.Material.KitMaterial;
+                    break;
+            }
 
             Reference = null;
         }

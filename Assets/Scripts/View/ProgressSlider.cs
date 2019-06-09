@@ -8,7 +8,7 @@ namespace Assets.Scripts.View
         public Slider mainSlider = null;
         public Slider progressSlider = null;
 
-        public float Main
+        public double Main
         {
             get
             {
@@ -16,12 +16,12 @@ namespace Assets.Scripts.View
             }
             set
             {
-                mainSlider.value = value;
-                progressSlider.value = System.Math.Max(mainSlider.value, value);
+                mainSlider.value = (float) value;
+                progressSlider.value = (float) System.Math.Max(mainSlider.value, value);
             }
         }
 
-        public float Progress
+        public double Progress
         {
             get
             {
@@ -29,7 +29,7 @@ namespace Assets.Scripts.View
             }
             set
             {
-                progressSlider.value = System.Math.Max(mainSlider.value, value);
+                progressSlider.value = (float) System.Math.Max(mainSlider.value, value);
             }
         }
     }

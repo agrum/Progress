@@ -38,7 +38,7 @@ namespace Assets.Scripts.ViewModel
                     new Vector2(0, 0));
             });
 
-            foreach (var metric in skillUpgrade.Skill.MetrictList)
+            foreach (var metric in skillUpgrade.Skill.Metrics)
             {
                 SpecializerFieldAdded(() =>
                 {
@@ -61,25 +61,25 @@ namespace Assets.Scripts.ViewModel
 
         public string Name()
         {
-            return skillUpgrade.Skill.Json["name"];
+            return skillUpgrade.Skill.Name.String;
         }
 
-        public float Handicap()
+        public double Handicap()
         {
             return skillUpgrade.Handicap();
         }
 
-        public float PreviewHandicap()
+        public double PreviewHandicap()
         {
             return specializer.Handicap();
         }
 
-        public float OverallWeight()
+        public double OverallWeight()
         {
             return skillUpgrade.OverallWeight();
         }
 
-        public float OverallPreviewWeight()
+        public double OverallPreviewWeight()
         {
             return specializer.OverallWeight();
         }
