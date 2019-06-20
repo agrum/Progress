@@ -24,7 +24,7 @@ namespace Assets.Scripts.Data.Skill.Effect
 
             public static implicit operator Id(string nameHash_)
             {
-                return nameHash_;
+                return new Id(nameHash_);
             }
         }
 

@@ -28,17 +28,17 @@ namespace Assets.Scripts.Data
 
         public static implicit operator NamedHash(JSONNode jNode_)
         {
-            return jNode_;
+            return new NamedHash(jNode_.Value);
         }
 
         public static implicit operator NamedHash(string string_)
         {
-            return string_;
+            return new NamedHash(string_);
         }
 
         public static implicit operator JSONNode(NamedHash numeric_)
         {
-            return numeric_.String;
+            return new JSONString(numeric_.String);
         }
     }
 }

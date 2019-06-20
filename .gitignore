@@ -21,3 +21,4 @@
 /server/private.js
 /server/mongoexport.bat
 /server/dump
+*.meta

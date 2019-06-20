@@ -17,14 +17,16 @@ namespace Assets.Scripts.Data.Skill
             Type = type_;
         }
 
-        public Cooldown(JSONNode jNode_)
+        public Cooldown(JSONObject jNode_)
         {
             Duration = jNode_["duration"];
         }
 
         public static implicit operator Cooldown(JSONNode jNode_)
         {
-            return jNode_;
+            if (jNode_.IsObject)
+                return new Cooldown(jNode_.AsObject);
+            throw new WestException("Cooldown's JSON is not an object");
         }
 
         public static implicit operator JSONNode(Cooldown cooldown_)

@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 router.post('/', function (req, res, next) {
+    console.log(req.body)
     if (!(req.body.email &&
         req.body.password)) {
         return res.send("Invalid request:" + req.body)
@@ -11,11 +12,13 @@ router.post('/', function (req, res, next) {
         if (err) {
             info.error = err
             res.send(info)
+            console.log("A" + info)
             return
         }
 
         if (!user) {
             res.send(info)
+            console.log("B" + info)
             return
         }
 
@@ -27,6 +30,7 @@ router.post('/', function (req, res, next) {
                 info.error = err
             }
             req.session.west = {}
+            console.log("C" + info)
             return res.send(info)
         })
     })(req, res)

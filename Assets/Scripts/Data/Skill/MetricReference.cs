@@ -13,37 +13,38 @@ namespace Assets.Scripts.Data.Skill
         public Metric Metric { get; private set; }
         public double Value { get; private set; }
 
-        public MetricReference(JSONNode jNode_)
+        public MetricReference(string name_)
         {
-            if (jNode_.IsString)
-            {
-                Name = jNode_;
-                Metric = Skill.Reference.GetMetric(Name);
-            }
-            else if (jNode_.IsNumber)
-                Value = jNode_;
-            else
-                throw new NotSupportedException();
+            Name = name_;
+            Metric = Skill.Reference.GetMetric(Name);
+        }
+
+        public MetricReference(double jNode_)
+        {
+            Value = jNode_;
         }
 
         public static implicit operator MetricReference(JSONNode jNode_)
         {
-            return jNode_;
+            if (jNode_.IsNumber)
+                return new MetricReference(jNode_.AsDouble);
+            else
+                return new MetricReference(jNode_.Value);
         }
 
         public static implicit operator MetricReference(NamedHash name_)
         {
-            return name_;
+            return new MetricReference(name_.String);
         }
 
         public static implicit operator MetricReference(string name_)
         {
-            return name_;
+            return new MetricReference(name_);
         }
 
-        public static implicit operator MetricReference(double value)
+        public static implicit operator MetricReference(double value_)
         {
-            return value;
+            return new MetricReference(value_);
         }
 
         public static implicit operator JSONNode(MetricReference object_)

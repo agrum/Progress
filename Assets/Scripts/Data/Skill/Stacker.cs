@@ -58,7 +58,7 @@ namespace Assets.Scripts.Data.Skill
 
         public static implicit operator Stacker(JSONNode jNode_)
         {
-            return jNode_;
+            return new Stacker(jNode_);
         }
 
         public static implicit operator JSONNode(Stacker numeric_)

@@ -24,7 +24,6 @@ router.use('/account', require('./routes/account').router)
 router.use('/champion', require('./routes/champion').router)
 router.use('/gameSettings', require('./routes/gameSettings').router)
 router.use('/constellation', require('./routes/constellation').router)
-router.use('/skill', require('./routes/skill').router)
 
 router.use(function (req, res, next) {
 	var err = new Error('Route not found: ' + req.originalUrl)

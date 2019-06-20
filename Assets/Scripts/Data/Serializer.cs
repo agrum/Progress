@@ -21,7 +21,7 @@ namespace Assets.Scripts.Data
             {
                 throw new ArgumentException("T must be an enumerated type");
             }
-            return (T)Enum.Parse(t, jNode_.ToString());
+            return (T)Enum.Parse(t, jNode_.Value);
         }
     }
 }

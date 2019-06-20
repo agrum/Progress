@@ -1,12 +1,9 @@
 module.exports = function () {
-	require('./schemas/users')();
-	require('./schemas/gameSettings')();
-	require('./schemas/constellations')();
-	require('./schemas/abilities')();
-	require('./schemas/classes')();
-	require('./schemas/kits')();
-	require('./schemas/skills')();
-	require('./schemas/champions')();
 	require('./schemas/accounts')();
+	require('./schemas/champions')();
+	require('./schemas/constellations')();
+	require('./schemas/gameSettings')();
 	require('./schemas/presets')();
+	require('./schemas/skills')();
+	require('./schemas/users')();
 }

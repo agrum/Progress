@@ -130,12 +130,12 @@ namespace Assets.Scripts.Data.Skill
 
         public static implicit operator Numeric(JSONNode jNode_)
         {
-            return jNode_.ToString();
+            return jNode_.Value;
         }
 
         public static implicit operator JSONNode(Numeric numeric_)
         {
-            return numeric_.literal;
+            return new JSONString(numeric_.literal);
         }
     }
 

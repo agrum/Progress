@@ -47,7 +47,9 @@ namespace Assets.Scripts.Data.Skill
 
             public static implicit operator UpgradeType(JSONNode jNode_)
             {
-                return jNode_;
+                if (jNode_.IsObject)
+                    return new UpgradeType(jNode_.AsObject);
+                throw new WestException("UpgradeType's JSON is not an object");
             }
 
             public static implicit operator JSONNode(UpgradeType object_)
@@ -60,7 +62,7 @@ namespace Assets.Scripts.Data.Skill
             }
         }
 
-        public Guid _Id { get; private set; }
+        public string _Id { get; private set; }
         public NamedHash Name { get; private set; }
         public ECategory Category { get; private set; }
         public Numeric Numeric { get; private set; }
@@ -68,26 +70,28 @@ namespace Assets.Scripts.Data.Skill
 
         public Metric(NamedHash name_, ECategory category_, Numeric numeric_, UpgradeType upgrade_ = null)
         {
-            _Id = Guid.NewGuid();
+            _Id = Guid.NewGuid().ToString();
             Name = name_;
             Category = category_;
             Numeric = numeric_;
             Upgrade = upgrade_;
         }
 
-        public Metric(JSONObject jNode_)
+        public Metric(JSONObject jObject_)
         {
-            _Id = new Guid(jNode_["_id"]);
-            Name = jNode_["name"];
-            Category = Serializer.ReadEnum<ECategory>(jNode_["category"]);
-            Numeric = jNode_["numeric"];
-            if (!jNode_["upgrade"].IsNull)
-                Upgrade = jNode_["upgrade"];
+            _Id = jObject_["_id"];
+            Name = jObject_["name"];
+            Category = Serializer.ReadEnum<ECategory>(jObject_["category"]);
+            Numeric = jObject_["numeric"];
+            if (!jObject_["upgrade"].IsNull)
+                Upgrade = jObject_["upgrade"];
         }
 
         public static implicit operator Metric(JSONNode jNode_)
         {
-            return jNode_;
+            if (jNode_.IsObject)
+                return new Metric(jNode_.AsObject);
+            throw new WestException("Metric's JSON is not an object");
         }
 
         public static implicit operator JSONNode(Metric object_)

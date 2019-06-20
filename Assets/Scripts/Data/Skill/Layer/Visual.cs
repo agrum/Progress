@@ -31,7 +31,9 @@ namespace Assets.Scripts.Data.Skill.Layer
 
         public static implicit operator Visual(JSONNode jNode_)
         {
-            return jNode_;
+            if (jNode_.IsObject)
+                return new Visual(jNode_.AsObject);
+            throw new WestException("Visual's JSON is not an object");
         }
 
         public static implicit operator JSONNode(Visual object_)

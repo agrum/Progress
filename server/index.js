@@ -54,6 +54,9 @@ app.use(passport.session())
 app.passport = passport;
 require('./passport')(app);
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 /*app.put('*', function(req, res, next){
 	var data = "";
 	req.on('data', function(chunk){ data += chunk})

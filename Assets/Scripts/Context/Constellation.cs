@@ -133,8 +133,9 @@ namespace Assets.Scripts.Model
 			foreach (var almostNode in array_)
 			{
 				JSONNode json = almostNode.Value;
-					
-				switch(category_)
+                Debug.Log(json.ToString());
+
+                switch (category_)
 				{
 					case Data.Skill.Skill.ECategory.Ability:
 						AbilityNodeList.Add(new ConstellationNode(
