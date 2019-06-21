@@ -8,9 +8,9 @@ namespace Assets.Scripts.Scene
 {
 	public class StartupManager : MonoBehaviour
 	{
-		void Start()
-		{
-			App.Content.GameSettings.Load(() => { });
-		}
+        IEnumerator Start()
+        {
+            yield return StartCoroutine(App.Content.Session.Load());
+        }
 	}
 }

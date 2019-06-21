@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Assets.Scripts.Scene
 {
@@ -16,21 +17,15 @@ namespace Assets.Scripts.Scene
 		private Model.HoveredSkill hovered = new Model.HoveredSkill();
         private Model.Champion champion = null;
 
-		void Start()
+		IEnumerator Start()
 		{
 			Debug.Assert(backButton != null);
 
-			App.Content.Account.Load(() =>
-			{
-				Setup();
-			});
-		}
+            yield return StartCoroutine(App.Content.Account.Load());
 
-		private void Setup()
-		{
 			//return if object died while waiting for answer
 			if (this == null)
-				return;
+				yield break;
 
             if (Model == null)
             {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Assets.Scripts.Scene
 {
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Scene
         private Model.ConstellationPreset preset = null;
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
-        void Start()
+        IEnumerator Start()
         {
             Debug.Assert(nodeTextualDetails != null);
             Debug.Assert(constellation != null);
@@ -25,25 +26,10 @@ namespace Assets.Scripts.Scene
             Debug.Assert(championHeadline != null);
             Debug.Assert(sceneTitle != null);
 
-            var loadingScreen = App.Resource.Prefab.LoadingCanvas();
-                
-            App.Content.Account.ActiveChampion?.Load(() =>
-            {
-                Destroy(loadingScreen);
-
-                Setup();
-            });
-        }
-
-        private void OnDestroy()
-        {
-            hovered.ChangedEvent -= OnHoveredChanged;
-        }
-
-        private void Setup()
-        {
+            yield return App.Content.Account.ActiveChampion?.Load();
+            
             if (this == null)
-                return;
+                yield break;
 
             //model
             preset = new Model.ConstellationPreset(new SimpleJSON.JSONObject(), new Model.PresetLimits(1, 1, 1));
@@ -66,9 +52,14 @@ namespace Assets.Scripts.Scene
                 preset,
                 filteredSkillList,
                 hovered));
-            championHeadline.Setup();
+            yield return championHeadline.Start();
             sceneTitle.Format(App.Content.Account.ActiveChampion.Json["specPointsRemaining"]);
             OnHoveredChanged();
+        }
+        
+        private void OnDestroy()
+        {
+            hovered.ChangedEvent -= OnHoveredChanged;
         }
 
         void OnPresetUpdated()

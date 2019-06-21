@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using SimpleJSON;
+using System.Collections;
 
 namespace Assets.Scripts.Scene
 {
@@ -15,28 +16,18 @@ namespace Assets.Scripts.Scene
 
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
-		void Start()
+		IEnumerator Start()
         {
             Debug.Assert(nodeTextualDetails != null);
             Debug.Assert(horizontalLayout != null);
             Debug.Assert(championColumnPrefab != null);
             Debug.Assert(additionColumnPrefab != null);
+            
+            yield return StartCoroutine(App.Content.Account.Load());
 
-            var loadingScreen = App.Resource.Prefab.LoadingCanvas();
-
-			App.Content.Account.Load(() =>
-			{
-                Destroy(loadingScreen);
-
-                Setup();
-			});
-		}
-
-		private void Setup()
-		{
 			//return if object died while waiting for answer
 			if (this == null)
-				return;
+				yield break;
 
             //deactivate any champion
             App.Content.Account.ActivateChampion(null);

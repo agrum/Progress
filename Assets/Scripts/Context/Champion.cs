@@ -2,6 +2,7 @@
 using SimpleJSON;
 using BestHTTP;
 using UnityEngine;
+using System.Collections;
 
 namespace Assets.Scripts.Model
 {
@@ -20,9 +21,9 @@ namespace Assets.Scripts.Model
         public event PresetDelegate PresetSaved = delegate { };
         public event PresetDelegate PresetRemoved = delegate { };
 
-        protected override void Build(OnBuilt onBuilt_)
+        protected override IEnumerator Build()
         {
-            App.Server.Request(
+            yield return App.Server.Request(
             HTTPMethods.Get,
             "champion/" + Json["_id"],
             (JSONNode json_) =>
@@ -44,7 +45,6 @@ namespace Assets.Scripts.Model
                 PresetRemoved = delegate { };
 
                 Debug.Log(Json);
-                onBuilt_();
             }).Send();
         }
 

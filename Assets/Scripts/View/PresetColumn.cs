@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.View
 {
-	class PresetColumn : WestBehaviour
+	class PresetColumn : MonoBehaviour
 	{
 		public NodeMap presetPreview = null;
         public Button addButton = null;
@@ -26,11 +27,9 @@ namespace Assets.Scripts.View
             viewModel.PresetUpdated += OnPresetUpdated;
 
             presetPreview.SetContext(viewModel.CreatePreviewContext());
-
-            Delay(DelayedStart);
 		}
 
-        private void DelayedStart()
+        IEnumerator Start()
 		{
 			Debug.Assert(presetPreview != null);
             Debug.Assert(addButton != null);
@@ -41,6 +40,11 @@ namespace Assets.Scripts.View
             Debug.Assert(handicapText != null);
             Debug.Assert(nameText != null);
             Debug.Assert(nameInput != null);
+
+            while (viewModel == null)
+            {
+                yield return null;
+            }
 
 			DisableAll();
                 

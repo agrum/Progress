@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Scene
@@ -14,7 +15,7 @@ namespace Assets.Scripts.Scene
 			
 		private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
-		void Start()
+		IEnumerator Start()
 		{
 			Debug.Assert(canvas != null);
 			Debug.Assert(nodeTextualDetails != null);
@@ -24,17 +25,11 @@ namespace Assets.Scripts.Scene
 
 			canvas.gameObject.SetActive(false);
 
-			App.Content.Account.Load(() =>
-			{
-				Setup();
-			});
-		}
-
-		private void Setup()
-		{
+            yield return StartCoroutine(App.Content.Account.Load());
+			
 			//return if object died while waiting for answer
 			if (this == null)
-				return;
+				yield break;
 
 			nodeTextualDetails.SetContext(new ViewModel.NodeTextualDetails(hovered));
 			backButton.onClick.AddListener(BackClicked);

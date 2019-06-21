@@ -50,7 +50,7 @@ namespace Assets.Scripts.ViewModel
                 Map[metric.Category][metric.Name.String] = (1.0 * factor).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
             }
 
-            Json = skill != null ? skill : null;
+            //Json = skill != null ? skill : null;
             Emit();
         }
     }

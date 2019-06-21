@@ -1,6 +1,7 @@
 ﻿using SimpleJSON;
 using UnityEngine.SceneManagement;
 using BestHTTP;
+using System.Collections;
 
 namespace Assets.Scripts.CloudContent
 {
@@ -11,49 +12,52 @@ namespace Assets.Scripts.CloudContent
 		public string Username { get; private set; } = null;
 		public string Account { get; private set; } = null;
 
-		protected override void Build(OnBuilt onBuilt_)
-		{
-			if (SceneManager.GetActiveScene().name != "Startup")
-			{
-				callbackScene = SceneManager.GetActiveScene().name;
-                App.Scene.Load("Startup");
-			}
+        protected override IEnumerator Build()
+        {
+            bool built = false;
+            bool triedLogin = false;
 
-			App.Server.Request(
-			HTTPMethods.Get,
-			"user",
-			(JSONNode json_) =>
+            while (!built && !triedLogin)
             {
-                App.Scene.Load(callbackScene);
-				Json = json_;
+                yield return App.Server.Request(
+                HTTPMethods.Get,
+                "user",
+                (JSONNode json_) =>
+                {
+                    if (callbackScene != null)
+                    {
+                        App.Scene.Load(callbackScene);
+                    }
+                    Json = json_;
 
-				Email = Json["email"];
-				Username = Json["username"];
-				Account = Json["account"];
+                    Email = Json["email"];
+                    Username = Json["username"];
+                    Account = Json["account"];
 
-				onBuilt_();
-			},
-			(JSONNode json) => //try to log in if not logged in yet
-			{
-				if (Json != null)
-					return;
+                    built = true;
+                },
+                (JSONNode json) => //try to log in if not logged in yet
+                {
+                    if (Json != null)
+                        return;
 
-				Json = json;
-				var request = App.Server.Request(
-					HTTPMethods.Post,
-					"login",
-					(JSONNode json_) => //if log in is successful, try to get game settigns again
-					{
-						Json = json;
-						Build(onBuilt_);
-					});
-				request.AddField("email", "thomas.lgd@gmail.com");
-				request.AddField("password", "plop");
-				request.Send();
-			}).Send();
-		}
+                    Json = json;
+                    var request = App.Server.Request(
+                        HTTPMethods.Post,
+                        "login",
+                        (JSONNode json_) => //if log in is successful, try to get game settigns again
+                        {
+                            Json = json;
+                            triedLogin = true;
+                        });
+                    request.AddField("email", "thomas.lgd@gmail.com");
+                    request.AddField("password", "plop");
+                    request.Send();
+                }).Send();
+            }
+        }
 
-		public Session()
+        public Session()
 		{
 
 		}

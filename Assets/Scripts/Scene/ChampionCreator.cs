@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Assets.Scripts.Scene
 {
@@ -14,21 +15,15 @@ namespace Assets.Scripts.Scene
         private Model.ConstellationPreset preset = null;
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
-        void Start()
+        IEnumerator Start()
         {
             Debug.Assert(backButton != null);
 
-            App.Content.ConstellationList.Load(() =>
-            {
-                Setup();
-            });
-        }
-
-        private void Setup()
-        {
+            yield return StartCoroutine(App.Content.ConstellationList.Load());
+            
             //return if object died while waiting for answer
             if (this == null)
-                return;
+                yield break;
 
             var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
             List<Data.Skill.Skill> filteredSkillList = new List<Data.Skill.Skill>();

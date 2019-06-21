@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
@@ -9,68 +10,60 @@ namespace Assets.Scripts.CloudContent
 		public delegate void OnLoaded();
 		public delegate void OnBuilt();
 		public event OnLoaded LoadedEvent;
-				
-		public void Load(OnLoaded onLoaded_)
-		{
-			//callback if already loaded.
-			if (loaded)
-			{
-				onLoaded_();
-				return;
-			}
+        public static GameObject LoadingScreen = null;
+        public static uint LoadCount = 0;
 
-			//bind to event
-			LoadedEvent += onLoaded_;
+        public IEnumerator Load()
+        {
+            //callback if already loaded.
+            //return if already loading
+            if (loaded || loading)
+            {
+                yield break;
+            }
 
-			//return if already loading
-			if (loading)
-				return;
+            //set as loading 
+            loading = true;
+            LoadCount++;
+            LoadingScreen = LoadingScreen ?? App.Resource.Prefab.LoadingCanvas();
 
-			//set as loading 
-			loading = true;
+            //check if we need to load the dependencies.
+            bool dependencies_loaded = true;
+            foreach (var dependency in dependencyList)
+            {
+                if (!dependency.loaded)
+                {
+                    dependencies_loaded = false;
+                    break;
+                }
+            }
 
-			//check if we need to load the dependencies.
-			bool dependencies_loaded = true;
-			foreach (var dependency in dependencyList)
-				if (!dependency.loaded)
-				{
-					dependencies_loaded = false;
-					break;
-				}
-					
-			//define all dependency acquired callback
-			OnBuilt selfBuiltCallback = () =>
-			{
-				loaded = true;
-				loading = false;
-				Debug.Log("Cloud content : " + this.GetType().Name + " loaded");
-				LoadedEvent();
-			};
+            //if no dependencies needed, just build yourself directly
+            if (dependencies_loaded)
+            {
+                yield return Build();
+                Loaded();
+                yield break;
+            }
 
-			//if no dependencies needed, just build yourself directly
-			if (dependencies_loaded)
-			{
-				Build(selfBuiltCallback);
-                return;
-			}
+            //otherwise define per-dependency-built callback
+            int dependency_needed_count = dependencyList.Count;
 
-			//otherwise define per-dependency-built callback
-			int dependency_needed_count = dependencyList.Count;
-			OnLoaded dependencyBuiltCallback = () =>
-			{
-				Interlocked.Decrement(ref dependency_needed_count);
+            //and load all dependencies, then trigger self build
+            foreach (var dependency in dependencyList)
+            {
+                yield return dependency.Load();
+                Interlocked.Decrement(ref dependency_needed_count);
 
-				//when all requests have been processed, call async callback's
-				if (Interlocked.Equals(dependency_needed_count, 0))
-						Build(selfBuiltCallback);
-			};
-
-			//and load all dependencies, then trigger self build
-			foreach (var dependency in dependencyList)
-			{
-				dependency.Load(dependencyBuiltCallback);
-			}
-		}
+                //when all requests have been processed, call async callback's
+                if (Interlocked.Equals(dependency_needed_count, 0))
+                {
+                    yield return Build();
+                    Loaded();
+                    yield break;
+                }
+            }
+        }
 
         public void Unload()
         {
@@ -78,9 +71,22 @@ namespace Assets.Scripts.CloudContent
             loading = false;
         }
 
-		protected abstract void Build(OnBuilt onBuilt_);
+        private void Loaded()
+        {
+            loaded = true;
+            loading = false;
+            LoadCount--;
+            if (LoadCount == 0)
+            {
+                GameObject.Destroy(LoadingScreen);
+                LoadingScreen = null;
+            }
+            Debug.Log("Cloud content : " + this.GetType().Name + " loaded");
+        }
+        
+        protected virtual IEnumerator Build() { return null; }
 
-		protected List<Base> dependencyList = new List<Base>();
+        protected List<Base> dependencyList = new List<Base>();
 		protected bool loaded = false;
 		protected bool loading = false;
 	}

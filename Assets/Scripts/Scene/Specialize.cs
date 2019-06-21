@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Assets.Scripts.Scene
 {
@@ -18,7 +19,7 @@ namespace Assets.Scripts.Scene
         private Model.SkillSpecializer model;
         private Model.HoveredSkill hovered = new Model.HoveredSkill();
 
-        void Start()
+        IEnumerator Start()
         {
             Debug.Assert(nodeTextualDetails != null);
             Debug.Assert(specializer != null);
@@ -27,20 +28,10 @@ namespace Assets.Scripts.Scene
             Debug.Assert(applyButton != null);
             Debug.Assert(SelectedSkill != null);
 
-            var loadingScreen = App.Resource.Prefab.LoadingCanvas();
+            yield return StartCoroutine(App.Content.Account.ActiveChampion?.Load());
                 
-            App.Content.Account.ActiveChampion?.Load(() =>
-            {
-                Destroy(loadingScreen);
-
-                Setup();
-            });
-        }
-
-        private void Setup()
-        {
             if (this == null)
-                return;
+                yield break;
 
             //model
             var constellationModel = App.Content.ConstellationList[App.Content.GameSettings.Json["constellation"]];
@@ -67,7 +58,7 @@ namespace Assets.Scripts.Scene
                     skillUpgrade,
                     true, 
                     hovered));
-            championHeadline.Setup();
+            yield return championHeadline.Start();
             OnSkillSpecialized();
         }
 

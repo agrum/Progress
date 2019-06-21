@@ -1,6 +1,7 @@
 ﻿using SimpleJSON;
 using BestHTTP;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace Assets.Scripts.CloudContent
 {
@@ -14,9 +15,9 @@ namespace Assets.Scripts.CloudContent
 		public int LengthConstellation { get; private set; }
         public JSONNode UpDownUpgradeSkillDictionnary { get; private set; }
 
-        protected override void Build(OnBuilt onBuilt_)
+        protected override IEnumerator Build()
 		{
-			App.Server.Request(
+			yield return App.Server.Request(
 			HTTPMethods.Get,
 			"gameSettings/Classic",
 			(JSONNode json_) =>
@@ -28,8 +29,6 @@ namespace Assets.Scripts.CloudContent
 				NumKits = Json["numberOfKits"];
 				LengthConstellation = Json["presetLength"];
                 UpDownUpgradeSkillDictionnary = Json["upDownUpgradeSkillDictionnary"];
-
-				onBuilt_();
 			}).Send();
 		}
 

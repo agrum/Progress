@@ -9,7 +9,7 @@ namespace Assets.Scripts.ViewModel
     {
         public event OnVoidDelegate SkillChanged = delegate { };
 
-        public JSONNode Json { get; protected set; } = null;
+        //public JSONNode Json { get; protected set; } = null;
 
         public Dictionary<string, string> Misc = new Dictionary<string, string>();
         public Dictionary<string, string> Desc = new Dictionary<string, string>();
@@ -76,7 +76,7 @@ namespace Assets.Scripts.ViewModel
                 }
             }
 
-            Json = hovered?.Skill ?? null;
+            //Json = hovered?.Skill ?? null;
             Emit();
         }
     }

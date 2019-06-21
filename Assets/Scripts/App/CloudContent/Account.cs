@@ -2,6 +2,7 @@
 using SimpleJSON;
 using BestHTTP;
 using UnityEngine;
+using System.Collections;
 
 namespace Assets.Scripts.CloudContent
 {
@@ -18,9 +19,9 @@ namespace Assets.Scripts.CloudContent
         public event ChampionDelegate ChampionSaved = delegate { };
         public event ChampionDelegate ChampionRemoved = delegate { };
 
-        protected override void Build(OnBuilt onBuilt_)
+        protected override IEnumerator Build()
         {
-            App.Server.Request(
+            yield return App.Server.Request(
             HTTPMethods.Get,
             "account/" + App.Content.Session.Account,
             (JSONNode json_) =>
@@ -31,7 +32,6 @@ namespace Assets.Scripts.CloudContent
                     ChampionList.Add(new Model.Champion(almostJson.Value.AsObject));
 
                 Debug.Log(Json);
-                onBuilt_();
             }).Send();
         }
 

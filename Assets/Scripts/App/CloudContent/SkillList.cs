@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SimpleJSON;
 using BestHTTP;
+using System.Collections;
 
 namespace Assets.Scripts.CloudContent
 {
@@ -12,9 +13,9 @@ namespace Assets.Scripts.CloudContent
         public Dictionary<string, Data.Skill.Skill> Classes = new Dictionary<string, Data.Skill.Skill>();
         public Dictionary<string, Data.Skill.Skill> Kits = new Dictionary<string, Data.Skill.Skill>();
 
-        protected override void Build(OnBuilt onBuilt_)
+        protected override IEnumerator Build()
         {
-            App.Server.Request(
+            yield return App.Server.Request(
             HTTPMethods.Get,
             "skill",
             (JSONNode json_) =>
@@ -30,8 +31,6 @@ namespace Assets.Scripts.CloudContent
                     else if (almostJson.Value["type"] == "Kit")
                         Kits.Add(almostJson.Value["_id"], new Data.Skill.Skill(almostJson.Value));
                 }
-
-                onBuilt_();
             }).Send();
         }
 

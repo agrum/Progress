@@ -18,9 +18,9 @@ namespace Assets.Scripts.CloudContent
 
 		private Hashtable Table = new Hashtable();
 
-		protected override void Build(OnBuilt onBuilt_)
+		protected override IEnumerator Build()
 		{
-			App.Server.Request(
+			yield return App.Server.Request(
 			HTTPMethods.Get,
 			"constellation",
 			(JSONNode json_) =>
@@ -29,8 +29,6 @@ namespace Assets.Scripts.CloudContent
 
 				foreach (var almostJson in Json)
 					Table.Add(almostJson.Value["_id"], new Model.Constellation(almostJson.Value));
-						
-				onBuilt_();
 			}).Send();
 		}
 

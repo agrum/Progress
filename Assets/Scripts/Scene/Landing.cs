@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Scene
@@ -12,33 +13,24 @@ namespace Assets.Scripts.Scene
         public Button backButton = null;
         public View.ChampionHeadline championHeadline = null;
 
-        void Start()
+        IEnumerator Start()
 		{
 			Debug.Assert(buttonPlayV != null);
 			Debug.Assert(buttonSpecializeV != null);
 			Debug.Assert(buttonGearV != null);
             Debug.Assert(buttonTradeV != null);
             Debug.Assert(championHeadline != null);
+            
+            yield return StartCoroutine(App.Content.Account.Load());
 
-            var loadingScreen = App.Resource.Prefab.LoadingCanvas();
-
-            App.Content.Account.Load(() =>
-            {
-                Destroy(loadingScreen);
-
-                Setup();
-            });
-        }
-
-        private void Setup()
-        {
             if (this == null)
-                return;
+                yield break; 
 
             buttonPlayV.clickEvent += () => { App.Scene.Load("PresetSelection"); };
             buttonSpecializeV.clickEvent += () => { App.Scene.Load("SpecializeOverview"); };
             backButton.onClick.AddListener(BackClicked);
-            championHeadline.Setup();
+
+            yield return championHeadline.Start();
         }
             
         private void BackClicked()
