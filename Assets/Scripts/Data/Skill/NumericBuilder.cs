@@ -23,7 +23,7 @@ namespace Assets.Scripts.Data.Skill
                 throw new InvalidOperationException();
 
             if (equationString.First() == ' ')
-                equationString.Remove(0);
+                equationString = equationString.Remove(0, 1);
 
             return equationString;
         }
@@ -44,7 +44,6 @@ namespace Assets.Scripts.Data.Skill
                 throw new InvalidOperationException();
             }
             --parenthesisOpened;
-            waitingOnField = true;
 
             return this;
         }

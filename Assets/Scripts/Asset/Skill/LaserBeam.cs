@@ -8,7 +8,7 @@ namespace Assets.Scripts.Asset.Skill
 {
     public class LaserBeam
     {
-        Data.Skill.Skill Dta;
+        public Data.Skill.Skill Dta { get; private set; }
 
         public LaserBeam()
         {
