@@ -59,25 +59,25 @@ namespace Assets.Scripts.Data.Skill
             }
         }
 
-        public partial class ReferencRandomRange : IReference
+        public partial class ReferenceRandomRange : IReference
         {
             double A;
             double B;
 
-            public ReferencRandomRange(List<string> fields)
+            public ReferenceRandomRange(List<string> fields)
             {
                 A = Convert.ToDouble(fields[2]);
                 B = Convert.ToDouble(fields[3]);
             }
         }
 
-        public partial class ReferencModifier : IReference
+        public partial class ReferenceModifier : IReference
         {
             ESubject Subject;
             uint Modifier;
             Modifier.EExtract Extract;
 
-            public ReferencModifier(List<string> fields)
+            public ReferenceModifier(List<string> fields)
             {
                 Subject = Serializer.ReadEnum<ESubject>(fields[1]);
                 Modifier = Convert.ToUInt32(fields[3]);
@@ -85,9 +85,9 @@ namespace Assets.Scripts.Data.Skill
             }
         }
 
-        public partial class ReferencInput : IReference
+        public partial class ReferenceInput : IReference
         {
-            public ReferencInput(List<string> fields)
+            public ReferenceInput(List<string> fields)
             {
 
             }
@@ -160,13 +160,13 @@ namespace Assets.Scripts.Data.Skill
                     reference = new ReferenceUnitStat(fields);
                     break;
                 case EReferenceType.RandomRange:
-                    reference = new ReferencRandomRange(fields);
+                    reference = new ReferenceRandomRange(fields);
                     break;
                 case EReferenceType.Modifier:
-                    reference = new ReferencModifier(fields);
+                    reference = new ReferenceModifier(fields);
                     break;
                 case EReferenceType.Input:
-                    reference = new ReferencInput(fields);
+                    reference = new ReferenceInput(fields);
                     break;
             }
         }

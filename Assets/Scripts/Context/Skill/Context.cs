@@ -8,7 +8,7 @@ namespace Assets.Scripts.Data.Skill
 {
     public partial class MetricReference
     {
-        public double Get(Context.Skill.TriggerInfo triggerInfo_)
+        public double Get(Context.Skill.Context triggerInfo_)
         {
             if (Metric != null)
                 return Metric.Numeric.Get(triggerInfo_);
@@ -20,12 +20,12 @@ namespace Assets.Scripts.Data.Skill
     {
         public interface IReference
         {
-            double Get(Context.Skill.TriggerInfo triggerInfo_);
+            double Get(Context.Skill.Context triggerInfo_);
         }
 
         public partial class ReferenceValue : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 return value;
             }
@@ -33,7 +33,7 @@ namespace Assets.Scripts.Data.Skill
 
         public partial class ReferenceUnitGauge : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 return Subject.GetContainer(triggerInfo_).GetUnitGauge(Type).Get(Extract);
             }
@@ -41,7 +41,7 @@ namespace Assets.Scripts.Data.Skill
 
         public partial class ReferenceUnitStat : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 return Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value;
             }
@@ -49,43 +49,43 @@ namespace Assets.Scripts.Data.Skill
 
         public partial class ReferenceCooldown : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 return Subject.GetContainer(triggerInfo_).GetUnitStat(Type).Value;
             }
         }
 
-        public partial class ReferencRandomRange : IReference
+        public partial class ReferenceRandomRange : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 double rnd = (double)new Random().NextDouble();
                 return A + (B - A) * rnd;
             }
         }
 
-        public partial class ReferencModifier : IReference
+        public partial class ReferenceModifier : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 return 1.0;
             }
         }
 
-        public partial class ReferencInput : IReference
+        public partial class ReferenceInput : IReference
         {
-            public double Get(Context.Skill.TriggerInfo triggerInfo_)
+            public double Get(Context.Skill.Context triggerInfo_)
             {
                 return triggerInfo_.Input;
             }
         }
 
-        public abstract double Get(Context.Skill.TriggerInfo triggerInfo_);
+        public abstract double Get(Context.Skill.Context triggerInfo_);
     }
 
     public partial class NumericValue : Numeric
     {
-        override public double Get(Context.Skill.TriggerInfo triggerInfo_)
+        override public double Get(Context.Skill.Context triggerInfo_)
         {
             return reference.Get(triggerInfo_);
         }
@@ -93,7 +93,7 @@ namespace Assets.Scripts.Data.Skill
 
     public partial class NumericEquation : Numeric
     {
-        override public double Get(Context.Skill.TriggerInfo triggerInfo_)
+        override public double Get(Context.Skill.Context triggerInfo_)
         {
             switch (ope)
             {
@@ -110,7 +110,7 @@ namespace Assets.Scripts.Data.Skill
 
 namespace Assets.Scripts.Context.Skill
 {
-    public class TriggerInfo
+    public class Context
     {
         public Container Target;
         public Container Source;

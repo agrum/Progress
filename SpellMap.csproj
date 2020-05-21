@@ -12,12 +12,15 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile></TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1149,7 +1152,7 @@
     <Compile Include="Assets\Scripts\Context\Skill\Container.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Subject.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\TriggerInfo.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Context.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Unit\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Unit\Gauge.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Unit\Stat.cs" />
@@ -1213,6 +1216,7 @@
     <Compile Include="Assets\Scripts\FieldOfView\FieldOfView.cs" />
     <Compile Include="Assets\Scripts\Scene\ChampionCreator.cs" />
     <Compile Include="Assets\Scripts\Scene\ChampionSelection.cs" />
+    <Compile Include="Assets\Scripts\Scene\Dbg\DataUpdate.cs" />
     <Compile Include="Assets\Scripts\Scene\Landing.cs" />
     <Compile Include="Assets\Scripts\Scene\Loader.cs" />
     <Compile Include="Assets\Scripts\Scene\PresetEditor.cs" />

@@ -12,7 +12,7 @@ namespace Assets.Scripts.Context.Skill.Unit
         private float Additive = 0;
         private float AdditiveMultiplier = 0;
         private float Multiplier = 1;
-        private float Zeroes = 0;
+        private uint Zeroes = 0;
         public float Value { get; private set; } = 0;
 
         public Stat(Data.NamedHash type_)
@@ -20,9 +20,9 @@ namespace Assets.Scripts.Context.Skill.Unit
             Type = type_;
         }
 
-        public void Input(float value_, Data.Skill.Unit.Stat.ECategory category_)
+        public void SetTo()
         {
-
+            Value = Zeroes > 0u ? 0 : Additive * (1 + AdditiveMultiplier) * Multiplier;
         }
     }
 }

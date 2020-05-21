@@ -8,7 +8,7 @@ namespace Assets.Scripts.Data.Skill
 {
     static class Subject
     {
-        public static Context.Skill.Container GetContainer(this ESubject subject_, Context.Skill.TriggerInfo triggerInfo_)
+        public static Context.Skill.Container GetContainer(this ESubject subject_, Context.Skill.Context triggerInfo_)
         {
             switch (subject_)
             {
