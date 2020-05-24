@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
         {
             public double expiration = 0;
             public uint amount = 0;
-            public TaskCompletionSource<object> interrupt = new TaskCompletionSource<object>();
+            public IEnumerator coroutine = null;
         }
 
         private MaxAmountDelegate maxAmount;
@@ -37,7 +38,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
 
             var evolution = new Evolution() { Previous = amount, Added = amount_ };
             amount += amount_;
-            groups.Add(new Grouped() { expiration = scheduler.Time + duration(), amount = amount_ });
+            groups.Add(new Grouped() { expiration = scheduler.Now + duration(), amount = amount_ });
             ScheduleRefresh();
             if (maxAmount() > 0 && amount > maxAmount())
             {
@@ -86,20 +87,17 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 else
                 {
                     amount_ -= groups[0].amount;
-                    groups[0].interrupt.TrySetCanceled();
+                    scheduler.StopCoroutine(groups[0].coroutine);
                     groups.RemoveAt(0);
                 }
             }
         }
 
-        async void ScheduleRefresh()
+        void ScheduleRefresh()
         {
             var grouped = groups.Last();
-            var completedTask = await Task.WhenAny(scheduler.WaitUntil(grouped.expiration), grouped.interrupt.Task);
-            if (completedTask == grouped.interrupt.Task)
-            {
-                return;
-            }
+            grouped.coroutine = scheduler.WaitUntil(grouped.expiration);
+            scheduler.StartCoroutine(grouped.coroutine);
             
             if (groups.Count == 0 || groups.First() != grouped)
             {

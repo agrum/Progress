@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Scripts.Context.Skill.Stacker
 {
@@ -11,7 +13,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
         MaxAmountDelegate maxAmount;
         DurationDelegate duration;
         Utility.Scheduler scheduler;
-        TaskCompletionSource<object> interruptTask = null;
+        IEnumerator coroutine = null;
         uint amount = 0;
         double expiration = 0;
 
@@ -35,13 +37,13 @@ namespace Assets.Scripts.Context.Skill.Stacker
             {
                 evolution.Removed = Amount() - maxAmount();
                 amount = maxAmount();
-                expiration = scheduler.Time + duration() * Amount();
+                expiration = scheduler.Now + duration() * Amount();
                 ScheduleRefresh();
             }
             evolution.Current = Amount();
             if (evolution.Previous == 0 || evolution.Removed > 0)
             {
-                expiration = scheduler.Time + duration() * Amount();
+                expiration = scheduler.Now + duration() * Amount();
                 ScheduleRefresh();
             }
             else
@@ -74,7 +76,11 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 evolution.Removed = amount;
                 amount = 0;
                 expiration = 0;
-                interruptTask?.TrySetCanceled();
+                if (coroutine != null)
+                {
+                    scheduler.StopCoroutine(coroutine);
+                    coroutine = null;
+                }
             }
             else
             {
@@ -86,18 +92,15 @@ namespace Assets.Scripts.Context.Skill.Stacker
             _Changed(evolution);
         }
 
-        async void ScheduleRefresh()
+        void ScheduleRefresh()
         {
-            interruptTask?.TrySetCanceled();
-            var localInterruptTask = new TaskCompletionSource<object>();
-            interruptTask = localInterruptTask;
-
-            var completedTask = await Task.WhenAny(scheduler.WaitUntil(expiration - (Amount() - 1 ) * duration()), interruptTask.Task);
-            if (completedTask == localInterruptTask.Task)
+            if (coroutine != null)
             {
-                interruptTask = null;
-                return;
+                scheduler.StopCoroutine(coroutine);
             }
+            coroutine = scheduler.WaitUntil(expiration - (Amount() - 1) * duration());
+            scheduler.StartCoroutine(coroutine);
+            coroutine = null;
 
             var evolution = new Evolution() { Previous = Amount() };
             if (Amount() == 1)
@@ -114,7 +117,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
             {
                 evolution.Removed = 1;
                 amount -= 1;
-                expiration = scheduler.Time + duration() * Amount();
+                expiration = scheduler.Now + duration() * Amount();
                 ScheduleRefresh();
             }
             evolution.Current = amount;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
         private MaxAmountDelegate maxAmount;
         private DurationDelegate duration;
         Utility.Scheduler scheduler;
-        TaskCompletionSource<object> interruptTask = null;
+        IEnumerator coroutine = null;
         private uint amount = 0;
         private double expiration = 0;
 
@@ -39,7 +40,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
             evolution.Current = amount;
             if (evolution.Previous == 0)
             {
-                expiration = scheduler.Time + duration();
+                expiration = scheduler.Now + duration();
             }
             _Changed(evolution);
         }
@@ -67,6 +68,11 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 evolution.Removed = amount;
                 amount = 0;
                 expiration = 0;
+                if (coroutine != null)
+                {
+                    scheduler.StopCoroutine(coroutine);
+                    coroutine = null;
+                }
             }
             else
             {
@@ -77,18 +83,15 @@ namespace Assets.Scripts.Context.Skill.Stacker
             _Changed(evolution);
         }
 
-        async void ScheduleRefresh()
+        void ScheduleRefresh()
         {
-            interruptTask?.TrySetCanceled();
-            var localInterruptTask = new TaskCompletionSource<object>();
-            interruptTask = localInterruptTask;
-
-            var completedTask = await Task.WhenAny(scheduler.WaitUntil(Expiration()), interruptTask.Task);
-            if (completedTask == localInterruptTask.Task)
+            if (coroutine != null)
             {
-                interruptTask = null;
-                return;
+                scheduler.StopCoroutine(coroutine);
             }
+            coroutine = scheduler.WaitUntil(Expiration()));
+            scheduler.StartCoroutine(coroutine);
+            coroutine = null;
 
             Remove(Amount());
         }

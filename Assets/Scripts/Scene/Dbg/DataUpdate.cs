@@ -23,6 +23,7 @@ namespace Assets.Scripts.Scene
             yield return StartCoroutine(App.Content.Session.Load());
 
             AddButton("Update skills", SkillUpdate);
+            AddButton("Test stackers", Context.Skill.Stacker.Base.UnitTest);
         }
 
         void AddButton(string name_, UnityEngine.Events.UnityAction delegate_)

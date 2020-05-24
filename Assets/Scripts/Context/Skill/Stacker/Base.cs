@@ -29,10 +29,12 @@ namespace Assets.Scripts.Context.Skill.Stacker
         public delegate double DurationDelegate();
         public delegate uint MaxAmountDelegate();
 
-        //public delegate void ActiveDelegate(bool alive_);
-        //public event ActiveDelegate Actived = delegate { };
-
         public delegate void EvolutionDelegate(Evolution evolution_);
         public event EvolutionDelegate Changed = delegate { };
+
+        static public void UnitTest()
+        {
+
+        }
     }
 }

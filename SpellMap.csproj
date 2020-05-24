@@ -12,15 +12,12 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.1f1</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>6</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -1158,7 +1155,6 @@
     <Compile Include="Assets\Scripts\Context\Skill\Stacker\NoRefresh.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Stacker\Permanent.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Stacker\Refresh.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Unit\Cooldown.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Unit\Gauge.cs" />
@@ -1315,9 +1311,6 @@
     <None Include="Assets\Shaders\FieldOfView\ObstacleStencilMask.shader" />
     <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
     <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Scripts\Context\Skill\Modifier\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
