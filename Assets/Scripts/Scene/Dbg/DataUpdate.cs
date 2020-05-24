@@ -11,6 +11,7 @@ namespace Assets.Scripts.Scene
     {
         public GameObject debugButtonPrefab = null;
         public HorizontalLayoutGroup horizontalLayout = null;
+        Utility.Scheduler scheduler;
         
         public delegate void OnClicked();
 
@@ -19,11 +20,12 @@ namespace Assets.Scripts.Scene
         {
             Debug.Assert(debugButtonPrefab != null);
             Debug.Assert(horizontalLayout != null);
+            scheduler = new Utility.Scheduler(this);
 
             yield return StartCoroutine(App.Content.Session.Load());
 
             AddButton("Update skills", SkillUpdate);
-            AddButton("Test stackers", Context.Skill.Stacker.Base.UnitTest);
+            AddButton("Test stackers", StackerUnitTest);
         }
 
         void AddButton(string name_, UnityEngine.Events.UnityAction delegate_)
@@ -51,6 +53,11 @@ namespace Assets.Scripts.Scene
             request.AddHeader("Content-Type", "application/json");
             request.RawData = System.Text.Encoding.UTF8.GetBytes(testJson.ToString());
             request.Send();
+        }
+
+        void StackerUnitTest()
+        {
+            StartCoroutine(Context.Skill.Stacker.Base.UnitTest(scheduler));
         }
     }
 }

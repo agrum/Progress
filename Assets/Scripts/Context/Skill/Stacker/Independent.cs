@@ -87,7 +87,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 else
                 {
                     amount_ -= groups[0].amount;
-                    scheduler.StopCoroutine(groups[0].coroutine);
+                    scheduler.Stop(groups[0].coroutine);
                     groups.RemoveAt(0);
                 }
             }
@@ -97,7 +97,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
         {
             var grouped = groups.Last();
             grouped.coroutine = scheduler.WaitUntil(grouped.expiration);
-            scheduler.StartCoroutine(grouped.coroutine);
+            scheduler.Start(grouped.coroutine);
             
             if (groups.Count == 0 || groups.First() != grouped)
             {

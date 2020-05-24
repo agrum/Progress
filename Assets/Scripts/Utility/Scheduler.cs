@@ -8,21 +8,38 @@ using UnityEngine;
 
 namespace Assets.Scripts.Utility
 {
-    public class Scheduler : MonoBehaviour
+    public class Scheduler
     {
+        MonoBehaviour parent;
         //delegate IEnumerator Event();
         //SortedList<double, event Event> oldTasks = null;
         //SortedList<double, TaskCompletionSource<bool>> tasks = new SortedList<double, TaskCompletionSource<bool>>();
         //int oldCursor = 0;
         //int cursor = 0;
 
-        public double Creation { get; private set; } = Time.time;
+        public double Creation { get; private set; } = 0;
         public double Now
         {
             get
             {
                 return Time.time - Creation;
             }
+        }
+
+        public Scheduler(MonoBehaviour parent_)
+        {
+            parent = parent_;
+            Creation = Time.time;
+        }
+
+        public void Start(IEnumerator coroutine)
+        {
+            parent.StartCoroutine(coroutine);
+        }
+
+        public void Stop(IEnumerator coroutine)
+        {
+            parent.StopCoroutine(coroutine);
         }
 
         //public void Tick(double dt)
@@ -66,11 +83,11 @@ namespace Assets.Scripts.Utility
 
         public IEnumerator WaitUntil(double time)
         {
-            if (time <= Time.time - Creation)
+            if (time <= Now)
             {
                 yield break;
             }
-            Wait(time - Time.time - Creation);
+            yield return Wait(time - Now);
             //var completion = new TaskCompletionSource<bool>();
             //tasks.Add(time, completion);
             //await completion.Task;

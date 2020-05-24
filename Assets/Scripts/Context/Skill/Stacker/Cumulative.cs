@@ -78,7 +78,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 expiration = 0;
                 if (coroutine != null)
                 {
-                    scheduler.StopCoroutine(coroutine);
+                    scheduler.Stop(coroutine);
                     coroutine = null;
                 }
             }
@@ -96,10 +96,10 @@ namespace Assets.Scripts.Context.Skill.Stacker
         {
             if (coroutine != null)
             {
-                scheduler.StopCoroutine(coroutine);
+                scheduler.Stop(coroutine);
             }
             coroutine = scheduler.WaitUntil(expiration - (Amount() - 1) * duration());
-            scheduler.StartCoroutine(coroutine);
+            scheduler.Start(coroutine);
             coroutine = null;
 
             var evolution = new Evolution() { Previous = Amount() };
