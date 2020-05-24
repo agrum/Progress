@@ -4,19 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Context.Skill.Modifier.Stacker
+namespace Assets.Scripts.Context.Skill.Stacker
 {
-    public class Refresh : Base
+    public class Permanent : Base
     {
         private MaxAmountDelegate maxAmount;
-        private DurationDelegate duration;
         private uint amount = 0;
-        private double expiration = 0;
 
-        public Refresh(MaxAmountDelegate maxStack_, DurationDelegate duration_)
+        public Permanent(MaxAmountDelegate maxStack_)
         {
             maxAmount = maxStack_;
-            duration = duration_;
         }
 
         override public void Add(uint amount_)
@@ -34,11 +31,6 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
                 amount = maxAmount();
             }
             evolution.Current = amount;
-            expiration = duration();
-            if (evolution.Previous == 0)
-            {
-                _Alived(true);
-            }
             _Changed(evolution);
         }
 
@@ -49,12 +41,12 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
 
         override public double Expiration()
         {
-            return expiration;
+            return Double.MaxValue;
         }
 
         override public void Remove(uint amount_)
         {
-            if (amount_ == 0)
+            if (Amount() == 0 || amount_ == 0)
             {
                 return;
             }
@@ -64,11 +56,6 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
             {
                 evolution.Removed = amount;
                 amount = 0;
-                expiration = 0;
-                if (evolution.Previous != 0)
-                {
-                    _Alived(true);
-                }
             }
             else
             {

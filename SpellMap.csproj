@@ -1152,12 +1152,12 @@
     <Compile Include="Assets\Scripts\Context\Skill\Container.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Context.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Modifier.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Modifier\Stacker\Base.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Modifier\Stacker\Cumulative.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Modifier\Stacker\Independent.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Modifier\Stacker\NoRefresh.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Modifier\Stacker\Permanent.cs" />
-    <Compile Include="Assets\Scripts\Context\Skill\Modifier\Stacker\Refresh.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Stacker\Base.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Stacker\Cumulative.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Stacker\Independent.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Stacker\NoRefresh.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Stacker\Permanent.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Stacker\Refresh.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Stacker.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Subject.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Unit\Cooldown.cs" />
@@ -1232,6 +1232,7 @@
     <Compile Include="Assets\Scripts\Scene\SpecializeOverview.cs" />
     <Compile Include="Assets\Scripts\Scene\StartupManager.cs" />
     <Compile Include="Assets\Scripts\Utility\Cache.cs" />
+    <Compile Include="Assets\Scripts\Utility\Scheduler.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnCreate.cs" />
     <Compile Include="Assets\Scripts\View\ChampionColumnPreview.cs" />
     <Compile Include="Assets\Scripts\View\ChampionHeadline.cs" />
@@ -1314,6 +1315,9 @@
     <None Include="Assets\Shaders\FieldOfView\ObstacleStencilMask.shader" />
     <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
     <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\Scripts\Context\Skill\Modifier\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

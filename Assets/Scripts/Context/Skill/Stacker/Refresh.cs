@@ -4,16 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Context.Skill.Modifier.Stacker
+namespace Assets.Scripts.Context.Skill.Stacker
 {
-    public class Permanent : Base
+    public class Refresh : Base
     {
         private MaxAmountDelegate maxAmount;
+        private DurationDelegate duration;
+        Utility.Scheduler scheduler;
+        TaskCompletionSource<object> interruptTask = null;
         private uint amount = 0;
+        private double expiration = 0;
 
-        public Permanent(MaxAmountDelegate maxStack_)
+        public Refresh(MaxAmountDelegate maxStack_, DurationDelegate duration_, Utility.Scheduler scheduler_)
         {
             maxAmount = maxStack_;
+            duration = duration_;
+            scheduler = scheduler_;
         }
 
         override public void Add(uint amount_)
@@ -31,10 +37,8 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
                 amount = maxAmount();
             }
             evolution.Current = amount;
-            if (evolution.Previous == 0)
-            {
-                _Alived(true);
-            }
+            expiration = scheduler.Time + duration();
+            ScheduleRefresh();
             _Changed(evolution);
         }
 
@@ -45,7 +49,7 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
 
         override public double Expiration()
         {
-            return Double.MaxValue;
+            return expiration;
         }
 
         override public void Remove(uint amount_)
@@ -60,10 +64,8 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
             {
                 evolution.Removed = amount;
                 amount = 0;
-                if (evolution.Previous != 0)
-                {
-                    _Alived(true);
-                }
+                expiration = 0;
+                interruptTask?.TrySetCanceled();
             }
             else
             {
@@ -72,6 +74,22 @@ namespace Assets.Scripts.Context.Skill.Modifier.Stacker
             }
             evolution.Current = amount;
             _Changed(evolution);
+        }
+
+        async void ScheduleRefresh()
+        {
+            interruptTask?.TrySetCanceled();
+            var localInterruptTask = new TaskCompletionSource<object>();
+            interruptTask = localInterruptTask;
+
+            var completedTask = await Task.WhenAny(scheduler.WaitUntil(Expiration()), interruptTask.Task);
+            if (completedTask == localInterruptTask.Task)
+            {
+                interruptTask = null;
+                return;
+            }
+
+            Remove(Amount());
         }
     }
 }
