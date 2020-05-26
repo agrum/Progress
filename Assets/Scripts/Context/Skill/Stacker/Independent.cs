@@ -39,11 +39,10 @@ namespace Assets.Scripts.Context.Skill.Stacker
             var evolution = new Evolution() { Previous = amount, Added = amount_ };
             amount += amount_;
             groups.Add(new Grouped() { expiration = scheduler.Now + duration(), amount = amount_ });
-            ScheduleRefresh();
+            scheduler.Start(Update, ref groups.Last().coroutine);
             if (maxAmount() > 0 && amount > maxAmount())
             {
                 evolution.Removed = amount - maxAmount();
-                amount = maxAmount();
                 RemoveFromGroups(evolution.Removed);
             }
             evolution.Current = amount;
@@ -57,7 +56,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
 
         override public double Expiration()
         {
-            return groups?.Last().expiration ?? 0;
+            return (groups.Count > 0) ? groups.Last().expiration : 0;
         }
 
         override public void Remove(uint amount_)
@@ -76,9 +75,9 @@ namespace Assets.Scripts.Context.Skill.Stacker
         void RemoveFromGroups(uint amount_)
         {
             amount_ = Math.Min(amount, amount_);
+            amount -= amount_;
             while (groups.Count > 0 && amount_ > 0)
             {
-                amount -= amount_;
                 if (groups[0].amount > amount_)
                 {
                     groups[0].amount -= amount_;
@@ -87,21 +86,19 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 else
                 {
                     amount_ -= groups[0].amount;
-                    scheduler.Stop(groups[0].coroutine);
+                    scheduler.Stop(ref groups[0].coroutine);
                     groups.RemoveAt(0);
                 }
             }
         }
 
-        void ScheduleRefresh()
+        IEnumerator Update()
         {
             var grouped = groups.Last();
-            grouped.coroutine = scheduler.WaitUntil(grouped.expiration);
-            scheduler.Start(grouped.coroutine);
-            
+            yield return scheduler.WaitUntil(grouped.expiration);            
             if (groups.Count == 0 || groups.First() != grouped)
             {
-                return;
+                yield break;
             }
 
             var evolution = new Evolution() { Previous = amount, Removed = groups.First().amount };

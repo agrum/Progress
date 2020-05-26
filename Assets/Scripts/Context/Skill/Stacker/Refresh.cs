@@ -39,7 +39,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
             }
             evolution.Current = amount;
             expiration = scheduler.Now + duration();
-            ScheduleRefresh();
+            scheduler.Start(Update, ref coroutine);
             _Changed(evolution);
         }
 
@@ -61,16 +61,12 @@ namespace Assets.Scripts.Context.Skill.Stacker
             }
 
             var evolution = new Evolution() { Previous = amount };
-            if (amount >= amount_)
+            if (amount_ >= amount)
             {
                 evolution.Removed = amount;
                 amount = 0;
                 expiration = 0;
-                if (coroutine != null)
-                {
-                    scheduler.Stop(coroutine);
-                    coroutine = null;
-                }
+                scheduler.Stop(ref coroutine);
             }
             else
             {
@@ -81,16 +77,10 @@ namespace Assets.Scripts.Context.Skill.Stacker
             _Changed(evolution);
         }
 
-        void ScheduleRefresh()
+        IEnumerator Update()
         {
-            if (coroutine != null)
-            {
-                scheduler.Stop(coroutine);
-            }
-            coroutine = scheduler.WaitUntil(Expiration());
-            scheduler.Start(coroutine);
+            yield return scheduler.WaitUntil(Expiration());
             coroutine = null;
-
             Remove(Amount());
         }
     }

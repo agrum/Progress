@@ -38,13 +38,13 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 evolution.Removed = Amount() - maxAmount();
                 amount = maxAmount();
                 expiration = scheduler.Now + duration() * Amount();
-                ScheduleRefresh();
+                scheduler.Start(Update, ref coroutine);
             }
             evolution.Current = Amount();
             if (evolution.Previous == 0 || evolution.Removed > 0)
             {
                 expiration = scheduler.Now + duration() * Amount();
-                ScheduleRefresh();
+                scheduler.Start(Update, ref coroutine);
             }
             else
             {
@@ -76,11 +76,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 evolution.Removed = amount;
                 amount = 0;
                 expiration = 0;
-                if (coroutine != null)
-                {
-                    scheduler.Stop(coroutine);
-                    coroutine = null;
-                }
+                scheduler.Stop(ref coroutine);
             }
             else
             {
@@ -92,20 +88,15 @@ namespace Assets.Scripts.Context.Skill.Stacker
             _Changed(evolution);
         }
 
-        void ScheduleRefresh()
+        IEnumerator Update()
         {
-            if (coroutine != null)
-            {
-                scheduler.Stop(coroutine);
-            }
-            coroutine = scheduler.WaitUntil(expiration - (Amount() - 1) * duration());
-            scheduler.Start(coroutine);
+            yield return scheduler.WaitUntil(expiration - (Amount() - 1) * duration());
             coroutine = null;
 
             var evolution = new Evolution() { Previous = Amount() };
             if (Amount() == 1)
             {
-                return;
+                yield break;
             }
             else if (Amount() == 1)
             {
@@ -118,7 +109,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
                 evolution.Removed = 1;
                 amount -= 1;
                 expiration = scheduler.Now + duration() * Amount();
-                ScheduleRefresh();
+                scheduler.Start(Update, ref coroutine);
             }
             evolution.Current = amount;
             _Changed(evolution);

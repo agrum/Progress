@@ -52,7 +52,7 @@ namespace Assets.Scripts.Context.Skill.Stacker
             }
 
             var evolution = new Evolution() { Previous = amount };
-            if (amount >= amount_)
+            if (amount_ >= amount)
             {
                 evolution.Removed = amount;
                 amount = 0;

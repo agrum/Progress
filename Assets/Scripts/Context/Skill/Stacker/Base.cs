@@ -28,6 +28,11 @@ namespace Assets.Scripts.Context.Skill.Stacker
         public abstract void Add(uint amount_);
         public abstract void Remove(uint amount_);
 
+        public double Duration(Utility.Scheduler scheduler)
+        {
+            return Amount() > 0 ? Expiration() - scheduler.Now : 0;
+        }
+
         protected void _Changed(Evolution evolution_)
         {
             Changed(evolution_);
@@ -46,24 +51,32 @@ namespace Assets.Scripts.Context.Skill.Stacker
 
         static public IEnumerator UnitTest(Utility.Scheduler scheduler)
         {
-            //NoRefresh
-            var noRefresh = new NoRefresh(() => 3, () => 0.5, scheduler);
-            noRefresh.Changed += (Evolution evolution) => { Debug.Log($"NoRefresh Evolution {evolution.ToString()}"); };
-            for (int i = 0; i < 100; ++i)
+            List<Base> stackers = new List<Base>();
+            stackers.Add(new NoRefresh(() => 3, () => 0.5, scheduler));
+            stackers.Add(new Refresh(() => 3, () => 0.5, scheduler));
+            stackers.Add(new Independent(() => 3, () => 0.5, scheduler));
+            stackers.Add(new Cumulative(() => 3, () => 0.5, scheduler));
+            stackers.Add(new Permanent(() => 3));
+
+            foreach (var stacker in stackers)
             {
-                if (UnityEngine.Random.value < 0.35)
+                stacker.Changed += (Evolution evolution) => { Debug.Log($"{stacker.GetType().Name} Evolution {evolution.ToString()} with {stacker.Duration(scheduler).ToString("F1")}s left at {scheduler.Now.ToString("F1")}s"); };
+                for (int i = 0; i < 100; ++i)
                 {
-                    uint amount = 1 + Convert.ToUInt32(UnityEngine.Random.value * 2);
-                    Debug.Log($"NoRefresh Add {amount} to {noRefresh.ToString()}");
-                    noRefresh.Add(amount);
+                    if (UnityEngine.Random.value < 0.35)
+                    {
+                        uint amount = 1 + Convert.ToUInt32(UnityEngine.Random.value * 2);
+                        Debug.Log($"{stacker.GetType().Name} Add {amount} to {stacker.ToString()}");
+                        stacker.Add(amount);
+                    }
+                    else if (UnityEngine.Random.value < 0.50)
+                    {
+                        uint amount = 1 + Convert.ToUInt32(UnityEngine.Random.value * 2);
+                        Debug.Log($"{stacker.GetType().Name} Remove {amount} to {stacker.ToString()}");
+                        stacker.Remove(amount);
+                    }
+                    yield return scheduler.Wait(0.1);
                 }
-                else if (UnityEngine.Random.value < 0.50)
-                {
-                    uint amount = 1 + Convert.ToUInt32(UnityEngine.Random.value * 2);
-                    Debug.Log($"NoRefresh Remove {amount} to {noRefresh.ToString()}");
-                    noRefresh.Remove(amount);
-                }
-                yield return scheduler.Wait(0.1);
             }
         }
     }

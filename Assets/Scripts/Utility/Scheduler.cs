@@ -11,11 +11,7 @@ namespace Assets.Scripts.Utility
     public class Scheduler
     {
         MonoBehaviour parent;
-        //delegate IEnumerator Event();
-        //SortedList<double, event Event> oldTasks = null;
-        //SortedList<double, TaskCompletionSource<bool>> tasks = new SortedList<double, TaskCompletionSource<bool>>();
-        //int oldCursor = 0;
-        //int cursor = 0;
+        public delegate IEnumerator Coroutine();
 
         public double Creation { get; private set; } = 0;
         public double Now
@@ -32,49 +28,24 @@ namespace Assets.Scripts.Utility
             Creation = Time.time;
         }
 
-        public void Start(IEnumerator coroutine)
+        public void Start(Coroutine process, ref IEnumerator coroutine)
         {
+            if (coroutine != null)
+            {
+                parent.StopCoroutine(coroutine);
+            }
+            coroutine = process();
             parent.StartCoroutine(coroutine);
         }
 
-        public void Stop(IEnumerator coroutine)
+        public void Stop(ref IEnumerator coroutine)
         {
-            parent.StopCoroutine(coroutine);
+            if (coroutine != null)
+            {
+                parent.StopCoroutine(coroutine);
+                coroutine = null;
+            }
         }
-
-        //public void Tick(double dt)
-        //{
-        //    Time += 0;
-
-        //    if (oldTasks != null)
-        //    { 
-        //        while (oldCursor < oldTasks.Count && oldTasks.Keys[oldCursor] <= Time)
-        //        {
-        //            tasks[oldCursor].TrySetResult(true);
-        //            ++oldCursor;
-        //        }
-
-        //        if (oldCursor == oldTasks.Count)
-        //        {
-        //            oldTasks = null;
-        //            oldCursor = 0;
-        //        }
-        //    }
-
-        //    while (cursor < tasks.Count && tasks.Keys[cursor] <= Time)
-        //    {
-        //        tasks[cursor].TrySetResult(true);
-        //        ++cursor;
-        //    }
-
-        //    if (oldTasks == null && cursor > 1000)
-        //    {
-        //        oldTasks = tasks;
-        //        oldCursor = cursor;
-        //        tasks = new SortedList<double, TaskCompletionSource<bool>>();
-        //        cursor = 0;
-        //    }
-        //}
 
         public IEnumerator Wait(double duration)
         {
@@ -88,9 +59,6 @@ namespace Assets.Scripts.Utility
                 yield break;
             }
             yield return Wait(time - Now);
-            //var completion = new TaskCompletionSource<bool>();
-            //tasks.Add(time, completion);
-            //await completion.Task;
         }
     }
 }
