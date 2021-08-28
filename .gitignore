@@ -1,23 +1,23 @@
-/.vs
-/Logs
-/Library
-/obj
-/Assets/Sprites/BG.psd
-/etc
-/Temp
-/Library
-/Progress_Data
-/Progress.exe
-/UnityPlayer.dll
-/Assets/nu Assets
-/Assets/Gizmos
-/Assets/Editor Default Resources
-/Assets/Raw Mocap Data
-/Assets/MORPH3D
-/Assets/StreamingAssets
-/Assets/Stones_and_buried_treasure
-/Assets/External
-/Assets/Best HTTP (Pro)
+/unity/.vs
+/unity/Logs
+/unity/Library
+/unity/obj
+/unity/Assets/Sprites/BG.psd
+/unity/etc
+/unity/Temp
+/unity/Library
+/unity/Progress_Data
+/unity/Progress.exe
+/unity/UnityPlayer.dll
+/unity/Assets/nu Assets
+/unity/Assets/Gizmos
+/unity/Assets/Editor Default Resources
+/unity/Assets/Raw Mocap Data
+/unity/Assets/MORPH3D
+/unity/Assets/StreamingAssets
+/unity/Assets/Stones_and_buried_treasure
+/unity/Assets/External
+/unity/Assets/Best HTTP (Pro)
 /server/node_modules
 /server/package-lock.json
 /server/private.js
