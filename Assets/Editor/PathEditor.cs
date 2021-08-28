@@ -199,7 +199,7 @@ namespace West
 			}
 
 			//Input
-			if (!guiEventHandled && guiEvent.type == EventType.mouseDown && guiEvent.button == 0 && guiEvent.shift)
+			if (!guiEventHandled && guiEvent.type == EventType.MouseDown && guiEvent.button == 0 && guiEvent.shift)
 			{
 				float enter;
 				Ray worldRay = HandleUtility.GUIPointToWorldRay(guiEvent.mousePosition);

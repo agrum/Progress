@@ -1,6 +1,7 @@
 /.vs
-/Library_
-/obj_
+/Logs
+/Library
+/obj
 /Assets/Sprites/BG.psd
 /etc
 /Temp
@@ -16,6 +17,7 @@
 /Assets/StreamingAssets
 /Assets/Stones_and_buried_treasure
 /Assets/External
+/Assets/Best HTTP (Pro)
 /server/node_modules
 /server/package-lock.json
 /server/private.js
