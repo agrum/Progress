@@ -21,6 +21,10 @@ var credentials = "agrum:" + encodeURI(private.mongoPWD)
 var uri = "mongodb://" + credentials + "@" + server + "/" + database + "?" + options
 
 app.db = mongoose
+mongoose.set('useNewUrlParser', true);
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.set('useUnifiedTopology', true);
 app.db.connect(uri)
 	.then(() => {
 		console.log('Database connection successful')

@@ -1,4 +1,4 @@
-let bcrypt = require('bcrypt')
+let bcrypt = require('bcryptjs')
 
 exports = module.exports = function (app) {
 	var LocalStrategy = require('passport-local').Strategy;

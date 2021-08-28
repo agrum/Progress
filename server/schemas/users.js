@@ -1,6 +1,6 @@
 let mongoose = require('mongoose')
 let validator = require('validator')
-let bcrypt = require('bcrypt')
+let bcrypt = require('bcryptjs')
 
 module.exports = function () {
 	let schema = new mongoose.Schema({
@@ -42,7 +42,7 @@ module.exports = function () {
 	schema.set('collection', 'users')
 	
 	schema.statics.validatePassword = function(password, hash, done) {
-		var bcrypt = require('bcrypt');
+		var bcrypt = require('bcryptjs');
 		bcrypt.compare(password, hash, function(err, res) {
 		  done(err, res);
 		});

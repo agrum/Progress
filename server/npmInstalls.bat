@@ -1,0 +1,13 @@
+npm i express
+npm i socket.io
+npm i mongodb
+npm i mongoose
+npm i body-parser
+npm i cookie-parser
+npm i passport
+npm i express-session
+npm i connect-mongo
+npm i bcryptjs
+npm i passport-local
+npm i async
+npm i validator
