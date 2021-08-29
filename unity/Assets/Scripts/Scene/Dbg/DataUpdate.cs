@@ -40,9 +40,8 @@ namespace Assets.Scripts.Scene
 
         void SkillUpdate()
         {
-            var testSkill = new Asset.Skill.LaserBeam();
-            JSONNode testJson = testSkill.Dta;
-            Debug.Log(testJson.ToString());
+            var testSkill = Asset.SkillExport.Exporter.LaserBeam();
+            Debug.Log(testSkill);
             var request = App.Server.Request(
                 HTTPMethods.Post,
                 "tools/skillsUpdate",
@@ -51,7 +50,7 @@ namespace Assets.Scripts.Scene
                     Debug.Log(json_.ToString());
                 });
             request.AddHeader("Content-Type", "application/json");
-            request.RawData = System.Text.Encoding.UTF8.GetBytes(testJson.ToString());
+            request.RawData = System.Text.Encoding.UTF8.GetBytes(testSkill);
             request.Send();
         }
 

@@ -43,7 +43,7 @@ namespace Assets.Scripts.Model
         
         public double Factor()
         {
-            return Factor(Level, Metric.Upgrade);
+            return 1.0; // Factor(Level, Metric.Upgrade);
         }
 
         public static SpecializeSign Sign(double level_)
@@ -56,17 +56,17 @@ namespace Assets.Scripts.Model
             return level_ / upgradeCost_ / 20.0f;
         }
 
-        public static double Factor(double level_, Data.Skill.Metric.UpgradeType upgradeType_)
-        {
-            if (upgradeType_.Sign == Data.Skill.Metric.UpgradeType.ESign.Negative)
-            {
-                level_ *= -1;
-            }
+        //public static double Factor(double level_, Data.Skill.Metric.UpgradeType upgradeType_)
+        //{
+        //    if (upgradeType_.Sign == Data.Skill.Metric.UpgradeType.ESign.Negative)
+        //    {
+        //        level_ *= -1;
+        //    }
 
-            if (level_ > 0)
-                return 1.0 + level_ * upgradeType_.Factor;
-            else
-                return 1.0f / (1.0f + System.Math.Abs(level_) * upgradeType_.Factor);
-        }
+        //    if (level_ > 0)
+        //        return 1.0 + level_ * upgradeType_.Factor;
+        //    else
+        //        return 1.0f / (1.0f + System.Math.Abs(level_) * upgradeType_.Factor);
+        //}
     }
 }

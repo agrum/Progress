@@ -33,7 +33,7 @@ namespace Assets.Scripts.ViewModel
 
     public class NodeTextualDetails : INodeTextualDetails
     {
-        private Dictionary<Data.Skill.Metric.ECategory, Dictionary<string, string>> Map = new Dictionary<Data.Skill.Metric.ECategory, Dictionary<string, string>>();
+        //private Dictionary<Data.Skill.Metric.ECategory, Dictionary<string, string>> Map = new Dictionary<Data.Skill.Metric.ECategory, Dictionary<string, string>>();
         private Model.HoveredSkill hovered;
 
         public NodeTextualDetails(Model.HoveredSkill hovered_)
@@ -41,14 +41,14 @@ namespace Assets.Scripts.ViewModel
             hovered = hovered_;
             hovered.ChangedEvent += OnHoveredChanged;
 
-            Map.Add(Data.Skill.Metric.ECategory.Misc, Misc);
-            Map.Add(Data.Skill.Metric.ECategory.Desc, Desc);
-            Map.Add(Data.Skill.Metric.ECategory.Modifier, Modifier);
-            Map.Add(Data.Skill.Metric.ECategory.Projectile, Projectile);
-            Map.Add(Data.Skill.Metric.ECategory.Charge, Charge);
-            Map.Add(Data.Skill.Metric.ECategory.Stack, Stack);
-            Map.Add(Data.Skill.Metric.ECategory.Unit, Unit);
-            Map.Add(Data.Skill.Metric.ECategory.Kit, Kit);
+            //Map.Add(Data.Skill.Metric.ECategory.Misc, Misc);
+            //Map.Add(Data.Skill.Metric.ECategory.Desc, Desc);
+            //Map.Add(Data.Skill.Metric.ECategory.Modifier, Modifier);
+            //Map.Add(Data.Skill.Metric.ECategory.Projectile, Projectile);
+            //Map.Add(Data.Skill.Metric.ECategory.Charge, Charge);
+            //Map.Add(Data.Skill.Metric.ECategory.Stack, Stack);
+            //Map.Add(Data.Skill.Metric.ECategory.Unit, Unit);
+            //Map.Add(Data.Skill.Metric.ECategory.Kit, Kit);
 
             OnHoveredChanged();
         }
@@ -60,8 +60,8 @@ namespace Assets.Scripts.ViewModel
 
         protected void OnHoveredChanged()
         {
-            foreach (var map in Map)
-                map.Value.Clear();
+            //foreach (var map in Map)
+            //    map.Value.Clear();
 
             if (hovered.Skill != null)
             {
@@ -69,11 +69,11 @@ namespace Assets.Scripts.ViewModel
                 if (App.Content.Account.ActiveChampion != null)
                     upgrade = App.Content.Account.ActiveChampion.Upgrades[hovered.Skill];
                 
-                foreach (var metric in hovered.Skill.Metrics)
-                {
-                    double factor = upgrade != null ? upgrade[metric].Factor() : 0;
-                    Map[metric.Category][metric.Name.String] = (1.0 * factor).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
-                }
+                //foreach (var metric in hovered.Skill.Metrics)
+                //{
+                //    double factor = upgrade != null ? upgrade[metric].Factor() : 0;
+                //    Map[metric.Category][metric.Name.String] = (1.0 * factor).ToString("F1", System.Globalization.CultureInfo.InvariantCulture);
+                //}
             }
 
             //Json = hovered?.Skill ?? null;

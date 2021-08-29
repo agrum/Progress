@@ -2,107 +2,88 @@
 using SimpleJSON;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Assets.Scripts.Data.Skill
 {
     public class Metric
     {
-        public enum ECategory
+        public enum ETag
         {
-            Misc,
-            Desc,
-            Modifier,
-            Projectile,
-            Charge,
-            Stack,
-            Unit,
-            Kit,
-        }
+            Physical,
+            Elemental,
+            Chaos,
 
-        public class UpgradeType
-        {
-            public enum ESign
-            {
-                Positive,
-                Negative,
-            }
-            
-            public ESign Sign { get; private set; }
-            public int MaxUpgradeCount { get; private set; }
-            public double Factor { get; private set; }
+            Melee,
+            Ranged,
+            AoE,
 
-            public UpgradeType(ESign sign_, int maxUpgradeCount_, double factor_)
-            {
-                Sign = sign_;
-                MaxUpgradeCount = maxUpgradeCount_;
-                Factor = factor_;
-            }
+            Attack,
+            Spell,
+            Trigger,
+            Aura,
 
-            public UpgradeType(JSONObject jNode_)
-            {
-                Sign = Serializer.ReadEnum<ESign>(jNode_["sign"]);
-                MaxUpgradeCount = jNode_["maxUpgradeCount"];
-                Factor = jNode_["factor"];
-            }
-
-            public static implicit operator UpgradeType(JSONNode jNode_)
-            {
-                if (jNode_.IsObject)
-                    return new UpgradeType(jNode_.AsObject);
-                throw new WestException("UpgradeType's JSON is not an object");
-            }
-
-            public static implicit operator JSONNode(UpgradeType object_)
-            {
-                JSONObject jObject = new JSONObject();
-                jObject["sign"] = Serializer.WriteEnum(object_.Sign);
-                jObject["maxUpgradeCount"] = object_.MaxUpgradeCount;
-                jObject["factor"] = object_.Factor;
-                return jObject;
-            }
+            Duration,
+            Cooldown,
+            ActionSpeed,
         }
 
         public string _Id { get; private set; }
         public NamedHash Name { get; private set; }
-        public ECategory Category { get; private set; }
+        public List<ETag> Tags { get; private set; } = new List<ETag>();
         public Numeric Numeric { get; private set; }
-        public UpgradeType Upgrade { get; private set; }
 
-        public Metric(NamedHash name_, ECategory category_, Numeric numeric_, UpgradeType upgrade_ = null)
+        public Metric(NamedHash name_, List<ETag> tags_, Numeric numeric_)
         {
             _Id = Guid.NewGuid().ToString();
             Name = name_;
-            Category = category_;
+            Tags = tags_;
             Numeric = numeric_;
-            Upgrade = upgrade_;
+
+            Regex regex = new Regex("^[a-zA-Z][a-zA-Z0-9]*$");
+            if (!regex.IsMatch(Name.String))
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         public Metric(JSONObject jObject_)
         {
             _Id = jObject_["_id"];
             Name = jObject_["name"];
-            Category = Serializer.ReadEnum<ECategory>(jObject_["category"]);
+            foreach (var tag in jObject_["tags"].AsArray)
+            {
+                Tags.Add(Serializer.ReadEnum<ETag>(tag));
+            }
             Numeric = jObject_["numeric"];
-            if (!jObject_["upgrade"].IsNull)
-                Upgrade = jObject_["upgrade"];
+
+            Regex regex = new Regex("^[a-zA-Z][a-zA-Z0-9]*$");
+            if (!regex.IsMatch(Name.String))
+            {
+                throw new InvalidOperationException();
+            }
         }
 
         public static implicit operator Metric(JSONNode jNode_)
         {
-            if (jNode_.IsObject)
+            if (jNode_ != null && jNode_.IsObject)
                 return new Metric(jNode_.AsObject);
             throw new WestException("Metric's JSON is not an object");
         }
 
         public static implicit operator JSONNode(Metric object_)
         {
+            JSONArray jTags = new JSONArray();
+            foreach (var tag in object_.Tags)
+            {
+                jTags.Add(Serializer.WriteEnum(tag));
+            }
+
             JSONObject jObject = new JSONObject();
             jObject["_id"] = object_._Id.ToString();
             jObject["name"] = object_.Name;
-            jObject["category"] = Serializer.WriteEnum(object_.Category);
+            jObject["tags"] = jTags;
             jObject["numeric"] = object_.Numeric;
-            if (object_.Upgrade != null)
-                jObject["upgrade"] = object_.Upgrade;
             return jObject;
         }
     }

@@ -62,10 +62,10 @@ namespace Assets.Scripts.ViewModel
             return specializer.Factor(metricUpgrade);
         }
 
-        public Data.Skill.Metric.ECategory Category()
-        {
-            return metricUpgrade.Metric.Category;
-        }
+        //public Data.Skill.Metric.ECategory Category()
+        //{
+        //    return metricUpgrade.Metric.Category;
+        //}
 
         public Data.NamedHash Name()
         {

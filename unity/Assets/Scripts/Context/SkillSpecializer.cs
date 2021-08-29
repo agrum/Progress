@@ -65,7 +65,7 @@ namespace Assets.Scripts.Model
         public double Factor(MetricUpgrade upgrade_)
         {
             if (temporaryUpgradeMap.ContainsKey(upgrade_))
-                return MetricUpgrade.Factor(temporaryUpgradeMap[upgrade_] + upgrade_.Level, upgrade_.Metric.Upgrade);
+                return 1.0;// MetricUpgrade.Factor(temporaryUpgradeMap[upgrade_] + upgrade_.Level, 1.0); // upgrade_.Metric.Upgrade);
             return upgrade_.Factor();
         }
 

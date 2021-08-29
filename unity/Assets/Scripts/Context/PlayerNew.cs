@@ -14,7 +14,7 @@ namespace Assets.Scripts.Context
         float horizontal = 0;
         float vertical = 0;
 
-        List<Skill.IAction> currentActions = new List<Skill.IAction>();
+        readonly List<Skill.IAction> currentActions = new List<Skill.IAction>();
         Skill.IAction dashForward;
         Skill.IAction dashBackward;
         Skill.IAction dashLeft;

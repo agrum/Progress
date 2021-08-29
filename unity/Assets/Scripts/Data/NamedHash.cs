@@ -17,6 +17,17 @@ namespace Assets.Scripts.Data
             }
         }
 
+        public override int GetHashCode()
+        {
+            return Value;
+        }
+
+        public override bool Equals(object other_)
+        {
+            var asNamedHash = other_ as NamedHash;
+            return asNamedHash != null && Value == asNamedHash.Value;
+        }
+
         public string String { get; private set; }
         public int Value { get; private set; }
 

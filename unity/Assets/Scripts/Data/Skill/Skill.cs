@@ -22,11 +22,9 @@ namespace Assets.Scripts.Data.Skill
         public string Description { get; private set; }
         public string Details { get; private set; }
         public List<Metric> Metrics { get; private set; } = new List<Metric>();
-        public List<ModifierBehaviour> Passives { get; private set; } = new List<ModifierBehaviour>();
-        public List<Layer.Base> Layers { get; private set; } = new List<Layer.Base>();
         public Material Material { get; private set; }
 
-        public Skill(ECategory category_, NamedHash name_, string description_, string details_, List<Metric> metrics_, List<ModifierBehaviour> passives_, List<Layer.Base> layers_)
+        public Skill(ECategory category_, NamedHash name_, string description_, string details_, List<Metric> metrics_)
         {
             Reference = this;
 
@@ -36,8 +34,6 @@ namespace Assets.Scripts.Data.Skill
             Description = description_;
             Details = details_;
             Metrics = metrics_;
-            Passives = passives_;
-            Layers = layers_;
 
             switch (Category)
             {
@@ -64,11 +60,7 @@ namespace Assets.Scripts.Data.Skill
             Details = jNode_["details"];
 
             foreach (var condition in jNode_["metrics"].AsArray)
-                Metrics.Add(condition.Value.AsArray);
-            foreach (var effect in jNode_["passives"].AsArray)
-                Passives.Add(effect.Value);
-            foreach (var effect in jNode_["layers"].AsArray)
-                Layers.Add(effect.Value);
+                Metrics.Add(condition.Value);
         }
 
         public static implicit operator Skill(JSONNode jNode_)
@@ -89,20 +81,13 @@ namespace Assets.Scripts.Data.Skill
             foreach (var entry in skill_.Metrics)
                 conditions.Add(entry);
             jObject["metrics"] = conditions;
-            var effects = new JSONArray();
-            foreach (var entry in skill_.Passives)
-                effects.Add(entry);
-            jObject["passives"] = conditions;
-            foreach (var entry in skill_.Layers)
-                effects.Add(entry);
-            jObject["layers"] = conditions;
 
             return jObject;
         }
 
         public Metric GetMetric(NamedHash name_)
         {
-           return Metrics.Find(x => x.Name == name_);
+           return Metrics.Find(x => x.Name.Equals(name_));
         }
     }
 }

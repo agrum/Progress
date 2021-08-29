@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using SimpleJSON;
 
@@ -153,6 +154,18 @@ namespace Assets.Scripts.Data.Skill
                 " " + Serializer.WriteEnum(Numeric.EReferenceType.Input) +
                 "|" + subject_.ToString("G") +
                 "|" + name_;
+            return FieldAdded();
+        }
+        public NumericBuilder Metric(string metric_)
+        {
+            Regex regex = new Regex("^[a-zA-Z][a-zA-Z0-9]*$");
+            if (!regex.IsMatch(metric_))
+            {
+                throw new InvalidOperationException();
+            }
+            equationString +=
+                " " + Serializer.WriteEnum(Numeric.EReferenceType.Metric) +
+                "|" + metric_;
             return FieldAdded();
         }
     }

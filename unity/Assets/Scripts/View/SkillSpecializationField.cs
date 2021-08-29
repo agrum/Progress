@@ -28,7 +28,7 @@ namespace Assets.Scripts.View
             plusButton.clickEvent += () => viewModel.Upgrade();
             minusButton.clickEvent += () => viewModel.Downgrade();
 
-            fieldName.Format(viewModel.Category().ToString(), viewModel.Name().String);
+            //fieldName.Format(viewModel.Category().ToString(), viewModel.Name().String);
 
             SetupUI();
         }

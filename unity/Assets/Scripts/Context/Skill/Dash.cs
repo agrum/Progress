@@ -1,19 +1,21 @@
-﻿using System.Collections;
+﻿using SimpleJSON;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Context.Skill
 {
     public class Dash : IAction
     {
-        static float travelDistance = 5.0f;
-        static float dashMinSpeedModifier = 2.0f;
-        static float dashMaxSpeedModifier = 6.0f;
-
+        Data.Skill.Skill data = Asset.SkillExport.Dash.GetData();
         Vector3 relativeDirection;
         Vector3 direction;
-        PlayerNew player;
+        readonly PlayerNew player;
         float playerSpeed;
-        float remainingDistance = travelDistance;
+
+        float remainingDistance;
+        float travelDistance;
+        float maxSpeedMultiplier;
+        float minSpeedMultiplier;
 
         public Dash(Vector3 direction_, PlayerNew player_)
         {
@@ -32,14 +34,17 @@ namespace Assets.Scripts.Context.Skill
 
         public override void Cast()
         {
-            remainingDistance = travelDistance;
+            Context context = new Context();
+            travelDistance = remainingDistance = (float) data.GetMetric(Asset.SkillExport.Dash.Range).Numeric.Get(context);
+            maxSpeedMultiplier = (float) data.GetMetric(Asset.SkillExport.Dash.MaxSpeedMultiplier).Numeric.Get(context);
+            minSpeedMultiplier = (float) data.GetMetric(Asset.SkillExport.Dash.MinSpeedMultiplier).Numeric.Get(context);
             playerSpeed = player.movementSpeed;
             direction = player.transform.rotation * relativeDirection.normalized;
         }
 
         public override bool Update()
         {
-            float dashSpeed = Mathf.Lerp(dashMaxSpeedModifier, dashMinSpeedModifier, remainingDistance / travelDistance);
+            float dashSpeed = Mathf.Lerp(maxSpeedMultiplier, minSpeedMultiplier, remainingDistance / travelDistance);
             float travel = Mathf.Min(remainingDistance, playerSpeed * dashSpeed * Time.deltaTime);
             player.transform.position += direction * travel;
             remainingDistance -= travel;

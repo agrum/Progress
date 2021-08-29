@@ -1512,7 +1512,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\ECFieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\CMSProcessableFile.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\ECCurve.cs" />
-    <Compile Include="Assets\Scripts\Asset\Skill\LaserBeam.cs" />
+    <Compile Include="Assets\Scripts\Asset\SkillExport\LaserBeam.cs" />
     <Compile Include="Assets\Scripts\Context\Terrain\Edge.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\RecipientInfoGenerator.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\cms\SCVPReqRes.cs" />
@@ -1832,6 +1832,8 @@
     <Compile Include="Assets\Scripts\Controller\ActionController.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\IAction.cs" />
     <Compile Include="Assets\Scripts\Context\Skill\Dash.cs" />
+    <Compile Include="Assets\Scripts\Asset\SkillExport\Dash.cs" />
+    <Compile Include="Assets\Scripts\Asset\SkillExport\Exporter.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
