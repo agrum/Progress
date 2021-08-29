@@ -1827,6 +1827,11 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\WhirlpoolDigest.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
+    <Compile Include="Assets\Scripts\Context\PlayerNew.cs" />
+    <Compile Include="Assets\Scripts\Controller\ActionKey.cs" />
+    <Compile Include="Assets\Scripts\Controller\ActionController.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\IAction.cs" />
+    <Compile Include="Assets\Scripts\Context\Skill\Dash.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
