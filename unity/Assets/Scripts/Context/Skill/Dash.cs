@@ -9,6 +9,7 @@ namespace Assets.Scripts.Context.Skill
         static float dashMinSpeedModifier = 2.0f;
         static float dashMaxSpeedModifier = 6.0f;
 
+        Vector3 relativeDirection;
         Vector3 direction;
         PlayerNew player;
         float playerSpeed;
@@ -16,9 +17,8 @@ namespace Assets.Scripts.Context.Skill
 
         public Dash(Vector3 direction_, PlayerNew player_)
         {
-            direction = player_.transform.rotation * direction_.normalized;
+            relativeDirection = direction_.normalized;
             player = player_;
-            playerSpeed = player.movementSpeed;
         }
         public override bool MovementLocked()
         {
@@ -33,6 +33,8 @@ namespace Assets.Scripts.Context.Skill
         public override void Cast()
         {
             remainingDistance = travelDistance;
+            playerSpeed = player.movementSpeed;
+            direction = player.transform.rotation * relativeDirection.normalized;
         }
 
         public override bool Update()
