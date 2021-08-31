@@ -21,8 +21,10 @@ namespace Assets.Scripts.Context
         Skill.IAction dashRight;
 
         // Use this for initialization
-        void Start()
+        IEnumerator Start()
         {
+            yield return StartCoroutine(App.Content.SkillList.Load());
+
             dashForward = new Skill.DashForward(this);
             dashBackward = new Skill.DashBackward(this);
             dashLeft = new Skill.DashLeft(this);
