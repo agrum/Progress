@@ -442,7 +442,6 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\DtlsEpoch.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\Security.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\DefaultTlsDHVerifier.cs" />
-    <Compile Include="Assets\Scripts\Asset\SkillExport\Exporter.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\WebSocket\WebSocket.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsSigner.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\raw\Nat320.cs" />
@@ -1517,7 +1516,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\ECFieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\CMSProcessableFile.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\ECCurve.cs" />
-    <Compile Include="Assets\Scripts\Asset\SkillExport\LaserBeam.cs" />
+    <Compile Include="Assets\Scripts\Asset\Skill\LaserBeam.cs" />
     <Compile Include="Assets\Scripts\Context\Terrain\Edge.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\RecipientInfoGenerator.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\cms\SCVPReqRes.cs" />
@@ -1654,7 +1653,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\CMSProcessableByteArray.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\ocsp\ResponderID.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\engines\RC532Engine.cs" />
-    <Compile Include="Assets\Scripts\Asset\SkillExport\Dash.cs" />
+    <Compile Include="Assets\Scripts\Asset\Skill\Dash.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\pkcs\PrivateKeyInfoFactory.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\x509\X509Crl.cs" />
     <Compile Include="Assets\Scripts\Data\Skill\Stacker.cs" />
@@ -1834,6 +1833,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\WhirlpoolDigest.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
+    <Compile Include="Assets\Scripts\Scene\Dbg\EmptyWorld.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />

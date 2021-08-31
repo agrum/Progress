@@ -41,8 +41,8 @@ namespace Assets.Scripts.Scene
         void SkillUpdate()
         {
             List<string> skills = new List<string>() {
-                Asset.SkillExport.LaserBeam.GetString(),
-                Asset.SkillExport.Dash.GetString()
+                Asset.Skill.LaserBeam.GetString(),
+                Asset.Skill.Dash.GetString()
             };
 
             foreach (var skill in skills)

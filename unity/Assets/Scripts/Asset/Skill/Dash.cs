@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Asset.SkillExport
+namespace Assets.Scripts.Asset.Skill
 {
     public class Dash
     {
+        static public readonly string _Id = "612d99c8e850138fcd5f55e8";
         static public readonly Data.NamedHash Name = new Data.NamedHash("Dash");
         static public readonly string Range = "Range";
         static public readonly string MaxSpeedMultiplier = "MaxSpeedMultiplier";
@@ -71,6 +72,7 @@ namespace Assets.Scripts.Asset.SkillExport
 
         static public string GetString() { 
             JSONNode jsonData = GetData();
+            jsonData["_id"] = _Id;
             return jsonData.ToString();
         }
     }

@@ -6,7 +6,7 @@ namespace Assets.Scripts.Context.Skill
 {
     public class Dash : IAction
     {
-        Data.Skill.Skill data = Asset.SkillExport.Dash.GetData();
+        Data.Skill.Skill data;
         Vector3 relativeDirection;
         Vector3 direction;
         readonly PlayerNew player;
@@ -19,6 +19,7 @@ namespace Assets.Scripts.Context.Skill
 
         public Dash(Vector3 direction_, PlayerNew player_)
         {
+            data = App.Content.SkillList.Abilities[Asset.Skill.Dash._Id];
             relativeDirection = direction_.normalized;
             player = player_;
         }
@@ -35,9 +36,9 @@ namespace Assets.Scripts.Context.Skill
         public override void Cast()
         {
             Context context = new Context();
-            travelDistance = remainingDistance = (float) data.GetMetric(Asset.SkillExport.Dash.Range).Numeric.Get(context);
-            maxSpeedMultiplier = (float) data.GetMetric(Asset.SkillExport.Dash.MaxSpeedMultiplier).Numeric.Get(context);
-            minSpeedMultiplier = (float) data.GetMetric(Asset.SkillExport.Dash.MinSpeedMultiplier).Numeric.Get(context);
+            travelDistance = remainingDistance = (float) data.GetMetric(Asset.Skill.Dash.Range).Numeric.Get(context);
+            maxSpeedMultiplier = (float) data.GetMetric(Asset.Skill.Dash.MaxSpeedMultiplier).Numeric.Get(context);
+            minSpeedMultiplier = (float) data.GetMetric(Asset.Skill.Dash.MinSpeedMultiplier).Numeric.Get(context);
             playerSpeed = player.movementSpeed;
             direction = player.transform.rotation * relativeDirection.normalized;
         }

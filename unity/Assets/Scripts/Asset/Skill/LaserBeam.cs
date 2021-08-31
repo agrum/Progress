@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.Scripts.Asset.SkillExport
+namespace Assets.Scripts.Asset.Skill
 {
     public class LaserBeam
     {
+        static public readonly string _Id = "612d99c7e850138fcd5f55d8";
         static public readonly Data.NamedHash Name = new Data.NamedHash("Laser Beam");
         static public readonly string BaseDamageFactor = "BaseDamage";
         static public readonly string HealthDamageFactor = "HealthDamage";
