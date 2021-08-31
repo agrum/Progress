@@ -15,9 +15,14 @@ namespace Assets.Scripts.CloudContent
 
         public IEnumerator Load()
         {
-            //callback if already loaded.
             //return if already loading
-            if (loaded || loading)
+            while (loading)
+            {
+                yield return new WaitForSeconds(0);
+            }
+
+            //callback if already loaded.
+            if (loaded)
             {
                 yield break;
             }
