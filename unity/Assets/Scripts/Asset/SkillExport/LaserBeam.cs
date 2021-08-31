@@ -7,19 +7,20 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Asset.SkillExport
 {
-    public partial class Exporter
+    public class LaserBeam
     {
-        static public string LaserBeam()
+        static public readonly Data.NamedHash Name = new Data.NamedHash("Laser Beam");
+        static public readonly string BaseDamageFactor = "BaseDamage";
+        static public readonly string HealthDamageFactor = "HealthDamage";
+        static public readonly string DamageEquation = "TotalDamage";
+        static public readonly string Cooldown = "Cooldown";
+        static public readonly string Length = "Length";
+        static public readonly string Width = "Width";
+        static public readonly string CastTime = "CastTime";
+
+        static public Data.Skill.Skill GetData()
         {
             //NAMES
-            Data.NamedHash name = new Data.NamedHash("Laser Beam");
-            string BaseDamageFactor = "BaseDamage";
-            string HealthDamageFactor = "HealthDamage";
-            string DamageEquation = "TotalDamage";
-            string Cooldown = "Cooldown";
-            string Length = "Length";
-            string Width = "Width";
-            string CastTime = "CastTime";
             string description = "Fire a wave that damages all enemies in its path.";
             string details = "Throw a projectile that deals #BaseDamage# plus #HealthDamage#% of your missing health as elemental damage to all enemy units in its path.";
 
@@ -88,13 +89,17 @@ namespace Assets.Scripts.Asset.SkillExport
             };
 
             //BUILD
-            var data = new Data.Skill.Skill(
+            return new Data.Skill.Skill(
                 Data.Skill.Skill.ECategory.Ability,
-                name,
+                Name,
                 description,
                 details,
                 metrics);
-            JSONNode jsonData = data;
+        }
+
+        static public string GetString()
+        {
+            JSONNode jsonData = GetData();
             return jsonData.ToString();
         }
     }

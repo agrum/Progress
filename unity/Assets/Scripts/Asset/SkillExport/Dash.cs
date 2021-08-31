@@ -9,6 +9,7 @@ namespace Assets.Scripts.Asset.SkillExport
 {
     public class Dash
     {
+        static public readonly Data.NamedHash Name = new Data.NamedHash("Dash");
         static public readonly string Range = "Range";
         static public readonly string MaxSpeedMultiplier = "MaxSpeedMultiplier";
         static public readonly string MinSpeedMultiplier = "MinSpeedMultiplier";
@@ -18,7 +19,6 @@ namespace Assets.Scripts.Asset.SkillExport
         static public Data.Skill.Skill GetData()
         {
             //NAMES
-            Data.NamedHash name = new Data.NamedHash("Dash");
             string description = "Fire a wave that damages all enemies in its path.";
             string details = "Throw a projectile that deals #BaseDamage# plus #HealthDamage#% of your missing health as elemental damage to all enemy units in its path.";
 
@@ -63,7 +63,7 @@ namespace Assets.Scripts.Asset.SkillExport
             //BUILD
             return new Data.Skill.Skill(
                 Data.Skill.Skill.ECategory.Ability,
-                name,
+                Name,
                 description,
                 details,
                 metrics);

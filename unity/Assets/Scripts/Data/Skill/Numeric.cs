@@ -110,8 +110,29 @@ namespace Assets.Scripts.Data.Skill
             if (fields_.Count() % 2 != 1)
                 throw new InvalidOperationException();
 
-            while (fields_.First() == "(" && fields_.Last() == ")")
-                fields_ = fields_.GetRange(1, fields_.Count() - 2);
+            if (fields_.First() == "(")
+            {
+                int openParenthesisCount = 0;
+                for (int i = 0; i < fields_.Count; ++i)
+                {
+                    if (fields_[i] == "(")
+                    {
+                        ++openParenthesisCount;
+                    }
+                    else if (fields_[i] == ")")
+                    {
+                        --openParenthesisCount;
+                        if (openParenthesisCount == 0)
+                        {
+                            if (i == fields_.Count - 1)
+                            {
+                                fields_ = fields_.GetRange(1, fields_.Count() - 2);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
 
             Numeric numeric;
             if (fields_.Count() == 1)

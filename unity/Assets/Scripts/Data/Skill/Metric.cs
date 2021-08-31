@@ -35,7 +35,6 @@ namespace Assets.Scripts.Data.Skill
 
         public Metric(NamedHash name_, List<ETag> tags_, Numeric numeric_)
         {
-            _Id = Guid.NewGuid().ToString();
             Name = name_;
             Tags = tags_;
             Numeric = numeric_;
@@ -49,7 +48,7 @@ namespace Assets.Scripts.Data.Skill
 
         public Metric(JSONObject jObject_)
         {
-            _Id = jObject_["_id"];
+            _Id = jObject_["_id"].ToString();
             Name = jObject_["name"];
             foreach (var tag in jObject_["tags"].AsArray)
             {
@@ -80,7 +79,10 @@ namespace Assets.Scripts.Data.Skill
             }
 
             JSONObject jObject = new JSONObject();
-            jObject["_id"] = object_._Id.ToString();
+            if (object_._Id != null)
+            {
+                jObject["_id"] = object_._Id.ToString();
+            }
             jObject["name"] = object_.Name;
             jObject["tags"] = jTags;
             jObject["numeric"] = object_.Numeric;

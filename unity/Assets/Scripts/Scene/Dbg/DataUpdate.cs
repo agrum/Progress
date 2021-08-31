@@ -40,18 +40,25 @@ namespace Assets.Scripts.Scene
 
         void SkillUpdate()
         {
-            var testSkill = Asset.SkillExport.Exporter.LaserBeam();
-            Debug.Log(testSkill);
-            var request = App.Server.Request(
-                HTTPMethods.Post,
-                "tools/skillsUpdate",
-                (JSONNode json_) =>
-                {
-                    Debug.Log(json_.ToString());
-                });
-            request.AddHeader("Content-Type", "application/json");
-            request.RawData = System.Text.Encoding.UTF8.GetBytes(testSkill);
-            request.Send();
+            List<string> skills = new List<string>() {
+                Asset.SkillExport.LaserBeam.GetString(),
+                Asset.SkillExport.Dash.GetString()
+            };
+
+            foreach (var skill in skills)
+            {
+                Debug.Log(skill);
+                var request = App.Server.Request(
+                    HTTPMethods.Post,
+                    "tools/skillsUpdate",
+                    (JSONNode json_) =>
+                    {
+                        Debug.Log(json_.ToString());
+                    });
+                request.AddHeader("Content-Type", "application/json");
+                request.RawData = System.Text.Encoding.UTF8.GetBytes(skill);
+                request.Send();
+            }
         }
 
         void StackerUnitTest()

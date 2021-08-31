@@ -28,7 +28,6 @@ namespace Assets.Scripts.Data.Skill
         {
             Reference = this;
 
-            _Id = Guid.NewGuid().ToString();
             Category = category_;
             Name = name_;
             Description = description_;
@@ -53,7 +52,7 @@ namespace Assets.Scripts.Data.Skill
 
         public Skill(JSONNode jNode_)
         {
-            _Id = jNode_["_id"];
+            _Id = jNode_["_id"].ToString();
             Category = Serializer.ReadEnum< ECategory>(jNode_["category"]);
             Name = jNode_["name"];
             Description = jNode_["description"];
@@ -72,7 +71,10 @@ namespace Assets.Scripts.Data.Skill
         {
             JSONObject jObject = new JSONObject();
 
-            jObject["_id"] = skill_._Id;
+            if (skill_._Id != null)
+            {
+                jObject["_id"] = skill_._Id.ToString();
+            }
             jObject["category"] = skill_.Category;
             jObject["name"] = skill_.Name;
             jObject["description"] = skill_.Description;
