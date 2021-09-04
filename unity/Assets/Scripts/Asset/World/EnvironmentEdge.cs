@@ -9,8 +9,6 @@ namespace West.Asset
 	{
 		[SerializeField]
 		private Vector2 position;
-		[SerializeField]
-		private bool enabled;
 
 		private Vector2 normal = Vector2.zero;
 		private Vector2 center = Vector2.zero;
@@ -36,18 +34,6 @@ namespace West.Asset
 		public Vector3 Position3(float y)
 		{
 			return new Vector3(position.x, y, position.y);
-		}
-
-		public bool Enabled
-		{
-			get 
-			{ 
-				return enabled; 
-			}
-            set
-            {
-				enabled = value;
-            }
 		}
 
 		public EnvironmentEdge NextEdge
@@ -90,11 +76,10 @@ namespace West.Asset
 			}
 		}
 
-		public EnvironmentEdge(Vector2 position_, EnvironmentEdge nextEdge_ = null, bool enabled_ = true)
+		public EnvironmentEdge(Vector2 position_, EnvironmentEdge nextEdge_ = null)
 		{
 			position = position_;
 			nextEdge = nextEdge_;
-			enabled = enabled_;
 		}
 	}
 }

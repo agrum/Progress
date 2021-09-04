@@ -31,8 +31,8 @@ namespace West.Asset
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
 			height = 0;
 			edgeList = new List<EnvironmentEdge>();
-			edgeList.Add(new EnvironmentEdge(center + Vector2.left, null, true));
-			edgeList.Add(new EnvironmentEdge(center + Vector2.right, this[0], true));
+			edgeList.Add(new EnvironmentEdge(center + Vector2.left, null));
+			edgeList.Add(new EnvironmentEdge(center + Vector2.right, this[0]));
 			justDropped = true;
 		}
 
@@ -57,7 +57,7 @@ namespace West.Asset
 
 		public void Split(int i)
 		{
-			edgeList.Insert((i % NumEdges) + 1, new EnvironmentEdge((this[i + 1].Position + this[i].Position) / 2.0f, this[i + 1], this[i].Enabled));
+			edgeList.Insert((i % NumEdges) + 1, new EnvironmentEdge((this[i + 1].Position + this[i].Position) / 2.0f, this[i + 1]));
 		}
 
 		public int NumEdges

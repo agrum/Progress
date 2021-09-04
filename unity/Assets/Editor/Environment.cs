@@ -42,11 +42,6 @@ namespace West.Tool
 			SceneView.duringSceneGui += OnScene;
 		}
 
-		Color ColorFrom(bool enabled)
-		{
-			return enabled ? Color.black : new Color(0, 0, 0, 0.5f);
-		}
-
 		void DrawVisual()
 		{
 			Vector2 parentPosition = (path.transform.parent == null) 
@@ -58,7 +53,7 @@ namespace West.Tool
 				Vector2 p1 = parentPosition + path[i].Position;
 				Vector2 p2 = parentPosition + path[i + 1].Position;
 				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-				Handles.color = ColorFrom(path[i].Enabled);
+				Handles.color = Color.black;
 				Handles.DrawLine(ToV3(p1), ToV3(p2));
 				Handles.ArrowHandleCap(
 					0,
@@ -158,7 +153,7 @@ namespace West.Tool
 				Vector2 p1 = parentPosition + path[i].Position;
 				Vector2 p2 = parentPosition + path[i + 1].Position;
 				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-				Handles.color = ColorFrom(path[i].Enabled);
+				Handles.color = Color.black;
 				bool clicked = Handles.Button(
 					ToV3((p1 + p2) / 2.0f),
 					Quaternion.LookRotation(Vector3.up),
@@ -176,11 +171,6 @@ namespace West.Tool
 					{
 						Undo.RecordObject(path, "Merge path edge");
 						path.Merge(i);
-					}
-					else
-					{
-						Undo.RecordObject(path, "Change path edge");
-						path[i].Enabled = !path[i].Enabled;
 					}
 					guiEventHandled = true;
 				}
