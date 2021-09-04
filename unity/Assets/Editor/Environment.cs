@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
-namespace West
+namespace West.Tool
 {
-	[CustomEditor(typeof(Path))]
-	public class PathEditor : Editor
+	[CustomEditor(typeof(Asset.Environment))]
+	public class EnvironmentEditor : Editor
 	{
-
-		Path path;
+		Asset.Environment path;
 		Plane xz = new Plane(new Vector3(0f, 1f, 0f), 0f);
 		bool passedOnce = false;
 		Vector2 lastCenter;
@@ -22,7 +19,7 @@ namespace West
 			}
 			else
 			{
-				SceneView.onSceneGUIDelegate -= OnScene;
+				SceneView.duringSceneGui -= OnScene;
 			}
 		}
 
@@ -37,35 +34,36 @@ namespace West
 			if (PrefabUtility.GetCorrespondingObjectFromSource(target) == null && PrefabUtility.GetPrefabInstanceHandle(target) != null)
 				return;
 
-			path = (Path)target;
+			path = (Asset.Environment)target;
 			if (path.edgeList == null)
-				path.InitPath();
+				path.Init();
+			lastCenter = ToV2(path.transform.localPosition);
 
 			SceneView.duringSceneGui += OnScene;
 		}
 
-		Color ColorFrom(Edge.TypeEnum type)
+		Color ColorFrom(bool enabled)
 		{
-			switch (type)
-			{
-				case Edge.TypeEnum.BlocksMovement: return Color.yellow;
-				case Edge.TypeEnum.BlocksVisionAndMovement: return Color.red;
-			}
-			return Color.black;
+			return enabled ? Color.black : new Color(0, 0, 0, 0.5f);
 		}
 
 		void DrawVisual()
 		{
+			Vector2 parentPosition = (path.transform.parent == null) 
+				? new Vector2() 
+				: new Vector2(path.transform.parent.transform.position.x, path.transform.parent.transform.position.z);
 			//draw edges
 			for (int i = 0; i < path.NumEdges; ++i)
 			{
-				float scale = (Camera.current.transform.position - ToV3((path[i].Position + path[i + 1].Position) / 2.0f)).magnitude / 50.0f;
-				Handles.color = ColorFrom(path[i].Type);
-				Handles.DrawLine(ToV3(path[i].Position), ToV3(path[i + 1].Position));
+				Vector2 p1 = parentPosition + path[i].Position;
+				Vector2 p2 = parentPosition + path[i + 1].Position;
+				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+				Handles.color = ColorFrom(path[i].Enabled);
+				Handles.DrawLine(ToV3(p1), ToV3(p2));
 				Handles.ArrowHandleCap(
 					0,
-					ToV3((path[i].Position + path[i + 1].Position) / 2.0f),
-					Quaternion.LookRotation(ToV3(new Vector2((path[i + 1].Position - path[i].Position).y, -(path[i + 1].Position - path[i].Position).x), false)),
+					ToV3((p1 + p2) / 2.0f),
+					Quaternion.LookRotation(ToV3(new Vector2((p2 - p1).y, -(p2 - p1).x), false)),
 					scale,
 					EventType.Repaint);
 			}
@@ -80,8 +78,13 @@ namespace West
 			Event guiEvent = Event.current;
 			bool guiEventHandled = false;
 
+			if (path == null)
+            {
+				return;
+            }
+
 			//move all points if moved from main anchor
-			Vector2 currentCenter = ToV2(path.transform.position);
+			Vector2 currentCenter = ToV2(path.transform.localPosition);
 			if ((passedOnce || path.justDropped) && (lastCenter != currentCenter))
 			{
 				Undo.RecordObject(path, "path move");
@@ -135,24 +138,29 @@ namespace West
 				float angle = Vector2.Angle(path[e1Candidate].Position - path[e3Candidate].Position, path[e2Candidate].Position - path[e3Candidate].Position);
 				if (angle <= 90.0f)
 				{
-					Edge e1 = new Edge(path[e1Candidate].Position, path[e2Candidate]);
-					Edge e2 = new Edge(path[e2Candidate].Position, path[e3Candidate]);
+					Asset.EnvironmentEdge e1 = new Asset.EnvironmentEdge(path[e1Candidate].Position, path[e2Candidate]);
+					Asset.EnvironmentEdge e2 = new Asset.EnvironmentEdge(path[e2Candidate].Position, path[e3Candidate]);
 					center = Path.IntersectionPoint(e1.Center, e1.Center + e1.Normal, e2.Center, e2.Center + e2.Normal);
 				}
 			}
 			//center /= path.NumPoints();
 			lastCenter = center;
 			path.center = center;
-			path.transform.position = ToV3(center);
+			path.transform.localPosition = new Vector3(center.x, path.transform.localPosition.y, center.y);
 
 			//draw edge type handles
 			Handles.color = Color.white;
+			Vector2 parentPosition = (path.transform.parent == null)
+				? new Vector2()
+				: new Vector2(path.transform.parent.transform.position.x, path.transform.parent.transform.position.z);
 			for (int i = 0; i < path.NumEdges; ++i)
 			{
-				float scale = (Camera.current.transform.position - ToV3((path[i].Position + path[i + 1].Position) / 2.0f)).magnitude / 50.0f;
-				Handles.color = ColorFrom(path[i].Type);
+				Vector2 p1 = parentPosition + path[i].Position;
+				Vector2 p2 = parentPosition + path[i + 1].Position;
+				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+				Handles.color = ColorFrom(path[i].Enabled);
 				bool clicked = Handles.Button(
-					ToV3((path[i].Position + path[i + 1].Position) / 2.0f),
+					ToV3((p1 + p2) / 2.0f),
 					Quaternion.LookRotation(Vector3.up),
 					scale,
 					scale,
@@ -172,7 +180,7 @@ namespace West
 					else
 					{
 						Undo.RecordObject(path, "Change path edge");
-						path[i].RotateType();
+						path[i].Enabled = !path[i].Enabled;
 					}
 					guiEventHandled = true;
 				}
@@ -182,8 +190,10 @@ namespace West
 			Handles.color = Color.grey;
 			for (int i = 0; i < path.NumEdges; ++i)
 			{
-				float scale = (Camera.current.transform.position - ToV3((path[i].Position + path[i + 1].Position) / 2.0f)).magnitude / 50.0f;
-				Vector3 newPosition = Handles.FreeMoveHandle(ToV3(path[i].Position), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
+				Vector2 p1 = parentPosition + path[i].Position;
+				Vector2 p2 = parentPosition + path[i + 1].Position;
+				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+				Vector3 newPosition = Handles.FreeMoveHandle(ToV3(p1), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
 
 				float enter;
 				Ray worldRay = new Ray(Camera.current.transform.position, newPosition - Camera.current.transform.position);
@@ -193,7 +203,7 @@ namespace West
 				if (path[i].Position != newPosition2D)
 				{
 					Undo.RecordObject(path, "Move path anchor");
-					path[i].Position = newPosition2D;
+					path[i].Position = newPosition2D - parentPosition;
 					guiEventHandled = true;
 				}
 			}
@@ -220,6 +230,19 @@ namespace West
 		Vector2 ToV2(Vector3 v3)
 		{
 			return new Vector2(v3.x, v3.z);
+		}
+		public override void OnInspectorGUI()
+		{
+			base.OnInspectorGUI();
+
+			if (path != null && GUILayout.Button("Add Child Environment"))
+			{
+				var go = new GameObject("environment");
+				go.transform.parent = path.transform;
+				go.transform.localScale = path.transform.localScale;
+				go.transform.localPosition = new Vector3();
+				go.AddComponent<Asset.Environment>();
+			}
 		}
 	}
 }

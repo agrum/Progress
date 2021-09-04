@@ -1834,6 +1834,9 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
     <Compile Include="Assets\Scripts\Scene\Dbg\EmptyWorld.cs" />
+    <Compile Include="Assets\Scripts\Asset\World\Generator.cs" />
+    <Compile Include="Assets\Scripts\Asset\World\Environment.cs" />
+    <Compile Include="Assets\Scripts\Asset\World\EnvironmentEdge.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />

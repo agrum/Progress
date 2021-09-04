@@ -59,6 +59,7 @@
     <Compile Include="Assets\Editor\PathEditor.cs" />
     <Compile Include="Assets\Editor\FieldOfViewEditor.cs" />
     <Compile Include="Assets\Editor\NexusEditor.cs" />
+    <Compile Include="Assets\Editor\Environment.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasSelection.shader" />
