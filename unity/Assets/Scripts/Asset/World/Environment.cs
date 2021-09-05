@@ -97,6 +97,14 @@ namespace West.Asset.World
 						return false;
 					}
 				}
+				else
+                {
+					if (environments[i].IsSelfIntersecting())
+					{
+						Debug.Log(String.Format("Environment \"{0}\" is self intersecting", environments[i].gameObject.name));
+						return false;
+					}
+                }
 			}
 
 			return true;

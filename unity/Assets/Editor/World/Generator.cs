@@ -57,7 +57,10 @@ namespace West.Tool.World
 
 			if (GUILayout.Button("Validate"))
 			{
-				activeGameObject.Validate();
+				if (activeGameObject.Validate())
+                {
+					Debug.Log("World template is valid");
+				}
 			}
 		}
 	}

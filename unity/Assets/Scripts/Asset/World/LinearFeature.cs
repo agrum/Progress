@@ -145,6 +145,30 @@ namespace West.Asset.World
 			return false;
 		}
 
+		public bool IsSelfIntersecting()
+		{
+			for (var i = 0; i < edgeList.Count; ++i)
+			{
+				for (var j = i + 1; j < edgeList.Count; ++j)
+				{
+					if (edgeList[i].PreviousEdge == null
+						|| edgeList[j].PreviousEdge == null
+						|| edgeList[i].PreviousEdge == edgeList[j]
+						|| edgeList[j].PreviousEdge == edgeList[i])
+					{
+						continue;
+					}
+
+					if (DoIntersect(edgeList[i].PreviousEdge.Position, edgeList[i].Position, edgeList[j].PreviousEdge.Position, edgeList[j].Position, true))
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
 		// Given three points p, q, r, the function checks if
 		// point q lies on line segment 'pr'
 		bool OnSegment(Vector2 p, Vector2 q, Vector2 r)

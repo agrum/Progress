@@ -20,12 +20,14 @@ namespace West.Asset.World
 			}
 		}
 
-        public void Validate()
+        public bool Validate()
         {
 			if (!Environment.Validate(gameObject))
             {
-				return;
+				return false;
             }
+
+			return true;
 		}
 	}
 }
