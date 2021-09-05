@@ -62,7 +62,7 @@ namespace West.Asset.World
 			{
 				if (previousEdge != null)
 				{
-					normal = new Vector2(previousEdge.Position.y - position.y, -(previousEdge.Position.x - position.x));
+					normal = new Vector2(position.y - previousEdge.Position.y, -(position.x - previousEdge.Position.x));
 				}
 				return normal;
 			}

@@ -104,6 +104,12 @@ namespace West.Asset.World
 						Debug.Log(String.Format("Environment \"{0}\" is self intersecting", environments[i].gameObject.name));
 						return false;
 					}
+
+					if (!environments[i].IsCCW())
+					{
+						Debug.Log(String.Format("Environment \"{0}\" is not counter clock wise", environments[i].gameObject.name));
+						return false;
+					}
                 }
 			}
 
@@ -129,6 +135,42 @@ namespace West.Asset.World
 			}
 
 			return (hitCount % 2) > 0;
+		}
+
+		bool IsCCW()
+		{
+			Bounds bounds = Bounds;
+			float size = Mathf.Max(bounds.size.x, bounds.size.z) * 1.5f;
+			Vector2 p1 = this[0].Center - this[0].Normal.normalized * size;
+			Vector2 q1 = this[0].Center + this[0].Normal.normalized * size;
+
+			int hitCount = 0;
+			float furthestEdgeDistance = 0;
+			Vector2 furthestEdgeNormal = Vector2.up;
+			foreach (var edge in edgeList)
+			{
+				Vector2 p2 = edge.PreviousEdge.Position;
+				Vector2 q2 = edge.Position;
+
+				if (DoIntersect(p1, q1, p2, q2, true))
+				{
+					++hitCount;
+					var intersectionPoint = IntersectionPoint(p1, q1, p2, q2);
+					var distanceToPoint = (intersectionPoint - p1).magnitude;
+					if (distanceToPoint > furthestEdgeDistance)
+                    {
+						furthestEdgeDistance = distanceToPoint;
+						furthestEdgeNormal = edge.Normal;
+					}
+				}
+			}
+
+			if ((hitCount % 2) > 0)
+            {
+				Debug.Log("Ray shouldn't be contained");
+			}
+
+			return Vector2.Dot(q1 - p1, furthestEdgeNormal) > 0;
 		}
 	}
 }
