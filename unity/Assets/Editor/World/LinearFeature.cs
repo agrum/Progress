@@ -47,9 +47,6 @@ namespace West.Tool.World
 
 		void DrawVisual()
 		{
-			Vector2 parentPosition = (linearFeature.transform.parent == null)
-				? new Vector2()
-				: new Vector2(linearFeature.transform.parent.transform.position.x, linearFeature.transform.parent.transform.position.z);
 			//draw edges
 			var headEnvironment = linearFeature;
 			while (headEnvironment.transform.parent != null)
@@ -152,9 +149,7 @@ namespace West.Tool.World
 
 			//draw edge type handles
 			Handles.color = Color.white;
-			Vector2 parentPosition = (linearFeature.transform.parent == null)
-				? new Vector2()
-				: new Vector2(linearFeature.transform.parent.transform.position.x, linearFeature.transform.parent.transform.position.z);
+			Vector2 parentPosition = linearFeature.ParentPosition;
 			for (int i = 0; i < linearFeature.NumEdges; ++i)
 			{
 				if (linearFeature[i].PreviousEdge == null)

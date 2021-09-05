@@ -60,7 +60,7 @@ namespace West.Asset.World
 			{
 				Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
 				Vector2 max = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
-				Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
+				Vector2 parentPosition = ParentPosition;
 				foreach (var edge in edgeList)
 				{
 					min.x = Mathf.Min(edge.Position.x, min.x);
@@ -87,6 +87,8 @@ namespace West.Asset.World
 				return Color.black;
             }
         }
+
+		public Vector2 ParentPosition => new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
 
 		public void Merge(int i)
 		{
@@ -139,8 +141,8 @@ namespace West.Asset.World
 
 		public bool CollidesWith(LinearFeature other)
 		{
-			Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
-			Vector2 OtherParentPosition = new Vector2(other.transform.position.x - other.transform.localPosition.x, other.transform.position.z - other.transform.localPosition.z);
+			Vector2 parentPosition = ParentPosition;
+			Vector2 OtherParentPosition = other.ParentPosition;
 			for (int i = 0; i < NumEdges; ++i)
 			{
 				if (this[i].PreviousEdge == null)
@@ -307,9 +309,7 @@ namespace West.Asset.World
 				}
 				else if (linearFeature == this)
 				{
-					Vector2 parentPosition = (linearFeature.transform.parent == null)
-						? new Vector2()
-						: new Vector2(linearFeature.transform.parent.transform.position.x, linearFeature.transform.parent.transform.position.z);
+					Vector2 parentPosition = ParentPosition;
 					for (int i = 0; i < linearFeature.NumEdges; ++i)
 					{
 						if (linearFeature[i].PreviousEdge == null)

@@ -158,8 +158,8 @@ namespace West.Asset.World
 
 		bool IsInside(Environment other)
 		{
-			Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
-			Vector2 OtherParentPosition = new Vector2(other.transform.position.x - other.transform.localPosition.x, other.transform.position.z - other.transform.localPosition.z);
+			Vector2 parentPosition = ParentPosition;
+			Vector2 OtherParentPosition = other.ParentPosition;
 			Bounds otherBounds = other.Bounds;
 			Vector2 p1 = this[0].Position + parentPosition;
 			Vector2 q1 = new Vector2(p1.x, otherBounds.max.x) + parentPosition;
