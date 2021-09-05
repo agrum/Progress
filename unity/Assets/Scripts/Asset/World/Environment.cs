@@ -177,7 +177,7 @@ namespace West.Asset
 			else if (p1.x == q1.x)
 			{
 				float yPerXFor2 = (q2.y - p2.y) / (q2.x - p2.x);
-				float yAtX0For2 = q1.y - yPerXFor2 * q1.x;
+				float yAtX0For2 = q2.y - yPerXFor2 * q2.x;
 
 				return new Vector2(p1.x, p1.x * yPerXFor2 + yAtX0For2);
 			}
