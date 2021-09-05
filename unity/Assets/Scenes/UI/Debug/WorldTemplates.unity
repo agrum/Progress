@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 57320284}
   - component: {fileID: 57320285}
   m_Layer: 0
-  m_Name: environment
+  m_Name: island
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 729111808}
   - component: {fileID: 729111809}
   m_Layer: 0
-  m_Name: linear obstacle
+  m_Name: river
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -381,7 +381,7 @@ GameObject:
   - component: {fileID: 789055194}
   - component: {fileID: 789055195}
   m_Layer: 0
-  m_Name: environment
+  m_Name: mountain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 1045408415}
   - component: {fileID: 1045408416}
   m_Layer: 0
-  m_Name: environment
+  m_Name: lake
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 1589371402}
   - component: {fileID: 1589371403}
   m_Layer: 0
-  m_Name: linear obstacle
+  m_Name: fissure
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +630,7 @@ GameObject:
   - component: {fileID: 2070364202}
   - component: {fileID: 2070364203}
   m_Layer: 0
-  m_Name: environment
+  m_Name: dirt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

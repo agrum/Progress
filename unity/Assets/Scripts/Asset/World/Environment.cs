@@ -158,15 +158,17 @@ namespace West.Asset.World
 
 		bool IsInside(Environment other)
 		{
+			Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
+			Vector2 OtherParentPosition = new Vector2(other.transform.position.x - other.transform.localPosition.x, other.transform.position.z - other.transform.localPosition.z);
 			Bounds otherBounds = other.Bounds;
-			Vector2 p1 = this[0].Position;
-			Vector2 q1 = new Vector2(p1.x, otherBounds.max.x);
+			Vector2 p1 = this[0].Position + parentPosition;
+			Vector2 q1 = new Vector2(p1.x, otherBounds.max.x) + parentPosition;
 
 			int hitCount = 0;
 			foreach (var edge in other.edgeList)
             {
-				Vector2 p2 = edge.PreviousEdge.Position;
-				Vector2 q2 = edge.Position;
+				Vector2 p2 = edge.PreviousEdge.Position + OtherParentPosition;
+				Vector2 q2 = edge.Position + OtherParentPosition;
 
 				if (DoIntersect(p1, q1, p2, q2, true))
                 {
