@@ -16,7 +16,7 @@ namespace West.Asset.World
 				{
 					continue;
 				}
-				environment.DrawEnvironmentHierarchy();
+				environment.DrawHierarchy();
 			}
 		}
 
