@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleJSON;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace West.Asset.World
 	[System.Serializable]
 	public class Environment : LinearFeature
 	{
-		public enum EType
+		public enum EVariety
 		{
 			Grass,
 			Dirt,
@@ -26,7 +27,7 @@ namespace West.Asset.World
 		}
 
 		[SerializeField]
-		public EType Type;
+		public EVariety Variety;
 
 		[SerializeField]
 		public EHeightDelta HeightDelta;
@@ -57,21 +58,31 @@ namespace West.Asset.World
 		{
 			get
 			{
-				switch (Type)
+				switch (Variety)
 				{
-					case EType.Ocean:
+					case EVariety.Ocean:
 						return new Color(0.0f, 0.3f, 0.9f);
-					case EType.Grass:
+					case EVariety.Grass:
 						return new Color(0.2f, 0.9f, 0.4f);
-					case EType.Dirt:
+					case EVariety.Dirt:
 						return new Color(0.8f, 0.6f, 0.3f);
-					case EType.Rock:
+					case EVariety.Rock:
 						return new Color(0.2f, 0.2f, 0.2f);
-					case EType.Snow:
+					case EVariety.Snow:
 						return new Color(0.7f, 0.7f, 0.7f);
 				}
 				return Color.black;
 			}
+		}
+
+		override public JSONNode ToJson()
+		{
+			var main = base.ToJson();
+
+			main["variety"] = Variety.ToString();
+			main["heightDelta"] = HeightDelta.ToString();
+
+			return main;
 		}
 
 		static public bool Validate(GameObject parent)

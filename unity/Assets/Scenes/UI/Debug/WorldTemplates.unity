@@ -166,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2eb6c5eb121aa48b30f0a8c6fab20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   edgeList:
   - position: {x: -0.6593342, y: 0.9141846}
   - position: {x: -0.63557434, y: 1.7257738}
@@ -175,7 +174,7 @@ MonoBehaviour:
   center: {x: -1.4064473, y: 1.0218492}
   height: 3.8535342
   justDropped: 0
-  Type: 0
+  Variety: 0
   HeightDelta: 0
 --- !u!1 &483760357
 GameObject:
@@ -268,7 +267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec7692e235bdfb498b8fe385611cdd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   edgeList:
   - position: {x: -3.2878647, y: -2.7420893}
   - position: {x: -1.0513458, y: 0.061904907}
@@ -276,7 +274,7 @@ MonoBehaviour:
   center: {x: -2.6439323, y: -0.37104464}
   height: 3.8535342
   justDropped: 0
-  Type: 0
+  Variety: 0
 --- !u!1 &775727293
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,7 +411,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2eb6c5eb121aa48b30f0a8c6fab20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   edgeList:
   - position: {x: -1.4924965, y: -4.2758846}
   - position: {x: 0.06854439, y: -6.02304}
@@ -426,7 +423,7 @@ MonoBehaviour:
   center: {x: 3.125615, y: -1.7206668}
   height: 3.8535342
   justDropped: 0
-  Type: 2
+  Variety: 2
   HeightDelta: 1
 --- !u!1 &1045408414
 GameObject:
@@ -472,7 +469,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2eb6c5eb121aa48b30f0a8c6fab20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   edgeList:
   - position: {x: -1.446207, y: 0.7125921}
   - position: {x: 2.5938263, y: 2.3752623}
@@ -481,7 +477,7 @@ MonoBehaviour:
   center: {x: -0.49405426, y: 0.4420598}
   height: 3.8535342
   justDropped: 0
-  Type: 4
+  Variety: 4
   HeightDelta: 0
 --- !u!1 &1589371401
 GameObject:
@@ -526,7 +522,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eec7692e235bdfb498b8fe385611cdd2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   edgeList:
   - position: {x: 3.9482632, y: 4.1229086}
   - position: {x: 2.19063, y: -0.7834444}
@@ -535,7 +530,7 @@ MonoBehaviour:
   center: {x: -0.6647682, y: -0.17000675}
   height: 3.8535342
   justDropped: 0
-  Type: 2
+  Variety: 2
 --- !u!1 &1921410855
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,7 +658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d2eb6c5eb121aa48b30f0a8c6fab20c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: 
   edgeList:
   - position: {x: -1.8265038, y: -2.5483408}
   - position: {x: -0.61624146, y: -1.1376419}
@@ -674,5 +668,5 @@ MonoBehaviour:
   center: {x: -2.0453272, y: 0.1550417}
   height: 3.8535342
   justDropped: 0
-  Type: 1
+  Variety: 1
   HeightDelta: 0

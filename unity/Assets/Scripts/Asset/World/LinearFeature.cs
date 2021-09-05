@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleJSON;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,9 +10,6 @@ namespace West.Asset.World
 	[System.Serializable]
 	public class LinearFeature : MonoBehaviour
 	{
-		[SerializeField]
-		public string name;
-
 		[SerializeField, HideInInspector]
 		public List<Edge> edgeList;
 
@@ -89,6 +87,25 @@ namespace West.Asset.World
         }
 
 		public Vector2 ParentPosition => new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
+
+		virtual public JSONNode ToJson()
+		{
+			var parentPosition = ParentPosition;
+			JSONArray edges = new JSONArray();
+			foreach (var edge in edgeList)
+			{
+				JSONArray position = new JSONArray();
+				position.Add(edge.Position.x + parentPosition.x);
+				position.Add(edge.Position.y + parentPosition.y);
+				edges.Add(position);
+			}
+
+			JSONObject main = new JSONObject();
+			main["name"] = gameObject.name;
+			main["vertices"] = edges;
+
+			return main;
+		}
 
 		public void Merge(int i)
 		{

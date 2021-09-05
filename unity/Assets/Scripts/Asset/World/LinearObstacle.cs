@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimpleJSON;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,7 +10,7 @@ namespace West.Asset.World
 	[System.Serializable]
 	public class LinearObstacle : LinearFeature
 	{
-		public enum EType
+		public enum EVariety
 		{
 			River,
 			Wall,
@@ -17,7 +18,7 @@ namespace West.Asset.World
 		}
 
 		[SerializeField]
-		public EType Type;
+		public EVariety Variety;
 
 		override public void Init()
 		{
@@ -34,17 +35,26 @@ namespace West.Asset.World
 		{
 			get
 			{
-				switch (Type)
+				switch (Variety)
 				{
-					case EType.River:
+					case EVariety.River:
 						return new Color(0.0f, 0.3f, 0.9f);
-					case EType.Fissure:
+					case EVariety.Fissure:
 						return new Color(0.8f, 0.6f, 0.3f);
-					case EType.Wall:
+					case EVariety.Wall:
 						return new Color(0.2f, 0.2f, 0.2f);
 				}
 				return Color.black;
 			}
+		}
+
+		override public JSONNode ToJson()
+		{
+			var main = base.ToJson();
+
+			main["variety"] = Variety.ToString();
+
+			return main;
 		}
 
 		public bool Validate()
