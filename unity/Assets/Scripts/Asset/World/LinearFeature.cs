@@ -39,7 +39,12 @@ namespace West.Asset.World
 		{
 			get
 			{
-				return edgeList[i % NumEdges];
+				var edge = edgeList[(i + NumEdges) % NumEdges];
+				if (i != 0 && edge.PreviousEdge == null)
+                {
+					edge.PreviousEdge = edgeList[(i - 1 + NumEdges) % NumEdges];
+				}
+				return edge;
 			}
 		}
 
@@ -61,6 +66,32 @@ namespace West.Asset.World
 		{
 			get { return edgeList.Count; }
 		}
+
+		public Bounds Bounds
+        {
+			get
+			{
+				Vector2 min = new Vector2(Mathf.Infinity, Mathf.Infinity);
+				Vector2 max = new Vector2(-Mathf.Infinity, -Mathf.Infinity);
+				Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
+				foreach (var edge in edgeList)
+				{
+					min.x = Mathf.Min(edge.Position.x, min.x);
+					min.y = Mathf.Min(edge.Position.y, min.y);
+					max.x = Mathf.Max(edge.Position.x, max.x);
+					max.y = Mathf.Max(edge.Position.y, max.y);
+				}
+
+				min.x += parentPosition.x;
+				min.y += parentPosition.y;
+				max.x += parentPosition.x;
+				max.y += parentPosition.y;
+				Vector3 center = new Vector3((min.x + max.x) / 2, 0, (min.y + max.y) / 2);
+				Vector3 size = new Vector3(max.x - min.x, 0, max.y - min.y);
+				var b = new Bounds(center, size);
+				return b;
+			}
+        }
 
 		public void AddSegment(Vector2 anchorPoint)
 		{
@@ -88,38 +119,6 @@ namespace West.Asset.World
 			this[bestCandidateIndex + 1].Position = anchorPoint;
 		}
 
-		static public bool Validate(GameObject parent)
-		{
-			var environments = parent.GetComponentsInChildren<Asset.World.Environment>();
-			for (var i = 0; i < environments.Length; ++i)
-			{
-				if (environments[i] == null)
-				{
-					continue;
-				}
-
-				for (var j = i + 1; j < environments.Length; ++j)
-				{
-					if (environments[j] == null)
-					{
-						continue;
-					}
-
-					if (environments[i].CollidesWith(environments[j]))
-					{
-						Debug.Log(String.Format("Environment \"{0}\" collides with \"{1}\"", environments[i].gameObject.name, environments[j].gameObject.name));
-						return false;
-					}
-				}
-
-				if (environments[i].gameObject != parent && !Validate(environments[i].gameObject))
-				{
-					return false;
-				}
-			}
-			return true;
-		}
-
 		public bool CollidesWith(LinearFeature other)
 		{
 			Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
@@ -131,12 +130,12 @@ namespace West.Asset.World
 					continue;
 				}
 
-				Vector2 p1 = parentPosition + this[i].Position;
-				Vector2 p2 = parentPosition + this[i + 1].Position;
+				Vector2 p1 = parentPosition + this[i - 1].Position;
+				Vector2 p2 = parentPosition + this[i].Position;
 				for (int j = 0; j < other.NumEdges; ++j)
 				{
-					Vector2 p3 = OtherParentPosition + other[j].Position;
-					Vector2 p4 = OtherParentPosition + other[j + 1].Position;
+					Vector2 p3 = OtherParentPosition + other[j - 1].Position;
+					Vector2 p4 = OtherParentPosition + other[j].Position;
 					if (DoIntersect(p1, p2, p3, p4, true))
 					{
 						return true;
@@ -176,7 +175,7 @@ namespace West.Asset.World
 
 		// The main function that returns true if line segment 'p1q1'
 		// and 'p2q2' intersect.
-		bool DoIntersect(Vector2 p1, Vector2 q1, Vector2 p2, Vector2 q2, bool checkForColinear)
+		protected bool DoIntersect(Vector2 p1, Vector2 q1, Vector2 p2, Vector2 q2, bool checkForColinear)
 		{
 			// Find the four orientations needed for general and
 			// special cases
@@ -266,8 +265,8 @@ namespace West.Asset.World
 							continue;
                         }
 
-						Vector2 p1 = parentPosition + linearFeature[i].Position;
-						Vector2 p2 = parentPosition + linearFeature[i + 1].Position;
+						Vector2 p1 = parentPosition + linearFeature[i - 1].Position;
+						Vector2 p2 = parentPosition + linearFeature[i].Position;
 						float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
 						Handles.color = Color.black;
 						Handles.DrawLine(ToV3(p1), ToV3(p2));

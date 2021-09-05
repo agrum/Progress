@@ -12,6 +12,7 @@ namespace West.Asset.World
 
 		private Vector2 normal = Vector2.zero;
 		private Vector2 center = Vector2.zero;
+
 		private Edge previousEdge = null;
 
 		public Vector2 Position
