@@ -3,6 +3,7 @@ module.exports = function () {
 	require('./schemas/champions')();
 	require('./schemas/constellations')();
 	require('./schemas/gameSettings')();
+	require('./schemas/outdoorLayouts')();
 	require('./schemas/presets')();
 	require('./schemas/skills')();
 	require('./schemas/users')();

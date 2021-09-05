@@ -1,4 +1,6 @@
-﻿using SimpleJSON;
+﻿using Assets.Scripts;
+using BestHTTP;
+using SimpleJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -118,8 +120,8 @@ namespace West.Asset.World
 			center.Add(bounds.center.z);
 
 			JSONArray size = new JSONArray();
-			center.Add(bounds.size.x);
-			center.Add(bounds.size.z);
+			size.Add(bounds.size.x);
+			size.Add(bounds.size.z);
 
 			JSONObject main = new JSONObject();
 			main["name"] = gameObject.name;
@@ -130,6 +132,22 @@ namespace West.Asset.World
 			main["size"] = size;
 
 			return main;
+		}
+
+		public void Export()
+        {
+			string jsonString = ToJson().ToString();
+			Debug.Log(jsonString);
+			var request = App.Server.Request(
+				HTTPMethods.Post,
+				"tools/outdoorLayoutsUpdate",
+				(JSONNode json_) =>
+				{
+					Debug.Log(json_.ToString());
+				});
+			request.AddHeader("Content-Type", "application/json");
+			request.RawData = System.Text.Encoding.UTF8.GetBytes(jsonString);
+			request.Send();
 		}
 	}
 }
