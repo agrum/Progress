@@ -34,7 +34,7 @@ namespace West.Tool.World
 			if (PrefabUtility.GetCorrespondingObjectFromSource(target) == null && PrefabUtility.GetPrefabInstanceHandle(target) != null)
 				return;
 
-			linearFeature = (Asset.World.Environment)target;
+			linearFeature = (Asset.World.LinearFeature)target;
 			lastCenter = ToV2(linearFeature.transform.localPosition);
 
 			SceneView.duringSceneGui += OnScene;
@@ -64,7 +64,7 @@ namespace West.Tool.World
 					var generator = headEnvironment.transform.parent.GetComponent<Asset.World.Generator>();
 					if (generator != null)
 					{
-						generator.DrawEnvironments();
+						generator.Draw();
 					}
 					else
 					{
@@ -157,8 +157,13 @@ namespace West.Tool.World
 				: new Vector2(linearFeature.transform.parent.transform.position.x, linearFeature.transform.parent.transform.position.z);
 			for (int i = 0; i < linearFeature.NumEdges; ++i)
 			{
-				Vector2 p1 = parentPosition + linearFeature[i].Position;
-				Vector2 p2 = parentPosition + linearFeature[i + 1].Position;
+				if (linearFeature[i].PreviousEdge == null)
+                {
+					continue;
+                }
+
+				Vector2 p1 = parentPosition + linearFeature[i - 1].Position;
+				Vector2 p2 = parentPosition + linearFeature[i].Position;
 				float scale = (Camera.current.transform.position - linearFeature.ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
 				Handles.color = Color.black;
 				bool clicked = Handles.Button(

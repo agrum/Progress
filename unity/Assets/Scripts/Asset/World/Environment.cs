@@ -14,23 +14,28 @@ namespace West.Asset.World
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
 			height = transform.position.y;
 			edgeList = new List<Edge>();
-			edgeList.Add(new Edge(center + Vector2.down + Vector2.right, null));
-			edgeList.Add(new Edge(center + Vector2.up + Vector2.right, this[0]));
-			edgeList.Add(new Edge(center + Vector2.up + Vector2.left, this[1]));
-			edgeList.Add(new Edge(center + Vector2.down + Vector2.left, this[2]));
-			edgeList[0].PreviousEdge = edgeList[NumEdges - 1];
+			edgeList.Add(new Edge(center + Vector2.down + Vector2.right));
+			edgeList.Add(new Edge(center + Vector2.up + Vector2.right));
+			edgeList.Add(new Edge(center + Vector2.up + Vector2.left));
+			edgeList.Add(new Edge(center + Vector2.down + Vector2.left));
 			justDropped = true;
 		}
 		override public Edge this[int i]
 		{
 			get
 			{
-				var edge = edgeList[(i + NumEdges) % NumEdges];
-				if (edge.PreviousEdge == null)
-				{
-					edge.PreviousEdge = edgeList[(i - 1 + NumEdges) % NumEdges];
-				}
+				i = (i + NumEdges) % NumEdges;
+				var edge = edgeList[i];
+				edge.PreviousEdge = edgeList[(i - 1 + NumEdges) % NumEdges];
 				return edge;
+			}
+		}
+
+		override public Color Color
+		{
+			get
+			{
+				return Color.green;
 			}
 		}
 

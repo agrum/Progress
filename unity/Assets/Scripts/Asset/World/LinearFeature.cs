@@ -30,8 +30,8 @@ namespace West.Asset.World
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
 			height = transform.position.y;
 			edgeList = new List<Edge>();
-			edgeList.Add(new Edge(center + Vector2.down + Vector2.right, null));
-			edgeList.Add(new Edge(center + Vector2.up + Vector2.left, this[1]));
+			edgeList.Add(new Edge(center + Vector2.down + Vector2.right));
+			edgeList.Add(new Edge(center + Vector2.up + Vector2.left));
 			justDropped = true;
 		}
 
@@ -39,27 +39,14 @@ namespace West.Asset.World
 		{
 			get
 			{
-				var edge = edgeList[(i + NumEdges) % NumEdges];
-				if (i != 0 && edge.PreviousEdge == null)
+				i = (i + NumEdges) % NumEdges;
+				var edge = edgeList[i];
+				if (i > 0)
                 {
-					edge.PreviousEdge = edgeList[(i - 1 + NumEdges) % NumEdges];
+					edge.PreviousEdge = edgeList[i-1];
 				}
 				return edge;
 			}
-		}
-
-		public void Merge(int i)
-		{
-			if (NumEdges > 2)
-			{
-				this[i + 1].Position = (this[i].Position + this[i + 1].Position) / 2.0f;
-				edgeList.RemoveAt(i % NumEdges);
-			}
-		}
-
-		public void Split(int i)
-		{
-			edgeList.Insert((i % NumEdges) + 1, new Edge((this[i + 1].Position + this[i].Position) / 2.0f, this[i + 1]));
 		}
 
 		public int NumEdges
@@ -91,7 +78,38 @@ namespace West.Asset.World
 				var b = new Bounds(center, size);
 				return b;
 			}
+		}
+
+		virtual public Color Color
+        {
+			get
+            {
+				return Color.black;
+            }
         }
+
+		public void Merge(int i)
+		{
+			i = (i + NumEdges) % NumEdges;
+			var edge = this[i];
+			if (NumEdges > 2 && edge.PreviousEdge != null)
+			{
+				edge.PreviousEdge.Position = (edge.PreviousEdge.Position + edge.Position) / 2.0f;
+				edgeList.RemoveAt(i);
+				edge = this[i];
+			}
+		}
+
+		public void Split(int i)
+		{
+			var edge = this[i];
+			if (NumEdges >= 2 && edge.PreviousEdge != null)
+			{
+				edgeList.Insert((i % NumEdges), new Edge((edge.PreviousEdge.Position + edge.Position) / 2.0f));
+				edge = this[i+1];
+				edge = this[i+2];
+			}
+		}
 
 		public void AddSegment(Vector2 anchorPoint)
 		{
@@ -233,6 +251,16 @@ namespace West.Asset.World
 
 		static public Vector2 IntersectionPoint(Vector2 p1, Vector2 q1, Vector2 p2, Vector2 q2)
 		{
+			//sharing point case
+			if (p1 == p2 || p1 == q2 )
+            {
+				return p1;
+            }
+			if (q1 == p1 || q1 == q2)
+            {
+				return q1;
+            }
+
 			//does not handle case when segments are co linears.
 
 			//general case
@@ -292,7 +320,7 @@ namespace West.Asset.World
 						Vector2 p1 = parentPosition + linearFeature[i - 1].Position;
 						Vector2 p2 = parentPosition + linearFeature[i].Position;
 						float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-						Handles.color = Color.black;
+						Handles.color = Color;
 						Handles.DrawLine(ToV3(p1), ToV3(p2));
 						Handles.ArrowHandleCap(
 							0,

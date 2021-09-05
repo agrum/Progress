@@ -29,7 +29,7 @@ namespace West.Tool.World
 
 		void DrawVisual()
 		{
-			activeGameObject.DrawEnvironments();
+			activeGameObject.Draw();
 		}
 
 		void DrawControl()
@@ -44,7 +44,7 @@ namespace West.Tool.World
 			if (activeGameObject == null)
             {
 				return;
-            }
+			}
 
 			if (GUILayout.Button("Add Child Environment"))
 			{
@@ -53,6 +53,15 @@ namespace West.Tool.World
 				go.transform.localScale = activeGameObject.transform.localScale;
 				go.transform.localPosition = new Vector3();
 				go.AddComponent<Asset.World.Environment>().Init();
+			}
+
+			if (GUILayout.Button("Add Child Linear Obstacle"))
+			{
+				var go = new GameObject("linear obstacle");
+				go.transform.parent = activeGameObject.transform;
+				go.transform.localScale = activeGameObject.transform.localScale;
+				go.transform.localPosition = new Vector3();
+				go.AddComponent<Asset.World.LinearObstacle>().Init();
 			}
 
 			if (GUILayout.Button("Validate"))

@@ -8,9 +8,15 @@ namespace West.Asset.World
 {
 	public class Generator : MonoBehaviour
 	{
-		public void DrawEnvironments()
+        public void Draw()
+        {
+			DrawEnvironments();
+			DrawLinearObstacles();
+		}
+
+        public void DrawEnvironments()
 		{
-			foreach (var environment in GetComponentsInChildren<Asset.World.Environment>())
+			foreach (var environment in GetComponentsInChildren<Environment>())
 			{
 				if (environment == null && environment == this)
 				{
@@ -19,13 +25,32 @@ namespace West.Asset.World
 				environment.DrawHierarchy();
 			}
 		}
+		public void DrawLinearObstacles()
+		{
+			foreach (var linearObstacle in GetComponentsInChildren<LinearObstacle>())
+			{
+				if (linearObstacle == null && linearObstacle == this)
+				{
+					continue;
+				}
+				linearObstacle.DrawHierarchy();
+			}
+		}
 
-        public bool Validate()
-        {
+		public bool Validate()
+		{
 			if (!Environment.Validate(gameObject))
-            {
+			{
 				return false;
-            }
+			}
+
+			foreach (var linearObstacle in GetComponentsInChildren<LinearObstacle>())
+			{
+				if (!linearObstacle.Validate())
+				{
+					return false;
+				}
+			}
 
 			return true;
 		}
