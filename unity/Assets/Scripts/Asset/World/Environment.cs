@@ -30,7 +30,7 @@ namespace West.Asset.World
 		public void Init()
 		{
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
-			height = 0;
+			height = transform.position.y;
 			edgeList = new List<EnvironmentEdge>();
 			edgeList.Add(new EnvironmentEdge(center + Vector2.down + Vector2.right, null));
 			edgeList.Add(new EnvironmentEdge(center + Vector2.up + Vector2.right, this[0]));
