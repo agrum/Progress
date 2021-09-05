@@ -48,6 +48,26 @@ namespace West.Tool
 				? new Vector2() 
 				: new Vector2(path.transform.parent.transform.position.x, path.transform.parent.transform.position.z);
 			//draw edges
+			var headEnvironment = path;
+			while (headEnvironment.transform.parent != null && headEnvironment.transform.parent.TryGetComponent<Asset.Environment>(out headEnvironment)) ;
+			DrawEnvironmentHierarchy(headEnvironment);
+			foreach (var environment in headEnvironment.GetComponentsInChildren< Asset.Environment>())
+			{
+				for (int i = 0; i < path.NumEdges; ++i)
+				{
+					Vector2 p1 = parentPosition + path[i].Position;
+					Vector2 p2 = parentPosition + path[i + 1].Position;
+					float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+					Handles.color = Color.black;
+					Handles.ArrowHandleCap(
+						0,
+						ToV3((p1 + p2) / 2.0f),
+						Quaternion.LookRotation(ToV3(new Vector2((p2 - p1).y, -(p2 - p1).x), false)),
+						scale,
+						EventType.Repaint);
+				}
+			}
+
 			for (int i = 0; i < path.NumEdges; ++i)
 			{
 				Vector2 p1 = parentPosition + path[i].Position;
@@ -62,10 +82,6 @@ namespace West.Tool
 					scale,
 					EventType.Repaint);
 			}
-
-			//draw unity collider radius
-			Handles.color = Color.gray;
-			Handles.DrawWireArc(path.transform.position, Vector3.up, Vector3.forward, 360, path.RoughRadius);
 		}
 
 		void DrawControl()
@@ -231,7 +247,63 @@ namespace West.Tool
 				go.transform.parent = path.transform;
 				go.transform.localScale = path.transform.localScale;
 				go.transform.localPosition = new Vector3();
-				go.AddComponent<Asset.Environment>();
+				go.AddComponent<Asset.Environment>().Init();
+			}
+		}
+
+		public bool CollidesWithOtherEnvironments()
+        {
+			var parentEnvironment = path.transform.parent.GetComponentInParent<Asset.Environment>();
+			if (parentEnvironment != null)
+			{
+				//check it's contain within its parent's boundaries
+				if (path.CollidesWith(parentEnvironment))
+				{
+					return true;
+				}
+
+				//check it doesn't collide with its peers
+				bool collided = false;
+				foreach (var peerEnvironment in parentEnvironment.gameObject.GetComponentsInChildren<Asset.Environment>())
+				{
+					if (peerEnvironment != null && peerEnvironment != path && path.CollidesWith(peerEnvironment))
+					{
+						return true;
+					}
+				}
+			}
+
+			//check it doesn't collide with its children
+			foreach (var childEnvironment in path.gameObject.GetComponentsInChildren<Asset.Environment>())
+			{
+				if (childEnvironment != null && childEnvironment != path && path.CollidesWith(childEnvironment))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private void DrawEnvironmentHierarchy(Asset.Environment parent)
+		{
+			foreach (var environment in parent.GetComponentsInChildren<Asset.Environment>())
+			{
+				if (environment == null)
+                {
+					continue;
+                }
+				Vector2 parentPosition = (environment.transform.parent == null)
+					? new Vector2()
+					: new Vector2(environment.transform.parent.transform.position.x, environment.transform.parent.transform.position.z);
+				for (int i = 0; i < environment.NumEdges; ++i)
+				{
+					Vector2 p1 = parentPosition + environment[i].Position;
+					Vector2 p2 = parentPosition + environment[i + 1].Position;
+					float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+					Handles.color = Color.black;
+					Handles.DrawLine(ToV3(p1), ToV3(p2));
+				}
 			}
 		}
 	}

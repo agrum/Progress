@@ -22,7 +22,6 @@ namespace West.Asset
 		[SerializeField, HideInInspector]
 		public bool justDropped;
 
-		private float roughRadius;
 		private CircleCollider2D circleCollider;
 		private PolygonCollider2D polyCollider;
 
@@ -31,8 +30,10 @@ namespace West.Asset
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
 			height = 0;
 			edgeList = new List<EnvironmentEdge>();
-			edgeList.Add(new EnvironmentEdge(center + Vector2.left, null));
-			edgeList.Add(new EnvironmentEdge(center + Vector2.right, this[0]));
+			edgeList.Add(new EnvironmentEdge(center + Vector2.down + Vector2.right, null));
+			edgeList.Add(new EnvironmentEdge(center + Vector2.up + Vector2.right, this[0]));
+			edgeList.Add(new EnvironmentEdge(center + Vector2.up + Vector2.left, this[1]));
+			edgeList.Add(new EnvironmentEdge(center + Vector2.down + Vector2.left, this[2]));
 			justDropped = true;
 		}
 
@@ -65,11 +66,6 @@ namespace West.Asset
 			get { return edgeList.Count; }
 		}
 
-		public float RoughRadius
-		{
-			get { return roughRadius; }
-		}
-
 		public void AddSegment(Vector2 anchorPoint)
 		{
 			float bestSqrDistance = Mathf.Infinity;
@@ -96,7 +92,28 @@ namespace West.Asset
 			this[bestCandidateIndex + 1].Position = anchorPoint;
 		}
 
-		// Given three colinear edgeList p, q, r, the function checks if
+		public bool CollidesWith(Environment other)
+		{
+			Vector2 parentPosition = new Vector2(transform.position.x - transform.localPosition.x, transform.position.z - transform.localPosition.z);
+			Vector2 OtherParentPosition = new Vector2(other.transform.position.x - other.transform.localPosition.x, other.transform.position.z - other.transform.localPosition.z);
+			for (int i = 0; i < NumEdges; ++i)
+			{
+				Vector2 p1 = parentPosition + this[i].Position;
+				Vector2 p2 = parentPosition + this[i + 1].Position;
+				for (int j = 0; j < other.NumEdges; ++j)
+				{
+					Vector2 p3 = OtherParentPosition + other[j].Position;
+					Vector2 p4 = OtherParentPosition + other[j + 1].Position;
+					if (DoIntersect(p1, p2, p3, p4, true))
+                    {
+						return true;
+                    }
+				}
+			}
+			return false;
+		}
+
+		// Given three points p, q, r, the function checks if
 		// point q lies on line segment 'pr'
 		bool OnSegment(Vector2 p, Vector2 q, Vector2 r)
 		{
