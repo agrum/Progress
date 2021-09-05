@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace West.Asset
+namespace West.Asset.World
 {
 	[System.Serializable]
 	public class EnvironmentEdge

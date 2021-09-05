@@ -1,12 +1,12 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace West.Tool
+namespace West.Tool.World
 {
-	[CustomEditor(typeof(Asset.Environment))]
+	[CustomEditor(typeof(Asset.World.Environment))]
 	public class EnvironmentEditor : Editor
 	{
-		Asset.Environment path;
+		Asset.World.Environment path;
 		Plane xz = new Plane(new Vector3(0f, 1f, 0f), 0f);
 		bool passedOnce = false;
 		Vector2 lastCenter;
@@ -34,53 +34,44 @@ namespace West.Tool
 			if (PrefabUtility.GetCorrespondingObjectFromSource(target) == null && PrefabUtility.GetPrefabInstanceHandle(target) != null)
 				return;
 
-			path = (Asset.Environment)target;
-			if (path.edgeList == null)
-				path.Init();
+			path = (Asset.World.Environment)target;
 			lastCenter = ToV2(path.transform.localPosition);
 
 			SceneView.duringSceneGui += OnScene;
 		}
 
-		void DrawVisual()
+        private void OnDisable()
+        {
+			path = null;
+		}
+
+        void DrawVisual()
 		{
 			Vector2 parentPosition = (path.transform.parent == null) 
 				? new Vector2() 
 				: new Vector2(path.transform.parent.transform.position.x, path.transform.parent.transform.position.z);
 			//draw edges
 			var headEnvironment = path;
-			while (headEnvironment.transform.parent != null && headEnvironment.transform.parent.TryGetComponent<Asset.Environment>(out headEnvironment)) ;
-			DrawEnvironmentHierarchy(headEnvironment);
-			foreach (var environment in headEnvironment.GetComponentsInChildren< Asset.Environment>())
+			while (headEnvironment.transform.parent != null)
 			{
-				for (int i = 0; i < path.NumEdges; ++i)
+				var component = headEnvironment.transform.parent.GetComponent<Asset.World.Environment>();
+				if (component != null)
 				{
-					Vector2 p1 = parentPosition + path[i].Position;
-					Vector2 p2 = parentPosition + path[i + 1].Position;
-					float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-					Handles.color = Color.black;
-					Handles.ArrowHandleCap(
-						0,
-						ToV3((p1 + p2) / 2.0f),
-						Quaternion.LookRotation(ToV3(new Vector2((p2 - p1).y, -(p2 - p1).x), false)),
-						scale,
-						EventType.Repaint);
+					headEnvironment = component;
 				}
-			}
-
-			for (int i = 0; i < path.NumEdges; ++i)
-			{
-				Vector2 p1 = parentPosition + path[i].Position;
-				Vector2 p2 = parentPosition + path[i + 1].Position;
-				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-				Handles.color = Color.black;
-				Handles.DrawLine(ToV3(p1), ToV3(p2));
-				Handles.ArrowHandleCap(
-					0,
-					ToV3((p1 + p2) / 2.0f),
-					Quaternion.LookRotation(ToV3(new Vector2((p2 - p1).y, -(p2 - p1).x), false)),
-					scale,
-					EventType.Repaint);
+				else
+				{
+					var generator = headEnvironment.transform.parent.GetComponent<Asset.World.Generator>();
+					if (generator != null)
+					{
+						generator.DrawEnvironments();
+					}
+                    else
+					{
+						headEnvironment.DrawEnvironmentHierarchy();
+					}
+					break;
+                }
 			}
 		}
 
@@ -149,8 +140,8 @@ namespace West.Tool
 				float angle = Vector2.Angle(path[e1Candidate].Position - path[e3Candidate].Position, path[e2Candidate].Position - path[e3Candidate].Position);
 				if (angle <= 90.0f)
 				{
-					Asset.EnvironmentEdge e1 = new Asset.EnvironmentEdge(path[e1Candidate].Position, path[e2Candidate]);
-					Asset.EnvironmentEdge e2 = new Asset.EnvironmentEdge(path[e2Candidate].Position, path[e3Candidate]);
+					Asset.World.EnvironmentEdge e1 = new Asset.World.EnvironmentEdge(path[e1Candidate].Position, path[e2Candidate]);
+					Asset.World.EnvironmentEdge e2 = new Asset.World.EnvironmentEdge(path[e2Candidate].Position, path[e3Candidate]);
 					center = Path.IntersectionPoint(e1.Center, e1.Center + e1.Normal, e2.Center, e2.Center + e2.Normal);
 				}
 			}
@@ -168,10 +159,10 @@ namespace West.Tool
 			{
 				Vector2 p1 = parentPosition + path[i].Position;
 				Vector2 p2 = parentPosition + path[i + 1].Position;
-				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+				float scale = (Camera.current.transform.position - path.ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
 				Handles.color = Color.black;
 				bool clicked = Handles.Button(
-					ToV3((p1 + p2) / 2.0f),
+					path.ToV3((p1 + p2) / 2.0f),
 					Quaternion.LookRotation(Vector3.up),
 					scale,
 					scale,
@@ -198,8 +189,8 @@ namespace West.Tool
 			{
 				Vector2 p1 = parentPosition + path[i].Position;
 				Vector2 p2 = parentPosition + path[i + 1].Position;
-				float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-				Vector3 newPosition = Handles.FreeMoveHandle(ToV3(p1), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
+				float scale = (Camera.current.transform.position - path.ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+				Vector3 newPosition = Handles.FreeMoveHandle(path.ToV3(p1), Quaternion.identity, scale, Vector3.zero, Handles.SphereHandleCap);
 
 				float enter;
 				Ray worldRay = new Ray(Camera.current.transform.position, newPosition - Camera.current.transform.position);
@@ -228,15 +219,11 @@ namespace West.Tool
 			EditorUtility.SetDirty(path);
 		}
 
-		Vector3 ToV3(Vector2 v2, bool applyCreatorHeight = true)
-		{
-			return new Vector3(v2.x, applyCreatorHeight ? path.height : 0.0f, v2.y);
-		}
-
 		Vector2 ToV2(Vector3 v3)
 		{
 			return new Vector2(v3.x, v3.z);
 		}
+
 		public override void OnInspectorGUI()
 		{
 			base.OnInspectorGUI();
@@ -247,63 +234,7 @@ namespace West.Tool
 				go.transform.parent = path.transform;
 				go.transform.localScale = path.transform.localScale;
 				go.transform.localPosition = new Vector3();
-				go.AddComponent<Asset.Environment>().Init();
-			}
-		}
-
-		public bool CollidesWithOtherEnvironments()
-        {
-			var parentEnvironment = path.transform.parent.GetComponentInParent<Asset.Environment>();
-			if (parentEnvironment != null)
-			{
-				//check it's contain within its parent's boundaries
-				if (path.CollidesWith(parentEnvironment))
-				{
-					return true;
-				}
-
-				//check it doesn't collide with its peers
-				bool collided = false;
-				foreach (var peerEnvironment in parentEnvironment.gameObject.GetComponentsInChildren<Asset.Environment>())
-				{
-					if (peerEnvironment != null && peerEnvironment != path && path.CollidesWith(peerEnvironment))
-					{
-						return true;
-					}
-				}
-			}
-
-			//check it doesn't collide with its children
-			foreach (var childEnvironment in path.gameObject.GetComponentsInChildren<Asset.Environment>())
-			{
-				if (childEnvironment != null && childEnvironment != path && path.CollidesWith(childEnvironment))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		private void DrawEnvironmentHierarchy(Asset.Environment parent)
-		{
-			foreach (var environment in parent.GetComponentsInChildren<Asset.Environment>())
-			{
-				if (environment == null)
-                {
-					continue;
-                }
-				Vector2 parentPosition = (environment.transform.parent == null)
-					? new Vector2()
-					: new Vector2(environment.transform.parent.transform.position.x, environment.transform.parent.transform.position.z);
-				for (int i = 0; i < environment.NumEdges; ++i)
-				{
-					Vector2 p1 = parentPosition + environment[i].Position;
-					Vector2 p2 = parentPosition + environment[i + 1].Position;
-					float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
-					Handles.color = Color.black;
-					Handles.DrawLine(ToV3(p1), ToV3(p2));
-				}
+				go.AddComponent<Asset.World.Environment>().Init();
 			}
 		}
 	}

@@ -56,10 +56,11 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\World\Environment.cs" />
     <Compile Include="Assets\Editor\PathEditor.cs" />
     <Compile Include="Assets\Editor\FieldOfViewEditor.cs" />
     <Compile Include="Assets\Editor\NexusEditor.cs" />
-    <Compile Include="Assets\Editor\Environment.cs" />
+    <Compile Include="Assets\Editor\World\Generator.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Editor\Easy Decal\nu Assets\Shared\Shaders\CanvasSelection.shader" />

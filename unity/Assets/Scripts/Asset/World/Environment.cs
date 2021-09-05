@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
-namespace West.Asset
+namespace West.Asset.World
 {
 	[System.Serializable]
 	public class Environment : MonoBehaviour
@@ -90,6 +92,38 @@ namespace West.Asset
 
 			Split(bestCandidateIndex);
 			this[bestCandidateIndex + 1].Position = anchorPoint;
+		}
+
+		static public bool Validate(GameObject parent)
+		{
+			var environments = parent.GetComponentsInChildren<Asset.World.Environment>();
+			for (var i = 0; i < environments.Length; ++i)
+			{
+				if (environments[i] == null)
+				{
+					continue;
+				}
+
+				for (var j = i + 1; j < environments.Length; ++j)
+				{
+					if (environments[j] == null)
+					{
+						continue;
+					}
+
+					if (environments[i].CollidesWith(environments[j]))
+					{
+						Debug.Log(String.Format("Environment \"{0}\" collides with \"{1}\"", environments[i].gameObject.name, environments[j].gameObject.name));
+						return false;
+					}
+				}
+
+				if (environments[i].gameObject != parent && !Validate(environments[i].gameObject))
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		public bool CollidesWith(Environment other)
@@ -205,6 +239,46 @@ namespace West.Asset
 				float yAtX0For1 = q1.y - yPerXFor1 * q1.x;
 
 				return new Vector2(p2.x, p2.x * yPerXFor1 + yAtX0For1);
+			}
+		}
+
+		public Vector3 ToV3(Vector2 v2, bool applyCreatorHeight = true)
+		{
+			return new Vector3(v2.x, applyCreatorHeight ? height : 0.0f, v2.y);
+		}
+
+		public void DrawEnvironmentHierarchy()
+		{
+			foreach (var environment in GetComponentsInChildren<Asset.World.Environment>())
+			{
+				if (environment == null)
+				{
+					continue;
+				}
+				else if (environment == this)
+				{
+					Vector2 parentPosition = (environment.transform.parent == null)
+						? new Vector2()
+						: new Vector2(environment.transform.parent.transform.position.x, environment.transform.parent.transform.position.z);
+					for (int i = 0; i < environment.NumEdges; ++i)
+					{
+						Vector2 p1 = parentPosition + environment[i].Position;
+						Vector2 p2 = parentPosition + environment[i + 1].Position;
+						float scale = (Camera.current.transform.position - ToV3((p1 + p2) / 2.0f)).magnitude / 50.0f;
+						Handles.color = Color.black;
+						Handles.DrawLine(ToV3(p1), ToV3(p2));
+						Handles.ArrowHandleCap(
+							0,
+							ToV3((p1 + p2) / 2.0f),
+							Quaternion.LookRotation(ToV3(new Vector2((p2 - p1).y, -(p2 - p1).x), false)),
+							scale,
+							EventType.Repaint);
+					}
+				}
+				else
+				{
+					environment.DrawEnvironmentHierarchy();
+				}
 			}
 		}
 	}

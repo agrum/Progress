@@ -65,6 +65,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\DefaultSignedAttributeTableGenerator.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\cryptopro\CryptoProObjectIdentifiers.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\x509\store\IX509Store.cs" />
+    <Compile Include="Assets\Scripts\Asset\World\Environment.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\cms\EncryptedData.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\cms\CMSAuthenticatedDataGenerator.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecT283FieldElement.cs" />
@@ -382,6 +383,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\RsaKeyGenerationParameters.cs" />
     <Compile Include="Assets\Scripts\Context\Terrain\ColliderToPath.cs" />
     <Compile Include="Assets\Scripts\FieldOfView\FieldOfView.cs" />
+    <Compile Include="Assets\Scripts\Asset\World\Generator.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\Extensions\WWWAuthenticateHeaderParser.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsECDsaSigner.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\x509\store\X509CrlStoreSelector.cs" />
@@ -784,6 +786,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\DtlsServerProtocol.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsServer.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\Examples\SignalR\ConnectionStatusSample.cs" />
+    <Compile Include="Assets\Scripts\Scene\Dbg\EmptyWorld.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\pkix\PkixCertPathValidatorResult.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\IDerivationParameters.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\util\io\pem\PemObjectGenerator.cs" />
@@ -1283,11 +1286,12 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\ECKeyParameters.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\Certificate.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\Logger\ILogger.cs" />
-    <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\x509\PolicyInformation.cs" />
+    <Compile Include="Assets\Scripts\Asset\World\EnvironmentEdge.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\KeccakDigest.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\esf\CompleteRevocationRefs.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsAuthentication.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\agreement\jpake\JPakeRound2Payload.cs" />
+    <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\asn1\x509\PolicyInformation.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\ExtensionType.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\IBasicAgreement.cs" />
     <Compile Include="Assets\Scripts\Data\Skill\Layer\Medium\Cast.cs" />
@@ -1833,10 +1837,6 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\WhirlpoolDigest.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
-    <Compile Include="Assets\Scripts\Scene\Dbg\EmptyWorld.cs" />
-    <Compile Include="Assets\Scripts\Asset\World\Generator.cs" />
-    <Compile Include="Assets\Scripts\Asset\World\Environment.cs" />
-    <Compile Include="Assets\Scripts\Asset\World\EnvironmentEdge.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
