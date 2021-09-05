@@ -9,6 +9,28 @@ namespace West.Asset.World
 	[System.Serializable]
 	public class Environment : LinearFeature
 	{
+		public enum EType
+		{
+			Grass,
+			Dirt,
+			Rock,
+			Snow,
+			Ocean,
+		}
+
+		public enum EHeightDelta
+		{
+			None,
+			Increase,
+			Decrease,
+		}
+
+		[SerializeField]
+		public EType Type;
+
+		[SerializeField]
+		public EHeightDelta HeightDelta;
+
 		override public void Init()
 		{
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
@@ -35,7 +57,20 @@ namespace West.Asset.World
 		{
 			get
 			{
-				return Color.green;
+				switch (Type)
+				{
+					case EType.Ocean:
+						return new Color(0.0f, 0.3f, 0.9f);
+					case EType.Grass:
+						return new Color(0.2f, 0.9f, 0.4f);
+					case EType.Dirt:
+						return new Color(0.8f, 0.6f, 0.3f);
+					case EType.Rock:
+						return new Color(0.2f, 0.2f, 0.2f);
+					case EType.Snow:
+						return new Color(0.7f, 0.7f, 0.7f);
+				}
+				return Color.black;
 			}
 		}
 

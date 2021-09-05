@@ -8,6 +8,9 @@ namespace West.Asset.World
 {
 	public class Generator : MonoBehaviour
 	{
+		[SerializeField]
+		public Environment.EType BaselineEnvironment;
+
         public void Draw()
         {
 			DrawEnvironments();

@@ -9,6 +9,16 @@ namespace West.Asset.World
 	[System.Serializable]
 	public class LinearObstacle : LinearFeature
 	{
+		public enum EType
+		{
+			River,
+			Wall,
+			Fissure,
+		}
+
+		[SerializeField]
+		public EType Type;
+
 		override public void Init()
 		{
 			center = new Vector2(transform.localPosition.x, transform.localPosition.z);
@@ -24,6 +34,15 @@ namespace West.Asset.World
 		{
 			get
 			{
+				switch (Type)
+				{
+					case EType.River:
+						return new Color(0.0f, 0.3f, 0.9f);
+					case EType.Fissure:
+						return new Color(0.8f, 0.6f, 0.3f);
+					case EType.Wall:
+						return new Color(0.2f, 0.2f, 0.2f);
+				}
 				return Color.black;
 			}
 		}
