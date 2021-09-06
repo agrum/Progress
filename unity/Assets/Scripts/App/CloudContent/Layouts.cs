@@ -9,7 +9,7 @@ namespace Assets.Scripts.CloudContent
     {
         public JSONNode Json { get; private set; } = null;
 
-        public Dictionary<string, JSONObject> OutdoorLayouts = new Dictionary<string, JSONObject>();
+        public Dictionary<string, Data.Layout.Outdoor> OutdoorLayouts = new Dictionary<string, Data.Layout.Outdoor>();
 
         protected override IEnumerator Build()
         {
@@ -22,7 +22,7 @@ namespace Assets.Scripts.CloudContent
 
                 foreach (var almostJson in Json)
                 {
-                    OutdoorLayouts.Add(almostJson.Value["_id"], almostJson.Value.AsObject);
+                    OutdoorLayouts.Add(almostJson.Value["_id"], new Data.Layout.Outdoor(almostJson.Value));
                 }
             }).Send();
         }

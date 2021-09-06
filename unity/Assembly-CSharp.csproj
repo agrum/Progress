@@ -1841,6 +1841,12 @@
     <Compile Include="Assets\Scripts\Scene\Dbg\WorldUpdate.cs" />
     <Compile Include="Assets\Scripts\Scene\OutdoorSession.cs" />
     <Compile Include="Assets\Scripts\App\CloudContent\Layouts.cs" />
+    <Compile Include="Assets\Scripts\Data\Layout\Environment.cs" />
+    <Compile Include="Assets\Scripts\Data\Layout\Outdoor.cs" />
+    <Compile Include="Assets\Scripts\Data\Layout\LinearFeature.cs" />
+    <Compile Include="Assets\Scripts\Data\Layout\LinearObstacle.cs" />
+    <Compile Include="Assets\Scripts\Context\Terrain\Tile.cs" />
+    <Compile Include="Assets\Scripts\Data\Layout\Edge.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
