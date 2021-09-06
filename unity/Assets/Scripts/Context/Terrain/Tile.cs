@@ -5,6 +5,6 @@ namespace Assets.Scripts.Context.Terrain
 {
     public class Tile
     {
-        West.Asset.World.Environment.EVariety Variety;
+        Data.Layout.Environment.EVariety Variety;
     }
 }

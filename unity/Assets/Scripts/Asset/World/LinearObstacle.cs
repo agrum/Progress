@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using static Assets.Scripts.Data.Layout.Environment;
+using static Assets.Scripts.Data.Layout.LinearObstacle;
 
 namespace West.Asset.World
 {
