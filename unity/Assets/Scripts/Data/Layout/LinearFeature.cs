@@ -10,7 +10,7 @@ namespace Assets.Scripts.Data.Layout
 	public class LinearFeature
 	{
 		public string name;
-		public List<Edge> edgeList;
+		public List<Edge> edgeList = new List<Edge>();
 
 		public LinearFeature(JSONNode node)
 		{
