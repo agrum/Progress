@@ -178,7 +178,7 @@ namespace West.Asset.World
 				Vector2 p2 = edge.PreviousEdge.Position + OtherParentPosition;
 				Vector2 q2 = edge.Position + OtherParentPosition;
 
-				if (DoIntersect(p1, q1, p2, q2, true))
+				if (Assets.Scripts.Utility.Math.DoIntersect(p1, q1, p2, q2, true))
                 {
 					++hitCount;
                 }
@@ -202,10 +202,10 @@ namespace West.Asset.World
 				Vector2 p2 = edge.PreviousEdge.Position;
 				Vector2 q2 = edge.Position;
 
-				if (DoIntersect(p1, q1, p2, q2, true))
+				if (Assets.Scripts.Utility.Math.DoIntersect(p1, q1, p2, q2, true))
 				{
 					++hitCount;
-					var intersectionPoint = IntersectionPoint(p1, q1, p2, q2);
+					var intersectionPoint = Assets.Scripts.Utility.Math.IntersectionPoint(p1, q1, p2, q2);
 					var distanceToPoint = (intersectionPoint - p1).magnitude;
 					if (distanceToPoint > furthestEdgeDistance)
                     {

@@ -139,7 +139,7 @@ namespace West.Tool.World
 				{
 					Asset.World.Edge e1 = new Asset.World.Edge(linearFeature[e1Candidate].Position, linearFeature[e2Candidate]);
 					Asset.World.Edge e2 = new Asset.World.Edge(linearFeature[e2Candidate].Position, linearFeature[e3Candidate]);
-					center = Asset.World.LinearFeature.IntersectionPoint(e1.Center, e1.Center + e1.Normal, e2.Center, e2.Center + e2.Normal);
+					center = Assets.Scripts.Utility.Math.IntersectionPoint(e1.Center, e1.Center + e1.Normal, e2.Center, e2.Center + e2.Normal);
 				}
 			}
 			//center /= linearFeature.NumPoints();

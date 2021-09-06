@@ -1847,6 +1847,7 @@
     <Compile Include="Assets\Scripts\Data\Layout\LinearObstacle.cs" />
     <Compile Include="Assets\Scripts\Context\Terrain\Tile.cs" />
     <Compile Include="Assets\Scripts\Data\Layout\Edge.cs" />
+    <Compile Include="Assets\Scripts\Utility\Math.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
