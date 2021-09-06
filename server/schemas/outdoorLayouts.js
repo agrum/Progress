@@ -8,6 +8,7 @@ module.exports = function()
         variety: String,
         heightDelta: String,
     });
+    environmentSchema.add({ nestedEnvironments: [environmentSchema] });
 
     let linearObstacleSchema = new mongoose.Schema({
         name: String,

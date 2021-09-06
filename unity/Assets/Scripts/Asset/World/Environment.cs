@@ -79,8 +79,20 @@ namespace West.Asset.World
 		{
 			var main = base.ToJson();
 
+			JSONArray nestedEnvironments = new JSONArray();
+			foreach (var environment in GetComponentsInChildren<Environment>())
+			{
+				if (environment == this || environment == null || environment.transform.parent != transform)
+				{
+					continue;
+				}
+
+				nestedEnvironments.Add(environment.ToJson());
+			}
+
 			main["variety"] = Variety.ToString();
 			main["heightDelta"] = HeightDelta.ToString();
+			main["nestedEnvironments"] = nestedEnvironments;
 
 			return main;
 		}
