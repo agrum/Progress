@@ -786,7 +786,6 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\DtlsServerProtocol.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\tls\TlsServer.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\Examples\SignalR\ConnectionStatusSample.cs" />
-    <Compile Include="Assets\Scripts\Scene\Dbg\EmptyWorld.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\pkix\PkixCertPathValidatorResult.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\IDerivationParameters.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\util\io\pem\PemObjectGenerator.cs" />
@@ -1840,6 +1839,8 @@
     <Compile Include="Assets\Scripts\Asset\World\LinearFeature.cs" />
     <Compile Include="Assets\Scripts\Asset\World\LinearObstacle.cs" />
     <Compile Include="Assets\Scripts\Scene\Dbg\WorldUpdate.cs" />
+    <Compile Include="Assets\Scripts\Scene\OutdoorSession.cs" />
+    <Compile Include="Assets\Scripts\App\CloudContent\Layouts.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
