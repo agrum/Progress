@@ -4,19 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static Assets.Scripts.Data.Layout.Environment;
 
 namespace West.Asset.World
 {
 	[System.Serializable]
 	public class LinearObstacle : LinearFeature
 	{
-		public enum EVariety
-		{
-			River,
-			Wall,
-			Fissure,
-		}
-
 		[SerializeField]
 		public EVariety Variety;
 
