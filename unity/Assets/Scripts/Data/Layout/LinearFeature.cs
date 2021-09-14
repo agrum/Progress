@@ -9,16 +9,25 @@ namespace Assets.Scripts.Data.Layout
 {
 	public class LinearFeature
 	{
-		public string name;
-		public List<Edge> edgeList = new List<Edge>();
+		public string Name;
+		public List<Edge> EdgeList = new List<Edge>();
 
 		public LinearFeature(JSONNode node)
 		{
-			name = node["name"];
+			Name = node["name"];
 			foreach (var edge in node["vertices"].AsArray)
-            {
-				edgeList.Add(new Edge(edge));
-            }
+			{
+				EdgeList.Add(new Edge(edge));
+			}
+		}
+
+		public LinearFeature(LinearFeature other_)
+		{
+			Name = other_.Name;
+			foreach (var edge in other_.EdgeList)
+			{
+				EdgeList.Add(new Edge(edge));
+			}
 		}
 
 		virtual public Edge this[int i]
@@ -26,10 +35,10 @@ namespace Assets.Scripts.Data.Layout
 			get
 			{
 				i = (i + NumEdges) % NumEdges;
-				var edge = edgeList[i];
+				var edge = EdgeList[i];
 				if (i > 0)
                 {
-					edge.PreviousEdge = edgeList[i-1];
+					edge.PreviousEdge = EdgeList[i-1];
 				}
 				return edge;
 			}
@@ -37,7 +46,7 @@ namespace Assets.Scripts.Data.Layout
 
 		public int NumEdges
 		{
-			get { return edgeList.Count; }
+			get { return EdgeList.Count; }
 		}
 	}
 }

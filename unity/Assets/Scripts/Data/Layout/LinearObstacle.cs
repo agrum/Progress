@@ -22,5 +22,10 @@ namespace Assets.Scripts.Data.Layout
 		{
 			Variety = Data.Serializer.ReadEnum<EVariety>(node["variety"]);
 		}
+
+		public LinearObstacle(LinearObstacle other_) : base(other_)
+		{
+			Variety = other_.Variety;
+		}
 	}
 }

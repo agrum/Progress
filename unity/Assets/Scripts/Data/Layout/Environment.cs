@@ -39,13 +39,23 @@ namespace Assets.Scripts.Data.Layout
 			}
 		}
 
+		public Environment(Environment other_) : base(other_)
+		{
+			Variety = other_.Variety;
+			HeightDelta = other_.HeightDelta;
+			foreach (var environment in other_.NestedEnvironments)
+			{
+				NestedEnvironments.Add(new Environment(environment));
+			}
+		}
+
 		override public Edge this[int i]
 		{
 			get
 			{
 				i = (i + NumEdges) % NumEdges;
-				var edge = edgeList[i];
-				edge.PreviousEdge = edgeList[(i - 1 + NumEdges) % NumEdges];
+				var edge = EdgeList[i];
+				edge.PreviousEdge = EdgeList[(i - 1 + NumEdges) % NumEdges];
 				return edge;
 			}
 		}

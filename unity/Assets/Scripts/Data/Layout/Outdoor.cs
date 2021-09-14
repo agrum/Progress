@@ -35,5 +35,26 @@ namespace Assets.Scripts.Data.Layout
 			Size.x = node["size"].AsArray[0];
 			Size.y = node["size"].AsArray[1];
 		}
+
+		private Outdoor(Outdoor other_)
+        {
+			Name = other_.Name;
+			BaselineEnvironment = other_.BaselineEnvironment;
+			foreach (var environment in other_.Environments)
+			{
+				Environments.Add(new Environment(environment));
+			}
+			foreach (var linearObstacle in other_.LinearObstacles)
+			{
+				LinearObstacles.Add(new LinearObstacle(linearObstacle));
+			}
+			Center = other_.Center;
+			Size = other_.Size;
+		}
+
+		public Outdoor Fractured()
+        {
+			return new Outdoor(this);
+        }
 	}
 }

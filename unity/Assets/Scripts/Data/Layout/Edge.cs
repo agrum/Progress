@@ -16,6 +16,11 @@ namespace Assets.Scripts.Data.Layout
 			position.y = node.AsArray[1];
 		}
 
+		public Edge(Edge other_)
+		{
+			position = other_.Position;
+		}
+
 		public Vector2 Position
 		{
 			get
