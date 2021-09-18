@@ -2,6 +2,7 @@
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Extensions;
 
 namespace Assets.Scripts.Utility
 {
@@ -36,7 +37,6 @@ namespace Assets.Scripts.Utility
             public List<Connection> Connections = new List<Connection>();
             public float StraightLineDistanceToEnd = 0;
             public Node NearestToStart;
-            public bool Visited = false;
             public float Weight = 0;
             public float Cost = 0;
 
@@ -61,7 +61,7 @@ namespace Assets.Scripts.Utility
                 }
             }
 
-            static public List<Node> GenerateGridMap(Vector2 start_, Vector2 end_, float minRes_, int buffer_, List<Data.Layout.Environment> obstacles_, Data.Layout.Environment container_, float randomness_)
+            static public Grid GenerateGridMap(Vector2 start_, Vector2 end_, float minRes_, int buffer_, List<Data.Layout.Environment> obstacles_, Data.Layout.Environment container_, float randomness_)
             {
                 Debug.Assert(minRes_ > 0.001);
                 Debug.Assert(buffer_ > 0);
@@ -119,9 +119,9 @@ namespace Assets.Scripts.Utility
                         {
                             Connection.Connect(map[i, j], map[i - 1, j - 1], rnd * 1.414f);
                         }
-                        if (i < map.GetLength(0) - 1 && j > 0)
+                        if (i > 0 && j < map.GetLength(1) - 1)
                         {
-                            Connection.Connect(map[i, j], map[i + 1, j - 1], rnd * 1.414f);
+                            Connection.Connect(map[i, j], map[i - 1, j + 1], rnd * 1.414f);
                         }
                     }
                 }
@@ -137,7 +137,32 @@ namespace Assets.Scripts.Utility
                         }
                     }
                 }
-                return rtn;
+                if (rtn.Count == 0)
+                {
+                    return null;
+                }
+                return new Grid(rtn, cellSize);
+            }
+
+            public void Disconnect()
+            {
+                foreach (var connection in Connections)
+                {
+                    connection.Node.Connections.RemoveAll(x => x.Node == this);
+                }
+                Connections.Clear();
+            }
+        }
+
+        public class Grid
+        {
+            public List<Node> Nodes = new List<Node>();
+            public float CellSize = 0;
+
+            public Grid(List<Node> nodes_, float cellSize_)
+            {
+                Nodes = nodes_;
+                CellSize = cellSize_;
             }
         }
 
@@ -145,34 +170,73 @@ namespace Assets.Scripts.Utility
         Node End;
         List<Node> Nodes;
 
-        static public List<Node> Compute(Vector2 start_, Vector2 end_, List<Data.Layout.Environment> obstacles_, Data.Layout.Environment container_, float randomness_ = 3.0f)
+        static public List<Node> GetFractured(Data.Layout.Environment toFracture_, Data.Layout.Environment container_, List<Data.Layout.Environment> obstacles_, float randomness_ = 3.0f)
         {
+            var rtn = new List<Node>();
             AStarSolver solver = new AStarSolver();
-            solver.Nodes = Node.GenerateGridMap(start_, end_, 0.1f, 2, obstacles_, container_, randomness_);
-            foreach (var node in solver.Nodes)
-            {
-                if (node.Position == start_)
-                {
-                    solver.Start = node;
-                }
-                else if (node.Position == end_)
-                {
-                    solver.End = node;
-                }
-            }
 
-            if (solver.Start == null || solver.End == null)
+            Vector2 min = new Vector2(float.MaxValue, float.MaxValue);
+            Vector2 max = new Vector2(float.MinValue, float.MinValue);
+            foreach (var edge in toFracture_.EdgeList)
             {
-                return null;
+                min.x = Mathf.Min(min.x, edge.Position.x);
+                min.y = Mathf.Min(min.y, edge.Position.y);
+                max.x = Mathf.Max(max.x, edge.Position.x);
+                max.y = Mathf.Max(max.y, edge.Position.y);
             }
+            var grid = Node.GenerateGridMap(min, max, 0.1f, 2, obstacles_, container_, randomness_);
+            if (grid.Nodes.Count == 0)
+            {
+                grid = null;
+            }
+            solver.Nodes = grid.Nodes;
 
-            return solver.GetShortestPath();
+            for (var i = 0; i < toFracture_.NumEdges; ++i)
+            {
+                solver.Start = null;
+                solver.End = null;
+                var desriedStart = toFracture_[i].Position;
+                var desriedEnd = toFracture_[i + 1].Position;
+                var closestStartDistSq = float.MaxValue;
+                var closestEndDistSq = float.MaxValue;
+                foreach (var node in solver.Nodes)
+                {
+                    if (node.Connections.Count > 0 && (node.Position - desriedStart).sqrMagnitude < closestStartDistSq)
+                    {
+                        solver.Start = node;
+                        closestStartDistSq = (node.Position - desriedStart).sqrMagnitude;
+                    }
+                    else if (node.Connections.Count > 0 && (node.Position - desriedEnd).sqrMagnitude < closestEndDistSq)
+                    {
+                        solver.End = node;
+                        closestEndDistSq = (node.Position - desriedEnd).sqrMagnitude;
+                    }
+                }
+
+                var path = solver.GetShortestPath();
+                if (path.Count == 0)
+                {
+                    rtn.Add(solver.End);
+                    continue;
+                }
+                for (int j = 1; j < path.Count - 2; ++j)
+                {
+                    path[j].Disconnect();
+                }
+                path.RemoveAt(0);
+                rtn.AddRange(path);
+            }
+            return rtn;
         }
 
-        public List<Node> GetShortestPath()
+        private List<Node> GetShortestPath()
         {
             foreach (var node in Nodes)
+            {
                 node.StraightLineDistanceToEnd = node.StraightLineDistanceTo(End);
+                node.NearestToStart = null;
+                node.Cost = 0;
+            }
 
             List<Node> path = new List<Node>();
             List<Node> openList = new List<Node>();
@@ -188,6 +252,10 @@ namespace Assets.Scripts.Utility
                 current = openList[0];
                 openList.Remove(current);
                 closedList.Add(current);
+                if (current == null)
+                {
+                    neighbors = current.Connections;
+                }
                 neighbors = current.Connections;
 
 
@@ -210,21 +278,17 @@ namespace Assets.Scripts.Utility
             // construct path, if end was not closed return null
             if (!closedList.Exists(x => x.Position == End.Position))
             {
-                return null;
+                return path;
             }
 
             // if all good, return path
             Node temp = closedList[closedList.IndexOf(current)];
-            if (temp == null)
-            {
-                return null;
-            }
-            path.Add(Start);
-            do
+            while (temp != null)
             {
                 path.Add(temp);
                 temp = temp.NearestToStart;
-            } while (temp != Start && temp != null);
+            } 
+            path.Reverse();
             return path;
         }
     }

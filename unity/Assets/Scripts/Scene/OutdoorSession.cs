@@ -113,7 +113,7 @@ namespace Assets.Scripts.Scene
         {
             yield return StartCoroutine(App.Content.Layouts.Load());
 
-            var layout = App.Content.Layouts.OutdoorLayouts[LayoutId];
+            var layout = App.Content.Layouts.OutdoorLayouts[LayoutId].Fractured();
             foreach (var environment in layout.Environments)
             {
                 environments.Add(new Environment(environment));
@@ -127,7 +127,6 @@ namespace Assets.Scripts.Scene
 
             int totalSize = Size + BoundarySize + BoundarySize;
             Tile.Signature.Region[,] regions = new Tile.Signature.Region[totalSize, totalSize];
-            var result = Utility.AStarSolver.Compute(new Vector2(1, 1), new Vector2(6, 6), null, null);
 
             for (int col = 0; col < totalSize; col++)
             {

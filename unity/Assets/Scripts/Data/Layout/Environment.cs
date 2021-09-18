@@ -39,6 +39,13 @@ namespace Assets.Scripts.Data.Layout
 			}
 		}
 
+		public Environment(string name_, Vector2 center_, Vector2 size_, EVariety variety_) : base(name_, center_, size_)
+        {
+			Variety = variety_;
+			HeightDelta = EHeightDelta.None;
+
+        }
+
 		public Environment(Environment other_) : base(other_)
 		{
 			Variety = other_.Variety;
@@ -90,5 +97,23 @@ namespace Assets.Scripts.Data.Layout
             }
 			return 0;
         }
+
+		public void Fracture(Environment container, List<Environment> obstacles)
+        {
+			var fracturedPath = Utility.AStarSolver.GetFractured(this, container, obstacles);
+			EdgeList.Clear();
+			foreach (var node in fracturedPath)
+            {
+				EdgeList.Add(new Edge(node.Position));
+			}
+
+			var nestedEnvironments = new List<Environment>(NestedEnvironments);
+			foreach (var nestedEnvironment in NestedEnvironments)
+			{
+				nestedEnvironments.Remove(nestedEnvironment);
+				nestedEnvironment.Fracture(this, nestedEnvironments);
+				nestedEnvironments.Add(nestedEnvironment);
+			}
+		}
 	}
 }

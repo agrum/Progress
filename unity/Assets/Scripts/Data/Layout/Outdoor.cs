@@ -54,7 +54,16 @@ namespace Assets.Scripts.Data.Layout
 
 		public Outdoor Fractured()
         {
-			return new Outdoor(this);
+			var fractured = new Outdoor(this);
+			var boundary = new Environment("Boundary", Center, Size * 2.0f, BaselineEnvironment);
+			var environments = new List<Environment>(fractured.Environments);
+			foreach (var environment in fractured.Environments)
+            {
+				environments.Remove(environment);
+				environment.Fracture(boundary, environments);
+				environments.Add(environment);
+			}
+			return fractured;
         }
 	}
 }

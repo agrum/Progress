@@ -1850,6 +1850,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\digests\WhirlpoolDigest.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
+    <Compile Include="Assets\Scripts\Utility\Extension.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />

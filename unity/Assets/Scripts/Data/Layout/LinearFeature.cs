@@ -21,6 +21,16 @@ namespace Assets.Scripts.Data.Layout
 			}
 		}
 
+		public LinearFeature(string name_, Vector2 center_, Vector2 size_)
+        {
+			var halfSize = size_ * 0.5f;
+			Name = name_;
+			EdgeList.Add(new Edge(center_ + new Vector2(halfSize.x, halfSize.y)));
+			EdgeList.Add(new Edge(center_ + new Vector2(-halfSize.x, halfSize.y)));
+			EdgeList.Add(new Edge(center_ + new Vector2(-halfSize.x, -halfSize.y)));
+			EdgeList.Add(new Edge(center_ + new Vector2(halfSize.x, -halfSize.y)));
+		}
+
 		public LinearFeature(LinearFeature other_)
 		{
 			Name = other_.Name;
