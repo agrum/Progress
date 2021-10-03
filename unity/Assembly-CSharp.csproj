@@ -1851,9 +1851,11 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\math\ec\custom\sec\SecP192R1FieldElement.cs" />
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
     <Compile Include="Assets\Scripts\Utility\Extension.cs" />
+    <Compile Include="Assets\Scripts\Scene\Session.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
+     <None Include="Assets\Shaders\Terrain.shader" />
      <None Include="Assets\Best HTTP (Pro)\ReleaseNotes.txt" />
      <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
      <None Include="Assets\Best HTTP (Pro)\link_android_subset.xml" />

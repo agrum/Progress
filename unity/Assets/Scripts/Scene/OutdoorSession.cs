@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Scene
 {
-    public class OutdoorSession : MonoBehaviour
+    public class OutdoorSession : Session
     {
         public class Tile : TileBase
         {
@@ -94,7 +94,6 @@ namespace Assets.Scripts.Scene
             }
         }
 
-        public Context.PlayerNew Player;
         public string LayoutId;
         public int Size;
         public int BoundarySize;
@@ -172,6 +171,8 @@ namespace Assets.Scripts.Scene
                     Tilemap.SetTile(new Vector3Int(col, row, 0), GetTile(regions[col, row]));
                 }
             }
+
+            loaded = true;
         }
 
         public Tile.Signature.Region GetRegionInLayout(Data.Layout.Outdoor layout, int x, int y)

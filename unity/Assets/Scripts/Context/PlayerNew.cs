@@ -6,10 +6,10 @@ namespace Assets.Scripts.Context
 {
     public class PlayerNew : MonoBehaviour
     {
+        public Scene.Session session;
         public float movementSpeed = 50.0f;
         public float cursorSensitivity = 5.0f;
         public Controller.ActionController actionController;
-        public float rawraw = 0;
 
         float horizontal = 0;
         float vertical = 0;
@@ -20,10 +20,14 @@ namespace Assets.Scripts.Context
         Skill.IAction dashLeft;
         Skill.IAction dashRight;
 
+        Rigidbody2D rb2d;
+
         // Use this for initialization
         IEnumerator Start()
         {
             yield return StartCoroutine(App.Content.SkillList.Load());
+
+            yield return StartCoroutine(session.Load());
 
             dashForward = new Skill.DashForward(this);
             dashBackward = new Skill.DashBackward(this);
@@ -34,6 +38,8 @@ namespace Assets.Scripts.Context
             actionController.SetBackwardDashAction(() => { CastAction(dashBackward); });
             actionController.SetLeftDashAction(() => { CastAction(dashLeft); });
             actionController.SetRightDashAction(() => { CastAction(dashRight); });
+
+            rb2d = gameObject.GetComponent<Rigidbody2D>();
         }
 
         // Update is called once per frame
@@ -57,15 +63,16 @@ namespace Assets.Scripts.Context
                 horizontal = Input.GetAxisRaw("Horizontal");
                 if (vertical != 0 || horizontal != 0)
                 {
-                    Vector3 axis = new Vector3(vertical, 0, -horizontal);
+                    Vector3 axis = new Vector3(horizontal, vertical, 0);
                     if (axis.sqrMagnitude > 0)
                     {
-                        transform.position += transform.rotation * axis.normalized * movementSpeed * Time.deltaTime * Mathf.Max(Mathf.Abs(vertical), Mathf.Abs(horizontal));
+                        var delta = transform.rotation * axis.normalized * movementSpeed * Mathf.Max(Mathf.Abs(vertical), Mathf.Abs(horizontal));
+                        rb2d.MovePosition(transform.position + delta);
                     }
                 }
             }
 
-            transform.Rotate(0, Input.GetAxis("Mouse X") * cursorSensitivity, 0);
+            transform.Rotate(0, 0, Input.GetAxis("Mouse X") * -cursorSensitivity);
         }
 
         void CastAction(Skill.IAction action_)
