@@ -73,6 +73,7 @@ namespace Assets.Scripts.Context
             }
 
             transform.Rotate(0, 0, Input.GetAxis("Mouse X") * -cursorSensitivity);
+            transform.position = new Vector3(transform.position.x, transform.position.y, -1);
         }
 
         void CastAction(Skill.IAction action_)

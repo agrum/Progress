@@ -16,6 +16,9 @@ namespace Assets.Scripts.Data.Layout
 			Rock,
 			Snow,
 			Ocean,
+			Unused1,
+			Unused2,
+			Unused3,
 		}
 
 		public enum EHeightDelta

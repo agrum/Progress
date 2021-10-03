@@ -12,55 +12,39 @@ namespace Assets.Scripts.Scene
 {
     public class OutdoorSession : Session
     {
-        public class Tile : TileBase
+        public class TileSignature
         {
-            public class Signature
+            public class Region : IEquatable<Region>
             {
-                public class Region : IEquatable<Region>
-                {
-                    public readonly Data.Layout.Environment.EVariety Variety;
-                    public readonly int Elevation;
+                public readonly Data.Layout.Environment.EVariety Variety;
+                public readonly int Elevation;
 
-                    public Region(Data.Layout.Environment.EVariety variety_, int elevation_)
-                    {
-                        Variety = variety_;
-                        Elevation = elevation_;
-                    }
-                    public override int GetHashCode()
-                    {
-                        return (((int) Variety) << 10) + Elevation;
-                    }
-                    public override bool Equals(object obj)
-                    {
-                        return Equals(obj as Region);
-                    }
-                    public bool Equals(Region obj)
-                    {
-                        return obj != null && obj.Variety == Variety && obj.Elevation == Elevation;
-                    }
+                public Region(Data.Layout.Environment.EVariety variety_, int elevation_)
+                {
+                    Variety = variety_;
+                    Elevation = elevation_;
                 }
-
-                public Region[] Surroundings = new Region[4]; //up, left, down, right
-                public Region Center;
-
-                public Signature(Region[] surroundings_, Region center_)
+                public override int GetHashCode()
                 {
-                    Surroundings = surroundings_;
-                    Center = center_;
+                    return (((int) Variety) << 10) + Elevation;
+                }
+                public override bool Equals(object obj)
+                {
+                    return Equals(obj as Region);
+                }
+                public bool Equals(Region obj)
+                {
+                    return obj != null && obj.Variety == Variety && obj.Elevation == Elevation;
                 }
             }
 
-            public GameObject prefab;
+            public Region[] Surroundings = new Region[4]; //up, left, down, right
+            public Region Center;
 
-            public override void RefreshTile(Vector3Int position, ITilemap tilemap)
+            public TileSignature(Region[] surroundings_, Region center_)
             {
-                // Read docs for an explanation on this.
-                tilemap.RefreshTile(position);
-            }
-
-            public override void GetTileData(Vector3Int position, ITilemap tileMap, ref TileData tileData)
-            {
-                tileData.gameObject = prefab;
+                Surroundings = surroundings_;
+                Center = center_;
             }
         }
 
@@ -78,11 +62,11 @@ namespace Assets.Scripts.Scene
                 }
             }
 
-            public bool GetRegion(Vector2 coordinate, Tile.Signature.Region parentRegion, out Tile.Signature.Region region)
+            public bool GetRegion(Vector2 coordinate, TileSignature.Region parentRegion, out TileSignature.Region region)
             {
                 if (data.Contains(coordinate))
                 {
-                    region = new Tile.Signature.Region(data.Variety, parentRegion.Elevation + data.HeightDeltaAsInt());
+                    region = new TileSignature.Region(data.Variety, parentRegion.Elevation + data.HeightDeltaAsInt());
                     foreach (var nestedEnvironment in nestedEnvironments)
                     {
                         nestedEnvironment.GetRegion(coordinate, region, out region);
@@ -102,10 +86,9 @@ namespace Assets.Scripts.Scene
         public GameObject RockPrefab;
         public GameObject SnowPrefab;
         public GameObject OceanPrefab;
-        public Tilemap Tilemap;
 
         List<Environment> environments = new List<Environment>();
-        readonly Dictionary<Tile.Signature.Region, Tile> tilePrefabs = new Dictionary<Tile.Signature.Region, Tile>();
+        readonly Dictionary<TileSignature.Region, GameObject> tilePrefabs = new Dictionary<TileSignature.Region, GameObject>();
         Dictionary<Data.Layout.Environment.EVariety, GameObject> prefabs = new Dictionary<Data.Layout.Environment.EVariety, GameObject>();
 
         // Use this for initialization
@@ -126,7 +109,7 @@ namespace Assets.Scripts.Scene
             prefabs.Add(Data.Layout.Environment.EVariety.Ocean, OceanPrefab);
 
             int totalSize = Size + BoundarySize + BoundarySize;
-            Tile.Signature.Region[,] regions = new Tile.Signature.Region[totalSize, totalSize];
+            TileSignature.Region[,] regions = new TileSignature.Region[totalSize, totalSize];
             Color32[] worldTextureData = new Color32[totalSize * totalSize];
 
             for (int col = 0; col < totalSize; col++)
@@ -157,27 +140,45 @@ namespace Assets.Scripts.Scene
             }
             File.WriteAllBytes(dirPath + "World" + ".png", bytes);
 
-            foreach (var prefab in prefabs)
-            {
-                var material = prefab.Value.GetComponentInChildren<MeshRenderer>().material;
-                material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
-                material.SetTexture("_WorldTex", worldTexture);
-            }
-
             for (int col = 0; col < totalSize; col++)
             {
                 for (int row = 0; row < totalSize; row++)
                 {
-                    Tilemap.SetTile(new Vector3Int(col, row, 0), GetTile(regions[col, row]));
+                    var tile = Instantiate(GetTile(regions[col, row]));
+                    tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+                    tile.transform.parent = transform;
                 }
             }
+
+            MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
+            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+            for (int i = 0; i < meshFilters.Length; ++i)
+            {
+                combine[i].mesh = meshFilters[i].sharedMesh;
+                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                Destroy(meshFilters[i].gameObject.GetComponent<MeshRenderer>());
+                Destroy(meshFilters[i]);
+            }
+            var meshFilter = gameObject.AddComponent<MeshFilter>();
+            meshFilter.mesh = new Mesh();
+            meshFilter.mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+            meshFilter.mesh.CombineMeshes(combine);
+            var material = gameObject.GetComponentInChildren<MeshRenderer>().material;
+            material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
+            material.SetTexture("_WorldTex", worldTexture);
+            transform.gameObject.SetActive(true);
+
+            Vector2 spawnPosition = new Vector2(0, 0);
+            Vector2 validSpawnPosition = GetValidSpawnPosition(spawnPosition, regions);
+            Player.transform.position = new Vector3(validSpawnPosition.x, validSpawnPosition.y, -1);
 
             loaded = true;
         }
 
-        public Tile.Signature.Region GetRegionInLayout(Data.Layout.Outdoor layout, int x, int y)
+        public TileSignature.Region GetRegionInLayout(Data.Layout.Outdoor layout, int x, int y)
         {
-            Tile.Signature.Region region = new Tile.Signature.Region(layout.BaselineEnvironment, 0);
+            TileSignature.Region region = new TileSignature.Region(layout.BaselineEnvironment, 0);
             if (x < BoundarySize || y < BoundarySize || x > Size + BoundarySize || y > Size + BoundarySize)
             {
                 return region;
@@ -199,38 +200,37 @@ namespace Assets.Scripts.Scene
             return region;
         }
 
-        public Tile GetTile(Tile.Signature.Region region)
+        public GameObject GetTile(TileSignature.Region region)
         {
-            Tile tile;
+            GameObject tile;
             if (tilePrefabs.TryGetValue(region, out tile))
             {
                 return tile;
             }
-            tile = ScriptableObject.CreateInstance<Tile>();
-            tile.prefab = prefabs[region.Variety];
 
-            tilePrefabs.Add(region, tile);
-            return tile;
+            tilePrefabs.Add(region, prefabs[region.Variety]);
+            return prefabs[region.Variety];
         }
 
-        private Color32 GetWorldPixel(Color32[] worldTexture, Tile.Signature.Region[,] regions, int x, int y)
+        private Color32 GetWorldPixel(Color32[] worldTexture, TileSignature.Region[,] regions, int x, int y)
         {
             Color pixel = new Vector4();
             var region = regions[x, y];
             float boundaryDistance = 0;
-            Material mat = GetTile(region).prefab.GetComponentInChildren<MeshRenderer>().material;
+            Material mat = GetTile(region).GetComponentInChildren<MeshRenderer>().material;
+            int maxBoundaryCheck = mat.mainTexture.width / Enum.GetNames(typeof(Data.Layout.Environment.EVariety)).Length;
 
             if (x > 0 && regions[x - 1, y] == region)
             {
-                boundaryDistance = Mathf.Max(0, worldTexture[x - 1 + y * regions.GetLength(0)].r * mat.mainTexture.width - 1);
+                boundaryDistance = Mathf.Max(0, worldTexture[x - 1 + y * regions.GetLength(0)].r * maxBoundaryCheck - 1);
             }
             else if (y > 0 && regions[x, y - 1] == region)
             {
-                boundaryDistance = Mathf.Max(0, worldTexture[x + (y - 1) * regions.GetLength(0)].r * mat.mainTexture.width - 1);
+                boundaryDistance = Mathf.Max(0, worldTexture[x + (y - 1) * regions.GetLength(0)].r * maxBoundaryCheck - 1);
             }
 
-            Tile.Signature.Region foundNewRegion = region;
-            while (boundaryDistance < mat.mainTexture.width)
+            TileSignature.Region foundNewRegion = region;
+            while (boundaryDistance < maxBoundaryCheck)
             {
                 float circle = Mathf.PI * 2.0f;
                 float step = circle / Mathf.CeilToInt(circle * (boundaryDistance + 1.0f));
@@ -258,19 +258,44 @@ namespace Assets.Scripts.Scene
 
             if (foundNewRegion.Variety == region.Variety)
             {
-                boundaryDistance = mat.mainTexture.width - 1;
+                boundaryDistance = maxBoundaryCheck - 1;
             }
             if (boundaryDistance < 0)
             {
                 boundaryDistance = 0;
             }
 
-            pixel.r = (boundaryDistance + 0.5f) / mat.mainTexture.width;
+            pixel.r = ((float)(int)region.Variety + (boundaryDistance / maxBoundaryCheck)) / Enum.GetNames(typeof(Data.Layout.Environment.EVariety)).Length;
             pixel.g = (((float) (int) foundNewRegion.Variety)) / mat.mainTexture.height;
             pixel.b = UnityEngine.Random.Range(0.0f, 0.1f);
             pixel.a = 0;
 
             return pixel;
+        }
+        Vector2 GetValidSpawnPosition(Vector2 candidateSpawnPosition, TileSignature.Region[,] regions)
+        {
+            for (float boundaryDistance = 1; boundaryDistance < BoundarySize * 2.0f; ++boundaryDistance)
+            {
+                float circle = Mathf.PI * 2.0f;
+                float step = circle / Mathf.CeilToInt(circle * boundaryDistance);
+                for (float i = 0; i < circle; i += step)
+                {
+                    int steppedX = Mathf.FloorToInt(candidateSpawnPosition.x + boundaryDistance * Mathf.Cos(i));
+                    int steppedY = Mathf.FloorToInt(candidateSpawnPosition.y + boundaryDistance * Mathf.Sin(i));
+                    if (steppedX < 0 || steppedY < 0 || steppedX >= regions.GetLength(0) || steppedY >= regions.GetLength(1))
+                    {
+                        continue;
+                    }
+
+                    if (regions[steppedX, steppedY].Variety != Data.Layout.Environment.EVariety.Rock
+                        && regions[steppedX, steppedY].Variety != Data.Layout.Environment.EVariety.Ocean)
+                    {
+                        return new Vector2(steppedX, steppedY);
+                    }
+                }
+            }
+               
+            return candidateSpawnPosition;
         }
     }
 }

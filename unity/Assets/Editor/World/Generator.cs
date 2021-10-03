@@ -74,7 +74,7 @@ namespace West.Tool.World
 
 			if (GUILayout.Button("Export"))
 			{
-				Debug.Log(activeGameObject.ToJson());
+				activeGameObject.Export();
 			}
 		}
 	}
