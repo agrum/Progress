@@ -58,8 +58,10 @@ namespace Assets.Scripts.Context
                 if (vertical != 0 || horizontal != 0)
                 {
                     Vector3 axis = new Vector3(vertical, 0, -horizontal);
-                    float axisSpeed = Mathf.Min(1.0f, axis.magnitude);
-                    transform.position += transform.rotation * axis * movementSpeed * Time.deltaTime / axisSpeed;
+                    if (axis.sqrMagnitude > 0)
+                    {
+                        transform.position += transform.rotation * axis.normalized * movementSpeed * Time.deltaTime * Mathf.Max(Mathf.Abs(vertical), Mathf.Abs(horizontal));
+                    }
                 }
             }
 
