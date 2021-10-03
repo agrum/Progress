@@ -11,7 +11,7 @@ namespace Assets.Scripts.Data.Layout
 	{
 		public enum EVariety
 		{
-			Grass,
+			Grass = 0,
 			Dirt,
 			Rock,
 			Snow,

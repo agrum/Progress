@@ -3,6 +3,7 @@ using SimpleJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -127,6 +128,7 @@ namespace Assets.Scripts.Scene
 
             int totalSize = Size + BoundarySize + BoundarySize;
             Tile.Signature.Region[,] regions = new Tile.Signature.Region[totalSize, totalSize];
+            Color32[] worldTextureData = new Color32[totalSize * totalSize];
 
             for (int col = 0; col < totalSize; col++)
             {
@@ -134,6 +136,33 @@ namespace Assets.Scripts.Scene
                 {
                     regions[col, row] = GetRegionInLayout(layout, col, row);
                 }
+            }
+
+            for (int col = 0; col < totalSize; col++)
+            {
+                for (int row = 0; row < totalSize; row++)
+                {
+                    worldTextureData[col + row * totalSize] = GetWorldPixel(worldTextureData, regions, col, row);
+                }
+            }
+
+            Texture2D worldTexture = new Texture2D(totalSize, totalSize, TextureFormat.RGBA32, false);
+            worldTexture.filterMode = FilterMode.Point;
+            worldTexture.SetPixels32(worldTextureData, 0);
+            worldTexture.Apply();
+            var bytes = worldTexture.EncodeToPNG();
+            var dirPath = Application.dataPath + "/../SaveImages/";
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+            File.WriteAllBytes(dirPath + "World" + ".png", bytes);
+
+            foreach (var prefab in prefabs)
+            {
+                var material = prefab.Value.GetComponentInChildren<MeshRenderer>().material;
+                material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
+                material.SetTexture("_WorldTex", worldTexture);
             }
 
             for (int col = 0; col < totalSize; col++)
@@ -178,8 +207,69 @@ namespace Assets.Scripts.Scene
             }
             tile = ScriptableObject.CreateInstance<Tile>();
             tile.prefab = prefabs[region.Variety];
+
             tilePrefabs.Add(region, tile);
             return tile;
+        }
+
+        private Color32 GetWorldPixel(Color32[] worldTexture, Tile.Signature.Region[,] regions, int x, int y)
+        {
+            Color pixel = new Vector4();
+            var region = regions[x, y];
+            float boundaryDistance = 0;
+            Material mat = GetTile(region).prefab.GetComponentInChildren<MeshRenderer>().material;
+
+            if (x > 0 && regions[x - 1, y] == region)
+            {
+                boundaryDistance = Mathf.Max(0, worldTexture[x - 1 + y * regions.GetLength(0)].r * mat.mainTexture.width - 1);
+            }
+            else if (y > 0 && regions[x, y - 1] == region)
+            {
+                boundaryDistance = Mathf.Max(0, worldTexture[x + (y - 1) * regions.GetLength(0)].r * mat.mainTexture.width - 1);
+            }
+
+            Tile.Signature.Region foundNewRegion = region;
+            while (boundaryDistance < mat.mainTexture.width)
+            {
+                float circle = Mathf.PI * 2.0f;
+                float step = circle / Mathf.CeilToInt(circle * (boundaryDistance + 1.0f));
+                for (float i = 0; i < circle; i += step)
+                {
+                    int steppedX = Mathf.FloorToInt(x + (boundaryDistance + 1.0f) * Mathf.Cos(i));
+                    int steppedY = Mathf.FloorToInt(y + (boundaryDistance + 1.0f) * Mathf.Sin(i));
+                    if (steppedX < 0 || steppedY < 0 || steppedX >= regions.GetLength(0) || steppedY >= regions.GetLength(1))
+                    {
+                        continue;
+                    }
+
+                    if (regions[steppedX, steppedY].Variety != region.Variety)
+                    {
+                        foundNewRegion = regions[steppedX, steppedY];
+                        break;
+                    }
+                }
+                if (foundNewRegion.Variety != region.Variety)
+                {
+                    break;
+                }
+                ++boundaryDistance;
+            }
+
+            if (foundNewRegion.Variety == region.Variety)
+            {
+                boundaryDistance = mat.mainTexture.width - 1;
+            }
+            if (boundaryDistance < 0)
+            {
+                boundaryDistance = 0;
+            }
+
+            pixel.r = (boundaryDistance + 0.5f) / mat.mainTexture.width;
+            pixel.g = (((float) (int) foundNewRegion.Variety)) / mat.mainTexture.height;
+            pixel.b = UnityEngine.Random.Range(0.0f, 0.1f);
+            pixel.a = 0;
+
+            return pixel;
         }
     }
 }
