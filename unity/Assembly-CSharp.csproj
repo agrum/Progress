@@ -1854,6 +1854,7 @@
     <Compile Include="Assets\Scripts\Scene\Session.cs" />
   </ItemGroup>
   <ItemGroup>
+     <None Include="Assets\Shaders\TerrainPoint.shader" />
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
      <None Include="Assets\Shaders\Terrain.shader" />
      <None Include="Assets\Best HTTP (Pro)\ReleaseNotes.txt" />
