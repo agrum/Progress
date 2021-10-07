@@ -144,8 +144,13 @@ namespace Assets.Scripts.Scene
             {
                 for (int row = 0; row < totalSize; row++)
                 {
+                    float height = 0;
+                    if (regions[col, row].Variety == Data.Layout.Environment.EVariety.Rock)
+                    {
+                        height = 2.0f + (worldTextureData[col + row * totalSize].a / 255.0f + 0.5f) * UnityEngine.Random.value * 4.0f;
+                    }
                     var tile = Instantiate(GetTile(regions[col, row]));
-                    tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+                    tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, -height);
                     tile.transform.parent = transform;
                 }
             }
@@ -268,7 +273,7 @@ namespace Assets.Scripts.Scene
             pixel.r = ((float)(int)region.Variety + (boundaryDistance / maxBoundaryCheck)) / Enum.GetNames(typeof(Data.Layout.Environment.EVariety)).Length;
             pixel.g = (((float) (int) foundNewRegion.Variety)) / mat.mainTexture.height;
             pixel.b = UnityEngine.Random.Range(0.0f, 0.1f);
-            pixel.a = 0;
+            pixel.a = boundaryDistance / maxBoundaryCheck;
 
             return pixel;
         }

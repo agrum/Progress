@@ -41,13 +41,14 @@ Shader "Custom/TerrainPoint"
 			{
 				float4 pos : SV_POSITION;
 				float3 norm : NORMAL;
-				float2 uv : TEXCOORD0;
+				float3 worldPos : WORLD_POS;
 			};
 
 			struct g2f
 			{
 				float4 pos : SV_POSITION;
 				float3 norm : NORMAL;
+				float3 worldPos : WORLD_POS;
 				float2 faceCenter : FACE_CENTER;
 			};
 
@@ -56,7 +57,7 @@ Shader "Custom/TerrainPoint"
 				v2g o;
 				o.pos = UnityObjectToClipPos(v.vertex);
 				o.norm = v.normal;
-				o.uv = v.vertex;
+				o.worldPos = v.vertex;
 
 				return o;
 			}
@@ -64,23 +65,26 @@ Shader "Custom/TerrainPoint"
 			[maxvertexcount(30)]
 			void geom(triangle v2g points[3], inout TriangleStream<g2f> triStream)
 			{
-				float2 faceCenter = (points[0].uv + points[1].uv + points[2].uv) * 0.3333f;
+				float2 faceCenter = (points[0].worldPos.xy + points[1].worldPos.xy + points[2].worldPos.xy) * 0.3333f;
 
 				g2f t1;
 				t1.pos = points[0].pos;
 				t1.norm = points[0].norm;
+				t1.worldPos = points[0].worldPos;
 				t1.faceCenter = faceCenter;
 				triStream.Append(t1);
 
 				g2f t2;
 				t2.pos = points[1].pos;
 				t2.norm = points[1].norm;
+				t2.worldPos = points[1].worldPos;
 				t2.faceCenter = faceCenter;
 				triStream.Append(t2);
 
 				g2f t3;
 				t3.pos = points[2].pos;
 				t3.norm = points[2].norm;
+				t3.worldPos = points[2].worldPos;
 				t3.faceCenter = faceCenter;
 				triStream.Append(t3);
 			}
@@ -88,8 +92,12 @@ Shader "Custom/TerrainPoint"
 
 			half4 frag(g2f IN) : COLOR
 			{
+				int3 faceCenter = IN.worldPos - IN.norm * 0.01;
+				float blockColorFactor = 0.1f + 0.1f * faceCenter.z;
+
 				fixed4 worldData = tex2D(_WorldTex, (IN.faceCenter.xy - IN.norm.xy * 0.01) / _WorldSize.xy);
-				return tex2D(_MainTex, worldData.xy) * _Color * (1 - worldData.b);
+				fixed4 color = tex2D(_MainTex, worldData.xy) * _Color * (1 - worldData.b - blockColorFactor);
+				return fixed4(color.rgb, 1);
 
 			}
 			ENDCG
