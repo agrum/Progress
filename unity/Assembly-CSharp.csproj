@@ -1852,15 +1852,19 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
     <Compile Include="Assets\Scripts\Utility\Extension.cs" />
     <Compile Include="Assets\Scripts\Scene\Session.cs" />
+    <Compile Include="Assets\HolyShift\Scripts\CheckForStandardAssets.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Shaders\TerrainPoint.shader" />
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
      <None Include="Assets\Shaders\Terrain.shader" />
+     <None Include="Assets\HolyShift\Shaders\FXWaterLowpoly.shader" />
      <None Include="Assets\Best HTTP (Pro)\ReleaseNotes.txt" />
      <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
      <None Include="Assets\Best HTTP (Pro)\link_android_subset.xml" />
      <None Include="Assets\Shaders\FieldOfView\ObstacleStencilMask.shader" />
+     <None Include="Assets\HolyShift\readme.txt" />
+     <None Include="Assets\HolyShift\Shaders\WaterInclude.cginc" />
      <None Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\License.txt" />
      <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
      <None Include="Assets\Best HTTP (Pro)\link.xml" />
@@ -2467,6 +2471,42 @@
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Searcher.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

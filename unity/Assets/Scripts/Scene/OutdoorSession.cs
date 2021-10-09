@@ -144,35 +144,61 @@ namespace Assets.Scripts.Scene
             {
                 for (int row = 0; row < totalSize; row++)
                 {
-                    float height = 0;
+                    var tile = Instantiate(GetTile(regions[col, row]));
                     if (regions[col, row].Variety == Data.Layout.Environment.EVariety.Rock)
                     {
-                        height = 2.0f + (worldTextureData[col + row * totalSize].a / 255.0f + 0.5f) * UnityEngine.Random.value * 4.0f;
+                        float height = 2.0f + (worldTextureData[col + row * totalSize].a / 255.0f + 0.5f) * UnityEngine.Random.value * 4.0f;
+                        tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, -height);
                     }
-                    var tile = Instantiate(GetTile(regions[col, row]));
-                    tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, -height);
+                    else if (regions[col, row].Variety == Data.Layout.Environment.EVariety.Ocean)
+                    {
+                        float height = -worldTextureData[col + row * totalSize].a / 32.0f + UnityEngine.Random.value * 0.5f;
+                        tile.transform.Find("Floor").localPosition = new Vector3(0, 0, 5.8f - height);
+                        tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+                    }
+                    else
+                    {
+                        tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+                    }
                     tile.transform.parent = transform;
                 }
             }
 
             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
-            CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+            Dictionary<string, Pair<Material, List<CombineInstance>>> combines = new Dictionary<string, Pair<Material, List<CombineInstance>>>();
 
             for (int i = 0; i < meshFilters.Length; ++i)
             {
-                combine[i].mesh = meshFilters[i].sharedMesh;
-                combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+                var combineInstance = new CombineInstance();
+                combineInstance.mesh = meshFilters[i].sharedMesh;
+                combineInstance.transform = meshFilters[i].transform.localToWorldMatrix;
+
+                var combineMaterial = meshFilters[i].gameObject.GetComponent<MeshRenderer>().material;
+
+                if (!combines.ContainsKey(combineMaterial.name)) 
+                {
+                    combines.Add(combineMaterial.name, new Pair<Material, List<CombineInstance>>(combineMaterial, new List<CombineInstance>()));
+                }
+
+                combines[combineMaterial.name].Second.Add(combineInstance);
                 Destroy(meshFilters[i].gameObject.GetComponent<MeshRenderer>());
                 Destroy(meshFilters[i]);
             }
-            var meshFilter = gameObject.AddComponent<MeshFilter>();
-            meshFilter.mesh = new Mesh();
-            meshFilter.mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
-            meshFilter.mesh.CombineMeshes(combine);
-            var material = gameObject.GetComponentInChildren<MeshRenderer>().material;
-            material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
-            material.SetTexture("_WorldTex", worldTexture);
-            transform.gameObject.SetActive(true);
+
+            foreach (var combine in combines)
+            {
+                var terrainObject = new GameObject(combine.Key);
+                terrainObject.transform.parent = gameObject.transform;
+                var meshFilter = terrainObject.AddComponent<MeshFilter>();
+                meshFilter.mesh = new Mesh();
+                meshFilter.mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
+                meshFilter.mesh.CombineMeshes(combine.Value.Second.ToArray());
+                var meshRenderer = terrainObject.AddComponent<MeshRenderer>();
+                meshRenderer.material = combine.Value.First;
+                meshRenderer.material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
+                meshRenderer.material.SetTexture("_WorldTex", worldTexture);
+                terrainObject.transform.gameObject.SetActive(true);
+            }
 
             Vector2 spawnPosition = new Vector2(0, 0);
             Vector2 validSpawnPosition = GetValidSpawnPosition(spawnPosition, regions);
