@@ -124,7 +124,7 @@ namespace Assets.Scripts.Scene
             {
                 for (int row = 0; row < totalSize; row++)
                 {
-                    worldTextureData[col + row * totalSize] = GetWorldPixel(worldTextureData, regions, col, row);
+                    ComputeWorldPixel(worldTextureData, regions, col, row, totalSize);
                 }
             }
 
@@ -243,7 +243,7 @@ namespace Assets.Scripts.Scene
             return prefabs[region.Variety];
         }
 
-        private Color32 GetWorldPixel(Color32[] worldTexture, TileSignature.Region[,] regions, int x, int y)
+        private void ComputeWorldPixel(Color32[] worldTexture, TileSignature.Region[,] regions, int x, int y, int totalSize)
         {
             Color pixel = new Vector4();
             var region = regions[x, y];
@@ -267,8 +267,8 @@ namespace Assets.Scripts.Scene
                 float step = circle / Mathf.CeilToInt(circle * (boundaryDistance + 1.0f));
                 for (float i = 0; i < circle; i += step)
                 {
-                    int steppedX = Mathf.FloorToInt(x + (boundaryDistance + 1.0f) * Mathf.Cos(i));
-                    int steppedY = Mathf.FloorToInt(y + (boundaryDistance + 1.0f) * Mathf.Sin(i));
+                    int steppedX = Mathf.FloorToInt(x + 0.5f + (boundaryDistance + 1.0f) * Mathf.Cos(i));
+                    int steppedY = Mathf.FloorToInt(y + 0.5f + (boundaryDistance + 1.0f) * Mathf.Sin(i));
                     if (steppedX < 0 || steppedY < 0 || steppedX >= regions.GetLength(0) || steppedY >= regions.GetLength(1))
                     {
                         continue;
@@ -301,7 +301,7 @@ namespace Assets.Scripts.Scene
             pixel.b = UnityEngine.Random.Range(0.0f, 0.1f);
             pixel.a = boundaryDistance / maxBoundaryCheck;
 
-            return pixel;
+            worldTexture[x + y * totalSize] = pixel;
         }
         Vector2 GetValidSpawnPosition(Vector2 candidateSpawnPosition, TileSignature.Region[,] regions)
         {
