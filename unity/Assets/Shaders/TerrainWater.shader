@@ -83,7 +83,7 @@ CGINCLUDE
 		float surfaceEyeDepth = LinearEyeDepth(i.pos.z);
 		float waterAlpha = (eyeDepth - surfaceEyeDepth) / i.pos.w;
 		float oceanDepth = tex2D(_OceanTex, i.worldPos.xy / _WorldSize).r;
-		float waveHeight = 1.0f - (_Time.x * 1.5f + oceanDepth) % 1.0f;
+		float waveHeight = 1.0f - (_Time.x * 1.5f + oceanDepth + 0.2f * tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f)) % 1.0f;
 		float waveOpacity = (saturate(1.8f - oceanDepth) * waveHeight) > (0.985f * saturate(oceanDepth * 4.0f));
 		waveOpacity = waveOpacity * saturate(2.0f* (0.25f - oceanDepth + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + float2(_Time.x * _TimeScale1, 0.0f)) + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + float2(0.0f, _Time.x * _TimeScale2))));
 
