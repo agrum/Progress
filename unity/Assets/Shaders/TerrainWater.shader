@@ -4,54 +4,24 @@
 
 Shader "Custom/TerrainWater" {
 Properties {
-	_ReflectionTex ("Internal reflection", 2D) = "white" {}
-	
-	_MainTex ("Fallback texture", 2D) = "black" {}
+	[HideInInspector]_MainTex ("Fallback texture", 2D) = "black" {}
 	_DistortionTex ("Distortion texture", 2D) = "black" {}
-	_BumpMap ("Normals ", 2D) = "bump" {}
-	
-	_DistortParams ("Distortions (Bump waves, Reflection, Fresnel power, Fresnel bias)", Vector) = (1.0 ,1.0, 2.0, 1.15)
-	_InvFadeParemeter ("Auto blend parameter (Edge, Shore, Distance scale)", Vector) = (0.15 ,0.15, 0.5, 1.0)
-	
-	_AnimationTiling ("Animation Tiling (Displacement)", Vector) = (2.2 ,2.2, -1.1, -1.1)
-	_AnimationDirection ("Animation Direction (displacement)", Vector) = (1.0 ,1.0, 1.0, 1.0)
+	[HideInInspector]_OceanTex("Ocean (Overriden at runtime)", 2D) = "grey" {}
+	[HideInInspector]_WorldSize("WorldWidth (Overriden at runtime)", Vector) = (1, 1, 1, 1)
 
-	_BumpTiling ("Bump Tiling", Vector) = (1.0 ,1.0, -2.0, 3.0)
-	_BumpDirection ("Bump Direction & Speed", Vector) = (1.0 ,1.0, -1.0, 1.0)
-	
-	_FresnelScale ("FresnelScale", Range (0.15, 4.0)) = 0.75
-
-	_BaseColor ("Base color", COLOR)  = ( .54, .95, .99, 0.5)
-	_ReflectionColor ("Reflection color", COLOR)  = ( .54, .95, .99, 0.5)
-	_SpecularColor ("Specular color", COLOR)  = ( .72, .72, .72, 1)
-	
-	_WorldLightDir ("Specular light direction", Vector) = (0.0, 0.1, -0.5, 0.0)
-	_Shininess ("Shininess", Range (2.0, 500.0)) = 200.0
-
-	_GerstnerIntensity("Per vertex displacement", Float) = 1.0
-	_GAmplitude ("Wave Amplitude", Vector) = (0.3 ,0.35, 0.25, 0.25)
-	_GFrequency ("Wave Frequency", Vector) = (1.3, 1.35, 1.25, 1.25)
-	_GSteepness ("Wave Steepness", Vector) = (1.0, 1.0, 1.0, 1.0)
-	_GSpeed ("Wave Speed", Vector) = (1.2, 1.375, 1.1, 1.5)
-	_GDirectionAB ("Wave Direction", Vector) = (0.3 ,0.85, 0.85, 0.25)
-	_GDirectionCD ("Wave Direction", Vector) = (0.1 ,0.9, 0.5, 0.5)
-
-	_WavesDensity("Waves density", Float) = 10.0
-	_DistortionPower("Distortion power", Float) = 4.0
-	_MaxTreshold("Max treshold", Range (0.0, 1.0)) = 0.5
-	_TresholdDensity("Treshold density", Float) = 20.0
-	_TresholdFalloff("Treshold falloff", Float) = 1.2
-	_TimeScale1("Timescale for wave 1", Float) = 30.0
-	_TimeScale2("Timescale for wave 2", Float) = 5.0
+	_OceanColor ("Base color", COLOR)  = ( .54, .95, .99, 0.5)
 	_WavesColor("Waves color", Color) = (0.3 ,0.35, 0.25, 0.25)
-	_TargetValue("Waves target value", Range (0.0, 1.0)) = 0.0
+
+	_WavesHeight("Waves height", Range(0.0, 1.0)) = 0.3
+	_WavesSpread("Waves spread", Range(0.0, 1.0)) = 0.1
+	_TimeScale1("Timescale for wave 1", Float) = 2.0
+	_TimeScale2("Timescale for wave 2", Float) = 1.5
 }
 
 
 CGINCLUDE
 
 	#include "UnityCG.cginc"
-	#include "WaterInclude.cginc"
 
 	struct appdata
 	{
@@ -64,123 +34,43 @@ CGINCLUDE
 	struct v2f
 	{
 		float4 pos : SV_POSITION;
-		float4 normalInterpolator : TEXCOORD0;
 		float4 viewInterpolator : TEXCOORD1;
-		float4 bumpCoords : TEXCOORD2;
 		float4 screenPos : TEXCOORD3;
-		float4 grabPassPos : TEXCOORD4;
+		float3 worldPos : WORLD_POS;
 		UNITY_FOG_COORDS(5)
 	};
 
 	// textures
-	sampler2D _BumpMap;
-	sampler2D _ReflectionTex;
-	sampler2D _RefractionTex;
 	sampler2D _DistortionTex;
+	sampler2D _OceanTex;
 	sampler2D_float _CameraDepthTexture;
+	fixed4 _WorldSize;
 
 	// colors in use
-	uniform float4 _RefrColorDepth;
-	uniform float4 _SpecularColor;
-	uniform float4 _BaseColor;
-	uniform float4 _ReflectionColor;
-	
-	// edge & shore fading
-	uniform float4 _InvFadeParemeter;
-
-	// specularity
-	uniform float _Shininess;
-	uniform float4 _WorldLightDir;
-
-	// fresnel, vertex & bump displacements & strength
-	uniform float4 _DistortParams;
-	uniform float _FresnelScale;
-	uniform float4 _BumpTiling;
-	uniform float4 _BumpDirection;
-
-	uniform float4 _GAmplitude;
-	uniform float4 _GFrequency;
-	uniform float4 _GSteepness;
-	uniform float4 _GSpeed;
-	uniform float4 _GDirectionAB;
-	uniform float4 _GDirectionCD;
-	
-	uniform float _WavesDensity;
-	uniform float _DistortionPower;
-	uniform float _MaxTreshold;
-	uniform float _TresholdDensity;
-	uniform float _TresholdFalloff;
-	uniform float _TimeScale1;
-	uniform float _TimeScale2;
-	uniform float _TargetValue;
+	uniform float4 _OceanColor;
 	uniform float4 _WavesColor;
 
-	// shortcuts
-	#define PER_PIXEL_DISPLACE _DistortParams.x
-	#define REALTIME_DISTORTION _DistortParams.y
-	#define FRESNEL_POWER _DistortParams.z
-	#define VERTEX_WORLD_NORMAL i.normalInterpolator.xyz
-	#define FRESNEL_BIAS _DistortParams.w
-	#define NORMAL_DISPLACEMENT_PER_VERTEX _InvFadeParemeter.z
-	
-	//
-	// HQ VERSION
-	//
-
-
-    inline float near(float delta, float value, float target) {
-       return (delta - min(delta, abs(value - target))) / delta;
-    }
-
-    inline float bin(float value) {
-       return log(1 + value * 1000.0);
-    }
-
-    inline float nearBin(float delta, float value, float target) {
-       return bin(near(delta, value, target));
-    }
-
-    inline float positiveSin(float x) {
-       return sin(x) * 0.5 + 0.5;
-    }
-
+	//variables
+	uniform float _WavesHeight;
+	uniform float _WavesSpread;
+	uniform float _TimeScale1;
+	uniform float _TimeScale2;
 
 	v2f vert(appdata_full v)
 	{
 		v2f o;
 		
 		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
-		half3 vtxForAni = (worldSpaceVertex).xyy;
+		float4 distortionCoord = float4(worldSpaceVertex.x + _Time.x * _TimeScale1, worldSpaceVertex.y + _Time.y * _TimeScale2, 0, 0);
+		float zOffest = _WavesHeight * tex2Dlod(_DistortionTex, distortionCoord * _WavesSpread);
+		v.vertex.z += zOffest;
 
-		half3 nrml;
-		half3 offsets;
-		Gerstner (
-			offsets, nrml, v.vertex.xyz, vtxForAni,						// offsets, nrml will be written
-			_GAmplitude,												// amplitude
-			_GFrequency,												// frequency
-			_GSteepness,												// steepness
-			_GSpeed,													// speed
-			_GDirectionAB,												// direction # 1, 2
-			_GDirectionCD												// direction # 3, 4
-		);
-		
-		v.vertex.xyz += offsets;
-		
-		// one can also use worldSpaceVertex.xy here (speed!), albeit it'll end up a little skewed
-		half2 tileableUv = mul(unity_ObjectToWorld,(v.vertex)).xy;
-		
-		o.bumpCoords.xyzw = (tileableUv.xyxy + _Time.xxxx * _BumpDirection.xyzw) * _BumpTiling.xyzw;
-
-		o.viewInterpolator.xyz = worldSpaceVertex - _WorldSpaceCameraPos;
+		o.viewInterpolator.xyz = worldSpaceVertex;
+		o.viewInterpolator.w = 1.0f;
 
 		o.pos = UnityObjectToClipPos(v.vertex);
-
-		ComputeScreenAndGrabPassPos(o.pos, o.screenPos, o.grabPassPos);
-		
-		o.normalInterpolator.xyz = nrml;
-		
-		o.viewInterpolator.w = saturate(offsets.y);
-		o.normalInterpolator.w = 1;//GetDistanceFadeout(o.screenPos.w, DISTANCE_SCALE);
+		o.screenPos = ComputeNonStereoScreenPos(o.pos);
+		o.worldPos = v.vertex;
 		
 		UNITY_TRANSFER_FOG(o,o.pos);
 		return o;
@@ -188,65 +78,18 @@ CGINCLUDE
 
 	half4 frag( v2f i ) : SV_Target
 	{
-		half3 worldNormal = PerPixelNormal(_BumpMap, i.bumpCoords, VERTEX_WORLD_NORMAL, PER_PIXEL_DISPLACE);
-		half3 viewVector = normalize(i.viewInterpolator.xyz);
-
-		half4 distortOffset = half4(worldNormal.xy * REALTIME_DISTORTION * 10.0, 0, 0);
-		half4 screenWithOffset = i.screenPos + distortOffset;
-		half4 grabWithOffset = i.grabPassPos + distortOffset;
-		
-		half4 rtRefractionsNoDistort = tex2Dproj(_RefractionTex, UNITY_PROJ_COORD(i.grabPassPos));
-		half refrFix = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(grabWithOffset));
-		half4 rtRefractions = tex2Dproj(_RefractionTex, UNITY_PROJ_COORD(grabWithOffset));
-		
-		#ifdef WATER_REFLECTIVE
-			half4 rtReflections = tex2Dproj(_ReflectionTex, UNITY_PROJ_COORD(screenWithOffset));
-		#endif
-
-		#ifdef WATER_EDGEBLEND_ON
-		if (LinearEyeDepth(refrFix) < i.screenPos.z)
-			rtRefractions = rtRefractionsNoDistort;
-		#endif
-		
-		half3 reflectVector = normalize(reflect(viewVector, worldNormal));
-		half3 h = normalize ((_WorldLightDir.xyz) + viewVector.xyz);
-		float nh = max (0, dot (worldNormal, -h));
-		float spec = max(0.0,pow (nh, _Shininess));
-		
-		half4 edgeBlendFactors = half4(1.0, 0.0, 0.0, 0.0);
-
 		float depth = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, i.screenPos);
 		float eyeDepth = LinearEyeDepth(depth);
-		float zDelta = 0.0;
-		#ifdef WATER_EDGEBLEND_ON
-			zDelta = (eyeDepth -i.screenPos.w);
-			edgeBlendFactors = saturate(_InvFadeParemeter * (eyeDepth -i.screenPos.w));
-			edgeBlendFactors.y = 1.0-edgeBlendFactors.y;
-		#endif
-		
-		// shading for fresnel term
-		worldNormal.xy *= _FresnelScale;
-		half refl2Refr = Fresnel(viewVector, worldNormal, FRESNEL_BIAS, FRESNEL_POWER);
-		
-		// base, depth & reflection colors
-		half4 baseColor = ExtinctColor (_BaseColor, i.viewInterpolator.w * _InvFadeParemeter.w);
-		#ifdef WATER_REFLECTIVE
-			half4 reflectionColor = lerp (rtReflections,_ReflectionColor,_ReflectionColor.a);
-		#else
-			half4 reflectionColor = _ReflectionColor;
-		#endif
-		
-		//baseColor = lerp (lerp (rtRefractions, baseColor, baseColor.a), reflectionColor, refl2Refr);
-		baseColor = baseColor + spec * _SpecularColor;
-		
-        // Calc threshold
-        float threshold = positiveSin(i.bumpCoords.x * _TresholdDensity) * _MaxTreshold * (_TresholdFalloff - zDelta);
-        // Modify final color
-		float4 waveColor = saturate(nearBin(threshold, zDelta, 0.0)) * _WavesColor * _WavesColor.a;
 		float surfaceEyeDepth = LinearEyeDepth(i.pos.z);
 		float waterAlpha = (eyeDepth - surfaceEyeDepth) / i.pos.w;
-        baseColor = baseColor + waveColor;
-		baseColor.a = saturate(0.4f + (waveColor.r + waveColor.g + waveColor.b) * 0.2f + waterAlpha + surfaceEyeDepth / 100.0f);
+		float oceanDepth = tex2D(_OceanTex, i.worldPos.xy / _WorldSize).r;
+		float waveHeight = 1.0f - (_Time.x * 1.5f + oceanDepth) % 1.0f;
+		float waveOpacity = (saturate(1.8f - oceanDepth) * waveHeight) > (0.985f * saturate(oceanDepth * 4.0f));
+		waveOpacity = waveOpacity * saturate(2.0f* (0.25f - oceanDepth + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + float2(_Time.x * _TimeScale1, 0.0f)) + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + float2(0.0f, _Time.x * _TimeScale2))));
+
+		half4 baseColor = _OceanColor;
+		baseColor.a = saturate(0.4f + waveOpacity * 0.2f + waterAlpha + surfaceEyeDepth / 100.0f);
+		baseColor.rgb = saturate(baseColor.rgb + 0.2f * waveOpacity);
 		
 		UNITY_APPLY_FOG(i.fogCoord, baseColor);
 		return baseColor;

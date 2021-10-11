@@ -1852,6 +1852,7 @@
     <Compile Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\crypto\parameters\NaccacheSternKeyParameters.cs" />
     <Compile Include="Assets\Scripts\Utility\Extension.cs" />
     <Compile Include="Assets\Scripts\Scene\Session.cs" />
+    <Compile Include="Assets\HolyShift\Scripts\CheckForStandardAssets.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\Shaders\WaterInclude.cginc" />
@@ -1859,10 +1860,13 @@
      <None Include="Assets\Best HTTP (Pro)\license.txt" />
      <None Include="Assets\Shaders\TerrainWater.shader" />
      <None Include="Assets\Shaders\Terrain.shader" />
+     <None Include="Assets\HolyShift\Shaders\FXWaterLowpoly.shader" />
      <None Include="Assets\Best HTTP (Pro)\ReleaseNotes.txt" />
      <None Include="Assets\Shaders\FieldOfView\ViewStencilMask.shader" />
      <None Include="Assets\Best HTTP (Pro)\link_android_subset.xml" />
      <None Include="Assets\Shaders\FieldOfView\ObstacleStencilMask.shader" />
+     <None Include="Assets\HolyShift\readme.txt" />
+     <None Include="Assets\HolyShift\Shaders\WaterInclude.cginc" />
      <None Include="Assets\Best HTTP (Pro)\BestHTTP\SecureProtocol\License.txt" />
      <None Include="Assets\Shaders\FieldOfView\StencilObject.shader" />
      <None Include="Assets\Best HTTP (Pro)\link.xml" />

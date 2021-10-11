@@ -111,56 +111,28 @@ namespace Assets.Scripts.Scene
             int totalSize = Size + BoundarySize + BoundarySize;
             TileSignature.Region[,] regions = new TileSignature.Region[totalSize, totalSize];
             Color32[] worldTextureData = new Color32[totalSize * totalSize];
+            Color32[] oceanTextureData = new Color32[totalSize * totalSize];
 
-            for (int col = 0; col < totalSize; col++)
-            {
-                for (int row = 0; row < totalSize; row++)
-                {
-                    regions[col, row] = GetRegionInLayout(layout, col, row);
-                }
-            }
-
-            for (int col = 0; col < totalSize; col++)
-            {
-                for (int row = 0; row < totalSize; row++)
-                {
-                    ComputeWorldPixel(worldTextureData, regions, col, row, totalSize);
-                }
-            }
+            ComputeRegions(regions, layout, totalSize);
+            ComputeTextures(worldTextureData, oceanTextureData, regions, totalSize);
 
             Texture2D worldTexture = new Texture2D(totalSize, totalSize, TextureFormat.RGBA32, false);
             worldTexture.filterMode = FilterMode.Point;
             worldTexture.SetPixels32(worldTextureData, 0);
             worldTexture.Apply();
-            var bytes = worldTexture.EncodeToPNG();
-            var dirPath = Application.dataPath + "/../SaveImages/";
-            if (!Directory.Exists(dirPath))
-            {
-                Directory.CreateDirectory(dirPath);
-            }
-            File.WriteAllBytes(dirPath + "World" + ".png", bytes);
+            WriteTexture(worldTexture, "World");
+            Texture2D oceanTexture = new Texture2D(totalSize, totalSize, TextureFormat.RGBA32, false);
+            oceanTexture.filterMode = FilterMode.Trilinear;
+            oceanTexture.SetPixels32(oceanTextureData, 0);
+            oceanTexture.Apply();
+            WriteTexture(oceanTexture, "Ocean");
 
             for (int col = 0; col < totalSize; col++)
             {
                 for (int row = 0; row < totalSize; row++)
                 {
                     var tile = Instantiate(GetTile(regions[col, row]));
-                    if (regions[col, row].Variety == Data.Layout.Environment.EVariety.Rock)
-                    {
-                        float height = 2.0f + (worldTextureData[col + row * totalSize].a / 255.0f + 0.5f) * UnityEngine.Random.value * 4.0f;
-                        tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, -height);
-                    }
-                    else if (regions[col, row].Variety == Data.Layout.Environment.EVariety.Ocean)
-                    {
-                        float height = -worldTextureData[col + row * totalSize].a / 32.0f + UnityEngine.Random.value * 0.5f;
-                        tile.transform.Find("Floor").localPosition = new Vector3(0, 0, 5.8f - height);
-                        tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
-                    }
-                    else
-                    {
-                        tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
-                    }
-                    tile.transform.parent = transform;
+                    PlaceTile(tile, regions[col, row].Variety, worldTextureData[col + row * totalSize], col, row);
                 }
             }
 
@@ -197,6 +169,7 @@ namespace Assets.Scripts.Scene
                 meshRenderer.material = combine.Value.First;
                 meshRenderer.material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
                 meshRenderer.material.SetTexture("_WorldTex", worldTexture);
+                meshRenderer.material.SetTexture("_OceanTex", oceanTexture);
                 terrainObject.transform.gameObject.SetActive(true);
             }
 
@@ -207,7 +180,18 @@ namespace Assets.Scripts.Scene
             loaded = true;
         }
 
-        public TileSignature.Region GetRegionInLayout(Data.Layout.Outdoor layout, int x, int y)
+        private void ComputeRegions(TileSignature.Region[,] regions, Data.Layout.Outdoor layout, int totalSize)
+        {
+            for (int col = 0; col < totalSize; col++)
+            {
+                for (int row = 0; row < totalSize; row++)
+                {
+                    regions[col, row] = GetRegionInLayout(layout, col, row);
+                }
+            }
+        }
+
+        private TileSignature.Region GetRegionInLayout(Data.Layout.Outdoor layout, int x, int y)
         {
             TileSignature.Region region = new TileSignature.Region(layout.BaselineEnvironment, 0);
             if (x < BoundarySize || y < BoundarySize || x > Size + BoundarySize || y > Size + BoundarySize)
@@ -243,7 +227,18 @@ namespace Assets.Scripts.Scene
             return prefabs[region.Variety];
         }
 
-        private void ComputeWorldPixel(Color32[] worldTexture, TileSignature.Region[,] regions, int x, int y, int totalSize)
+        private void ComputeTextures(Color32[] worldTexture, Color32[] oceanTexture, TileSignature.Region[,] regions, int totalSize)
+        {
+            for (int col = 0; col < totalSize; col++)
+            {
+                for (int row = 0; row < totalSize; row++)
+                {
+                    ComputePixel(worldTexture, oceanTexture, regions, col, row, totalSize);
+                }
+            }
+        }
+
+        private void ComputePixel(Color32[] worldTexture, Color32[] oceanTexture, TileSignature.Region[,] regions, int x, int y, int totalSize)
         {
             Color pixel = new Vector4();
             var region = regions[x, y];
@@ -300,9 +295,15 @@ namespace Assets.Scripts.Scene
             pixel.g = (((float) (int) foundNewRegion.Variety)) / mat.mainTexture.height;
             pixel.b = UnityEngine.Random.Range(0.0f, 0.1f);
             pixel.a = boundaryDistance / maxBoundaryCheck;
-
             worldTexture[x + y * totalSize] = pixel;
+
+            pixel.r = region.Variety == Data.Layout.Environment.EVariety.Ocean ? ((boundaryDistance + 1.0f) / maxBoundaryCheck) : 0.0f;
+            pixel.g = pixel.r;
+            pixel.b = pixel.r;
+            pixel.a = 1.0f;
+            oceanTexture[x + y * totalSize] = pixel;
         }
+
         Vector2 GetValidSpawnPosition(Vector2 candidateSpawnPosition, TileSignature.Region[,] regions)
         {
             for (float boundaryDistance = 1; boundaryDistance < BoundarySize * 2.0f; ++boundaryDistance)
@@ -327,6 +328,37 @@ namespace Assets.Scripts.Scene
             }
                
             return candidateSpawnPosition;
+        }
+
+        void WriteTexture(Texture2D texture, string filename)
+        {
+            var bytes = texture.EncodeToPNG();
+            var dirPath = Application.dataPath + "/../SaveImages/";
+            if (!Directory.Exists(dirPath))
+            {
+                Directory.CreateDirectory(dirPath);
+            }
+            File.WriteAllBytes(dirPath + filename + ".png", bytes);
+        }
+
+        void PlaceTile(GameObject tile, Data.Layout.Environment.EVariety variety, Color32 worldPixel, int col, int row)
+        {
+            if (variety == Data.Layout.Environment.EVariety.Rock)
+            {
+                float height = 2.0f + (worldPixel.a / 255.0f + 0.5f) * UnityEngine.Random.value * 4.0f;
+                tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, -height);
+            }
+            else if (variety == Data.Layout.Environment.EVariety.Ocean)
+            {
+                float height = -worldPixel.a / 32.0f + UnityEngine.Random.value * 0.5f;
+                tile.transform.Find("Floor").localPosition = new Vector3(0, 0, 5.8f - height);
+                tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+            }
+            else
+            {
+                tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+            }
+            tile.transform.parent = transform;
         }
     }
 }
