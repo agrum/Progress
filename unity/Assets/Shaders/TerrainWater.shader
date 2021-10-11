@@ -88,8 +88,8 @@ CGINCLUDE
 		waveOpacity = waveOpacity * saturate(2.0f* (0.25f - oceanDepth + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + float2(_Time.x * _TimeScale1, 0.0f)) + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + float2(0.0f, _Time.x * _TimeScale2))));
 
 		half4 baseColor = _OceanColor;
-		baseColor.a = saturate(0.4f + waveOpacity * 0.2f + waterAlpha + surfaceEyeDepth / 100.0f);
-		baseColor.rgb = saturate(baseColor.rgb + 0.2f * waveOpacity);
+		baseColor.a = saturate(0.4f + waveOpacity * _WavesColor.a + waterAlpha + surfaceEyeDepth / 100.0f);
+		baseColor.rgb = lerp(baseColor.rgb, _WavesColor.rgb, waveOpacity * _WavesColor.a);
 		
 		UNITY_APPLY_FOG(i.fogCoord, baseColor);
 		return baseColor;
