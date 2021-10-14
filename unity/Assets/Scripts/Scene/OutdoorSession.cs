@@ -136,6 +136,12 @@ namespace Assets.Scripts.Scene
                 }
             }
 
+            //populate decor
+            foreach (var decorLibrary in GetComponentsInChildren<Data.Layout.DecorLibrary>())
+            {
+                decorLibrary.Populate();
+            }
+
             MeshFilter[] meshFilters = GetComponentsInChildren<MeshFilter>();
             Dictionary<string, Pair<Material, List<CombineInstance>>> combines = new Dictionary<string, Pair<Material, List<CombineInstance>>>();
 
@@ -147,7 +153,7 @@ namespace Assets.Scripts.Scene
 
                 var combineMaterial = meshFilters[i].gameObject.GetComponent<MeshRenderer>().material;
 
-                if (!combines.ContainsKey(combineMaterial.name)) 
+                if (!combines.ContainsKey(combineMaterial.name))
                 {
                     combines.Add(combineMaterial.name, new Pair<Material, List<CombineInstance>>(combineMaterial, new List<CombineInstance>()));
                 }
