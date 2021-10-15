@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DistortionTex:
-        m_Texture: {fileID: 2800000, guid: b01980ff2ae464fadaac446f66f5558f, type: 3}
+        m_Texture: {fileID: 2800000, guid: e8d2c54bb5888894c84123039f424157, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Fresnel:
