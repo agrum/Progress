@@ -27,3 +27,4 @@ unity/Assets/HolyShift
 /server/mongoexport.bat
 /server/dump
 *.meta
+/wiki
