@@ -9,23 +9,23 @@ var bodyParser = require('body-parser')
 var cookieParser = require('cookie-parser')
 var passport = require('passport')
 var session = require('express-session')
-var mongoStore = require('connect-mongo')(session);
+var mongoStore = require('connect-mongo');
 
 var server =
-	"west-shard-00-00-1wi8d.mongodb.net:27017," +
-	"west-shard-00-01-1wi8d.mongodb.net:27017," +
-	"west-shard-00-02-1wi8d.mongodb.net:27017"
+	"ac-udu9cyr-shard-00-00.vnb94ro.mongodb.net:27017," +
+	"ac-udu9cyr-shard-00-01.vnb94ro.mongodb.net:27017," +
+	"ac-udu9cyr-shard-00-02.vnb94ro.mongodb.net:27017"
 var database = "west"
-var options = "ssl=true&replicaSet=West-shard-0&authSource=admin"
+var options = "ssl=true&replicaSet=atlas-7od264-shard-0&authSource=admin"
 var credentials = "agrum:" + encodeURI(private.mongoPWD)
 var uri = "mongodb://" + credentials + "@" + server + "/" + database + "?" + options
 
 app.db = mongoose
-mongoose.set('useNewUrlParser', true);
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
-mongoose.set('useUnifiedTopology', true);
-app.db.connect(uri)
+app.db.connect(uri, 
+	{
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
 	.then(() => {
 		console.log('Database connection successful')
 		require('./models')()
@@ -48,9 +48,8 @@ app.use(session(
 		cookie: { maxAge: 3600000 * 24 * 3 }, //3days
 		saveUninitialized: true,
 		resave: true,
-		store: new mongoStore({
-			url: uri,
-			collection: 'sessions'
+		store: mongoStore.create({
+			mongoUrl: uri
 		})
 	}))
 app.use(passport.initialize())
