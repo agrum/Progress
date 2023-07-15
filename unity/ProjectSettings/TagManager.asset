@@ -4,8 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - UnityColldier2DContainer
-  - Terrain
+  - Shadow
+  - Collide
   layers:
   - Default
   - TransparentFX
@@ -15,16 +15,16 @@ TagManager:
   - UI
   - 
   - 
-  - Terrain
-  - Target
-  - Navigation
-  - Player
-  - Fog
-  - TerrainCollider
-  - FieldOfView
-  - Locked
-  - TerrainRoughCollider
-  - VisionCollider
+  - TempCast
+  - Walkable
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 

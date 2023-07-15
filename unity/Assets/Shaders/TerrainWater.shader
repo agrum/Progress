@@ -70,9 +70,9 @@ CGINCLUDE
 		v2g o;
 		
 		half3 worldSpaceVertex = mul(unity_ObjectToWorld,(v.vertex)).xyz;
-		float4 distortionCoord = float4(worldSpaceVertex.x + _Time.x * _TimeScale1, worldSpaceVertex.y + _Time.y * _TimeScale2, 0, 0);
-		float zOffest = _WavesHeight * tex2Dlod(_DistortionTex, distortionCoord * _WavesSpread);
-		v.vertex.z += zOffest;
+		float4 distortionCoord = float4(worldSpaceVertex.x + _Time.x * _TimeScale1, worldSpaceVertex.z + _Time.y * _TimeScale2, 0, 0);
+		float yOffest = _WavesHeight * tex2Dlod(_DistortionTex, distortionCoord * _WavesSpread);
+		v.vertex.y += yOffest;
 
 		o.viewInterpolator.xyz = worldSpaceVertex;
 		o.viewInterpolator.w = 1.0f;
@@ -123,11 +123,11 @@ CGINCLUDE
 		float eyeDepth = LinearEyeDepth(depth);
 		float surfaceEyeDepth = LinearEyeDepth(i.pos.z);
 		float waterAlpha = (eyeDepth - surfaceEyeDepth) / i.pos.w;
-		float oceanDepth = tex2D(_OceanTex, i.worldPos.xy / _WorldSize).r;
-		float waveHeight = 1.0f - (_Time.x * 1.5f + oceanDepth + 0.2f * tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f)) % 1.0f;
+		float oceanDepth = tex2D(_OceanTex, i.worldPos.xz / _WorldSize).r;
+		float waveHeight = 1.0f - (_Time.x * 1.5f + oceanDepth + 0.2f * tex2D(_DistortionTex, i.viewInterpolator.xz * 0.1f)) % 1.0f;
 		float waveThreshold = 0.985f * saturate(oceanDepth * 4.0f);
 		float waveOpacity = saturate(((saturate(1.8f - oceanDepth) * waveHeight) - waveThreshold) / (1.0f - waveThreshold));
-		waveOpacity *= saturate(2.0f * (0.25f - oceanDepth + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + time.x) + tex2D(_DistortionTex, i.viewInterpolator.xy * 0.1f + time.y)));
+		waveOpacity *= saturate(2.0f * (0.25f - oceanDepth + tex2D(_DistortionTex, i.viewInterpolator.xz * 0.1f + time.x) + tex2D(_DistortionTex, i.viewInterpolator.xz * 0.1f + time.y)));
 
 		half4 baseColor = tex2D(_RefractionTex, -i.normal.xy * 300.0f * waterAlpha + i.screenPos / i.screenPos.w);
 		float overlayOpacity = saturate(waveOpacity * _WavesColor.a + waterAlpha + surfaceEyeDepth / 100.0f);

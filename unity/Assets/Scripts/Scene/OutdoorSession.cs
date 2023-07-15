@@ -177,11 +177,18 @@ namespace Assets.Scripts.Scene
                 meshRenderer.material.SetTexture("_WorldTex", worldTexture);
                 meshRenderer.material.SetTexture("_OceanTex", oceanTexture);
                 terrainObject.transform.gameObject.SetActive(true);
+                terrainObject.transform.SetParent(transform.parent);
+                terrainObject.layer = LayerMask.NameToLayer("Walkable");
+            }
+
+            foreach (Transform child in transform)
+            {
+                Destroy(child.gameObject);
             }
 
             Vector2 spawnPosition = new Vector2(0, 0);
             Vector2 validSpawnPosition = GetValidSpawnPosition(spawnPosition, regions);
-            Player.transform.position = new Vector3(validSpawnPosition.x, validSpawnPosition.y, -1);
+            Player.transform.position = new Vector3(validSpawnPosition.x, 1, validSpawnPosition.y);
 
             loaded = true;
         }
@@ -352,17 +359,17 @@ namespace Assets.Scripts.Scene
             if (variety == Data.Layout.Environment.EVariety.Rock)
             {
                 float height = 2.0f + (worldPixel.a / 255.0f + 0.5f) * UnityEngine.Random.value * 4.0f;
-                tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, -height);
+                tile.transform.position = new Vector3(col + 0.5f, height, row + 0.5f);
             }
             else if (variety == Data.Layout.Environment.EVariety.Ocean)
             {
                 float height = -worldPixel.a / 32.0f + UnityEngine.Random.value * 0.5f;
-                tile.transform.Find("Floor").localPosition = new Vector3(0, 0, 5.8f - height);
-                tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+                tile.transform.Find("Floor").localPosition = new Vector3(0, height - 5.8f, 0);
+                tile.transform.position = new Vector3(col + 0.5f, 0, row + 0.5f);
             }
             else
             {
-                tile.transform.position = new Vector3(col + 0.5f, row + 0.5f, 0);
+                tile.transform.position = new Vector3(col + 0.5f, 0, row + 0.5f);
             }
             tile.transform.parent = transform;
         }

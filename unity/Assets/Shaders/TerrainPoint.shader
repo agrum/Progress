@@ -65,7 +65,7 @@ Shader "Custom/TerrainPoint"
 			[maxvertexcount(30)]
 			void geom(triangle v2g points[3], inout TriangleStream<g2f> triStream)
 			{
-				float2 faceCenter = (points[0].worldPos.xy + points[1].worldPos.xy + points[2].worldPos.xy) * 0.3333f;
+				float2 faceCenter = (points[0].worldPos.xz + points[1].worldPos.xz + points[2].worldPos.xz) * 0.3333f;
 
 				g2f t1;
 				t1.pos = points[0].pos;
@@ -93,9 +93,9 @@ Shader "Custom/TerrainPoint"
 			half4 frag(g2f IN) : COLOR
 			{
 				int3 faceCenter = IN.worldPos - IN.norm * 0.01;
-				float blockColorFactor = 0.1f + 0.1f * faceCenter.z;
+				float blockColorFactor = 0.1f + 0.1f * faceCenter.y;
 
-				fixed4 worldData = tex2D(_WorldTex, (IN.faceCenter.xy - IN.norm.xy * 0.01) / _WorldSize.xy);
+				fixed4 worldData = tex2D(_WorldTex, (IN.faceCenter.xy - IN.norm.xz * 0.01) / _WorldSize.xy);
 				fixed4 color = tex2D(_MainTex, worldData.xy) * _Color * (1 - worldData.b - blockColorFactor);
 				return fixed4(color.rgb, 1);
 
@@ -141,8 +141,8 @@ Shader "Custom/TerrainPoint"
 		void surf(Input IN, inout SurfaceOutputStandard o)
 		{
 			// Albedo comes from a texture tinted by color
-			//fixed4 worldData = tex2D(_WorldTex, (IN.worldPos.xy - IN.worldNormal.xy * 0.01) / _WorldSize.xy);
-			//o.Albedo = (tex2D(_MainTex, worldData.xy) * _Color).rgb * (1 - worldData.b);
+			//fixed4 worldData = tex2D(_WorldTex, (IN.worldPos.xz - IN.worldNormal.xz * 0.01) / _WorldSize.xz);
+			//o.Albedo = (tex2D(_MainTex, worldData.xz) * _Color).rgb * (1 - worldData.b);
 			o.Albedo = tex2D(_IntermediateTexture, IN.screenPos / IN.screenPos.w).rgb;
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;

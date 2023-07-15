@@ -12,7 +12,7 @@ namespace Assets.Scripts.Scene
 {
     public class Session : MonoBehaviour
     {
-        public Context.PlayerNew Player;
+        public GameObject Player;
 
         protected bool loaded = false;
 
