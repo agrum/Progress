@@ -25,7 +25,7 @@ module.exports = function () {
 		},
 		account: {
 			type: mongoose.Schema.Types.ObjectId,
-			required: true,
+			required: false,
 			ref: 'accounts',
 		}
 	})

@@ -9,11 +9,8 @@ exports = module.exports = function (app) {
 			passwordField: 'password'
 		},
 		function (email, password, done) {
-			app.db.models.users.findOne({ 'email': email }, function (err, user) {
-				if (err) {
-					return done(err)
-				}
-
+			app.db.models.users.findOne({ 'email': email })
+			.then(user => {
 				if (!user) {
 					return done(null, false, { message: 'Unknown user' })
 				}
@@ -30,6 +27,9 @@ exports = module.exports = function (app) {
 					return done(null, user, { message: 'Login successful' })
 				})
 			})
+			.catch(err => {
+				return done(err)
+			})
 		}
 	))
 
@@ -39,8 +39,12 @@ exports = module.exports = function (app) {
 	})
 
 	app.passport.deserializeUser(function (id, done) {
-		app.db.models.users.findById(id, function (err, user) {
-			done(err, user)
+		app.db.models.users.findById(id)
+		.then(user => {
+			done(null, user)
+		})
+		.catch(err => {
+			done(err, null)
 		})
 	})
 }

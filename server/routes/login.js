@@ -10,10 +10,9 @@ router.post('/', function (req, res, next) {
 
     req._passport.instance.authenticate('local', function (err, user, info) {
         if (err) {
-            info.error = err
-            res.send(info)
-            console.log("A" + info)
-            return
+            console.log("A " + err)
+            res.json({ success: false, message: err });
+            return;
         }
 
         if (!user) {

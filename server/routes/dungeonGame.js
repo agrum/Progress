@@ -17,8 +17,9 @@ router.post('/join/:id', function(req, res, next) {
     req.app.db.models.accounts
     .findOne({ _id: req.user.account })
     .then(accountDocument => {
+        let preset;
         if (accountDocument.presets.length > 0)
-            let preset = accountDocument.presets[0];
+            preset = accountDocument.presets[0];
 
         req.app.db.models.dungeonGames
         .findOne({ _id: req.params.id })

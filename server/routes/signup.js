@@ -19,13 +19,13 @@ router.post('/', function (req, res, next) {
     }
 
     //use schema.create to insert data into the db
-    req.app.db.models.users.create(userData, function (err, user) {
-        if (err) {
-            return next(err)
-        } else {
-            return res.send({})
-        }
+    req.app.db.models.users.create(userData)
+    .then((result) => {
+        res.send({});
     })
+    .catch((err) => {
+        next(err);
+    });
 })
 
 module.exports.router = router
