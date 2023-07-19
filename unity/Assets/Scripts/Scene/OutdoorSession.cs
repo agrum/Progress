@@ -26,7 +26,7 @@ namespace Assets.Scripts.Scene
                 }
                 public override int GetHashCode()
                 {
-                    return (((int) Variety) << 10) + Elevation;
+                    return (((int)Variety) << 10) + Elevation;
                 }
                 public override bool Equals(object obj)
                 {
@@ -151,15 +151,25 @@ namespace Assets.Scripts.Scene
                 combineInstance.mesh = meshFilters[i].sharedMesh;
                 combineInstance.transform = meshFilters[i].transform.localToWorldMatrix;
 
-                var combineMaterial = meshFilters[i].gameObject.GetComponent<MeshRenderer>().material;
-
-                if (!combines.ContainsKey(combineMaterial.name))
+                string materialName = "InvisibleCollisions";
+                Material combineMaterial = null;
+                MeshRenderer meshRenderer = meshFilters[i].gameObject.GetComponent<MeshRenderer>();
+                if (meshRenderer)
                 {
-                    combines.Add(combineMaterial.name, new Pair<Material, List<CombineInstance>>(combineMaterial, new List<CombineInstance>()));
+                    combineMaterial = meshRenderer.material;
+                    materialName = combineMaterial.name;
                 }
 
-                combines[combineMaterial.name].Second.Add(combineInstance);
-                Destroy(meshFilters[i].gameObject.GetComponent<MeshRenderer>());
+                if (!combines.ContainsKey(materialName))
+                {
+                    combines.Add(materialName, new Pair<Material, List<CombineInstance>>(combineMaterial, new List<CombineInstance>()));
+                }
+
+                combines[materialName].Second.Add(combineInstance);
+                if (meshRenderer)
+                {
+                    Destroy(meshRenderer);
+                }
                 Destroy(meshFilters[i]);
             }
 
@@ -171,11 +181,16 @@ namespace Assets.Scripts.Scene
                 meshFilter.mesh = new Mesh();
                 meshFilter.mesh.indexFormat = UnityEngine.Rendering.IndexFormat.UInt32;
                 meshFilter.mesh.CombineMeshes(combine.Value.Second.ToArray());
-                var meshRenderer = terrainObject.AddComponent<MeshRenderer>();
-                meshRenderer.material = combine.Value.First;
-                meshRenderer.material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
-                meshRenderer.material.SetTexture("_WorldTex", worldTexture);
-                meshRenderer.material.SetTexture("_OceanTex", oceanTexture);
+                if (combine.Value.First)
+                {
+                    var meshRenderer = terrainObject.AddComponent<MeshRenderer>();
+                    meshRenderer.material = combine.Value.First;
+                    meshRenderer.material.SetVector("_WorldSize", new Vector4(totalSize, totalSize, 1, 1));
+                    meshRenderer.material.SetTexture("_WorldTex", worldTexture);
+                    meshRenderer.material.SetTexture("_OceanTex", oceanTexture);
+                }
+                terrainObject.AddComponent<MeshCollider>();
+                terrainObject.AddComponent<BSPTree>();
                 terrainObject.transform.gameObject.SetActive(true);
                 terrainObject.transform.SetParent(transform.parent);
                 terrainObject.layer = LayerMask.NameToLayer("Walkable");
@@ -188,7 +203,7 @@ namespace Assets.Scripts.Scene
 
             Vector2 spawnPosition = new Vector2(0, 0);
             Vector2 validSpawnPosition = GetValidSpawnPosition(spawnPosition, regions);
-            Player.transform.position = new Vector3(validSpawnPosition.x, 1, validSpawnPosition.y);
+            Player.transform.position = new Vector3(validSpawnPosition.x + 0.5f, 1, validSpawnPosition.y + 0.5f);
 
             loaded = true;
         }
@@ -305,7 +320,7 @@ namespace Assets.Scripts.Scene
             }
 
             pixel.r = ((float)(int)region.Variety + (boundaryDistance / maxBoundaryCheck)) / Enum.GetNames(typeof(Data.Layout.Environment.EVariety)).Length;
-            pixel.g = (((float) (int) foundNewRegion.Variety)) / mat.mainTexture.height;
+            pixel.g = (((float)(int)foundNewRegion.Variety)) / mat.mainTexture.height;
             pixel.b = UnityEngine.Random.Range(0.0f, 0.1f);
             pixel.a = boundaryDistance / maxBoundaryCheck;
             worldTexture[x + y * totalSize] = pixel;
@@ -339,7 +354,7 @@ namespace Assets.Scripts.Scene
                     }
                 }
             }
-               
+
             return candidateSpawnPosition;
         }
 
