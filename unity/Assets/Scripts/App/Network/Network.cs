@@ -8,7 +8,7 @@ using BestHTTP;
 
 namespace Assets.Scripts.Model.Network
 {
-    public class Server
+	public class Server
 	{
 		static private string host = "http://127.0.0.1:3000";
 
@@ -23,21 +23,21 @@ namespace Assets.Scripts.Model.Network
 				var oldCallback = request.Callback;
 				request.Callback = (HTTPRequest request_, HTTPResponse response_) =>
 				{
-				//call original callback
-				oldCallback(request_, response_);
+					//call original callback
+					oldCallback(request_, response_);
 
-				//write errors if any.
-				if (request_.State != HTTPRequestStates.Finished)
+					//write errors if any.
+					if (request_.State != HTTPRequestStates.Finished)
 						cumulatedResponses.Add(request_.Uri.ToString() + ": didn't terminate properly");
 					var json = JSON.Parse(request_.Response.DataAsText);
 					if (!(json != null && json["error"] == json["null"]))
 						cumulatedResponses.Add(request_.Uri.ToString() + ": error");
 
-				//decrement counter
-				Interlocked.Decrement(ref request_pending_count);
+					//decrement counter
+					Interlocked.Decrement(ref request_pending_count);
 
-				//when all requests have been processed, call async callback's
-				if (Interlocked.Equals(request_pending_count, 0))
+					//when all requests have been processed, call async callback's
+					if (Interlocked.Equals(request_pending_count, 0))
 						callback(cumulatedResponses);
 				};
 				request.Send();
@@ -51,33 +51,33 @@ namespace Assets.Scripts.Model.Network
 
 		public HTTPRequest Request(HTTPMethods method, string path, OnAppRespondedDelegate callback, OnAppRespondedDelegate err)
 		{
-            return new HTTPRequest(
-                new System.Uri(URI, path),
-                method,
-                (HTTPRequest request_, HTTPResponse response_) =>
-                {
-                        if (request_.State != HTTPRequestStates.Finished)
-                        {
-                            request_ = null;
-                            Debug.Log("Request " + path + " returned null");
-                            return;
-                        }
+			return new HTTPRequest(
+				new System.Uri(URI, path),
+				method,
+				(HTTPRequest request_, HTTPResponse response_) =>
+				{
+					if (request_.State != HTTPRequestStates.Finished)
+					{
+						request_ = null;
+						Debug.Log("Request " + path + " returned null");
+						return;
+					}
 
-                        var json = JSON.Parse(request_.Response.DataAsText);
-                    if (json != null && json["error"] == json["null"])
-                    {
-                        try
-                        {
-                            callback(json);
-                        }
-                        catch
-                        {
-                            Debug.Log("Network request callback threw: " + method.ToString() + ":" + path);
-                        }
-                    }
-                    else
-                        err(json);
-                });
+					var json = JSON.Parse(request_.Response.DataAsText);
+					if (json != null && json["error"] == json["null"])
+					{
+						try
+						{
+							callback(json);
+						}
+						catch
+						{
+							Debug.Log("Network request callback threw: " + method.ToString() + ":" + path);
+						}
+					}
+					else
+						err(json);
+				});
 		}
 
 		public System.Uri URI { get; } = new System.Uri(host);
